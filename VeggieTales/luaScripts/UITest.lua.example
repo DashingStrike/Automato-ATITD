@@ -1,0 +1,34 @@
+--
+-- Example/test of UI functions
+--   See ui_utils.inc for details/better examples
+--
+
+loadfile("luaScripts/screen_reader_common.inc")();
+loadfile("luaScripts/ui_utils.inc")();
+
+dropdown_values = {"Apple", "Banana", "Crack"};
+dropdown_cur_value = 1;
+
+function doit()
+	local is_done = nil;
+	local scale = 1.0;
+	local z = 0.0; -- Only matters if there is overlapping elements on screen
+
+	-- promptNumber() in ui_utils.inc is a good example of an EditBox and buttons and text
+	local value = promptNumber("Enter a number!", 777);
+	
+	-- Display the value read from the edit box
+	while not lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "Done") do
+		-- Put these everywhere to make sure we don't lock up with no easy way to escape!
+		checkBreak();
+
+		lsPrintWrapped(10, 10, z, lsScreenX - 20, scale, scale, 0x7F00FFff, "You entered '" .. value .. "'");
+		
+		dropdown_cur_value = lsDropdown("UITestDropDown", 10, 50, z, 100, dropdown_cur_value, dropdown_values);
+
+		lsDoFrame();
+		
+		lsSleep(10); -- Sleep just so we don't eat up all the CPU for no reason
+	end
+	
+end

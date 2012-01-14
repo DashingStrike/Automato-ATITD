@@ -1,0 +1,29 @@
+!!ARBvp1.0
+        ATTRIB iPos         = vertex.position;
+        ATTRIB iNormal      = vertex.normal;
+        ATTRIB iTex         = vertex.texcoord;
+        ATTRIB iColor       = vertex.color;
+        PARAM  mvinv[4]     = { state.matrix.modelview.invtrans };
+        PARAM  mvp[4]       = { state.matrix.mvp };
+        TEMP   xfNormal;
+        OUTPUT oPos         = result.position;
+        OUTPUT oColor       = result.color;
+        OUTPUT oTex			= result.texcoord[0];
+        OUTPUT oNormal		= result.texcoord[1];
+
+        # Transform the vertex to clip coordinates.   
+        DP4   oPos.x, mvp[0], iPos;
+        DP4   oPos.y, mvp[1], iPos;
+        DP4   oPos.z, mvp[2], iPos;
+        DP4   oPos.w, mvp[3], iPos;
+
+        # Transform the normal to eye coordinates.
+        DP3   xfNormal.x, mvinv[0], iNormal;
+        DP3   xfNormal.y, mvinv[1], iNormal;
+        DP3   xfNormal.z, mvinv[2], iNormal;
+        MOV oNormal, xfNormal;
+        
+        MOV   oColor, iColor;
+        
+        MOV oTex, iTex;
+        END

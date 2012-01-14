@@ -1,0 +1,39 @@
+float distAlphaMask = baseColor.a; // The texture fext
+
+if ( OUTLINE &&
+( distAlphaMask >= OUTLINE_MIN_VALUE0 ) &&
+( distAlphaMask <= OUTLINE_MAX_VALUE1 ) )
+{
+float oFactor = 1.0;
+if (distAlphaMask <= OUTLINE_MIN_VALUE1 )
+{
+oFactor = smoothstep ( OUTLINE_MIN_VALUE0 ,
+OUTLINE_MIN_VALUE1 ,
+distAlphaMask ) ;
+}
+e l s e
+{
+oFactor = smoothstep ( OUTLINE MAX VALUE1 ,
+OUTLINE MAX VALUE0 ,
+distAlphaMask ) ;
+}
+b a s eCo l o r = l e r p ( ba s eColor , OUTLINE COLOR, oFactor ) ;
+}
+i f ( SOFT EDGES ) {
+b a s eCo l o r . a = smoothstep ( SOFT EDGE MIN,
+SOFT EDGE MAX,
+distAlphaMask ) ;
+} e l s e {
+b a s eCo l o r . a = distAlphaMask >= 0 . 5 ;
+}
+
+i f ( OUTER GLOW ) {
+f l o a t 4 glowTexe l =
+tex2D ( Ba s eTextur eSampl e r ,
+i . baseTexCoord . xy+GLOW UV OFFSET ) ;
+f l o a t 4 glowc = OUTER GLOW COLOR  smoothstep (
+OUTER GLOW MIN DVALUE,
+OUTER GLOW MAX DVALUE,
+glowTexe l . a ) ;
+b a s eCo l o r = l e r p ( glowc , ba s eColor , mskUsed ) ;
+}

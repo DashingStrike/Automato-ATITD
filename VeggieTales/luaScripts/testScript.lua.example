@@ -1,0 +1,29 @@
+
+loadfile("luaScripts/screen_reader_common.inc")();
+loadfile("luaScripts/ui_utils.inc")();
+
+xyWindowSize = srGetWindowSize();
+
+function doit()
+	askForWindow("Make sure the Skills window is visible.");
+	local end_red;
+	while 1 do
+		statusScreen("Toggling");
+		srReadScreen();
+		
+		srClickMouseNoMove(100, 100);
+		
+		local test1 = srFindImage("test1.png", 5000)
+		if test1 then
+			srClickMouseNoMove(test1[0]+5, test1[1], 0);
+		end
+		test1 = srFindImage("test2.png", 5000)
+		if test1 then
+			srClickMouseNoMove(test1[0]+5, test1[1], 0);
+		end
+		for i=1, 100 do
+			statusScreen("Waiting...");
+			lsSleep(10);
+		end
+	end
+end
