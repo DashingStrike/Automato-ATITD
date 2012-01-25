@@ -337,6 +337,7 @@ function doStashWH(qty)
       srClickMouseNoMove(insects[0],insects[1]);
       lsSleep(250);
 
+      srReadScreen();
       insects = srFindImage("stashAllTheInsects.png");
       if not insects then
         error "found insects but couldn't stash them";
