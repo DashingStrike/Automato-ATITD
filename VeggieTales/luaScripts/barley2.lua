@@ -5,6 +5,7 @@
 grid_w = 5;
 grid_h = 5;
 watered = {};
+loop_count = 0;
 
 loadfile("luaScripts/Flax_common.inc")();
 loadfile("luaScripts/screen_reader_common.inc")();
@@ -236,9 +237,9 @@ function doit()
             error 'Could not find rightbar';
           end
           local barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
-          if not barleyWater then error 'Could not find water button'; end
+          if not barleyWater then error 'Could not find water button.'; end
           local barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
-          if not barleyAddButton then error 'Could not find add button'; end
+          if not barleyAddButton then error 'Could not find add button. Ended at batch '; end
 
           while 1 do
             if leftBar then
@@ -314,8 +315,20 @@ function doit()
     --doRefillWater(4*numloops*grid_w*grid_w);
     doStashWH(grid_w*grid_w);
     doRefillWater(4*grid_w*grid_w);
+    if loop_count % 5 == 0 then
+      doCorrectiveMove()
+    end 
     debug('end of batch #' .. loop_count)
   end
+end
+
+function doCorrectiveMove()
+  statusScreen("Moving to correct for drift");
+  local xyCenter = getCenterPos();
+  srClickMouseNoMove(xyCenter[0] + walk_px_x*-1, xyCenter[1], 0);
+  lsSleep(walk_time);
+  srClickMouseNoMove(xyCenter[0], xyCenter[1] + walk_px_y, 0);
+  lsSleep(walk_time);
 end
 
 function doStashWH(qty)
