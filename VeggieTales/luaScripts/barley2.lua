@@ -164,6 +164,14 @@ function doit()
         srReadScreen();
         local barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
         local barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
+        if not barleyAddButton or not barleyWater then
+          -- bugfix maybe for lag.
+          lsSleep(100);
+          srReadScreen();
+          barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
+          barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
+        end
+
         srClickMouseNoMove(barleyAddButton[0]+8, barleyWater[1]);
         srClickMouseNoMove(barleyAddButton[0]+8, barleyWater[1]);
         watered[x+((y-1)*grid_w)] = watered[x+((y-1)*grid_w)] + 2;
@@ -306,6 +314,7 @@ function doit()
     --doRefillWater(4*numloops*grid_w*grid_w);
     doStashWH(grid_w*grid_w);
     doRefillWater(4*grid_w*grid_w);
+    debug('end of batch #' .. loop_count)
   end
 end
 
@@ -317,6 +326,8 @@ function doStashWH(qty)
     lsSleep(250);
 
     srReadScreen();
+    local insects = srFindImage("stashInsectEllipsis.png");
+
     local stashes = srFindImage("stashBarley.png");
     if not stashes then
       error "no barley to stash"
@@ -328,21 +339,23 @@ function doStashWH(qty)
     srKeyEvent(qty);
     srKeyEvent('\n');
 
-    srClickMouseNoMove(wh[0]+9,wh[1]+9)
-    lsSleep(250);
-    srReadScreen();
-
-    local insects = srFindImage("stashInsectEllipsis.png");
     if insects then
-      srClickMouseNoMove(insects[0],insects[1]);
+      srClickMouseNoMove(wh[0]+9,wh[1]+9)
       lsSleep(250);
-
       srReadScreen();
-      insects = srFindImage("stashAllTheInsects.png");
-      if not insects then
-        error "found insects but couldn't stash them";
+
+      local insects = srFindImage("stashInsectEllipsis.png");
+      if insects then
+        srClickMouseNoMove(insects[0],insects[1]);
+        lsSleep(250);
+
+        srReadScreen();
+        insects = srFindImage("stashAllTheInsects.png");
+        if not insects then
+          error "found insects but couldn't stash them";
+        end
+        srClickMouseNoMove(insects[0],insects[1]);
       end
-      srClickMouseNoMove(insects[0],insects[1]);
     end
   end
 end
