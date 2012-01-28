@@ -79,7 +79,7 @@ function doit()
 	grid_h = promptNumber("How many rows of plants?", grid_h);
 	num_loops = promptNumber("How many " .. grid_w .. "x" .. grid_h .. " passes?", 5);
 
-	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.");
+	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.\n	\nYou may optionally pin a sheep pen window, if you do all the onions will be placed there.");
 	
 	initGlobals();
 	num_waters = 0;
