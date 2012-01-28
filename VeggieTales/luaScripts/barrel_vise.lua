@@ -177,7 +177,7 @@ function doit()
 
 	-- testReorder();
 	num_barrels = promptNumber("How many barrels?", 100);
-	askForWindow("Pin your Vises, put the cursor over the ATITD window, press Shift.");
+	askForWindow("Have 100 Boards, 2 Copper Straps, and 80 Wood in your inventory for every barrel you want to make.\n	\nFor large numbers of barrels you can get away with less wood, the average used is 60.\n	\nPin as many vises as you want, put the cursor over the ATITD window, press Shift.");
 	
 	srReadScreen();
 	
