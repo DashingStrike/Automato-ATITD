@@ -20,7 +20,7 @@ loadfile("luaScripts/ui_utils.inc")();
 function doit()
 	--num_loops = promptNumber("How many " .. grid_w .. "x" .. grid_h .. " passes ?", 5);
 	promptFlaxNumbers(false);
-	askForWindow("Make sure the plant flax window is pinned and you are in F8F8 cam zoomed in.  You may need to F12 at low resolutions or hide your chat window (if it starts planting and fails to move downward, it probably clicked on your chat window).  Will plant grid NE of current location.  'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.");
+	askForWindow("Make sure the plant flax window is pinned and you are in F8F8 cam zoomed in.  You may need to F12 at low resolutions or hide your chat window (if it starts planting and fails to move downward, it probably clicked on your chat window).  Will plant grid NE of current location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.");
 	initGlobals();
 	srReadScreen();
 	local xyPlantFlax = srFindImage(imgFlax1);
@@ -183,13 +183,27 @@ function doit()
 				end
 				checkBreak();
 			end
+
+
+
+
 		end
 		
+
+
+	--Click the plant window, to refresh seeds, in case you used your last seed. Prevents fails (can't find onion seed) on 2nd or higher passes.
+	srClickMouseNoMove(xyPlantFlax[0], xyPlantFlax[1]+15, 0); 
+
+
 		if rip_out_when_done then
 			-- wait for beds to disappear
 			lsSleep(1500);
 			
-			statusScreen(loop_label .. " Walking back");
+	
+
+
+
+		statusScreen(loop_label .. " Walking back");
 			-- move back!
 			srClickMouseNoMove(xyCenter[0] + walk_px_x*0, xyCenter[1] + walk_px_y*1, 0);
 			lsSleep(walk_time);
