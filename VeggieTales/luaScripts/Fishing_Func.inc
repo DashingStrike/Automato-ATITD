@@ -84,6 +84,7 @@ CL_Fish = {
 "Chatlog_Fish_Chromis.png",
 "Chatlog_Fish_FlyingFish.png",
 "Chatlog_Fish_HornedPigfish.png",
+"Chatlog_Fish_Kingfish.png",
 "Chatlog_Fish_LimaChub.png",
 "Chatlog_Fish_Malapterurus.png",
 "ChatLog_Fish_NileMackerel.png",
@@ -101,6 +102,7 @@ CL_Fish = {
 "Chatlog_Fish_StripedBatfin.png",
 "Chatlog_Fish_Tilapia.png",
 "Chatlog_Fish_Tilefish.png",
+"Chatlog_Fish_WhiteOniontail.png",
 };
 
 --Size of fish
