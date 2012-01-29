@@ -311,13 +311,13 @@ function doit()
     end
     local end_time = lsGetTimer();
     statusScreen("Time taken: " .. (end_time-start_time)/1000);
+    if loop_count % 4 == 0 then
+      doCorrectiveMove()
+    end 
     --doStashWH(num_loops*grid_w*grid_w);
     --doRefillWater(4*numloops*grid_w*grid_w);
     doStashWH(grid_w*grid_w);
     doRefillWater(4*grid_w*grid_w);
-    if loop_count % 5 == 0 then
-      doCorrectiveMove()
-    end 
     debug('end of batch #' .. loop_count)
   end
 end
