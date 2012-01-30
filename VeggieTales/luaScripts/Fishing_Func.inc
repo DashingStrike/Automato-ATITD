@@ -13,11 +13,11 @@ Lures = {
 "Lure_AshCentipede.png",
 "Lure_BatMite.png",
 "Lure_BlisterBeetle.png",
---Bloodworm
+"Lure_Bloodworm.png",
 "Lure_Bristleworm.png",
 "Lure_CamelWeevel.png",
 "Lure_ClaySlug.png",
---Clearwing
+"Lure_Clearwing.png",
 --Corn Maggot
 "Lure_CorkscrewAsp.png",
 "Lure_DesertMillipede.png",
@@ -84,6 +84,7 @@ CL_Fish = {
 "Chatlog_Fish_Chromis.png",
 "Chatlog_Fish_FlyingFish.png",
 "Chatlog_Fish_HornedPigfish.png",
+"Chatlog_Fish_Kingfish.png",
 "Chatlog_Fish_LimaChub.png",
 "Chatlog_Fish_Malapterurus.png",
 "ChatLog_Fish_NileMackerel.png",
@@ -101,6 +102,7 @@ CL_Fish = {
 "Chatlog_Fish_StripedBatfin.png",
 "Chatlog_Fish_Tilapia.png",
 "Chatlog_Fish_Tilefish.png",
+"Chatlog_Fish_WhiteOniontail.png",
 };
 
 --Size of fish
@@ -175,6 +177,7 @@ Lure_Types = {
 "Lure_Menu_Fresh.png",
 "Lure_Menu_Glazed.png",
 "Lure_Menu_Preserved.png",
+"Lure_Menu_Hardened.png",
 };
 
 
