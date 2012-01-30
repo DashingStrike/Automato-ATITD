@@ -311,8 +311,11 @@ function doit()
     end
     local end_time = lsGetTimer();
     statusScreen("Time taken: " .. (end_time-start_time)/1000);
-    if loop_count % 4 == 0 then
-      doCorrectiveMove()
+    -- move X and Y every 4 batches, but skip the Y move every 20th batch
+    if loop_count % 4 == 0 and loop_count % 5 == 0 then
+      doCorrectiveMove('x')
+    elseif loop_count % 4 == 0 then
+      doCorrectiveMove('xy')
     end 
     --doStashWH(num_loops*grid_w*grid_w);
     --doRefillWater(4*numloops*grid_w*grid_w);
@@ -322,13 +325,17 @@ function doit()
   end
 end
 
-function doCorrectiveMove()
+function doCorrectiveMove(move)
   statusScreen("Moving to correct for drift");
   local xyCenter = getCenterPos();
-  srClickMouseNoMove(xyCenter[0] + walk_px_x*-1, xyCenter[1], 0);
-  lsSleep(walk_time);
-  srClickMouseNoMove(xyCenter[0], xyCenter[1] + walk_px_y, 0);
-  lsSleep(walk_time);
+  if move == 'xy' or move == 'x' then
+    srClickMouseNoMove(xyCenter[0] + walk_px_x*-1, xyCenter[1], 0);
+    lsSleep(walk_time);
+  end
+  if move == 'xy' or move == 'y' then
+    srClickMouseNoMove(xyCenter[0], xyCenter[1] + walk_px_y, 0);
+    lsSleep(walk_time);
+  end
 end
 
 function doStashWH(qty)
