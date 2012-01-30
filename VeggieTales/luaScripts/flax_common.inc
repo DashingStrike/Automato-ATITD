@@ -12,15 +12,26 @@ imgWeedThese = "WeedThese.png";
 
 
 
-delay_time = 100;
-screen_refresh_time = 300;
+
+
+
 walk_px_y = 340;
 walk_px_x = 380;
 walk_y_drift = 18;
 walk_x_drift = 14;
 walk_time = 570;
-refocus_time = 500;
-refocus_click_time = 200;
+
+refocus_time = 150; -- Time to Wait for last window to bring to the foreground before clicking again
+refocus_click_time = 150; --How fast it 'shuffles' the pin up windows
+screen_refresh_time = 150; --How often it refreshes (clicks) the current pinup for change (ie Weed, Water, Rip plant options)
+
+
+
+
+delay_time = 100; --This value doesn't seem to be used anywhere. It is commented in every flax and onion script. Is it hardcoded in veggietales.exe? hmm... ^_^
+
+
+
 
 function initGlobals()
 	pixel_scale = xyWindowSize[0] / 1720; -- Macro written with 1720 pixel wide window
@@ -202,7 +213,7 @@ function promptFlaxNumbers(is_plant)
 		else
 			rip_out_when_done = lsCheckBox(10, y, z+10, 0xFFFFFFff, "Rip out when done", rip_out_when_done);
 			y = y + 25;
-			lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff, "This will plant a " .. grid_w .. "x" .. grid_w .. " grid of Flax and harvest it " .. seeds_per_pass .. " times, requiring " .. (grid_w * grid_w) .. " seeds, and repeat this " .. num_loops .. " times, yielding " .. (grid_w * grid_w * num_loops * seeds_per_pass) .. " seeds.");
+			lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff, "This will plant a " .. grid_w .. "x" .. grid_w .. " grid of Flax and harvest it " .. seeds_per_pass .. " times, requiring " .. (grid_w * grid_w * num_loops) .. " seeds, and repeat this " .. num_loops .. " times, yielding " .. (grid_w * grid_w * num_loops * seeds_per_pass) .. " seeds.");
 		end
 
 		if fast_refocus then
