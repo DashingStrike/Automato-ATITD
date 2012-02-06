@@ -1,0 +1,244 @@
+Major Revision 2/5/2012
+Notes by Cegaiel
+
+
+Using 4x4 Grid, 16 seeds and 64 jugs in inventory for scenario in Update #1:
+
+
+
+If you are using the exact number of jugs (for 1 pass), like I do then if the macro failed from lag (pin ups got hung) you need to start the macro over.
+If you watered a few of the onions already, then your jug count isn't technically correct anymore. You would have to remember to manually fill them again.
+
+While I (and most people) would still just repeat the defaults: 64 'jugs', when it asks "How many jugs", I might not have 64 'Water in jugs' in inventory (due to it watering a few times before the macro messed up).
+
+If I was to enter 4x4 grid, 64 jugs and one pass. That is enough to trigger the water_needed = false; line. Thus not forcing it to look for or refill any empty jugs before the planting. Update # 1 addresses this issue.
+
+
+
+
+
+Update #1 --------------
+
+
+
+Made it so if will try to fill jugs no matter what (first run). 
+If water_needed = false then dont give an error (if water icon/aqueduct not found).
+But if water_needed = 1 then DO give an error (if water icon/aqueduct not found).
+
+
+
+FEATURE: If you claim to have enough jugs to handle the entire planting, it will assume they're already filled, and that it doesn't need to refill them. This allows you to plant at a distance from water. However, it will still fill the jugs when the water icon or aqueduct is present.
+
+
+
+
+This new code is directly under the -- Find plant onions window
+
+
+Changed this code:
+
+	-- Find aqudeuct or fill water button, use it
+	aque = srFindImage("Aqueduct.png", 5000);
+	if not aque then
+		aqueduct_mode = nil;
+		xyFillWater = srFindImage(imgWaterJugs);
+		if not xyFillWater then
+			error 'Could not find Aqueduct window OR fill jugs with water icon, you may need to empty 1 jug.';
+		else
+			-- Use it
+			fillWater(nil);
+		end;
+	else
+		aqueduct_mode = 1;
+		fillWater(nil);
+	end
+
+
+
+TO:
+
+
+
+	-- Find aqudeuct or fill water button
+	-- If we can fill jugs, then do it. But if they are all full, then dont give an error if water_needed is false.
+
+	aque = srFindImage("Aqueduct.png", 5000);
+	if not aque then
+		aqueduct_mode = nil;
+		xyFillWater = srFindImage(imgWaterJugs);
+
+		if not xyFillWater and water_needed then
+			error 'Could not find Aqueduct window OR fill jugs with water icon, you may need to empty 1 jug.';
+		elseif xyFillWater then
+			-- Use it
+			fillWater(nil);
+		end;
+	else
+		aqueduct_mode = 1;
+
+			if xyFillWater then
+			fillWater(nil);
+			end
+
+	end
+
+
+
+
+
+
+
+Update #2 --------------
+
+
+Since the water_needed thing is handled in the above section, then I commented out the 'if water_needed If/Then statements' in the FillWater() function as its not needed anymore due to Update #1.
+
+
+
+
+
+Update #3 --------------
+
+The next area I would like to address is this line:
+
+if num_waters >= num_jugs then
+	fillWater(1);
+end
+
+
+
+This is causing it to fill 1 jug too early when I used 4x4 grid and 64 jugs
+
+
+I changed it to this (removed the = sign):
+
+if num_waters > num_jugs then
+	fillWater(1);
+end
+
+
+
+Update #4 --------------
+
+
+Changed the notes that display on final screen:
+Recommends a minimum amount of jugs (grid width x grid height x 4 (waterings)
+
+
+
+	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.");
+	
+
+TO:
+
+
+	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.\n \nYour " .. grid_w .. "x" .. grid_h .. " grid will work best with a minimum of " .. grid_w * grid_h * 4 .. " jugs. Using less will cause it to gather water during a critical time, while watering onions. " .. grid_w * grid_h * 4 * num_loops .. " jugs will allow you to do " .. num_loops .. " passes away from a water source.");
+
+
+
+
+Update #5 --------------
+
+Changed these lines in function doit()
+
+	num_jugs = promptNumber("How many jugs?", 15);
+	grid_w = promptNumber("How many plants across?", grid_w);
+	grid_h = promptNumber("How many rows of plants?", grid_h);
+	num_loops = promptNumber("How many " .. grid_w .. "x" .. grid_h .. " passes?", 5);
+
+
+TO:
+
+
+	num_jugs = promptNumber("How many jugs?", 64);
+	grid_w = promptNumber("How many plants across?", 4);
+	grid_h = promptNumber("How many rows of plants?", 4);
+	num_loops = promptNumber("How many " .. grid_w .. "x" .. grid_h .. " passes?", 5);
+
+
+I changed the middle two lines to 4, I didn't see where grid_w or grid_h is defined until here. Not sure why those variables are in place instead of a real number, like the 4.
+It will still remember the numbers previously used for for 'plants across' and 'rows of plants' if you exit script and start it back u
+
+
+
+
+Update #5 --------------
+
+Changed this line:
+
+if (time_left > fill_water_time) and (num_waters > 0) then
+
+
+TO:
+
+if (time_left > fill_water_time) and (num_waters > 0) and (water_needed) then
+
+
+Previously if you were planting small grids 3x3 or lower for example, it would still gather water while waiting on the timer (ms) to finish. 
+This was from original veggietales. While there is no harm doing this, whats the point if you have enough water jugs? This might confuse the user as to why its collecting water every stage of watering the onions.  So now it won't do it if theres enough water jugs to complete the pass.
+
+More importantly, if you are doing onions away from a water source, then it will messed up the script by triggering this line after 1st watering:
+
+error 'Moved too far for fill jugs with water icon.';
+
+
+
+
+
+Update #6 --------------
+
+
+Added the code to look for the plant window before planting the each seed.
+This will give a different error message that just the 'Could not find plant window' message.
+This error would suggest either you ran out of seeds or you drifted off the sand.
+
+
+
+
+	-- Find plant onions window. Verify that 'Onion Seeds' is still showing. Else you probably drifted off the sand.
+	local xyPlantOnions = srFindImage(imgOnionSeeds);
+	if not xyPlantOnions then
+		error 'Could not find plant window. You probably ran out of seeds or drifted off of the sand.';
+	end
+
+
+
+Update #7 --------------
+
+Commented out this line at top:
+
+--screen_refresh_time = 300; -- This will pull the value from flax_common.inc which is set to 150
+
+While I did say that 300 was a good number a while back, I have since already pushed a change to 150 in the flax_common.inc a while back.
+I think this is a good number, even on slower computers. If they can't handle this, then their flax.lua can't handle it either. Might as well let it fetch the variable from one file then (flax_common.inc) which would work on both flax and onions, then to have it set seperately here.
+
+
+
+
+
+Update #8 --------------
+
+
+
+Changed the values to help compensate for laggy or slower computers. This should still keep up and have smaller chance to freeze on the pinups.
+
+
+	if (grid_w*grid_h) > 9 then
+		refocus_click_time = 125; -- run faster if many plants   
+		screen_refresh_time = 100;
+	end
+	if (grid_w*grid_h) > 16 then
+		refocus_click_time = 85; -- run faster if many plants
+		screen_refresh_time = 85;
+	end
+
+
+Update #9 --------------
+
+
+Added checkBreak(); on Line 156.
+
+This will allow you to break out of the script (Ctrl+Shift) before filling water jugs after harvesting (and before next pass).
+Previously it would not break until after the water gather.
+
+This is in case you set it to multiple passes and want to break out before next pass. By leaving some jugs empty, you wont have to empty one manually (only if water_needed is not false) when you start the macro again .
