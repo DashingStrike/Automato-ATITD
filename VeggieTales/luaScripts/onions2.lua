@@ -1,3 +1,6 @@
+-- Major Revision Feb 5, 2012
+
+
 imgOnionBed = "ThisIsAnOnionBed.png";
 imgOnionSeeds = "OnionSeeds.png";
 imgWaterThese = "WaterThese.png";
@@ -11,7 +14,7 @@ loadfile("luaScripts/ui_utils.inc")();
 walk_px_x = 112;
 walk_px_y = 112;
 walk_time = 250;
-screen_refresh_time = 300;
+--screen_refresh_time = 300; -- screen_refresh is also defined in flax_common.inc. The default of 150 seems to work well as a safe approach. Commented out this override.
 water_time = 1200;
 harvest_time = 1100;
 fill_water_time = 4000;
@@ -29,7 +32,7 @@ search_dy = {0, -search_size, search_size, search_size, -search_size, 0, 0, -sea
 
 
 function fillWater(required)
-    if water_needed then
+    --if water_needed then
 	if (aqueduct_mode) then
 		aque = srFindImage("Aqueduct.png", 5000);
 		if not aque then
@@ -40,7 +43,7 @@ function fillWater(required)
 		srReadScreen();
 		fill = srFindImage("FillWithWater.png", 5000);
 		if ((not fill) and required) then
-			error 'Could not find Fill With Wather';
+			error 'Could not find Fill With Water on acqueduct menu';
 		end
 		if fill then
 			srClickMouseNoMove(fill[0]+5, fill[1]);
@@ -58,7 +61,7 @@ function fillWater(required)
 			lsSleep(fill_water_time);
 		end;
 	end
-    end;
+    --end;
     num_waters = 0;
 end
 
@@ -74,23 +77,29 @@ function storeonions()
 end
 
 function doit()
-	num_jugs = promptNumber("How many jugs?", 15);
-	grid_w = promptNumber("How many plants across?", grid_w);
-	grid_h = promptNumber("How many rows of plants?", grid_h);
+	num_jugs = promptNumber("How many jugs?", 64);
+	grid_w = promptNumber("How many plants across?", 4);
+	grid_h = promptNumber("How many rows of plants?", 4);
 	num_loops = promptNumber("How many " .. grid_w .. "x" .. grid_h .. " passes?", 5);
 
-	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.\n	\nYou may optionally pin a sheep pen window, if you do all the onions will be placed there.");
+	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.\n \nYour " .. grid_w .. "x" .. grid_h .. " grid will work best with a minimum of " .. grid_w * grid_h * 4 .. " jugs. Using less will cause it to gather water during a critical time, while watering onions. " .. grid_w * grid_h * 4 * num_loops .. " jugs will allow you to do " .. num_loops .. " passes away from a water source.");
 	
+
+
+
 	initGlobals();
 	num_waters = 0;
 	water_needed = 1;
+	
 	if num_jugs >= (grid_w*grid_h*4*num_loops) then
 		water_needed = false;
 	end;
+
 	if (grid_w*grid_h) > 9 then
-		refocus_click_time = 100; -- run faster if many plants
+		refocus_click_time = 125; -- run faster if many plants   
 		screen_refresh_time = 100;
 	end
+
 	if (grid_w*grid_h) > 16 then
 		refocus_click_time = 50; -- run faster if many plants
 	end
@@ -106,26 +115,46 @@ function doit()
 	end
 	xyPlantOnions[0] = xyPlantOnions[0] + 5;
 
-	-- Find aqudeuct or fill water button, use it
+
+
+
+	-- Find aqudeuct or fill water button
+	-- If we can fill jugs, then do it. But if they are all full, then dont give an error if water_needed is false.
+
+
+
+
+
 	aque = srFindImage("Aqueduct.png", 5000);
 	if not aque then
-	    if water_needed then
 		aqueduct_mode = nil;
 		xyFillWater = srFindImage(imgWaterJugs);
-		if not xyFillWater then
+
+		if not xyFillWater and water_needed then
 			error 'Could not find Aqueduct window OR fill jugs with water icon, you may need to empty 1 jug.';
-		else
+		elseif xyFillWater then
 			-- Use it
 			fillWater(nil);
 		end;
-	    end;
 	else
 		aqueduct_mode = 1;
-		fillWater(nil);
+
+			if xyFillWater then
+			fillWater(nil);
+			end
+
 	end
-	
+
+
+
+
+
 
 	for loop_count=1, num_loops do
+
+
+		checkBreak();
+
 		-- If we have enough jugs to do an entire pass to harvest, and
 		-- we don't have enough filled jugs to do so then
 		-- refill before planting to minimize time used during the cycle.
@@ -135,14 +164,29 @@ function doit()
 				fillWater(1);
 		end;	
 
+
+
+
 		-- Plant and pin
 		for y=1, grid_h do
 			for x=1, grid_w do
+
 				lsPrintln('doing ' .. x .. ',' .. y);
 	
 				statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Planting " .. x .. ", " .. y);
 	
+
+
+	-- Reverify plant window and the 'Onion Seeds' is still showing. Else you probably drifted off the sand or ran out of seeds.
+
+	local xyPlantOnions = srFindImage(imgOnionSeeds);
+	if not xyPlantOnions then
+		error 'Could not find plant window. You probably ran out of seeds or drifted off of the sand.';
+	end
+
+
 				-- Plant
+
 				srClickMouseNoMove(xyPlantOnions[0], xyPlantOnions[1], 0);
 				-- lsSleep(delay_time);
 				
@@ -242,7 +286,7 @@ function doit()
 								srClickMouseNoMove(water[0] + 5, water[1], 0);
 								lsSleep(water_time);
 								num_waters = num_waters + 1;
-								if num_waters >= num_jugs then
+								if num_waters > num_jugs then
 									fillWater(1);
 								end
 								break;
@@ -280,6 +324,8 @@ function doit()
 				end
 			end
 			lsSleep(refocus_click_time); -- Wait for last window to bring to the foreground before clicking again
+
+
 		
 			if water_pass_count == passes_before_harvest then
 				do_harvest = 1;
@@ -287,7 +333,7 @@ function doit()
 				-- Otherwise, wait until 24 seconds has elapsed, and water again
 				local time_left = pass_growth_time - (lsGetTimer() - start_time);
 				statusScreen("Waiting " .. time_left .. "ms before starting next pass...");
-				if (time_left > fill_water_time) and (num_waters > 0) then
+				if (time_left > fill_water_time) and (num_waters > 0) and (water_needed) then
 					fillWater(1);
 				end
 				while pass_growth_time - (lsGetTimer() - start_time) > 0 do
@@ -306,6 +352,8 @@ function doit()
 		if (grid_w*grid_h) > 15 then
 			lsSleep(1000); -- If many harvests it can take longer to get to the last one
 		end
+
+
 
 		-- Move back a bit
 		if grid_h == 1 then
