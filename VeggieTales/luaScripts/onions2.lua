@@ -82,7 +82,7 @@ function doit()
 	grid_h = promptNumber("How many rows of plants?", 4);
 	num_loops = promptNumber("How many " .. grid_w .. "x" .. grid_h .. " passes?", 5);
 
-	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.\n \nYour " .. grid_w .. "x" .. grid_h .. " grid will work best with a minimum of " .. grid_w * grid_h * 4 .. " jugs. Using less will cause it to gather water during a critical time, while watering onions. " .. grid_w * grid_h * 4 * num_loops .. " jugs will allow you to do " .. num_loops .. " passes away from a water source.");
+	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.\n \nYour " .. grid_w .. "x" .. grid_h .. " grid will work best with a minimum of " .. grid_w * grid_h * 4 .. " jugs. Using less will cause it to gather water during a critical time, while watering onions. " .. grid_w * grid_h * 4 * num_loops .. " water jugs will allow you to do " .. num_loops .. " passes away from a water source.");
 	
 
 
@@ -99,9 +99,8 @@ function doit()
 		refocus_click_time = 125; -- run faster if many plants   
 		screen_refresh_time = 100;
 	end
-
 	if (grid_w*grid_h) > 16 then
-		refocus_click_time = 50; -- run faster if many plants
+		refocus_click_time = 75; -- run faster if many plants
 	end
 
 
