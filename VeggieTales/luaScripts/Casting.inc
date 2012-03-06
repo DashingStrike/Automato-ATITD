@@ -53,7 +53,7 @@ function heavyleadbowl()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(700*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Heavy Lead Bowl to finish");
+		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Heavy Lead Bowl to finish");
 	end
 end
 
@@ -75,7 +75,7 @@ function monkeywrench()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(280*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Monkey Wrench to finish");
+		sleepWithStatus(276000, "[" .. i .. "/" .. num_loops .. "] Waiting for Monkey Wrench to finish");
 	end
 end
 
@@ -98,7 +98,7 @@ function silverbowl()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(1050*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Bowl to finish");
+		sleepWithStatus(1035000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Bowl to finish");
 	end
 end
 
@@ -121,7 +121,7 @@ function ironcookpot()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(70*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Cookpot to finish");
+		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Cookpot to finish");
 	end
 end
 
@@ -144,7 +144,7 @@ function anvilbed()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(210*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Anvil Bed to finish");
+		sleepWithStatus(207000, "[" .. i .. "/" .. num_loops .. "] Waiting for Anvil Bed to finish");
 	end
 end
 
@@ -172,7 +172,7 @@ function orichalcumpellets()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(36*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Orichalcum Pellets to finish");
+		sleepWithStatus(34500, "[" .. i .. "/" .. num_loops .. "] Waiting for Orichalcum Pellets to finish");
 		end
 end
 
@@ -200,7 +200,7 @@ function mediumgear()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(350*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Medium Gear to finish");
+		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Medium Gear to finish");
 	end
 end
 
@@ -228,7 +228,7 @@ function smallgear()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(70*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Small Gear to finish");
+		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Small Gear to finish");
 	end
 end
 
@@ -256,7 +256,7 @@ function bearing()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(140*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Bearings to finish");
+		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Bearings to finish");
 	end
 end
 
@@ -284,7 +284,7 @@ function washers()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(140*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Washers to finish");
+		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Washers to finish");
 	end
 end
 
@@ -311,7 +311,7 @@ function bolts()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(140*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Bolts to finish");
+		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Bolts to finish");
 	end
 end
 
@@ -339,7 +339,7 @@ function heavymallethead()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(700*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Heavy Mallet Head to finish");
+		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Heavy Mallet Head to finish");
 	end
 end
 
@@ -367,7 +367,7 @@ function widetungstenchisel()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(350*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Wide Tungsten Chisel to finish");
+		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Wide Tungsten Chisel to finish");
 	end
 end
 
@@ -395,7 +395,7 @@ function roundhammer()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(350*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Round Hammer to finish");
+		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Round Hammer to finish");
 	end
 end
 
@@ -423,7 +423,7 @@ function ballpeenhammer()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(350*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Ball Peen Hammer to finish");
+		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Ball Peen Hammer to finish");
 	end
 end
 
@@ -451,7 +451,7 @@ function shapingmallet()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(350*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Shaping Mallet to finish");
+		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Shaping Mallet to finish");
 	end
 end
 
@@ -479,7 +479,7 @@ function leadmallet()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(700*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Mallet to finish");
+		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Mallet to finish");
 	end
 end
 
@@ -507,7 +507,7 @@ function pewterincenseprong()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(210*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Pewter Incense Prong to finish");
+		sleepWithStatus(207000, "[" .. i .. "/" .. num_loops .. "] Waiting for Pewter Incense Prong to finish");
 	end
 end
 

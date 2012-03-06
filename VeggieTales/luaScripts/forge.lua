@@ -1,14 +1,19 @@
 -- Open, Add Charcoal, Fire, Pin, and arrange your forge windows
 -- **Does not take items**
 -- ***********************
+--Below times are exact teppy minutes + 3 seconds *1000 (ms)
 -- Times:
--- 1 Minute = 70*1000
--- 2 Minutes = 140*1000
--- 3 Minutes = 210*1000
--- 5 Minutes = 350*1000
--- 6 Minutes = 420*1000
--- 10 Minutes = 700*1000
--- 20 minutes = 1400*1000
+-- 1 Minute = 69000
+-- 2 Minutes = 138000
+-- 3 Minutes = 207000
+-- 4 Minutes = 276000
+-- 5 Minutes = 345000
+-- 6 Minutes = 414000
+-- 10 Minutes = 690000 
+-- 15 Minutes = 1035000
+-- 20 minutes = 1380000
+-- 25 minutes = 1725000
+-- 30 minutes = 2070000
 -- ***********************
 
 
