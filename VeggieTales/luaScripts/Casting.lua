@@ -15,7 +15,7 @@
 
 loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
-loadfile("luaScripts/Forge.inc")();
+loadfile("luaScripts/Casting.inc")();
 -- loadfile("luaScripts/Forge_Bars.lua")();
 
 local per_click_delay = 0;
@@ -84,45 +84,41 @@ function doit()
 			local x = nil;
 			local bsize = nil;
 			for i=1, #button_names do
-				if button_names[i] == "Knife Blade" then
+				if button_names[i] == "Heavy Lead Bowl" then
 					x = 30;
 					y = 10;
 					bsize = 130;
-				elseif button_names[i] == "Shovel Blade" then
+				elseif button_names[i] == "Monkey Wrench" then
 					x = 30;
 					y = 40;
 					bsize = 130;
-				elseif button_names[i] == "Nails" then
+				elseif button_names[i] == "Silver Bowl" then
 					x = 30;
 					y = 70;
 					bsize = 130;
-				elseif button_names[i] == "Copper Pipe" then
+				elseif button_names[i] == "Iron Cookpot" then
 					x = 30;
 					y = 100;
 					bsize = 130;
-				elseif button_names[i] == "Lead Pipe" then
+				elseif button_names[i] == "Anvil Bed" then
 					x = 30;
 					y = 130;
 					bsize = 130;
-				elseif button_names[i] == "Bars" then
+				elseif button_names[i] == "Fuel" then
 					x = 30;
 					y = 170;
 					bsize = 130;
-				elseif button_names[i] == "Sheeting" then
+				elseif button_names[i] == "Gearwork" then
 					x = 30;
 					y = 200;
 					bsize = 130;
-				elseif button_names[i] == "Straps" then
+				elseif button_names[i] == "Hardware" then
 					x = 30;
 					y = 230;
 					bsize = 130;
 				elseif button_names[i] == "Tools" then
 					x = 30;
 					y = 260;
-					bsize = 130;
-				elseif button_names[i] == "Wire" then
-					x = 30;
-					y = 290;
 					bsize = 130;
 				end
 				if lsButtonText(x, y, 0, 250, 0xe5d3a2ff, button_names[i]) then
@@ -138,26 +134,24 @@ function doit()
 			lsSleep(10);
 		end	
 		
-		if image_name == "Knife Blade" then
-			KnifeBlade();
-		elseif image_name == "Shovel Blade" then
-			ShovelBlade();
-		elseif image_name == "Nails" then
-			Nails();
-		elseif image_name == "Copper Pipe" then
-			CopperPipe();
-		elseif image_name == "Lead Pipe" then
-			LeadPipe();
-		elseif image_name == "Bars" then
-			Bars();
-		elseif image_name == "Sheeting" then
-			Sheeting();
-		elseif image_name == "Straps" then
-			Straps();
+		if image_name == "Heavy Lead Bowl" then
+			heavyleadbowl();
+		elseif image_name == "Monkey Wrench" then
+			monkeywrench();
+		elseif image_name == "Silver Bowl" then
+			silverbowl();
+		elseif image_name == "Iron Cookpot" then
+			ironcookpot();
+		elseif image_name == "Anvil Bed" then
+			anvilbed();
+		elseif image_name == "Fuel" then
+			fuel();
+		elseif image_name == "Gearwork" then
+			gearwork();
+		elseif image_name == "Hardware" then
+			hardware();
 		elseif image_name == "Tools" then
-			Tools();
-		elseif image_name == "Wire" then
-			Wire();
+			tools();
 		end
 	end
 end

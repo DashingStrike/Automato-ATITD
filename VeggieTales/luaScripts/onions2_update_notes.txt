@@ -1,4 +1,4 @@
-Major Revision 2/5/2012
+Major Revision 2/5/2012 - Minor Revision: 2/25/2012
 Notes by Cegaiel
 
 
@@ -7,6 +7,7 @@ Using 4x4 Grid, 16 seeds and 64 jugs in inventory for scenario in Update #1:
 
 
 If you are using the exact number of jugs (for 1 pass), like I do then if the macro failed from lag (pin ups got hung) you need to start the macro over.
+
 If you watered a few of the onions already, then your jug count isn't technically correct anymore. You would have to remember to manually fill them again.
 
 While I (and most people) would still just repeat the defaults: 64 'jugs', when it asks "How many jugs", I might not have 64 'Water in jugs' in inventory (due to it watering a few times before the macro messed up).
@@ -132,7 +133,7 @@ Recommends a minimum amount of jugs (grid width x grid height x 4 (waterings)
 TO:
 
 
-	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.\n \nYour " .. grid_w .. "x" .. grid_h .. " grid will work best with a minimum of " .. grid_w * grid_h * 4 .. " jugs. Using less will cause it to gather water during a critical time, while watering onions. " .. grid_w * grid_h * 4 * num_loops .. " jugs will allow you to do " .. num_loops .. " passes away from a water source.");
+	askForWindow("Make sure the plant Onions window is pinned and you are in F8F8 cam zoomed in.  Will plant SE of this location.\n \n'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.  'Right click opens Menu as Pinned' must be OFF.\n \nYour " .. grid_w .. "x" .. grid_h .. " grid will work best with a minimum of " .. grid_w * grid_h * 4 .. " jugs. Using less will cause it to gather water during a critical time, while watering onions. " .. grid_w * grid_h * 4 * num_loops .. " water jugs will allow you to do " .. num_loops .. " passes away from a water source.");
 
 
 
@@ -157,6 +158,7 @@ TO:
 
 
 I changed the middle two lines to 4, I didn't see where grid_w or grid_h is defined until here. Not sure why those variables are in place instead of a real number, like the 4.
+
 It will still remember the numbers previously used for for 'plants across' and 'rows of plants' if you exit script and start it back u
 
 
@@ -228,8 +230,7 @@ Changed the values to help compensate for laggy or slower computers. This should
 		screen_refresh_time = 100;
 	end
 	if (grid_w*grid_h) > 16 then
-		refocus_click_time = 85; -- run faster if many plants
-		screen_refresh_time = 85;
+		refocus_click_time = 75; -- run faster if many plants
 	end
 
 
