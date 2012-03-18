@@ -17,7 +17,6 @@ bar_button_names = {
 "Silver Bar"
 };
 
-
 sheeting_button_names = {
 "Lead Sheeting",
 "Gold Sheeting",
@@ -31,8 +30,6 @@ sheeting_button_names = {
 "Moon Steel Sheeting",
 "Thoths Metal Sheeting"
 };
-
-
 
 straps_button_names = {
 "Water Metal Strap",
@@ -76,8 +73,8 @@ function KnifeBlade()
 		clickAll("Forge/Forge_Knife_Blade.png", 1);
 		lsSleep(200);
 		-- refocus();
-		--10 Min
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Knife Blades to finish");
+		
+		sleepWithStatus(72*10000, "[" .. i .. "/" .. num_loops .. "] Waiting for Knife Blades to finish");
 	end
 end
 
@@ -95,11 +92,11 @@ function ShovelBlade()
 		lsSleep(200);
 		-- refocus();
 		
-		clickAll("Forge/Forge/Forge_Shovel_Blade.png", 1);
+		clickAll("Forge/Forge_Shovel_Blade.png", 1);
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Shovel Blades to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Shovel Blades to finish");
 	end
 end
 
@@ -122,7 +119,7 @@ function Nails()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for nails to finish");
+		sleepWithStatus(72*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for nails to finish");
 	end
 end
 
@@ -145,7 +142,7 @@ function CopperPipe()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Pipe to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Pipe to finish");
 	end
 end
 
@@ -168,7 +165,7 @@ function LeadPipe()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Pipe to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Pipe to finish");
 	end
 end
 
@@ -195,8 +192,8 @@ function IronBar()
 		clickAll("Forge/Forge_Iron_Bar.png", 1);
 		lsSleep(200);
 		-- refocus();
-		--15 Min
-		sleepWithStatus(1035000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Bars to finish");
+		
+		sleepWithStatus(72*15000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Bars to finish");
 		end
 end
 
@@ -224,7 +221,7 @@ function GoldBar()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000 "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Bars to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Bars to finish");
 	end
 end
 
@@ -252,7 +249,7 @@ function SilverBar()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Bars to finish");
+		sleepWithStatus(72*10000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Bars to finish");
 	end
 end
 
@@ -280,7 +277,7 @@ function LeadSheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Sheeting to finish");
+		sleepWithStatus(72*10000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Sheeting to finish");
 	end
 end
 
@@ -308,7 +305,7 @@ function GoldSheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Sheeting to finish");
+		sleepWithStatus(72*10000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Sheeting to finish");
 	end
 end
 
@@ -336,7 +333,7 @@ function CopperSheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Sheeting to finish");
+		sleepWithStatus(72*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Sheeting to finish");
 	end
 end
 
@@ -364,7 +361,7 @@ function OctecsAlloySheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(1380000, "[" .. i .. "/" .. num_loops .. "] Waiting for Octecs Alloy Sheeting to finish");
+		sleepWithStatus(72*20000, "[" .. i .. "/" .. num_loops .. "] Waiting for Octecs Alloy Sheeting to finish");
 	end
 end
 
@@ -392,7 +389,7 @@ function SilverSheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Sheeting to finish");
+		sleepWithStatus(72*2000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Sheeting to finish");
 	end
 end
 
@@ -420,7 +417,7 @@ function SteelSheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Steel Sheeting to finish");
+		sleepWithStatus(72*10000, "[" .. i .. "/" .. num_loops .. "] Waiting for Steel Sheeting to finish");
 	end
 end
 
@@ -448,7 +445,7 @@ function GoldFoil()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Foil to finish");
+		sleepWithStatus(72*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Foil to finish");
 	end
 end
 
@@ -476,7 +473,7 @@ function MetalBlueSheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(1035000, "[" .. i .. "/" .. num_loops .. "] Waiting for Metal Blue Sheeting to finish");
+		sleepWithStatus(72*15000, "[" .. i .. "/" .. num_loops .. "] Waiting for Metal Blue Sheeting to finish");
 	end
 end
 
@@ -504,7 +501,7 @@ function TinSheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Tin Sheeting to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Tin Sheeting to finish");
 	end
 end
 
@@ -532,7 +529,7 @@ function MoonSteelSheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Moon Steel Sheeting to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Moon Steel Sheeting to finish");
 	end
 end
 
@@ -560,7 +557,7 @@ function ThothsMetalSheeting()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Thoths Metal Sheeting to finish");
+		sleepWithStatus(72*10000, "[" .. i .. "/" .. num_loops .. "] Waiting for Thoths Metal Sheeting to finish");
 	end
 end
 
@@ -588,7 +585,7 @@ function WaterMetalStrap()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Water Metal Straps to finish");
+		sleepWithStatus(72*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Water Metal Straps to finish");
 		end
 end
 
@@ -616,7 +613,7 @@ function IronStrap()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(207000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Straps to finish");
+		sleepWithStatus(72*3000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Straps to finish");
 		end
 end
 
@@ -644,7 +641,7 @@ function AluminumStrap()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Aluminum Straps to finish");
+		sleepWithStatus(72*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Aluminum Straps to finish");
 		end
 end
 	
@@ -672,7 +669,7 @@ function CopperStrap()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Straps to finish");
+		sleepWithStatus(72*2000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Straps to finish");
 		end
 end
 
@@ -700,7 +697,7 @@ function IronPoker()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(1380000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Pokers to finish");
+		sleepWithStatus(72*20000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Pokers to finish");
 		end
 end
 
@@ -728,7 +725,7 @@ function SteelBlade()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Steel Blades to finish");
+		sleepWithStatus(72*10000, "[" .. i .. "/" .. num_loops .. "] Waiting for Steel Blades to finish");
 		end
 end
 	
@@ -756,7 +753,7 @@ function LeadChisel()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(414000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Chisels to finish");
+		sleepWithStatus(72*6000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Chisels to finish");
 		end
 end
 
@@ -784,7 +781,7 @@ function ThothsMetalWire()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Thoths Metal Wire to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Thoths Metal Wire to finish");
 	end
 end
 
@@ -812,7 +809,7 @@ function MetalBlueWire()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Metal Blue Wire to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Metal Blue Wire to finish");
 	end
 end
 
@@ -840,7 +837,7 @@ function MagnesiumWire()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Magnesium Wire to finish");
+		sleepWithStatus(72*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Magnesium Wire to finish");
 	end
 end
 
@@ -868,7 +865,7 @@ function OctecsAlloyWire()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Octecs Alloy Wire to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Octecs Alloy Wire to finish");
 	end
 end
 
@@ -896,7 +893,7 @@ function SilverWire()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Wire to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Wire to finish");
 	end
 end
 
@@ -924,7 +921,7 @@ function CopperWire()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Wire to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Wire to finish");
 	end
 end
 
@@ -952,7 +949,7 @@ function SteelWire()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Steel Wire to finish");
+		sleepWithStatus(72*5000, "[" .. i .. "/" .. num_loops .. "] Waiting for Steel Wire to finish");
 	end
 end
 
@@ -980,7 +977,7 @@ function GoldWire()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Wire to finish");
+		sleepWithStatus(72*10000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Wire to finish");
 	end
 end
 
