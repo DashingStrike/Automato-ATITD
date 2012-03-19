@@ -1,5 +1,5 @@
 -- Open windows with window_opener.lua
--- Arrange them with winder_arranger.lua in rock saw mode
+-- Arrange them with winder_arranger.lua in paper press mode
 -- Run this
 -- Profit!
 
@@ -68,7 +68,7 @@ end
 
 function doit()
 	num_loops = promptNumber("How many passes ?", 100);
-	askForWindow("Open, pin, and arrange rock saws with window_opener/window_arranger first.");
+	askForWindow("Open and pin your paper presses. If you have many use window_opener and window_arranger to open and arrange the menus.");
 
 	srReadScreen();	
 
@@ -88,13 +88,13 @@ function doit()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(72*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for 1st batch of paper to finish");
+		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for 1st batch of paper to finish");
 
 		clickAll("PaperMake.png", 1);
 		lsSleep(200);
 		-- refocus();
 
-		sleepWithStatus(72*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for 2nd batch of paper to finish");
+		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for 2nd batch of paper to finish");
 
 		clickAll("PaperRemove.png", 1);
 		lsSleep(200);
