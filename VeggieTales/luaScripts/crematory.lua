@@ -432,7 +432,7 @@ function takeAll()
   end
   updateWait("Update Crematory Windows", longWait*2);
   srReadScreen();
-  posList = findAllImages("crem-take.png");
+  posList = findAllImages("Take.png");
   for i=1,#posList do
     srClickMouseNoMove(posList[i][0] + 5, posList[i][1] + 5);
     updateWait("Grabbing Everything", longWait);

@@ -100,7 +100,7 @@ end;
 function process_vise(window_pos)
 	-- if we can take anything do that
 
-	local take = srFindImageInRange("ViseTake.png", window_pos[0], window_pos[1], window_w, window_h);
+	local take = srFindImageInRange("Take.png", window_pos[0], window_pos[1], window_w, window_h);
 	if take then
 		srClickMouseNoMove(take[0], take[1]);
 		lsSleep(200);
