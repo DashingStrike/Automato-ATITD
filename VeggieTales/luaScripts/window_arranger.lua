@@ -1,6 +1,7 @@
 --
 -- To choose a differnet layout, add a new section below, or change a "nil" to "1"
 -- 'if nil' or 'elseif nil' means ignore this layout, 'if 1' or 'elseif 1' means use this layout
+-- If all elseif statements are "nil" then it will use the else statement, which is thistle_new
 
 --
 
@@ -16,6 +17,8 @@ y0_2 = 14;
 y0_2_threshold = window_w * 2; -- if x > this, use y0_2 instead, set large to ignore
 
 -- Add new sections here
+
+
 if nil then
 	-- setting permissions
 	dx = 413+55; -- when wrapping
@@ -33,7 +36,7 @@ elseif nil then
 	num_high = 8;
 	window_w = 340;
 
-elseif 1 then
+elseif nil then
 	-- paper presses
 	dx = 388;
 	dy = 100;
@@ -47,12 +50,26 @@ elseif nil then
 	little_dx = 0;
 	num_high = 7;
 
+elseif nil then
+	-- brick racks
+	dx = 170;
+	dy = 115;
+	little_dx = 0;
+	num_high = 7;
+
+elseif nil then
+	-- Kilns
+	dx = 285;
+	dy = 180;
+	little_dx = 0;
+	num_high = 4;
+
 elseif 1 then
 	-- kettles
 	dx = 165;
 	dy = 275;
 	little_dx = 0;
-	num_high = 4;
+	num_high = 3;
 
 elseif nil then
 	-- thistle_custom
@@ -60,6 +77,7 @@ elseif nil then
 	dy = 190;
 	little_dx = 0; -- for every window
 	num_high = 5;
+
 else
 	-- thistle_new
 	dx = 413; -- when wrapping
@@ -67,6 +85,8 @@ else
 	little_dx = 8; -- for every window
 	num_high = 33;
 end
+
+
 
 function setWaitSpot(x0, y0)
 	setWaitSpot_x = x0;
