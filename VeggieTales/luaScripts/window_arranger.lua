@@ -1,5 +1,7 @@
 --
 -- To choose a differnet layout, add a new section below, or change a "nil" to "1"
+-- 'if nil' or 'elseif nil' means ignore this layout, 'if 1' or 'elseif 1' means use this layout
+
 --
 
 loadfile("luaScripts/screen_reader_common.inc")();
@@ -22,6 +24,7 @@ if nil then
 	num_high = 5;
 	y0 = 15;
 	y0_2_threshold = 100000;
+
 elseif nil then
 	-- mass rock saws
 	dx = 137;
@@ -29,18 +32,28 @@ elseif nil then
 	little_dx = 0;
 	num_high = 8;
 	window_w = 340;
+
+elseif 1 then
+	-- paper presses
+	dx = 388;
+	dy = 100;
+	little_dx = 0;
+	num_high = 8;
+
 elseif nil then
 	-- pottery wheels
 	dx = 190;
 	dy = 150;
 	little_dx = 0;
 	num_high = 7;
+
 elseif 1 then
 	-- kettles
 	dx = 165;
 	dy = 275;
 	little_dx = 0;
 	num_high = 4;
+
 elseif nil then
 	-- thistle_custom
 	dx = 413; -- when wrapping
