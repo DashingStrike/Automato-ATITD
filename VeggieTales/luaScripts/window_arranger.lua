@@ -2,8 +2,10 @@
 -- To choose a differnet layout, add a new section below, or change a "nil" to "1"
 -- 'if nil' or 'elseif nil' means ignore this layout, 'if 1' or 'elseif 1' means use this layout
 -- If all elseif statements are "nil" then it will use the else statement, which is thistle_new
-
 --
+--
+
+
 
 loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
