@@ -5,6 +5,8 @@
 --
 
 
+
+
 loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
 
