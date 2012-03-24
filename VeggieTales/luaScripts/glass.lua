@@ -14,7 +14,7 @@ item_priority = {"GlassMakeJar.png", "GlassMakeRod.png", "GlassMakePipe.png", "G
 -- max temperature in which we will contine heating it, wait until it gets below this before adding
 max_add_temp = 2300;
 -- minimum temperature in which we will start a new project, otherwise will reheat
-min_new_temp = 1780;
+min_new_temp = 1750;
 
 tick_time = 3000;
 
@@ -64,9 +64,6 @@ function addCC(window_pos, state)
 	end
 	-- lsPrintln(window_pos[0] .. " " .. window_pos[1] .. " " .. window_w .. " " .. window_h);
 	local pos = srFindImageInRange("GlassAdd2Charcoal.png", window_pos[0], window_pos[1], window_w, window_h, tol);
-	if not pos then
-		error 'Could not find Add 2 Charcoal';
-	end
 	
 	state.just_added = 1;
 	srClickMouseNoMove(pos[0]+5, pos[1]+2);
@@ -77,6 +74,10 @@ function glassTick(window_pos, state)
 	state.status = "";
 	local pos;
 	local out_of_glass = nil;
+	if state.want_spike then
+		state.timer = state.timer - (tick_time / 1000);
+	end
+	
 	pos = srFindImageInRange("GlassTimeToStop.png", window_pos[0], window_pos[1], window_w, window_h, tol);
 	if pos then
 		out_of_glass = 1;
@@ -88,9 +89,7 @@ function glassTick(window_pos, state)
 	end
 	local temp = ocrNumber(pos[0] + temp_width, pos[1]);
 	
-	if temp == 0 then
-		state.spiking = 1; -- assume user spikes it to increase temperature
-	end
+
 	state.status = (state.status .. "  Temp:" .. temp);
 
 	nothing_cooking = srFindImageInRange("GlassNothingCooking.png", window_pos[0]-5, window_pos[1], window_w, window_h, tol);
@@ -117,27 +116,30 @@ function glassTick(window_pos, state)
 			addCC(window_pos, state);
 		end
 			
-		--  if just fell, and is under 1600+threshold, add one, and as soon as we finish the current
+		--  if just fell, and is under 1600+threshold, add one
 		--    item, add another and wait for spike or fall
 		if fell and (temp < min_new_temp) then
 			-- addCC(window_pos, state); -- done above
+			state.timer = 72;
 			state.want_spike = 1;
-			state.status = state.status .. " FlaggedWantSpike";
+			state.status = state.status .. " WaitingToSpike";
 		end
 		
-		if rose and state.want_spike and nothing_cooking and state.last_nothing_cooking and not state.just_added then
-			state.status = state.status .. " StartingSpike";
-			addCC(window_pos, state);
-			state.spiking = 1;
+		--if it's time to add for spike, add
+		if state.want_spike and state.timer <= 0 then
 			state.want_spike = nil;
+			state.spiking = 1;
+			state.timer = 0;
+			addCC(window_pos, state);
 		end
 	end
-	
+
+	if state.want_spike then
+		state.status = state.status .. " (wait to spike: " .. state.timer .. ")";
+	end
+
 	if state.spiking then
 		state.status = state.status .. " (spiking)";
-	end
-	if state.want_spike then
-		state.status = state.status .. " (want spike)";
 	end
 	
 	state.last_temp = temp;
@@ -150,25 +152,21 @@ function glassTick(window_pos, state)
 	if nothing_cooking then
 		state.status = state.status .. " NothingCooking";
 		if not stop_cooking then
-			if temp > min_new_temp and temp < 2400 then
-				if not state.spiking and not state.want_spike then
-					local made_one=nil;
-					for item_index=1, #item_priority do
-						pos = srFindImageInRange(item_priority[item_index], window_pos[0], window_pos[1], window_w, window_h, tol);
-						if pos then
-							state.status = state.status .. " Making:" .. item_priority[item_index];
-							srClickMouseNoMove(pos[0]+5, pos[1]+2);
-							made_one = 1;
-							break;
-						end
+			if temp > 1600 and temp < 2400 then
+				local made_one=nil;
+				for item_index=1, #item_priority do
+					pos = srFindImageInRange(item_priority[item_index], window_pos[0], window_pos[1], window_w, window_h, tol);
+					if pos then
+						state.status = state.status .. " Making:" .. item_priority[item_index];
+						srClickMouseNoMove(pos[0]+5, pos[1]+2);
+						made_one = 1;
+						break;
 					end
-					if not made_one then
-						state.status = state.status .. " NothingToMake";
-						-- refresh window
-						srClickMouseNoMove(window_pos[0], window_pos[1]);
-					end
-				else
-					state.status = state.status .. " (waiting for spike)";
+				end
+				if not made_one then
+					state.status = state.status .. " NothingToMake";
+					-- refresh window
+					srClickMouseNoMove(window_pos[0], window_pos[1]);
 				end
 			else
 				state.status = state.status .. " (temp out of range)";
