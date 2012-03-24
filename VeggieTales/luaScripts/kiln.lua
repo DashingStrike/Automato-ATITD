@@ -56,6 +56,33 @@ function clickAll(image_name)
 	end
 end
 
+function clickAllRight(image_name)
+	-- Find windows and click them!
+	srReadScreen();
+	xyWindowSize = srGetWindowSize();
+	local buttons = findAllImages(image_name);
+	
+	if #buttons == 0 then
+		statusScreen("Could not find any pinned up windows...");
+		lsSleep(1500);
+	else
+		statusScreen("Clicking " .. #buttons .. "windows(s)...");
+		if up then
+			for i=#buttons, 1, -1  do
+				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, true);
+				lsSleep(per_click_delay);
+			end
+		else
+			for i=1, #buttons  do
+				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, true);
+				lsSleep(per_click_delay);
+			end
+		end
+		statusScreen("Done clicking (" .. #buttons .. " windows).");
+		lsSleep(100);
+	end
+end
+
 function refocus()
 	statusScreen("Refocusing...");
 	for i=2, #window_locs do
@@ -67,16 +94,14 @@ end
 
 
 function Unpin()
+
+	askForWindow("Press Shift key to unpin/close all pinned windows. If you should get any errors, put ATITD window in focus first, before pressing Shift key.");
 	
 	srReadScreen();
 
-
 	window_locs = findAllImages("This.png");
 
-	clickAll("This.png", 1);
-	lsSleep(200);
-	
-	clickAll("Unpin.png", 1);
+	clickAllRight("This.png", 1);
 	lsSleep(200);
 end
 
