@@ -18,7 +18,7 @@ num_clicks = 0;
 num_repairs = 0;
 
 function doit()
-	askForWindow();
+	askForWindow("Pin up your barrel grinder menu, then press Shift to continue.");
 	while 1 do
 		lsSleep(100);
 		if (lsShiftHeld() and lsControlHeld()) then
@@ -29,7 +29,7 @@ function doit()
 		lsPrintln(lsGetTimer() .. " start it");
 		local st = srFindImage(imgStart, 4000);
 		if not st then
-			error 'Could not find start button';
+			error 'Could not find \'Start grinding\' button.';
 		end
 		lsPrintln(lsGetTimer() .. " winding and waiting");
 		statusScreen("Winding and waiting.");

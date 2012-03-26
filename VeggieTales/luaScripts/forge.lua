@@ -50,8 +50,9 @@ function clickAll(image_name)
 	local buttons = findAllImages(image_name);
 	
 	if #buttons == 0 then
-		statusScreen("Could not find specified buttons...");
-		lsSleep(1500);
+		error 'Could not find \'Forge\' windows.'
+		--statusScreen("Could not find specified buttons...");
+		--lsSleep(1500);
 	else
 		statusScreen("Clicking " .. #buttons .. "button(s)...");
 		if up then

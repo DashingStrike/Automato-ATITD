@@ -7,21 +7,10 @@ loadfile("luaScripts/ui_utils.inc")();
 
 per_click_delay = 10;
 
-button_names = {
--- "Potash.png", "Begin.png", "Ignite.png", "StokeMax.png",
-"ThisIs.png",
-"Take.png",
-"UnPin.png",
-"ThistleAsc.png",
-"Harvest.png",
-
-"CUSTOM", "Last CUSTOM"};
-
-up = nil;
 right_click = nil;
 
 function doit()
-	askForWindow("Pin any number of windows, after selecting the window, you will be given a prompt of what kind of button to click on.");
+	askForWindow("Pin any number of Wood Plane or Carpentry Bench windows. Press Shift to continue.");
 	while 1 do
 		local image_name = "ThisIs.png";
 
@@ -31,8 +20,9 @@ function doit()
 		local buttons = findAllImages(image_name);
 		
 		if #buttons == 0 then
-			statusScreen("Could not find specified buttons...");
-			lsSleep(1500);
+			error 'Could not find \'Start Planing\' button.'
+			--statusScreen("Could not find specified buttons...");
+			--lsSleep(1500);
 		else
 			statusScreen("Clicking " .. #buttons .. "button(s)...");
 			for i=#buttons, 1, -1 do
@@ -51,8 +41,9 @@ function doit()
 		local buttons = findAllImages(image_name);
 		
 		if #buttons == 0 then
-			statusScreen("Could not find specified buttons...");
-			lsSleep(1500);
+			error 'Could not find any windows.'
+			--statusScreen("Could not find specified buttons...");
+			--lsSleep(1500);
 		else
 			statusScreen("Clicking " .. #buttons .. "button(s)...");
 			for i=#buttons, 1, -1 do

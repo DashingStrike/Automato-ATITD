@@ -57,7 +57,7 @@ wire_button_names = {
 
 
 function KnifeBlade()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -79,7 +79,7 @@ function KnifeBlade()
 end
 
 function ShovelBlade()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -102,7 +102,7 @@ end
 
 
 function Nails()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill with charcoal, arrange, and pin the forges first before you light the fire.");
 
 	srReadScreen();	
@@ -125,7 +125,7 @@ end
 
 function CopperPipe()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -148,7 +148,7 @@ end
 
 function LeadPipe()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -171,7 +171,7 @@ end
 
 function IronBar()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -199,7 +199,7 @@ end
 
 function GoldBar()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -227,7 +227,7 @@ end
 
 function SilverBar()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -254,7 +254,7 @@ function SilverBar()
 end
 
 function LeadSheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -282,7 +282,7 @@ function LeadSheeting()
 end
 
 function GoldSheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -310,7 +310,7 @@ function GoldSheeting()
 end
 
 function CopperSheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -338,7 +338,7 @@ function CopperSheeting()
 end
 
 function OctecsAlloySheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -366,7 +366,7 @@ function OctecsAlloySheeting()
 end
 
 function SilverSheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -394,7 +394,7 @@ function SilverSheeting()
 end
 
 function SteelSheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -423,7 +423,7 @@ end
 
 function GoldFoil()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -450,7 +450,7 @@ function GoldFoil()
 end
 
 function MetalBlueSheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -478,7 +478,7 @@ function MetalBlueSheeting()
 end
 
 function TinSheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -506,7 +506,7 @@ function TinSheeting()
 end
 
 function MoonSteelSheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -534,7 +534,7 @@ function MoonSteelSheeting()
 end
 
 function ThothsMetalSheeting()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -563,7 +563,7 @@ end
 
 function WaterMetalStrap()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -591,7 +591,7 @@ end
 
 function IronStrap()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -619,7 +619,7 @@ end
 
 function AluminumStrap()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -647,7 +647,7 @@ end
 	
 function CopperStrap()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -675,7 +675,7 @@ end
 
 function IronPoker()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -703,7 +703,7 @@ end
 
 function SteelBlade()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -731,7 +731,7 @@ end
 	
 function LeadChisel()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -758,7 +758,7 @@ function LeadChisel()
 end
 
 function ThothsMetalWire()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -786,7 +786,7 @@ function ThothsMetalWire()
 end
 
 function MetalBlueWire()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -814,7 +814,7 @@ function MetalBlueWire()
 end
 
 function MagnesiumWire()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -842,7 +842,7 @@ function MagnesiumWire()
 end
 
 function OctecsAlloyWire()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -870,7 +870,7 @@ function OctecsAlloyWire()
 end
 
 function SilverWire()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -898,7 +898,7 @@ function SilverWire()
 end
 
 function CopperWire()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -926,7 +926,7 @@ function CopperWire()
 end
 
 function SteelWire()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();
@@ -954,7 +954,7 @@ function SteelWire()
 end
 
 function GoldWire()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
 	
 	srReadScreen();

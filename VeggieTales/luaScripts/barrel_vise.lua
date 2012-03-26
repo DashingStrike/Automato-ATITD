@@ -164,7 +164,7 @@ function process_vise(window_pos)
 		return "DANGER; No Stoke (0 Wood)";
 	end;
 
-	return 'Flame: OK; Fuel OK;';
+	return 'Flame: OK; Fuel OK';
 end
 
 
@@ -176,7 +176,7 @@ end
 function doit()
 
 	-- testReorder();
-	num_barrels = promptNumber("How many barrels?", 100);
+	num_barrels = promptNumber("How many barrels?", 1);
 	askForWindow("Have 100 Boards, 2 Copper Straps, and 80 Wood in your inventory for every barrel you want to make.\n	\nFor large numbers of barrels you can get away with less wood, the average used is 60.\n	\nPin as many vises as you want, put the cursor over the ATITD window, press Shift.");
 	
 	srReadScreen();
@@ -184,7 +184,7 @@ function doit()
 	local vise_windows = findAllImages("ThisIs.png");
 	
 	if #vise_windows == 0 then
-		error 'Did not find any open windows';
+		error 'Could not \'Barrel Vice\' windows.';
 	end
 	
 	local last_ret = {};
@@ -221,7 +221,7 @@ function doit()
 			if not (#vise_windows == #vise_windows2) then
 				lsPrintWrapped(10, 45, 5, lsScreenX-15, 1, 1, 0xFF7070ff, "Expected " .. #vise_windows .. " windows, found " .. #vise_windows2 .. ", not ticking.");		
 			elseif (made>=num_barrels) or (taken >= num_barrels) or (stop_cooking>0) then
-				lsPrint(10, 45, 5, 1.5, 1.5, 0x70FF70ff, "finishing up.");
+				lsPrint(10, 45, 5, 1.5, 1.5, 0x70FF70ff, "Finishing up.");
 			elseif (taken > made) then
 				lsPrint(10, 45, 5, 1.5, 1.5, 0xFFFFFFff, taken .. "/" .. num_barrels .. " finished");
 			else
