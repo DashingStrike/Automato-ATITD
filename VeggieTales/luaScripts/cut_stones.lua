@@ -6,7 +6,11 @@
 loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
 
-local expected_windows = 40; -- Just to double check you don't have any extra windows open that it'll try to click on
+--local expected_windows = 40; -- Just to double check you don't have any extra windows open that it'll try to click on
+
+expected_windows = promptNumber("How many Rock Saws?", 1);
+
+
 local per_click_delay = 0;
 
 function setWaitSpot(x0, y0)
@@ -34,8 +38,9 @@ function clickAll(image_name, up)
 	local buttons = findAllImages(image_name);
 	
 	if #buttons == 0 then
-		statusScreen("Could not find specified buttons...");
-		lsSleep(1500);
+		error 'Could not find any \'Rock Saw\' windows.'
+		--statusScreen("Could not find specified buttons...");
+		--lsSleep(1500);
 	else
 		statusScreen("Clicking " .. #buttons .. "button(s)...");
 		if up then

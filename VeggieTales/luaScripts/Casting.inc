@@ -36,7 +36,7 @@ tools_button_names = {
 
 
 function heavyleadbowl()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -58,7 +58,7 @@ function heavyleadbowl()
 end
 
 function monkeywrench()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -81,7 +81,7 @@ end
 
 
 function silverbowl()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 
 	srReadScreen();	
@@ -104,7 +104,7 @@ end
 
 function ironcookpot()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -127,7 +127,7 @@ end
 
 function anvilbed()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -150,7 +150,7 @@ end
 
 function orichalcumpellets()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -178,7 +178,7 @@ end
 
 function mediumgear()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -206,7 +206,7 @@ end
 
 function smallgear()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -233,7 +233,7 @@ function smallgear()
 end
 
 function bearing()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -261,7 +261,7 @@ function bearing()
 end
 
 function washers()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -289,7 +289,7 @@ function washers()
 end
 
 function bolts()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -316,7 +316,7 @@ function bolts()
 end
 
 function heavymallethead()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -344,7 +344,7 @@ function heavymallethead()
 end
 
 function widetungstenchisel()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -372,7 +372,7 @@ function widetungstenchisel()
 end
 
 function roundhammer()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -401,7 +401,7 @@ end
 
 function ballpeenhammer()
 
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -428,7 +428,7 @@ function ballpeenhammer()
 end
 
 function shapingmallet()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -456,7 +456,7 @@ function shapingmallet()
 end
 
 function leadmallet()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();
@@ -484,7 +484,7 @@ function leadmallet()
 end
 
 function pewterincenseprong()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
 	
 	srReadScreen();

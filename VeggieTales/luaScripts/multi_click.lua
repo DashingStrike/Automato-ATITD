@@ -12,7 +12,7 @@ button_names = {
 "ThisIs.png",
 "Take.png",
 "UnPin.png",
-"ThistleAsc.png",
+"This.png",
 "Harvest.png",
 
 "CUSTOM", "Last CUSTOM"};
