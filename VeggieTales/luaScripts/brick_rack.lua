@@ -35,8 +35,9 @@ function clickAll(image_name)
 	local buttons = findAllImages(image_name);
 	
 	if #buttons == 0 then
-		statusScreen("Could not find specified buttons...");
-		lsSleep(1500);
+		error 'Could not find any \'Brick Rack\' windows.'
+		--statusScreen("Could not find specified buttons...");
+		--lsSleep(1500);
 	else
 		statusScreen("Clicking " .. #buttons .. "button(s)...");
 		if up then
@@ -109,7 +110,7 @@ end
 
 
 function Bricks()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Pin all Brickrack windows up and stand where all of them can be reached.");
 	
 	srReadScreen();
@@ -140,11 +141,21 @@ function Bricks()
 		clickAll("Everything.png", 1);
 		lsSleep(200);
 		-- refocus();
+
+
+		-- refresh windows, one last time so we know for sure the machine is empty (Take menu disappears)
+		clickAll("This.png", 1);
+		lsSleep(200);
+		-- refocus();
+
+
+
+
 	end
 end
 
 function Clay_Bricks()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Pin all Brickrack windows up and stand where all of them can be reached.");
 	
 	srReadScreen();
@@ -175,11 +186,18 @@ function Clay_Bricks()
 		clickAll("Everything.png", 1);
 		lsSleep(200);
 		-- refocus();
+
+		-- refresh windows, one last time so we know for sure the machine is empty (Take menu disappears)
+		clickAll("This.png", 1);
+		lsSleep(200);
+		-- refocus();
+
+
 	end
 end
 
 function Firebricks()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Pin all Brickrack windows up and stand where all of them can be reached.");
 	
 	srReadScreen();
@@ -210,6 +228,12 @@ function Firebricks()
 		clickAll("Everything.png", 1);
 		lsSleep(200);
 		-- refocus();
+
+		-- refresh windows, one last time so we know for sure the machine is empty (Take menu disappears)
+		clickAll("This.png", 1);
+		lsSleep(200);
+		-- refocus();
+
 	end
 end
 

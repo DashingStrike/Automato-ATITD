@@ -57,10 +57,10 @@ windows = nil;
 -------------------------------------------------------------------------------
 
 function doit()
-  askForWindow("Crematory script by Tallow.");
---  askForWindow("Make sure all your crematory windows are pinned. Each crematory should be empty.");
   while true do
     promptLoad();
+  askForWindow("Crematory script by Tallow.\n\nMake sure all your crematory windows are pinned. Each crematory should be empty BEFORE pinning them up.");
+
     for i=1,passCount do
       currentPass = i;
       takeAll();

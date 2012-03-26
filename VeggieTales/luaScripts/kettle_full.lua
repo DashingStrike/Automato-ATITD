@@ -28,8 +28,9 @@ function clickAll(image_name)
 	local buttons = findAllImages(image_name);
 	
 	if #buttons == 0 then
-		statusScreen("Could not find specified buttons...");
-		lsSleep(1500);
+		error 'Could not find \'Kettle\' windows.'
+		--statusScreen("Could not find specified buttons...");
+		--lsSleep(1500);
 	else
 		statusScreen("Clicking " .. #buttons .. "button(s)...");
 		if up then
@@ -123,7 +124,7 @@ function FlowerFert()
 		
 		sleepWithStatus(40*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Flower Fertilizer to finish");
 		
-		clickAll("Take.png", 1);
+		clickAll("Kettle_Take.png", 1);
 		lsSleep(200);
 		-- refocus();
 	end
@@ -153,7 +154,7 @@ function GrainFert()
 		
 		sleepWithStatus(40*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Grain Fertilizer to finish");
 		
-		clickAll("Take.png", 1);
+		clickAll("Kettle_Take.png", 1);
 		lsSleep(200);
 		-- refocus();
 
@@ -229,7 +230,7 @@ function Acid()
 
 		sleepWithStatus(10*60*340, "[" .. i .. "/" .. num_loops .. "] Waiting for Acid to finish");
 
-		clickAll("Take.png", 1);
+		clickAll("Kettle_Take.png", 1);
 		lsSleep(200);
 		-- refocus();
 
@@ -306,7 +307,7 @@ function Potash()
 
 		sleepWithStatus(10*60*340, "[" .. i .. "/" .. num_loops .. "] Waiting for Potash to finish");
 
-		clickAll("Take.png", 1);
+		clickAll("Kettle_Take.png", 1);
 		lsSleep(200);
 		-- refocus();
 
@@ -383,7 +384,7 @@ function Sulfur()
 
 		sleepWithStatus(10*60*340, "[" .. i .. "/" .. num_loops .. "] Waiting for sulfur to finish");
 
-		clickAll("Take.png", 1);
+		clickAll("Kettle_Take.png", 1);
 		lsSleep(200);
 		-- refocus();
 
@@ -460,7 +461,7 @@ function Salt()
 
 		sleepWithStatus(10*60*340, "[" .. i .. "/" .. num_loops .. "] Waiting for Salt to finish");
 
-		clickAll("Take.png", 1);
+		clickAll("Kettle_Take.png", 1);
 		lsSleep(200);
 		-- refocus();
 
@@ -492,7 +493,7 @@ function WeedKiller()
 		
 		sleepWithStatus(80*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Weed Killer to finish");
 		
-		clickAll("Take.png", 1);
+		clickAll("Kettle_Take.png", 1);
 		lsSleep(200);
 		-- refocus();
 
@@ -523,7 +524,7 @@ function Arsenic()
 		
 		sleepWithStatus(40*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Arsenic to finish");
 		
-		clickAll("Take.png", 1);
+		clickAll("Kettle_Take.png", 1);
 		lsSleep(200);
 		-- refocus();
 
@@ -554,7 +555,7 @@ function GebsTears()
 		
 		sleepWithStatus(40*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gebs Tears to finish");
 		
-		clickAll("Take.png", 1);
+		clickAll("Kettle_Take.png", 1);
 		lsSleep(200);
 		-- refocus();
 

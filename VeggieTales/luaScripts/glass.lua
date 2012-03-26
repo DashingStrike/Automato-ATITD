@@ -227,7 +227,7 @@ function doit()
 	local glass_windows = findAllImages("ThisIs.png");
 	
 	if #glass_windows == 0 then
-		error 'Did not find any open windows';
+		error 'Could not find any \'Glazier\'s Bench\' windows.';
 	end
 	
 	local glass_state = {};

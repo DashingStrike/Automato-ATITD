@@ -52,7 +52,7 @@ function SetupLureGroup()
 			LastLure=nil;
 		end
 	else
-		error("didnt find pin");
+		error("Didn\'t find pin up.");
 	end
 	
 	

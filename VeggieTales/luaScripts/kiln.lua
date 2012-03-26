@@ -36,8 +36,9 @@ function clickAll(image_name)
 	local buttons = findAllImages(image_name);
 	
 	if #buttons == 0 then
-		statusScreen("Could not find specified buttons...");
-		lsSleep(1500);
+		error 'Could not find \'Kiln\' windows.'
+		--statusScreen("Could not find specified buttons...");
+		--lsSleep(1500);
 	else
 		statusScreen("Clicking " .. #buttons .. "button(s)...");
 		if up then
@@ -149,6 +150,12 @@ function Clay_Morter()
 		lsSleep(200);
 		-- refocus();
 		
+		-- refresh windows, one last time so we know for sure the machine is empty (Take menu disappears)
+		clickAll("This.png", 1);
+		lsSleep(200);
+		-- refocus();
+
+
 	end
 end
 
@@ -195,6 +202,12 @@ function Jugs()
 		lsSleep(200);
 		-- refocus();
 		
+		-- refresh windows, one last time so we know for sure the machine is empty (Take menu disappears)
+		clickAll("This.png", 1);
+		lsSleep(200);
+		-- refocus();
+
+
 	end
 end
 
@@ -241,6 +254,12 @@ function Clay_Bricks()
 		lsSleep(200);
 		-- refocus();
 		
+		-- refresh windows, one last time so we know for sure the machine is empty (Take menu disappears)
+		clickAll("This.png", 1);
+		lsSleep(200);
+		-- refocus();
+
+
 	end
 end
 
@@ -287,6 +306,12 @@ function Firebricks()
 		lsSleep(200);
 		-- refocus();
 		
+		-- refresh windows, one last time so we know for sure the machine is empty (Take menu disappears)
+		clickAll("This.png", 1);
+		lsSleep(200);
+		-- refocus();
+
+
 	end
 end
 

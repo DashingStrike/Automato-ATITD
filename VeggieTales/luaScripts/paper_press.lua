@@ -37,8 +37,9 @@ function clickAll(image_name, up, image_name2)
 	end
 	
 	if #buttons == 0 then
-		statusScreen("Could not find specified buttons...");
-		lsSleep(1500);
+		error 'Could not find \'Paper Press\' windows.'
+		--statusScreen("Could not find specified buttons...");
+		--lsSleep(1500);
 	else
 		statusScreen("Clicking " .. #buttons .. "button(s)...");
 		if up then
