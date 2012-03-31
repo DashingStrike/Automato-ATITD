@@ -184,7 +184,7 @@ function doit()
 	local vise_windows = findAllImages("ThisIs.png");
 	
 	if #vise_windows == 0 then
-		error 'Could not \'Barrel Vice\' windows.';
+		error 'Could not find \'Barrel Vise\' windows.';
 	end
 	
 	local last_ret = {};
