@@ -33,7 +33,9 @@ end
 
 
 function doit()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How much flax to process ?", 100);
+	num_loops = math.floor(num_loops / 10);
+
 	askForWindow("Pin Hacking Rake window up and have Rotten Flax in you inventory. Make sure your rake is on the first step before beginning. You MUST have Skills window open and everything from Strength to Perception skill should be visible.");
 	local step = 1;
 	local warn_small_font=nil;
