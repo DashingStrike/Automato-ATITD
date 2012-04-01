@@ -67,7 +67,7 @@ function doit()
 		end
 		
 		if not stats_black and not stats_black2 and not stats_black3 then
-			sleepWithStatus(1500, "[" .. loop_count .. "/" .. num_loops .. "] Wait for Endurance\n[" .. step .. "/4] Step Of Hacking Rake" .. warning);
+			sleepWithStatus(1200, "[" .. loop_count .. "/" .. num_loops .. "] Wait for Endurance\n[" .. step .. "/4] Step Of Hacking Rake" .. warning);
 		elseif loop_count > num_loops then
 			num_loops = nil;
 		elseif step <= 3 then
