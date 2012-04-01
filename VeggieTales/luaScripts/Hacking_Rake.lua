@@ -33,7 +33,9 @@ end
 
 
 function doit()
-	num_loops = promptNumber("How many passes ?", 100);
+	num_loops = promptNumber("How much flax to process ?", 100);
+	num_loops = math.floor(num_loops / 10);
+
 	askForWindow("Pin Hacking Rake window up and have Rotten Flax in you inventory. Make sure your rake is on the first step before beginning. You MUST have Skills window open and everything from Strength to Perception skill should be visible.");
 	local step = 1;
 	local warn_small_font=nil;
@@ -67,7 +69,7 @@ function doit()
 		end
 		
 		if not stats_black and not stats_black2 and not stats_black3 then
-			sleepWithStatus(10*60*5, "[" .. loop_count .. "/" .. num_loops .. "] Wait for Endurance\n[" .. step .. "/4] Step Of Hacking Rake" .. warning);
+			sleepWithStatus(1200, "[" .. loop_count .. "/" .. num_loops .. "] Wait for Endurance\n[" .. step .. "/4] Step Of Hacking Rake" .. warning);
 		elseif loop_count > num_loops then
 			num_loops = nil;
 		elseif step <= 3 then
