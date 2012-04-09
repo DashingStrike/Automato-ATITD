@@ -61,17 +61,26 @@ Lures = {
 };
 
 --Picture/ID
+
+-- Do not change the current order of Chat_Types or else there may be consequences. Add to the end of the list. 
+-- Other arrays on this page most likely doesn't matter on the order. The lost lure images needs to be higher above similiar images
+-- Example, "oddlostlure" must be listed above the "odd" entry. If not, then "oddlostlure" won't ever get triggered, because it will find a match to the "odd" image first.
+
 Chat_Types = {
 "ChatLog_UsingALure.png","lure",
-"ChatLog_NoFishBit.png","nofish",
+"Chatlog_AlmostCaughtOddLostLure.png","oddlostlure",
+"Chatlog_AlmostCaughtOdd.png","odd",
 "Chatlog_AlmostCaughtStrange.png","strange",
 "Chatlog_AlmostCaughtUnusual.png","unusual",
-"Chatlog_NoBitLostLure.png","nofishlostlure",
+"Chatlog_NoBitLostLure.png","nobitlostlure",
+"Chatlog_NoCatchLostLure.png","nocatchlostlure",
+"Chatlog_ThoughYouLost.png","caughtlostlure",
 "ChatLog_CaughtA.png","caught",
 "Chatlog_CarryMuch.png","carry",
 "Chatlog_CarryBulk.png","carry",
 "Chatlog_AlreadyFishing.png","alreadyfishing",
-"Chat_ThoughYouLost.png","caughtlostlure",
+"ChatLog_FailedToCatch.png","nocatch",
+"ChatLog_NoFishBit.png","nobit",
 };
 
 CL_Fish = {
@@ -95,6 +104,7 @@ CL_Fish = {
 "Chatlog_Fish_PancakeLoach.png",
 "Chatlog_Fish_Perch.png",
 "Chatlog_Fish_Phagrus.png",
+"Chatlog_Fish_QueenLionFish.png",
 "Chatlog_Fish_RainbowCod.png",
 "Chatlog_Fish_SeaUrchin.png",
 "Chatlog_Fish_ShelomitsPuffer.png",
