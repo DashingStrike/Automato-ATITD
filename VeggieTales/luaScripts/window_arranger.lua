@@ -1,27 +1,131 @@
 --
--- To choose a differnet layout, add a new section below, or change a "nil" to "1"
--- 'if nil' or 'elseif nil' means ignore this layout, 'if 1' or 'elseif 1' means use this layout
--- If all elseif statements are "nil" then it will use the else statement, which is thistle_new
 --
-
-
-
+--
 
 loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
 
 local window_w = 410;
 local window_h = 312;
+local dropdown_cur_value = 1;
+local choice = "Brick Racks";
+
+local scale = 0.6;
+local z = 0.0; -- Only matters if there is overlapping elements on screen
+
 
 x0 = 10;
 y0 = 50;
 y0_2 = 14;
 y0_2_threshold = window_w * 2; -- if x > this, use y0_2 instead, set large to ignore
 
+
+
+dropdown_values = {"Brick Rack", "Carpentry Shop", "Kettle", "Kiln", "Paper Press", "Pottery Wheel", "Rock Saw", "Thistle Custom", "Thistle New"};
+
+
+
+
+
+function GetLayout()
+
+
 -- Add new sections here
 
+if (dropdown_cur_value == 1) then
+choice = "Brick Racks";
+	-- brick racks
+	dx = 170;
+	dy = 115;
+	little_dx = 0;
+	num_high = 7;
 
-if nil then
+
+elseif (dropdown_cur_value == 2) then
+choice = "Carpentry Shop";
+	-- carpentry shop
+	dx = 280;
+	dy = 205;
+	little_dx = 0;
+	num_high = 4;
+
+
+
+elseif (dropdown_cur_value == 3) then
+choice = "Kettles";
+	-- kettles
+	dx = 165;
+	dy = 275;
+	little_dx = 0;
+	num_high = 3;
+
+
+elseif (dropdown_cur_value == 4) then
+choice = "Kilns";
+	-- Kilns
+	dx = 285;
+	dy = 180;
+	little_dx = 0;
+	num_high = 4;
+
+
+elseif (dropdown_cur_value == 5) then
+choice = "Paper Press";
+	-- paper presses
+	dx = 388;
+	dy = 100;
+	little_dx = 0;
+	num_high = 8;
+
+elseif (dropdown_cur_value == 6) then
+choice = "Pottery Wheel";
+	-- pottery wheels
+	dx = 190;
+	dy = 150;
+	little_dx = 0;
+	num_high = 7;
+
+
+
+elseif (dropdown_cur_value == 7) then
+choice = "Rock Saw";
+	-- rock saws
+	dx = 137;
+	dy = 125;
+	little_dx = 0;
+	num_high = 8;
+	window_w = 340;
+
+
+elseif (dropdown_cur_value == 8) then
+choice = "Thistle Custom";
+	-- thistle_custom
+	dx = 413; -- when wrapping
+	dy = 190;
+	little_dx = 0; -- for every window
+	num_high = 5;
+
+
+elseif (dropdown_cur_value == 9) then
+choice = "Thistle New";
+	-- thistle_new
+	dx = 413; -- when wrapping
+	dy = 24;
+	little_dx = 8; -- for every window
+	num_high = 33;
+
+
+-- Add more layouts below, between this line and the 'else' statement below.
+-- The below 'else' statement is a copy of the original script, not sure what it's for, but added it just in case.
+
+	-- The subsequent/future layout statement would be 'elseif (dropdown_cur_value == 10) then'
+	-- The 2nd next subsequent/future layout statement would be 'elseif (dropdown_cur_value == 11) then', etc...
+
+
+
+
+else
+
 	-- setting permissions
 	dx = 413+55; -- when wrapping
 	dy = 205;
@@ -30,63 +134,12 @@ if nil then
 	y0 = 15;
 	y0_2_threshold = 100000;
 
-elseif nil then
-	-- mass rock saws
-	dx = 137;
-	dy = 125;
-	little_dx = 0;
-	num_high = 8;
-	window_w = 340;
 
-elseif nil then
-	-- paper presses
-	dx = 388;
-	dy = 100;
-	little_dx = 0;
-	num_high = 8;
 
-elseif nil then
-	-- pottery wheels
-	dx = 190;
-	dy = 150;
-	little_dx = 0;
-	num_high = 7;
-
-elseif nil then
-	-- brick racks
-	dx = 170;
-	dy = 115;
-	little_dx = 0;
-	num_high = 7;
-
-elseif nil then
-	-- Kilns
-	dx = 285;
-	dy = 180;
-	little_dx = 0;
-	num_high = 4;
-
-elseif 1 then
-	-- kettles
-	dx = 165;
-	dy = 275;
-	little_dx = 0;
-	num_high = 3;
-
-elseif nil then
-	-- thistle_custom
-	dx = 413; -- when wrapping
-	dy = 190;
-	little_dx = 0; -- for every window
-	num_high = 5;
-
-else
-	-- thistle_new
-	dx = 413; -- when wrapping
-	dy = 24;
-	little_dx = 8; -- for every window
-	num_high = 33;
 end
+
+end
+
 
 
 
@@ -161,8 +214,31 @@ end
 
 
 function doit()
-	askForWindow("Pin any number of windows.  Will be arranged according to settings in window_arranger.lua, edit this file to choose different layouts.");
+
+while not lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "Next") do
+
+
+
+lsPrintWrapped(10, 10, z, lsScreenX - 20, scale, scale, 0xFFFFFFff, "This will arrange your windows according to the defined layouts. Choose layout to arrange:");
+
+--This shrinks down the letter size in pulldown menu. But gets reset by askForWindow below...
+lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
+
+dropdown_cur_value = lsDropdown("ArrangerDropDown", 20, 60, z, 310, dropdown_cur_value, dropdown_values);
+		lsDoFrame();
+		checkBreak();
+end
+
+
+GetLayout();
+
+
+	askForWindow("Pin any number of " .. choice .. " windows. Will be arranged according to settings in window_arranger.lua. Press Shift to continue.");
+
 	
+
+
+
 	xyScreenSize = srGetWindowSize();
 	
 	-- refocusThistles();

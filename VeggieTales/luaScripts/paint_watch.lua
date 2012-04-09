@@ -59,6 +59,7 @@ function doit()
 
 	askForWindow("Open the paint window. Take any paint away so to start with 'Black'.");
 
+
 	srReadScreen();
 	xyWindowSize = srGetWindowSize();
 	local colour_panel = findAllImages("paint-black.png");
@@ -74,8 +75,9 @@ function doit()
 		error "No buttons found";
 	end
 
-	while 1 do
 
+	while 1 do
+lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
 		-- Where to start putting buttons/text on the screen.
 		y=0;
 

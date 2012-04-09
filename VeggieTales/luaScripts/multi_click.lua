@@ -79,6 +79,9 @@ function doit()
 			image_name = "CUSTOM";
 		end
 		
+
+	askForWindow("Press Shift to continue. If you get any \'not found\' errors, then click ATITD window and put it in focus first.");
+
 		-- Find buttons and click them!
 		srReadScreen();
 		xyWindowSize = srGetWindowSize();

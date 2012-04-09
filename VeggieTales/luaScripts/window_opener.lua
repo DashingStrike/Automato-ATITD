@@ -11,14 +11,14 @@ function askForWindowAndPixel(message)
 	-- Display message until shift is held
 	while not lsShiftHeld() do
 		lsPrintWrapped(0, 0, 1, lsScreenX, 0.7, 0.7, 0xFFFFFFff,
-			"Mouse over the relevant pixel and press Shift.");
+			"Mouse over the relevant pixel and press Shift. Right-click opens a Menu as Pinned must be ON.");
 		if message then
-			lsPrintWrapped(0, 70, 1, lsScreenX, 0.7, 0.7, 0xB0B0B0ff,
+			lsPrintWrapped(0, 100, 1, lsScreenX, 0.7, 0.7, 0xB0B0B0ff,
 				message);
 		end
 		lsSetCaptureWindow();
 		mouse_x, mouse_y = srMousePos();
-		lsPrintWrapped(0, 40, 1, lsScreenX, 0.7, 0.7, 0xB0B0B0ff,
+		lsPrintWrapped(0, 70, 1, lsScreenX, 0.7, 0.7, 0xB0B0B0ff,
 			mouse_x .. ", " .. mouse_y);
 		lsDoFrame();
 		if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Exit") then
@@ -34,8 +34,8 @@ end
 
 function doit()
 	w = promptNumber("Width?", 5);
-	h = promptNumber("Height?", 8);
-	max = promptNumber("Max Windows?", 34);
+	h = promptNumber("Height?", 4);
+	max = promptNumber("Max Windows?", 20);
 	ul_x, ul_y = askForWindowAndPixel("Upper Left corner");
 	lr_x, lr_y = askForWindowAndPixel("Lower Right corner");
 	pxw = lr_x - ul_x;
