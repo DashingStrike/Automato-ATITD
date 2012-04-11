@@ -1,0 +1,98 @@
+This is documentation for editing scripts.  For general usage and macro information, see [[Jimbly's Macros]]
+
+This reference is now included in the VeggieTales installer under the file name
+ScriptingReference.txt
+
+== General Philosophy ==
+
+Most of the existing macros and the macroing interface are all built around a
+few primary goals:
+* No keyboard interaction.  While a macro is running, the user should be able to freely chat with their friends, navigate between guild tabs, etc.
+* Image recognition over offsets.  Where possible, read and scrape the screen to find the exact image we want to click on instead of hardcoding pixel offsets that might change based on resolution or other factors.  The downside of this is that it is more susceptible to minor changes in ATITD causing the macros to work.
+* Status and prompts.  Friendly prompts about what values are desired are easy to add, and much better than telling someone to edit the script to handle the values they desire.
+
+== API ==
+
+The functions prefixed with "ls" (short for "LUA script", which makes more sense
+in the C++ code, as opposed to the actual macros where *everything* is lua
+script...) generally operate on the VeggieTales window, so lsGetWindowSize()
+gets the width and height of the VeggieTales window.
+
+The functions prefixed with "sr" (short for Screen Reader) generally operate on
+the ATITD window, so srGetWindowSize() gets the width and height of the ATITD
+window.
+
+* Note that you *MUST* call srReadScreen to update the screen before calling srFindImageInRange etc.
+
+== Function List ==
+=== General ===
+  void lsSetCaptureWindow()
+  void lsSleep(int ms)
+=== Sending Input ===
+  void srClickMouse(int x, int y, bool bRightClick)
+  void srClickMouseNoMove(int x, int y, bool bRightClick)
+  void srKeyEvent(const char *s)
+  void srLeftArrow()
+  void srRightArrow()
+  void srUpArrow()
+  void srDownArrow()
+  void srDrag(int x0, int y0, int x1, int y1, bool rightClick)
+  void srSetMousePos(int x, int y)
+  void srMouseDown(int x, int y, bool rightClick)
+  void srMouseUp(int x, int y, bool rightClick)
+  Vec2 srMousePos()
+=== Screen Reading ===
+  Vec2 srGetWindowSize()
+  Vec2 srImageSize(const char *fn)
+  void srMakeImage(const char *name, int x, int y, int w, int h)
+  Vec2 srFindImage(const char *fn, int tol)
+  void srShowImageDebug(const char *fn, float x, float y, float z, float scale)
+  Vec2 srFindImageInRange(const char *fn, int x0, int y0, int w, int h, int tol)
+  void srReadScreen()
+  int srReadPixel(int x, int y)
+  int srReadPixelFromBuffer(int x, int y)
+  void srSaveLastReadScreen(const char *fn)
+  void lsShowScreengrab(const char *_color)
+  Vec2[] lsAnalyzePapyrus(int minsize, int maxsize, int debug, int relevant_radius)
+  Vec2[] lsAnalyzeSilt(int minsize, int maxsize, int debug, int relevant_radius)
+=== User Interface ===
+  int lsScreenX
+  int lsScreenY
+  Vec2 lsGetWindowSize()
+  Vec2 lsMouseClick(int x, int y, int w, int h, int button)
+  void lsPrintln(const char *s)
+  bool lsShiftHeld()
+  bool lsAltHeld()
+  bool lsControlHeld()
+  void lsPlaySound(const char *sound)
+  int lsPrint(int x, int y, int z, float xsc, float ysc, const char *color, const char *str)
+  void lsFontShadow(int on)
+  int lsMessageBox(const char *title, const char *msg, int buttons)
+  int lsPrintWrapped(int x, int y, int z, int w, float xsc, float ysc, const char *color, const char *str)
+  void lsDisplaySystemSprite(int tile, int x, int y, int z, float w, float h, const char *color)
+  bool lsButtonText(int x, int y, int z, int w, const char *color, const char *txt)
+  bool lsCheckBox(int x, int y, int z, const char *color, const char *txt, bool value)
+  int lsDropdown(const char *key, int x, int y, int z, int w, int val)
+  void lsScrollAreaBegin(const char *key, int x, int y, int z, int w, int h)
+  void lsScrollAreaEnd(int h)
+  void lsSetCamera(float x0, float y0, float x1, float y1)
+  void lsDoFrame()
+  void lsTopmost(int value)
+  {bool done, selection} lsEditBox(const char *key, int x, int y, int z, int w, int h, float xsc, float ysc, const char *color, const char *def)
+  int lsGetTimer()
+
+== Specific reference ==
+=== void srKeyEvent(const char *s) ===
+
+Sends a character or sequence of characters to the captured window.  Example:
+  loadfile("luaScripts/screen_reader_common.inc")();
+  function doit()
+    askForWindow();
+    lsSleep(250); -- wait for shift release to make it to the window
+    srKeyEvent('username\tpassword');
+    lsSleep(250); -- wait a moment before submitting so we can see it work, that's more fun!
+    srKeyEvent('\n');
+  end
+This will send the string "username" followed by a tab (\t) and then the string
+"password" and then enter (\n).
+

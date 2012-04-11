@@ -1,3 +1,11 @@
 /VeggieTales/settings.txt
 /VeggieTales/stats.txt
 /VeggieTales/history.txt
+/VeggieTales/data/*.bin
+/VeggieTales/data/talescripts_version.txt
+*.000
+*.001
+*.002
+*.003
+*.004
+*.005
