@@ -55,11 +55,13 @@ window.
   void lsShowScreengrab(const char *_color)
   Vec2[] lsAnalyzePapyrus(int minsize, int maxsize, int debug, int relevant_radius)
   Vec2[] lsAnalyzeSilt(int minsize, int maxsize, int debug, int relevant_radius)
+  [l,t,r,b] srGetWindowBorders(int x, int y)
 === User Interface ===
   int lsScreenX
   int lsScreenY
   Vec2 lsGetWindowSize()
   Vec2 lsMouseClick(int x, int y, int w, int h, int button)
+  bool lsMouseIsDown(int button)
   void lsPrintln(const char *s)
   bool lsShiftHeld()
   bool lsAltHeld()
