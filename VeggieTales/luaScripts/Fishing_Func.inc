@@ -192,7 +192,15 @@ Lure_Types = {
 
 
 function WriteFishLog(Text)
-	FileFish = io.open("fishing/fishlog.txt","a+");
+	FileFish = io.open("fishlog.txt","a+");
+	FileFish:write(Text);
+	FileFish:close();
+	
+end
+
+
+function WriteFishStats(Text)
+	FileFish = io.open("fishstats.txt","w+");
 	FileFish:write(Text);
 	FileFish:close();
 	

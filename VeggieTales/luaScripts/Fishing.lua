@@ -10,10 +10,13 @@
 -- Higher resolutions may not have to reach quite to the mid point.
 
 
--- ********** This macro writes to a log file (Fishing/Fishlog.txt) for most actions, so you can review later! ******
+-- ********** This macro writes to a log file (Fishlog.txt) for most actions, so you can review later! ******
+-- ********** This also macro writes to a log file (Fishstats.txt) showing stats of your last fishing session, so you can review later! ******
 
--- Just delete the file if you want it to start over. It will create a new log file the next time you use the macro.
 
+--You can delete any of the log files if you wish. It will automatically create new ones if they dont exist.
+--The fishlog.txt file gets appended everytime you fish, so the file can grow quite long over time.
+--The fishstats.txt file gets overwritten everytime your gui program window updates, so it doesn't 'grow' over time.
 
 
 -- "Main chat tab is not showing" and other errors can usually be overcome by adjusting the main chat window size and restarting, assuming main chat is showing.
@@ -23,7 +26,6 @@
 -- The very first thing this macro does is to Self Click, Special, What Time is it? option. This will then display the time in main chat window.
 -- The macro then parses time displayed, in main chat tab, so it can use it while the macro runs (Log files and on screen display).
 -- Thats what the mysterious Self Click is doing, its not a bug, it is suppose to do that and thats why, to fetch the time.
-
 
 
 	-- Note: These are currently refered to as Common Fish in the below 'SkipCommon' type of fishes (True or False), in the 'Custom Variables' section.
@@ -38,12 +40,11 @@
 
 
 
+--CUSTOM VARIABLES -- EDIT HERE To Change Fishing Casts, Skips, Updates.
 
---Custom Variables -- EDIT HERE To Change Fishing Casts, Skips, Updates.
-
-TotalCasts=2; --Total Casts per lure, if a fish caught. If no fish then it skips.
+TotalCasts=5; --Total Casts per lure, if a fish caught. If no fish then it skips.
 SkipCommon = false; --Skips to next lure if fish caught is a common (Choose True or False).
-LureChangesToUpdateTimer = 5; --Total lures used before time is updated. Zero updates every new lure.
+LureChangesToUpdateTimer = 7; --Total lures used before time is updated. Zero updates every new lure.
 
 --AlmostCaughtAttempts = 0; --Adds additional attempts to the current lure if Unusual, Strange fish are seen;
 -- Note: AlmostCaughtAttempts above was already commented out upon arriving to Talescripts.
@@ -62,7 +63,7 @@ LogStrangeUnusual = true; 	-- Do you want to add Strange and Unusual fish to the
 LogOdd = true; 	-- Do you want to add Odd fish to the log file? Note the log will still add an entry if you lost lure.
 
 
--- End Custom Variables
+-- END CUSTOM VARIABLES
 
 
 
@@ -462,13 +463,15 @@ function gui_refresh()
 
 	lsPrintWrapped(10, 40, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Last [" .. last10 .. "] Fish Caught:");
 
-
+	--Reset this string before showing last 10 fish below. Else the entries will multiply with entries from previous loops/call to this function
+	last10caught = "";
 
 	if #gui_log_fish > 10 then
 		table.remove(gui_log_fish,1);
 	end
 		for i = 1, #gui_log_fish,1 do
 			lsPrintWrapped(10, 50 + (12*i), 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, gui_log_fish[i]);
+			last10caught = last10caught .. gui_log_fish[i] .. "\n";
 		end
 
 
@@ -488,6 +491,12 @@ function gui_refresh()
 	lsPrintWrapped(10, winsize[1]-25, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Fish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)");
 
 
+	-- Write stats to log file. Everytime the GUI screen is updated, so is the log file.
+
+	WriteFishStats("Last Session Hour: " .. CurrentTime .. "\n\nOdd Fish Seen: " .. GrandTotalOdd .. "\nUnusual Fish Seen: " .. GrandTotalUnusual .. "\nStrange Fish Seen: " .. GrandTotalStrange .. "\n---------------------\nLures Clicked: " .. GrandTotalLuresUsed .. "\nLures Lost: " .. GrandTotalLostLures .. " \n---------------------\nTotal Casts: " .. GrandTotalCasts .. "\nFailed Catches: " .. GrandTotalFailed .. "\nFish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)\n---------------------\n\nLast 10 Fish Caught:\n\n".. last10caught);
+
+
+
 
 end
 
@@ -496,7 +505,7 @@ end
 
 
 function doit()
-	askForWindow("MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. Pin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. There are options you can set in the script such as how many casts per lure, what gets written to the log file and more! History will be recorded in the FishLog.txt file, inside the Fishing folder. Most errors can be fixed by slightly adjusting/moving your chat screen! Press Shift to continue.");
+	askForWindow("MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. Pin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. There are options you can set in the script such as how many casts per lure, what gets written to the log file and more! History will be recorded in FishLog.txt and stats in FishStats.txt. Most errors can be fixed by slightly adjusting/moving your chat screen! Press Shift to continue.");
 
 	--Gui_Main();
 
@@ -530,12 +539,14 @@ function doit()
 	GrandTotalLostLures = 0;
 	GrandTotalFailed = 0;
 
-
-
 	
 	PlayersLures = SetupLureGroup();
 	CurrentTime = GetTime();
 	lsSleep(1500);
+
+
+	--Write an entry into log file to show this is a new session
+	WriteFishLog("[New Session]\n\n");
 
 	
 	while 1 do

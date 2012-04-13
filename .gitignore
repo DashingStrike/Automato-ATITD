@@ -3,6 +3,8 @@
 /VeggieTales/history.txt
 /VeggieTales/data/*.bin
 /VeggieTales/data/talescripts_version.txt
+/VeggieTales/fishlog.txt
+/VeggieTales/fishstats.txt
 *.000
 *.001
 *.002
