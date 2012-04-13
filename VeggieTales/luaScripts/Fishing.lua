@@ -10,8 +10,8 @@
 -- Higher resolutions may not have to reach quite to the mid point.
 
 
--- ********** This macro writes to a log file (Fishing/Fishlog.txt) for most actions, so you can review later! ******
--- ********** This also macro writes to a log file (Fishing/Fishstats.txt) showing stats of your last fishing session, so you can review later! ******
+-- ********** This macro writes to a log file (Fishlog.txt) for most actions, so you can review later! ******
+-- ********** This also macro writes to a log file (Fishstats.txt) showing stats of your last fishing session, so you can review later! ******
 
 
 --You can delete any of the log files if you wish. It will automatically create new ones if they dont exist.
@@ -505,7 +505,7 @@ end
 
 
 function doit()
-	askForWindow("MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. Pin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. There are options you can set in the script such as how many casts per lure, what gets written to the log file and more! History will be recorded in the FishLog.txt file, inside the Fishing folder. Most errors can be fixed by slightly adjusting/moving your chat screen! Press Shift to continue.");
+	askForWindow("MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. Pin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. There are options you can set in the script such as how many casts per lure, what gets written to the log file and more! History will be recorded in FishLog.txt and stats in FishStats.txt. Most errors can be fixed by slightly adjusting/moving your chat screen! Press Shift to continue.");
 
 	--Gui_Main();
 
