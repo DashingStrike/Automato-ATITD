@@ -125,9 +125,13 @@ function resetWindow(current)
   local vLime = srFindImageInRange("crem-lime.png", current.origin[1] - 20,
                                    current.origin[2] - 20, 100, 100,
 				   tolerance);
-  if (not vLime) or (vLime[0] ~= current.origin[1]) or
-     (vLime[1] ~= current.origin[2]) then
-     error "Window moved";
+  if (not vLime) then
+     error "Could not find origin again.";
+  end
+  if ((vLime[0] ~= current.origin[1]) or
+      (vLime[1] ~= current.origin[2])) then
+     error("Window moved from (" .. current.origin[1] .. ", " ..
+       current.origin[2] .. ") to (" .. vLime[0] .. ", " .. vLime[1] .. ")");
   end
   local vFire = srFindImageInRange("crem-fire.png", current.origin[1] - 31,
                                    current.origin[2] - 175, 238, 175,
@@ -172,7 +176,7 @@ function start()
   end
   for i=1,#windows do
     if windows[i].fire then
-      srClickMouseNoMove(windows[i].fire[1] + 5, windows[1].fire[2] + 5);
+      srClickMouseNoMove(windows[i].fire[1] + 5, windows[i].fire[2] + 5);
       lsSleep(shortWait);
     end
   end
