@@ -7,72 +7,6 @@ loadfile("luaScripts/ui_utils.inc")();
 
 per_click_delay = 10;
 
-function ccBegin()
-	image_name = "mm_Begin.png"
-	srReadScreen();
-
-	local buttons = findAllImages(image_name);
-	for i=1, #buttons do
-		srClickMouseNoMove(buttons[i][0]+20,buttons[i][1]+10);
-		lsSleep(per_click_delay);
-	end
-end
-
-function addWood()
-	image_name = "mm_Wood.png"
-	srReadScreen();
-
-	local buttons = findAllImages(image_name);
-	for i=1, #buttons do
-		srClickMouseNoMove(buttons[i][0]+20,buttons[i][1]+30);
-		lsSleep(per_click_delay);
-	end
-end
-
-function addWater()
-	image_name = "mm_Water.png"
-	srReadScreen();
-
-	local buttons = findAllImages(image_name);
-	for i=1, #buttons do
-		srClickMouseNoMove(buttons[i][0]+20,buttons[i][1]+30);
-		lsSleep(per_click_delay);
-	end
-end
-
-function ventLeft()
-	image_name = "mm_Vent.png"
-	srReadScreen();
-
-	local buttons = findAllImages(image_name);
-	for i=1, #buttons do
-		srClickMouseNoMove(buttons[i][0]+15,buttons[i][1]+30);
-		lsSleep(per_click_delay);
-	end
-end
-
-function ventCenter()
-	image_name = "mm_Vent.png"
-	srReadScreen();
-
-	local buttons = findAllImages(image_name);
-	for i=1, #buttons do
-		srClickMouseNoMove(buttons[i][0]+40,buttons[i][1]+30);
-		lsSleep(per_click_delay);
-	end
-end
-
-function ventRight()
-	image_name = "mm_Vent.png"
-	srReadScreen();
-
-	local buttons = findAllImages(image_name);
-	for i=1, #buttons do
-		srClickMouseNoMove(buttons[i][0]+65,buttons[i][1]+30);
-		lsSleep(per_click_delay);
-	end
-end
-
 button_names = {
 "Begin",
 "Wood",
@@ -82,8 +16,41 @@ button_names = {
 "Full"
 };
 
+button2image = {
+Begin = "mm_Begin.png",
+Wood = "mm_Wood.png",
+Water = "mm_Water.png",
+Closed = "mm_Vent.png",
+Open = "mm_Vent.png",
+Full = "mm_Vent.png"
+};
+
+button2offset = {
+Begin = {20, 10},
+Wood = {20-4, 30-2},
+Water = {20-5, 30-2},
+Closed = {15-9, 30-2},
+Open = {40-9, 30-2},
+Full = {65-9, 30-2}
+};
+
+function click(name)
+  if not name then
+    return nil;
+  end
+  local image = button2image[name];
+  srReadScreen();
+  local buttons = findAllImages(image);
+  for i=1, #buttons do
+    srClickMouseNoMove(buttons[i][0]+button2offset[name][1],
+                       buttons[i][1]+button2offset[name][2]);
+    lsSleep(per_click_delay);
+  end
+  return nil;
+end
+
 function doit()
-	askForWindow("Script Author: Makazi\n\nPin all charcoal oven/hearts and make sure your ATITD is set to High Priority Mode in Options -> Interface options.");
+	askForWindow("Script Author: Makazi\nTweaked by: Tallow\n\nPin all charcoal oven/hearts and make sure your ATITD is set to High Priority Mode in Options -> Interface options.");
 
 	while 1 do
 		-- Ask for which button
@@ -131,21 +98,6 @@ function doit()
 			lsDoFrame();
 			lsSleep(10);
 		end
-				
-		if image_name == "Wood" then
-			addWood();
-		elseif image_name == "Water" then
-			addWater();
-		elseif image_name == "Closed" then
-			ventLeft();
-		elseif image_name == "Open" then
-			ventCenter();
-		elseif image_name == "Full" then
-			ventRight();
-		elseif image_name == "Begin" then
-			ccBegin();
-		end
-
-		
+		click(image_name);
 	end
 end

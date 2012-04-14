@@ -1,3 +1,14 @@
+-- Crematory v1.1 by Tallow
+--
+-- Runs one or more crematories. Automatically discovers button
+-- configuration on its own and loads/unloads materials.
+--
+
+mainMessage = [[
+Crematory v1.1 script by Tallow.
+
+Make sure all your crematory windows are pinned.]];
+
 loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
 
@@ -59,22 +70,19 @@ windows = nil;
 function doit()
   while true do
     promptLoad();
-  askForWindow("Crematory script by Tallow.\n\nMake sure all your crematory windows are pinned. Each crematory should be empty BEFORE pinning them up.");
-
+    askForWindow(mainMessage);
     for i=1,passCount do
       currentPass = i;
       takeAll();
-      takeAll();
       loadAll();
       start();
-      while true do
+      local is_done = false;
+      while not is_done do
         tick();
-        if checkDone() then
-          break;
-        end
+        is_done = checkDone();
       end
+      updateWait("Waiting to take", longWait*5);
     end
-    takeAll();
     takeAll();
     lsPlaySound("Complete.wav");
   end
@@ -103,6 +111,8 @@ function addWindow(vPos)
                                    tolerance);
   if vFire then
     newWindow.fire = {vFire[0], vFire[1]};
+  else
+    error "No fire button. Do you have Advanced Chemistry?"
   end
   windows[#windows + 1] = newWindow;
 end
@@ -115,9 +125,13 @@ function resetWindow(current)
   local vLime = srFindImageInRange("crem-lime.png", current.origin[1] - 20,
                                    current.origin[2] - 20, 100, 100,
 				   tolerance);
-  if (not vLime) or (vLime[0] ~= current.origin[1]) or
-     (vLime[1] ~= current.origin[2]) then
-     error "Window moved";
+  if (not vLime) then
+     error "Could not find origin again.";
+  end
+  if ((vLime[0] ~= current.origin[1]) or
+      (vLime[1] ~= current.origin[2])) then
+     error("Window moved from (" .. current.origin[1] .. ", " ..
+       current.origin[2] .. ") to (" .. vLime[0] .. ", " .. vLime[1] .. ")");
   end
   local vFire = srFindImageInRange("crem-fire.png", current.origin[1] - 31,
                                    current.origin[2] - 175, 238, 175,
@@ -152,7 +166,7 @@ function start()
     end
   else
     windows = {};
-    posList = findAllImages("crem-lime.png");
+    local posList = findAllImages("crem-lime.png");
     if #posList == 0 then
       error "No crematories found";
     end
@@ -162,7 +176,7 @@ function start()
   end
   for i=1,#windows do
     if windows[i].fire then
-      srClickMouseNoMove(windows[i].fire[1] + 5, windows[1].fire[2] + 5);
+      srClickMouseNoMove(windows[i].fire[1] + 5, windows[i].fire[2] + 5);
       lsSleep(shortWait);
     end
   end
@@ -340,7 +354,6 @@ end
 -------------------------------------------------------------------------------
 
 function toggleButtons(current, points, buttonState)
-  local debug = "";
   local balance = getBalance(points, current.double);
   for i=1,5 do
     local up = getPointValue(points, current.double, current.ups[i],
@@ -367,17 +380,14 @@ function toggleButtons(current, points, buttonState)
     if buttonState[i] then
       buttonStr = "true";
     end
-    debug = debug .. i .. "-- up: " .. up .. ", down: " .. down .. ", goal: " .. goalStateStr .. ", button: " .. buttonStr .. "\n";
     if (goalState and not buttonState[i]) or
        (not goalState and buttonState[i]) then
-       debug = debug .. "Flipped\n";
       srClickMouseNoMove(current.origin[1] + buttonOffsets[i][1] + buttonClick,
                          current.origin[2] + buttonOffsets[i][2] + buttonClick);
       lsSleep(shortWait);
       buttonState[i] = goalState;
     end
   end
---  askForWindow(debug);
 end
 
 -------------------------------------------------------------------------------
@@ -424,18 +434,17 @@ end
 -------------------------------------------------------------------------------
 
 function takeAll()
-  updateWait("Waiting to Take", longWait);
   srReadScreen();
-  local posList = findAllImages("ThisIs.png");
-  for i=1,#posList do
-    srClickMouseNoMove(posList[i][0], posList[i][1]);
+  local updateList = findAllImages("ThisIs.png");
+  for i=1,#updateList do
+    srClickMouseNoMove(updateList[i][0], updateList[i][1]);
   end
-  updateWait("Update Crematory Windows", longWait*2);
+  updateWait("Update Crematory Windows", longWait);
   srReadScreen();
-  posList = findAllImages("Take.png");
-  for i=1,#posList do
-    srClickMouseNoMove(posList[i][0] + 5, posList[i][1] + 5);
-    updateWait("Grabbing Everything", longWait);
+  local takeList = findAllImages("crem-take.png");
+  for i=1,#takeList do
+    srClickMouseNoMove(takeList[i][0] + 5, takeList[i][1] + 5);
+    waitForImage("Grabbing Everything", "Everything.png", 1);
     srReadScreen();
     local allList = findAllImages("Everything.png");
     for j=1,#allList do
@@ -482,17 +491,6 @@ function promptLoad()
     load_limestone = lsCheckBox(15, y, z+10, 0xffffffff, "Limestone",
                                 load_limestone);
     y = y + 32;
-
-    lsPrint(5, y, z, scale, scale, 0xffffffff, "Wait (ms):");
-    is_done, longWait = lsEditBox("wait", 110, y, z, 50, 30, scale, scale,
-                                   0x000000ff, 500);
-    longWait = tonumber(longWait);
-    if not longWait then
-      is_done = false;
-      lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-      longWait = 500;
-    end
-    y = y + 48;
 
     lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xd0d0d0ff,
                    "Make sure each crematory is pinned and empty.");
@@ -544,16 +542,21 @@ end
 -------------------------------------------------------------------------------
 
 function loadSingle(pos, offset, type)
-  updateWait("Waiting to Load", longWait);
+  if windows then
+    waitForImage("Waiting to Load", "crem-fire.png", #windows);
+  else
+    waitForImage("Waiting to Load", "crem-fire.png", 1);
+  end
   srClickMouseNoMove(pos[0]+5, pos[1]+5+16);
-  updateWait("Loading " .. type .. " Into Crematory", longWait);
+  waitForImage("Loading " .. type .. " Into Crematory",
+               "crem-limestone.png", 1);
   srReadScreen();
   local limePos = findAllImages("crem-limestone.png");
   if #limePos == 0 then
     error "Could not find match for limestone image.";
   end
   srClickMouseNoMove(limePos[1][0] + 5, limePos[1][1] + 5 + offset);
-  updateWait("Adding Maximum Amount", longWait);
+  waitForImage("Adding Maximum Amount", "crem-max.png", 1);
   srReadScreen();
   local maxPos = findAllImages("crem-max.png");
   if #maxPos > 0 then
@@ -616,4 +619,14 @@ function getDir(sign, number)
     result = sign .. number
   end
   return result;
+end
+
+function waitForImage(message, file, count)
+  local done = false;
+  while not done do
+    updateWait(message, 100);
+    srReadScreen();
+    local images = findAllImages(file);
+    done = (#images >= count);
+  end
 end
