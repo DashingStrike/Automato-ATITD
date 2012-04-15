@@ -273,7 +273,7 @@ end
 
 function doit()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Pin any number of thistle gardnes, edit thistle_custom with recipe.");
+	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe.");
 	
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';
