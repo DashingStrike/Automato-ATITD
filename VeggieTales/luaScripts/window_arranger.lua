@@ -8,7 +8,7 @@ loadfile("luaScripts/ui_utils.inc")();
 local window_w = 410;
 local window_h = 312;
 local dropdown_cur_value = 1;
-local choice = "Brick Racks";
+local windowname = "Brick Racks";
 
 local scale = 0.6;
 local z = 0.0; -- Only matters if there is overlapping elements on screen
@@ -30,10 +30,8 @@ dropdown_values = {"Brick Rack", "Carpentry Shop", "Kettle", "Kiln", "Paper Pres
 function GetLayout()
 
 
--- Add new sections here
-
-if (dropdown_cur_value == 1) then
-choice = "Brick Racks";
+	if (dropdown_cur_value == 1) then
+	windowname = "Brick Rack";
 	-- brick racks
 	dx = 170;
 	dy = 115;
@@ -41,8 +39,8 @@ choice = "Brick Racks";
 	num_high = 7;
 
 
-elseif (dropdown_cur_value == 2) then
-choice = "Carpentry Shop";
+	elseif (dropdown_cur_value == 2) then
+	windowname = "Carpentry Shop";
 	-- carpentry shop
 	dx = 280;
 	dy = 205;
@@ -50,9 +48,8 @@ choice = "Carpentry Shop";
 	num_high = 4;
 
 
-
-elseif (dropdown_cur_value == 3) then
-choice = "Kettles";
+	elseif (dropdown_cur_value == 3) then
+	windowname = "Kettles";
 	-- kettles
 	dx = 165;
 	dy = 275;
@@ -60,8 +57,8 @@ choice = "Kettles";
 	num_high = 3;
 
 
-elseif (dropdown_cur_value == 4) then
-choice = "Kilns";
+	elseif (dropdown_cur_value == 4) then
+	windowname = "Kilns";
 	-- Kilns
 	dx = 285;
 	dy = 180;
@@ -69,16 +66,17 @@ choice = "Kilns";
 	num_high = 4;
 
 
-elseif (dropdown_cur_value == 5) then
-choice = "Paper Press";
+	elseif (dropdown_cur_value == 5) then
+	windowname = "Paper Press";
 	-- paper presses
 	dx = 388;
 	dy = 100;
 	little_dx = 0;
 	num_high = 8;
 
-elseif (dropdown_cur_value == 6) then
-choice = "Pottery Wheel";
+
+	elseif (dropdown_cur_value == 6) then
+	windowname = "Pottery Wheel";
 	-- pottery wheels
 	dx = 190;
 	dy = 150;
@@ -86,9 +84,8 @@ choice = "Pottery Wheel";
 	num_high = 7;
 
 
-
-elseif (dropdown_cur_value == 7) then
-choice = "Rock Saw";
+	elseif (dropdown_cur_value == 7) then
+	windowname = "Rock Saw";
 	-- rock saws
 	dx = 137;
 	dy = 125;
@@ -97,17 +94,17 @@ choice = "Rock Saw";
 	window_w = 340;
 
 
-elseif (dropdown_cur_value == 8) then
-choice = "Thistle Custom";
+	elseif (dropdown_cur_value == 8) then
+	windowname = "Thistle";
 	-- thistle_custom
-	dx = 413; -- when wrapping
+	dx = 420; -- when wrapping
 	dy = 190;
 	little_dx = 0; -- for every window
-	num_high = 5;
+	num_high = 4;
 
 
-elseif (dropdown_cur_value == 9) then
-choice = "Thistle New";
+	elseif (dropdown_cur_value == 9) then
+	windowname = "Thistle";
 	-- thistle_new
 	dx = 413; -- when wrapping
 	dy = 24;
@@ -115,16 +112,19 @@ choice = "Thistle New";
 	num_high = 33;
 
 
--- Add more layouts below, between this line and the 'else' statement below.
--- The below 'else' statement is a copy of the original script, not sure what it's for, but added it just in case.
 
-	-- The subsequent/future layout statement would be 'elseif (dropdown_cur_value == 10) then'
-	-- The 2nd next subsequent/future layout statement would be 'elseif (dropdown_cur_value == 11) then', etc...
+	-- Add new sections here
 
 
 
 
-else
+
+
+
+
+
+
+	else
 
 	-- setting permissions
 	dx = 413+55; -- when wrapping
@@ -136,7 +136,7 @@ else
 
 
 
-end
+	end
 
 end
 
@@ -233,7 +233,7 @@ end
 GetLayout();
 
 
-	askForWindow("Pin any number of " .. choice .. " windows. Will be arranged according to settings in window_arranger.lua. Press Shift to continue.");
+	askForWindow("Pin any number of \'" .. windowname .. "\' windows. They will be arranged according to settings in window_arranger.lua. Press Shift to continue.");
 
 	
 

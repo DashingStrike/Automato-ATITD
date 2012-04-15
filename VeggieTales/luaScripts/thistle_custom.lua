@@ -13,7 +13,7 @@ loadfile("luaScripts/ui_utils.inc")();
 
 per_click_delay = 0;
 
-local expected_gardens = 19;
+local expected_gardens = 12;
 local last_sun = 99;
 
 instructions = {
@@ -203,7 +203,7 @@ end
 
 function doit()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Pin any number of thistle gardnes, edit thistle_custom with recipe.");
+	askForWindow("Pin any number of thistle gardens, edit thistle_custom with recipe.");
 	
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';
