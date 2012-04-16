@@ -195,10 +195,24 @@ end
 
 function refillWater()
 	statusScreen("Refilling water...");
-	srClickMouseNoMove(359, 13);
-	lsSleep(100);
-	srClickMouseNoMove(srGetWindowSize()[0]/2 + 10, srGetWindowSize()[1]/2 + 20);
-	lsSleep(4000);
+	lsSleep(200);
+	srReadScreen();
+	FindWater = srFindImage("iconWaterJugSmall.png", 1);
+
+	if FindWater then
+	srClickMouseNoMove(FindWater[0]+3,FindWater[1]-5);
+	lsSleep(1500);
+
+
+		srReadScreen();
+		FindMaxButton = srFindImage("Maxbutton.png", 1);
+
+
+		if FindMaxButton then
+		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3);
+		end
+
+	end
 end
 
 function doit()
@@ -261,7 +275,7 @@ function doit()
 		clickAll("Harvest.png", nil);
 		lsSleep(500);
 		
-		refillWater(); -- Hack - won't work unless things are arranged precisely, and does no checking
+		refillWater();
 		
 		if finish_up then
 			break;
