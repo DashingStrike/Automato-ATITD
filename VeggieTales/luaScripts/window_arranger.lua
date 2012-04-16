@@ -95,7 +95,7 @@ function GetLayout()
 
 
 	elseif (dropdown_cur_value == 8) then
-	windowname = "Thistle";
+	windowname = "Thistle Garden";
 	-- thistle_custom
 	dx = 420; -- when wrapping
 	dy = 190;
@@ -104,7 +104,7 @@ function GetLayout()
 
 
 	elseif (dropdown_cur_value == 9) then
-	windowname = "Thistle";
+	windowname = "Thistle Garden";
 	-- thistle_new
 	dx = 413; -- when wrapping
 	dy = 24;
