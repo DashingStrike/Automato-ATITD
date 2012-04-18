@@ -1,68 +1,39 @@
+-- boards.lua v1.1 -- Revised by Tallow
 --
--- 
+-- Run a set of sawmills to generate boards.
 --
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+loadfile("luaScripts/common.inc")();
 
-per_click_delay = 10;
+askText = singleLine([[
+  Board Maker v1.1 -- Revised by Tallow. Automatically planes boards
+  from any number of Wood Plane or Carpentry Shop windows. Make sure
+  the VT window is in the TOP-RIGHT corner of the screen.
+]]);
 
---pause time is how long it waits after clicking on 'Plane a piece of wood' button (1000 ms = 1 second)
+wmText = "Tap shift on Wood Planes or Carpentry Benches to open and pin.";
+
+--Amount of time to pause after clicking the plane woods button (ms)
 pause_time = 2500; 
 
-right_click = nil;
-
 function doit()
-	askForWindow("Pin any number of Wood Plane or Carpentry Bench windows. Press Shift to continue.");
-	while 1 do
-		local image_name = "ThisIs.png";
+  askForWindow(askText);
+  windowManager("Board Setup", wmText)
+  askForWindow("Switch focus back to client window if necessary");
+  unpinOnExit(planeBoards);
+end
 
-		-- Click pin ups to refresh the window
-		srReadScreen();
-		xyWindowSize = srGetWindowSize();
-		local buttons = findAllImages(image_name);
-		
-		if #buttons == 0 then
+function planeBoards()
+  while 1 do
+    -- Click pin ups to refresh the window
+    clickAllImages("ThisIs.png");
+    sleepWithStatusPause(200, "Refreshing");
 
-			error 'Could not find any pinned windows.'
-
-		else
-			statusScreen("Refreshing (" .. #buttons .. " windows)");
-			for i=#buttons, 1, -1 do
-				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, right_click);
-				lsSleep(per_click_delay);
-			end
-
-		end
-
-
-			lsSleep(200);
-
-
-
-		image_name = "PlaneAPiece.png";
-
-		-- Find buttons and click them!
-		srReadScreen();
-		xyWindowSize = srGetWindowSize();
-		local buttons2 = findAllImages(image_name);
-		
-		if #buttons2 == 0 then
-			statusScreen("Refreshing (" .. #buttons .. " windows)\n\nWaiting for buttons...");
-
-		else
-
-			for i=#buttons2, 1, -1 do
-				srClickMouseNoMove(buttons2[i][0]+5, buttons2[i][1]+3, right_click);
-				lsSleep(per_click_delay);
-			end
-
-
-			statusScreen("Done clicking (" .. #buttons2 .. " windows)\n\nPausing...");
-				lsSleep(pause_time);
-
-
-		end
-
-	end
+    image_name = "PlaneAPiece.png";
+    
+    -- Find buttons and click them!
+    local clickCount = clickAllImages("PlaneAPiece.png");
+    sleepWithStatusPause(pause_time, "Clicked " .. clickCount .. " windows");
+  end
+  return quitMessage;
 end
