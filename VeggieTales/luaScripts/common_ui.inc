@@ -9,6 +9,7 @@
 tick_delay = 10;
 
 quitMessage = "Macro aborted by user";
+focusMessage = "Switch focus back to client window if necessary";
 
 -------------------------------------------------------------------------------
 -- singleLine(message)
@@ -20,7 +21,6 @@ quitMessage = "Macro aborted by user";
 -- whitespace is replaced by a single space.
 --
 -- message -- Blob of text to convert
---
 -------------------------------------------------------------------------------
 
 function singleLine(message)
@@ -80,6 +80,8 @@ end
 -- at the beginning of nearly every macro.
 --
 -- message (optional) -- Additional instructions to print for the user
+--
+-- Returns the position of the mouse when shift is pressed.
 -------------------------------------------------------------------------------
 
 function askForWindow(message)
@@ -110,11 +112,13 @@ function askForWindow(message)
     checkBreak();
   end
   lsSetCaptureWindow();
+  local mouseX, mouseY = srMousePos();
 
   -- Wait for shift to be released
   while lsShiftHeld() do
     checkBreak();
   end;
+  return makePoint(mouseX, mouseY);
 end
 
 -------------------------------------------------------------------------------
@@ -134,7 +138,7 @@ function statusScreen(message, color, can_pause)
   if not color then
     color = 0xFFFFFFff;
   end
-  lsPrintWrapped(10, 60, 0, lsScreenX - 20, 1, 1, color, message);
+  lsPrintWrapped(10, 80, 0, lsScreenX - 20, 0.8, 0.8, color, message);
   if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100,
 		  0xFFFFFFff, "End script") then
     error(quitMessage);
@@ -173,38 +177,45 @@ end
 --
 -- delay_time -- minimum amount of time to wait
 -- message (optional) -- status to show user
+-- color (optional) -- color of status message
 -- can_pause (optional) -- allow the user to pause (defaults to false)
 -------------------------------------------------------------------------------
 
-function sleepWithStatus(delay_time, message, can_pause)
+function sleepWithStatus(delay_time, message, color, can_pause)
+  if not color then
+    color = 0xffffffff;
+  end
   if not delay_time then
     error("Incorrect number of arguments for sleepWithStatus()");
   end
   local start_time = lsGetTimer();
   while delay_time > (lsGetTimer() - start_time) do
     time_left = delay_time - (lsGetTimer() - start_time);
-    lsPrintWrapped(10, 120, 0, lsScreenX - 20, 1, 1, 0xFFFFFFff,
-		   "Waiting " .. time_left .. "ms...");
-    statusScreen(message, 0xffffffff, can_pause);
+    if delay_time >= 1000 then
+      lsPrintWrapped(10, 50, 0, lsScreenX - 20, 1, 1, 0xd0d0d0ff,
+		     "Waiting " .. time_left .. "ms...");
+    end
+    statusScreen(message, color, can_pause);
     lsSleep(tick_delay);
   end
 end
 
 -------------------------------------------------------------------------------
--- sleepWithStatusPause(delay_time, message)
+-- sleepWithStatusPause(delay_time, message, color)
 --
 -- Waits at least delay_time before returning. Show the message and
 -- allow the user to cancel or pause the macro while waiting.
 --
 -- delay_time -- minimum amount of time to wait
 -- message (optional) -- status to show user
+-- color (optional) -- color of status message
 -------------------------------------------------------------------------------
 
-function sleepWithStatusPause(delay_time, message)
+function sleepWithStatusPause(delay_time, message, color)
   if not delay_time then
     error("Incorrect number of arguments for sleepWithStatusPause()");
   end
-  sleepWithStatus(delay_time, message, true);
+  sleepWithStatus(delay_time, message, color, true);
 end
 
 

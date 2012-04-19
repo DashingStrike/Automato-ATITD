@@ -110,11 +110,15 @@ function clickAllImages(image_name, offsetX, offsetY, rightClick, tol)
   srReadScreen();
   local buttons = findAllImages(image_name, tol);
   for i=1, #buttons  do
-    statusScreen("Clicking " .. #buttons .. "button(s)...");
+    if click_delay > 0 then
+      statusScreen("Clicking " .. #buttons .. " button(s)...");
+    end
     safeClick(buttons[i][0]+offsetX, buttons[i][1]+offsetY, rightClick);
     lsSleep(click_delay);
   end
-  statusScreen("Done clicking (" .. #buttons .. " clicks).");
+  if click_delay > 0 then
+    statusScreen("Done clicking (" .. #buttons .. " clicks).");
+  end
   lsSleep(click_delay);
   return #buttons;
 end

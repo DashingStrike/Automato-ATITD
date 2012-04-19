@@ -27,7 +27,7 @@ function stashWindow(sourceX, sourceY, corner, bounds)
   if not sourceX or not sourceY or not corner then
     error("Incorrect number of arguments for stashWindow()");
   end
-  stashBit = (stashBit + 1) % 3;
+  stashBit = (stashBit + 2) % 4;
   if not bounds then
     srReadScreen();
     bounds = srGetWindowBorders(sourceX, sourceY);
@@ -110,39 +110,58 @@ end
 --
 -- x, y -- position to click
 -- timeout -- time to wait before giving up
+--
+-- Returns true on success.
 -------------------------------------------------------------------------------
 
 function openAndPin(x, y, timeout)
   if not x or not y or not timeout then
     error("Incorrect number of arguments for openAndPin()");
   end
+  local result = false;
   local spot = getWaitSpot(x+5, y);
-  safeClick(x, y, 1);
+  safeBegin();
+  srClickMouse(x, y, 1);
   lsDoFrame();
   statusScreen("Clicking to open window");
   if waitForChange(spot, timeout) then
-    lsDoFrame();
     statusScreen("Looking for anchor");
     local anchor = waitForImageInWindow("ThisIs.png", x+5, y, timeout);
     if anchor then
+      success = true;
       if not findImageInWindow("UnPin.png", x+5, y) then
 	safeClick(anchor[0], anchor[1], 1);
-	lsDoFrame();
 	statusScreen("Pinning window");
       end
     end
   end
+  return success;
 end
 
 -------------------------------------------------------------------------------
--- arrangeInGrid()
+-- arrangeInGrid(cascade)
 --
--- Arrange all open windows into a grid on the screen.
+-- Arrange all open windows into a grid on the screen. Stashes them first.
+--
+-- cascade (optional) -- arrange windows into a overlapping cascade
 -------------------------------------------------------------------------------
 
-function arrangeInGrid()
+function arrangeInGrid(cascade)
   stashAllWindows(BOTTOM_LEFT);
   stashAllWindows(BOTTOM_RIGHT);
+  arrangeStashed(cascade);
+end
+
+-------------------------------------------------------------------------------
+-- arrangeStashed(cascade)
+--
+-- Arrange all open windows into a grid on the screen. Assumes they
+-- are pre-stashed.
+--
+-- cascade (optional) -- arrange windows into a overlapping cascade
+-------------------------------------------------------------------------------
+
+function arrangeStashed(cascade)
   local screen = srGetWindowSize();
   local bottomRightX = screen[0] - 20;
   local bottomRightY = screen[1] - 20;
@@ -151,6 +170,7 @@ function arrangeInGrid()
   local currentY = 0;
   local lastX = 0;
   local lastY = 0;
+  local xMax = 0;
   local yMax = 0;
   srReadScreen();
   local window = findImageInWindow("ThisIs.png", bottomRightX, bottomRightY);
@@ -161,18 +181,35 @@ function arrangeInGrid()
     local bounds = srGetWindowBorders(window[0], window[1]);
     local width = bounds[2] - bounds[0];
     local height = bounds[3] - bounds[1];
-    if currentX + width >= screen[0] then
-      currentX = 0;
-      currentY = currentY + yMax;
-      yMax = 0;
-    end
-    if currentY + height >= screen[1] then
-      error("Cannot arrange these windows into a grid.");
+    if cascade then
+      if currentY + height >= screen[1] then
+	currentX = currentX + xMax;
+	currentY = 0;
+	xMax = 0;
+      end
+      if currentX + width >= screen[0] then
+	error("Cannot arrange these windows into a cascade.");
+      end
+    else
+      if currentX + width >= screen[0] then
+	currentX = 0;
+	currentY = currentY + yMax;
+	yMax = 0;
+      end
+      if currentY + height >= screen[1] then
+	error("Cannot arrange these windows into a grid.");
+      end
     end
     lastX = window[0] - bounds[0] + currentX;
     lastY = window[1] - bounds[1] + currentY;
     safeDrag(window[0], window[1], lastX, lastY);
-    currentX = currentX + width;
+    if cascade then
+      currentX = currentX + 24;
+      currentY = currentY + 24;
+    else
+      currentX = currentX + width;
+    end
+    xMax = math.max(xMax, width);
     yMax = math.max(yMax, height);
     lsSleep(tick_delay);
     srReadScreen();
@@ -182,42 +219,58 @@ function arrangeInGrid()
 end
 
 -------------------------------------------------------------------------------
--- closeAllWindows()
+-- closeAllWindows(x, y, width, height)
 --
 -- Close all open windows.
+--
+-- x, y (optional) -- origin of box to search
+-- width, height (optional) -- size of box to search
 -------------------------------------------------------------------------------
 
-function closeAllWindows()
+function closeAllWindows(x, y, width, height)
+  if not x then
+    x = 0;
+  end
+  if not y then
+    y = 0;
+  end
+  if not width then
+    width = srGetWindowSize()[0];
+  end
+  if not height then
+    height = srGetWindowSize()[1];
+  end
   srReadScreen();
-  local current = srFindImage("ThisIs.png");
+  local current = srFindImageInRange("ThisIs.png", x, y, width, height);
   while current do
     safeClick(current[0], current[1], 1);
     sleepWithStatus(200, "Closing Windows");
     srReadScreen();
-    current = srFindImage("ThisIs.png");
+    current = srFindImageInRange("ThisIs.png", x, y, width, height);
   end
 
   srReadScreen();
-  current = srFindImage("UnPin.png");
+  current = srFindImageInRange("UnPin.png", x, y, width, height);
   while current do
     safeClick(current[0], current[1], 1);
     sleepWithStatus(click_delay, "Closing Windows");
     srReadScreen();
-    current = srFindImage("UnPin.png");
+    current = srFindImageInRange("UnPin.png", x, y, width, height);
   end
 end
 
 -------------------------------------------------------------------------------
--- windowManager(title, message)
+-- windowManager(title, message, overlap)
 --
 -- Run a window manager interface to let the user open, pin, arrange,
 -- or clear windows.
 --
 -- title (optional) -- title of window
 -- message (optional) -- extra instructions for the user
+-- overlap (optional) -- cascade windows instead of putting them in a grid
 -------------------------------------------------------------------------------
 
-function windowManager(title, message)
+function windowManager(title, message, overlap)
   if not title then
     title = "Window Manager";
   end
@@ -229,12 +282,15 @@ function windowManager(title, message)
   while not done do
     lsPrint(10, 10, 0, 1.0, 1.0, 0xFFFFFFff, title);
     if lsButtonText(30, 60, 0, 250, 0x80D080ff, "Arrange Windows") then
-      arrangeInGrid();
+      lsDoFrame();
+      arrangeInGrid(overlap);
     end
     if lsButtonText(30, 100, 0, 250, 0x80D080ff, "Stash Windows") then
+      lsDoFrame();
       stashAllWindows(BOTTOM_RIGHT);
     end
     if lsButtonText(30, 140, 0, 250, 0x80D080ff, "Un-Pin Windows") then
+      lsDoFrame();
       closeAllWindows();
     end
     lsPrintWrapped(10, 200, 0, 250, 0.7, 0.7, 0xd0d0d0ff,
