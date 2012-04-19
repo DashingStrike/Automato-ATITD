@@ -363,7 +363,8 @@ function forAllWindows(f, image_names, message)
   for i=#window_locs, 1, -1 do
     if not first and overlap then
       -- focus
-      local spot = getWaitSpot(window_locs[i+1][0], window_locs[i+1][1]);
+      local spot = getWaitSpot(window_locs[i+1][0] + 24,
+			       window_locs[i+1][1] + 24);
       safeClick(window_locs[i][0], window_locs[i][1]);
       waitForChange(spot, 500);
     end
@@ -375,7 +376,8 @@ function forAllWindows(f, image_names, message)
   if overlap then
     statusScreen(message .. " Refocusing...");
     for i=2, #window_locs do
-      local spot = getWaitSpot(window_locs[i][0], window_locs[i][1]);
+      local spot = getWaitSpot(window_locs[i][0] + 24,
+			       window_locs[i][1] + 24);
       safeClick(window_locs[i][0], window_locs[i][1] + 310);
       waitForChange(spot, 500);
     end
