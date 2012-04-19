@@ -1,16 +1,17 @@
--- Crematory v1.1 by Tallow
+-- crematory.lua v1.2 by Tallow
 --
 -- Runs one or more crematories. Automatically discovers button
 -- configuration on its own and loads/unloads materials.
 --
 
-mainMessage = [[
-Crematory v1.1 script by Tallow.
+assert(loadfile("luaScripts/common.inc"))();
 
-Make sure all your crematory windows are pinned.]];
+askText = singleLine([[
+  Crematory v1.2 (by Tallow) --
+  Automatically runs one or more crematories.
+]]);
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+wmText = "Tap shift on Crematories to open and pin.";
 
 OPP = 0;
 SAME_UP = 1;
@@ -18,6 +19,7 @@ SAME_DOWN = 2;
 
 tolerance = 6500;
 tickTime = 1000;
+maxWait = 1000;
 longWait = 500;
 shortWait = 30;
 
@@ -68,24 +70,31 @@ windows = nil;
 -------------------------------------------------------------------------------
 
 function doit()
-  while true do
-    promptLoad();
-    askForWindow(mainMessage);
-    for i=1,passCount do
-      currentPass = i;
-      takeAll();
-      loadAll();
-      start();
-      local is_done = false;
-      while not is_done do
-        tick();
-        is_done = checkDone();
-      end
-      updateWait("Waiting to take", longWait*5);
-    end
+  askForWindow(askText);
+  windowManager("Crematory Setup", wmText);
+  unpinOnExit(runCrematories);
+end
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
+function runCrematories()
+  promptLoad();
+  askForWindow(focusMessage);
+  for i=1,passCount do
+    currentPass = i;
     takeAll();
-    lsPlaySound("Complete.wav");
+    loadAll();
+    start();
+    local is_done = false;
+    while not is_done do
+      tick();
+      is_done = checkDone();
+    end
+    sleepWithStatus(longWait*5, updateMessage("Waiting to take"));
   end
+  takeAll();
+  lsPlaySound("Complete.wav");
 end
 
 -------------------------------------------------------------------------------
@@ -158,7 +167,7 @@ end
 -------------------------------------------------------------------------------
 
 function start()
-  updateWait("Waiting to begin", longWait);
+  sleepWithStatus(longWait, updateMessage("Waiting to begin"));
   srReadScreen();
   if windows then
     for i=1,#windows do
@@ -176,11 +185,11 @@ function start()
   end
   for i=1,#windows do
     if windows[i].fire then
-      srClickMouseNoMove(windows[i].fire[1] + 5, windows[i].fire[2] + 5);
+      safeClick(windows[i].fire[1] + 5, windows[i].fire[2] + 5);
       lsSleep(shortWait);
     end
   end
-  updateWait("Finding my Chi", longWait);
+  sleepWithStatus(longWait, updateMessage("Finding my Chi"));
   srReadScreen();
   for i=1,#windows do
     windows[i].lastPos = findPoints(windows[i]);
@@ -195,7 +204,7 @@ end
 -------------------------------------------------------------------------------
 
 function tick()
-  updateWait("Tending Crematory", tickTime);
+  sleepWithStatus(tickTime, updateMessage("Tending Crematory"));
   srReadScreen();
   for i=1,#windows do
     tickWindow(windows[i]);
@@ -318,9 +327,14 @@ function probeNext(current, points)
     current.lastDiffs = diffs;
     current.probe = current.probe + 1;
     if current.probe <= 5 then
-      current.buttonState[current.probe] = not current.buttonState[current.probe];
-      srClickMouseNoMove(current.origin[1] + buttonOffsets[current.probe][1] + buttonClick,
-                         current.origin[2] + buttonOffsets[current.probe][2] + buttonClick);
+      local newProbe = not current.buttonState[current.probe];
+      local clickX = current.origin[1] + buttonOffsets[current.probe][1] +
+	buttonClick;
+      local clickY = current.origin[2] + buttonOffsets[current.probe][2] +
+	buttonClick;
+
+      current.buttonState[current.probe] = newProbe;
+      safeClick(clickX, clickY);
       lsSleep(shortWait);
     end
   end
@@ -382,8 +396,8 @@ function toggleButtons(current, points, buttonState)
     end
     if (goalState and not buttonState[i]) or
        (not goalState and buttonState[i]) then
-      srClickMouseNoMove(current.origin[1] + buttonOffsets[i][1] + buttonClick,
-                         current.origin[2] + buttonOffsets[i][2] + buttonClick);
+      safeClick(current.origin[1] + buttonOffsets[i][1] + buttonClick,
+		current.origin[2] + buttonOffsets[i][2] + buttonClick);
       lsSleep(shortWait);
       buttonState[i] = goalState;
     end
@@ -437,19 +451,18 @@ function takeAll()
   srReadScreen();
   local updateList = findAllImages("ThisIs.png");
   for i=1,#updateList do
-    srClickMouseNoMove(updateList[i][0], updateList[i][1]);
+    safeClick(updateList[i][0], updateList[i][1]);
   end
-  updateWait("Update Crematory Windows", longWait);
+  sleepWithStatus(longWait, updateMessage("Update Crematory Windows"));
   srReadScreen();
   local takeList = findAllImages("crem-take.png");
   for i=1,#takeList do
-    srClickMouseNoMove(takeList[i][0] + 5, takeList[i][1] + 5);
-    waitForImage("Grabbing Everything", "Everything.png", 1);
-    srReadScreen();
-    local allList = findAllImages("Everything.png");
-    for j=1,#allList do
-      srClickMouseNoMove(allList[j][0] + 5, allList[j][1] + 5);
+    safeClick(takeList[i][0] + 5, takeList[i][1] + 5);
+    local all = waitForImage("Everything.png", maxWait, "Grabbing Everything");
+    if all then
+      safeClick(all[0] + 5, all[1] + 5);
     end
+    lsSleep(shortWait*2);
   end
 end
 
@@ -515,9 +528,9 @@ function loadAll()
   srReadScreen();
   local posList = findAllImages("ThisIs.png");
   for i=1,#posList do
-    srClickMouseNoMove(posList[i][0], posList[i][1]);
+    safeClick(posList[i][0], posList[i][1]);
   end
-  updateWait("Update Crematory Windows", longWait);
+  sleepWithStatus(longWait, updateMessage("Update Crematory Windows"));
   srReadScreen();
   posList = findAllImages("crem-fire.png");
   for i=1,#posList do
@@ -542,75 +555,51 @@ end
 -------------------------------------------------------------------------------
 
 function loadSingle(pos, offset, type)
-  if windows then
-    waitForImage("Waiting to Load", "crem-fire.png", #windows);
-  else
-    waitForImage("Waiting to Load", "crem-fire.png", 1);
-  end
-  srClickMouseNoMove(pos[0]+5, pos[1]+5+16);
-  waitForImage("Loading " .. type .. " Into Crematory",
-               "crem-limestone.png", 1);
-  srReadScreen();
-  local limePos = findAllImages("crem-limestone.png");
-  if #limePos == 0 then
-    error "Could not find match for limestone image.";
-  end
-  srClickMouseNoMove(limePos[1][0] + 5, limePos[1][1] + 5 + offset);
-  waitForImage("Adding Maximum Amount", "crem-max.png", 1);
-  srReadScreen();
-  local maxPos = findAllImages("crem-max.png");
-  if #maxPos > 0 then
-    srClickMouseNoMove(maxPos[1][0]+5, maxPos[1][1]+5);
-  else
-    error "Could not find match for max image.";
+  sleepWithStatus(200, "Waiting to load");
+  safeClick(pos[0]+5, pos[1]+5+16);
+  local limePos = waitForImage("crem-limestone.png", maxWait,
+			       "Loading " .. type .. " Into Crematory", 1000);
+  if limePos then
+    safeClick(limePos[0] + 5, limePos[1] + 5 + offset);
+    local maxPos = waitForImage("crem-max.png", maxWait,
+				"Adding Maximum Amount");
+    if maxPos then
+      safeClick(maxPos[0]+5, maxPos[1]+5);
+    end
   end
 end
 
 -------------------------------------------------------------------------------
--- updateWait
+-- updateMessage
 -------------------------------------------------------------------------------
 
-function updateWait(message, time)
-  local start_time = lsGetTimer();
-  while (lsGetTimer() - start_time) < time do
-    local time_left = time - (lsGetTimer() - start_time);
-    lsPrint(10, 6, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
-    lsPrint(10, 24, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting " .. time_left .. "ms...");
-    lsPrint(10, 42, 0, 1.0, 1.0, 0xccccccff,
-            "Pass " .. currentPass .. " / " .. passCount);
-    lsPrint(10, 72, 0, 1.0, 1.0, 0xffffffff, message);
-
-    if message == "Tending Crematory" then
-      local y = 100;
-      for i=1,#windows do
-        local status = "Buttons: ";
-        for j=1,5 do
-          if windows[i].dirs[j] == OPP then
-            status = status .. getDir("+", windows[i].ups[j]) ..
-                               getDir("-", windows[i].downs[j]);
-          elseif windows[i].dirs[j] == SAME_UP then
-            status = status .. getDir("+", windows[i].ups[j]) ..
-                               getDir("+", windows[i].downs[j]);
-          else
-            status = status .. getDir("-", windows[i].ups[j]) ..
-                               getDir("-", windows[i].downs[j]);
-          end
-	  if j ~= 5 then
-            status = status .. ", ";
-          end
-        end
-        lsPrint(10, y, 0, 0.7, 0.7, 0xccccccff, status);
-        y = y + 16;
+function updateMessage(message)
+  local result = "Pass " .. currentPass .. " / " .. passCount .. "\n";
+  result = result .. message .. "\n\n";
+  if message == "Tending Crematory" then
+    for i=1,#windows do
+      local status = "Buttons: ";
+      for j=1,5 do
+	if windows[i].dirs[j] == OPP then
+	  status = status .. getDir("+", windows[i].ups[j]) ..
+	    getDir("-", windows[i].downs[j]);
+	elseif windows[i].dirs[j] == SAME_UP then
+	  status = status .. getDir("+", windows[i].ups[j]) ..
+	    getDir("+", windows[i].downs[j]);
+	else
+	  status = status .. getDir("-", windows[i].ups[j]) ..
+	    getDir("-", windows[i].downs[j]);
+	end
+	if j ~= 5 then
+	  status = status .. ", ";
+	else
+	  status = status .. "\n";
+	end
       end
+      result = result .. "\n" .. status;
     end
-    if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
-                    "End script") then
-      error "Clicked End Script button";
-    end
-    checkBreak();
-    lsDoFrame();
-    lsSleep(shortWait);
   end
+  return result;
 end
 
 function getDir(sign, number)
@@ -619,14 +608,4 @@ function getDir(sign, number)
     result = sign .. number
   end
   return result;
-end
-
-function waitForImage(message, file, count)
-  local done = false;
-  while not done do
-    updateWait(message, 100);
-    srReadScreen();
-    local images = findAllImages(file);
-    done = (#images >= count);
-  end
 end

@@ -1,9 +1,15 @@
--- Simon by Tallow
--- Set up a list of points to click on request. Useful for 
+-- simon.lua v1.1 -- by Tallow
+--
+-- Set up a list of points to click on request. Useful for paint or
+-- ad-hoc macros.
 --
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+assert(loadfile("luaScripts/common.inc"))();
+
+askText = singleLine([[
+  Simon v1.1 (by Tallow) --
+  Sets up a list of points and then click on them in sequence.
+]]);
 
 clickList = {};
 clickDelay = 150;
@@ -23,17 +29,20 @@ function getPoints()
     end
     was_shifted = is_shifted;
 
-    checkBreak("disallow pause");
-    lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff, "Adding Points");
+    checkBreak();
+    lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
+	    "Adding Points (" .. #clickList .. ")");
     local y = 60;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Tap shift to add a point.");
     y = y + 30;
-    for i=1,#clickList do
-      local index = i - 1;
+    local start = math.max(1, #clickList - 20);
+    local index = 0;
+    for i=start,#clickList do
       local xOff = (index % 3) * 100;
       local yOff = (index - index%3)/2 * 15;
       lsPrint(20 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff,
               "(" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
+      index = index + 1;
     end
 
     if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Next") then
@@ -52,7 +61,7 @@ function promptRun()
   local is_done = false;
   local count = 1;
   while not is_done do
-    checkBreak("disallow pause");
+    checkBreak();
     lsPrint(10, 10, 0, 1.0, 1.0, 0xffffffff,
             "Configure Sequence");
     local y = 60;
@@ -86,7 +95,7 @@ function promptRun()
     end
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
                     "End script") then
-      error "Clicked End Script button";
+      error(quitMessage);
     end
 
     lsSleep(50);
@@ -95,39 +104,34 @@ function promptRun()
   return count;
 end
 
-function clickAll(count)
+function clickSequence(count)
   for i=1,count do
     for j=1,#clickList do
-      checkBreak("disallow pause");
-      local currentX = 0;
-      local currentY = 0;
-      currentX, currentY = srMousePos();
-      srMouseUp(currentX, currentY);
-      srClickMouseNoMove(clickList[j][1], clickList[j][2]);
-      lsPrint(10, 10, 0, 1.0, 1.0, 0xffffffff,
-              "Pass " .. i .. "/" .. count);
-      lsPrint(10, 40, 0, 1.0, 1.0, 0xffffffff,
-              "Clicked " .. j .. "/" .. #clickList);
+      checkPause();
+      safeClick(clickList[j][1], clickList[j][2]);
+
+      local message = "Pass " .. i .. "/" .. count .. " -- ";
+      message = message .. "Clicked " .. j .. "/" .. #clickList .. "\n";
       if is_stats then
-	updateWait("Waiting between clicks", 500);
-        waitForStats("Waiting For Stats to Appear as All Black");
+	sleepWithStatusPause(500, message .. "Waiting between clicks");
+        waitForStats(message .. "Waiting For Stats");
       else
-        updateWait("Waiting Fixed Delay", clickDelay);
+        sleepWithStatusPause(clickDelay, message .. "Waiting Fixed Delay");
       end
-      lsDoFrame();
     end
   end
 end
 
 function doit()
-  askForWindow("You will be asked to set up a sequence of points using the mouse and shift. Then you will be able to click that sequence on request.");
+  askForWindow(askText);
   getPoints();
 
   local is_done = false;
   while not is_done do
     local count = promptRun();
     if count > 0 then
-      clickAll(count);
+      askForWindow(focusMessage);
+      clickSequence(count);
     else
       is_done = true;
     end
@@ -137,7 +141,7 @@ end
 function waitForStats(message)
   local stats = findStats();
   while not stats do
-    updateWait(message, 500);
+    sleepWithStatusPause(500, message, 0xff3333ff);
     stats = findStats();
   end
 end
@@ -152,22 +156,4 @@ function findStats()
     stats = srFindImage("AllStats-Black3.png");
   end
   return stats;
-end
-
-function updateWait(message, time)
-  local start_time = lsGetTimer();
-  while (lsGetTimer() - start_time) < time do
-    local time_left = time - (lsGetTimer() - start_time);
-    lsPrint(10, 6, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
-    lsPrint(10, 24, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting " .. time_left .. "ms...");
-    lsPrint(10, 72, 0, 1.0, 1.0, 0xffffffff, message);
-
-    if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
-                    "End script") then
-      error "Clicked End Script button";
-    end
-    checkBreak();
-    lsDoFrame();
-    lsSleep(10);
-  end
 end
