@@ -1,7 +1,27 @@
--- Plant flax and harvest either flax or seeds. Version 1.1
--- 
+-- flax_stable.lua v1.2 -- by Jimbly, tweaked by Cegaiel and
+--   KasumiGhia, revised by Tallow.
+--
+-- Plant flax and harvest either flax or seeds.
+--
 -- Works Reliably: 2x2, 3x3, 4x4, 5x5
 -- May Work (depends on your computer): 6x6, 7x7
+--
+
+assert(loadfile("luaScripts/common.inc"))();
+
+askText = singleLine([[
+  flax_stable v1.1 (by Jimbly, tweaked by Cegaiel and KasumiGhia,
+  revised by Tallow) --
+  Plant flax and harvest either flax or seeds. --
+  Make sure the plant flax window is pinned and on the RIGHT side of
+  the screen. Your VeggieTales window should also be on the RIGHT side
+  of the screen. You must be in F8F8 cam zoomed in.  You may need to
+  F12 at low resolutions or hide your chat window (if it starts
+  planting and fails to move downward, it probably clicked on your
+  chat window). Will plant grid NE of current location.  'Plant all
+  crops where you stand' must be ON.  'Right click pins/unpins a menu'
+  must be ON. Enable Hotkeys on flax must be OFF.
+]]);
 
 -- Global parameters set by prompt box.
 grid_w = 5;
@@ -9,7 +29,6 @@ grid_h = 5;
 is_plant = true;
 seeds_per_pass = 5;
 
-loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
 
 imgFlax1 = "FlaxGeneric.png";
@@ -24,8 +43,6 @@ imgRipOut = "RipOut.png";
 imgUnpin = "UnPin.png";
 
 -- Tweakable delay values
-tick_time = 10; -- Time to sleep in a polling loop
-delay_time = 50; -- Time to wait between non-dependent clicks
 refresh_time = 300; -- Time to wait for windows to update
 walk_time = 300;
 
@@ -89,139 +106,6 @@ function checkWindowSize(x, y)
       window_h = 116;
     end
   end
-end
-
--------------------------------------------------------------------------------
--- setWaitSpot()
---
--- Initialize position and pixel value for waitForChange() or waitForStasis()
--------------------------------------------------------------------------------
-
-function setWaitSpot(x0, y0)
-  setWaitSpot_x = x0;
-  setWaitSpot_y = y0;
-  setWaitSpot_px = srReadPixel(x0, y0);
-end
-
--------------------------------------------------------------------------------
--- waitForChange()
---
--- Wait for pixel previously initialized in setWaitSpot() to change.
--------------------------------------------------------------------------------
-
-function waitForChange(timeout)
-  local success = true;
-  local timestart = lsGetTimer();
-  local pixel = srReadPixel(setWaitSpot_x, setWaitSpot_y)
-  while pixel == setWaitSpot_px do
-    lsSleep(tick_time);
-    if (lsShiftHeld() and lsControlHeld()) then
-      error 'broke out of loop from Shift+Ctrl';
-    end
-    if timeout and (lsGetTimer() > timestart + timeout) then
-      lsPrintln('Timed out waiting.');
-      success = false;
-      break;
-    end
-    pixel = srReadPixel(setWaitSpot_x, setWaitSpot_y);
-  end
-  lsPrintln('Waited ' .. (lsGetTimer() - timestart) ..
-            'ms for pixel to change.');
-  return success;
-end
-
-function isHomogenous(list)
-  local result = true;
-  for i=1,#list do
-    if list[i] ~= list[1] then
-      result = false;
-    end
-  end
-  return result;
-end
-
--------------------------------------------------------------------------------
--- waitForStasis()
---
--- Wait for pixel previously initialized in setWaitSpot() to change.
--------------------------------------------------------------------------------
-
-function waitForStasis(timeout)
-  local lastPixels = {0, 1, 2, 3, 4, 5, 6};
-  local index = 1;
-  local success = true;
-  local timestart = lsGetTimer();
---  local pixel = srReadPixel(setWaitSpot_x, setWaitSpot_y)
-  while not isHomogenous(lastPixels) do
-    if (lsShiftHeld() and lsControlHeld()) then
-      error 'broke out of loop from Shift+Ctrl';
-    end
-    if timeout and (lsGetTimer() > timestart + timeout) then
-      lsPrintln('Timed out waiting.');
-      success = false;
-      break;
-    end
-    lsSleep(tick_time);
-    pixel = srReadPixel(setWaitSpot_x, setWaitSpot_y);
-    lastPixels[index] = pixel;
-    index = index + 1;
-    if (index > #lastPixels) then
-      index = 1;
-    end
-  end
-  lsPrintln('Waited ' .. (lsGetTimer() - timestart) ..
-            'ms for pixel to change.');
-  return success;
-end
-
--------------------------------------------------------------------------------
--- waitForImage(file, timeout)
---
--- Wait for a particular image to appear subject to a timeout in ms.
--------------------------------------------------------------------------------
-
-function waitForImage(file, timeout)
-  return waitForImageInRange(file, 0, 0, xyWindowSize[0], xyWindowSize[1],
-                             timeout);
-end
-
--------------------------------------------------------------------------------
--- waitForImageInRange(file, x, y, width, height, timeout)
---
--- Wait for an image to appear within a box subject to a timeout in ms.
--------------------------------------------------------------------------------
-
-function waitForImageInRange(file, x, y, width, height, timeout)
-  local done = false;
-  local image = null;
-  local timestart = lsGetTimer();
-  while not done do
-    lsSleep(tick_time);
-    srReadScreen();
-    image = srFindImageInRange(file, x, y, width, height, 5000);
-    done = (image ~= null) ;
-    if timeout and (lsGetTimer() > timestart + timeout) then
-      lsPrintln('Timed out waiting.');
-      done = true;
-    end
- end
-  return image;
-end
-
--------------------------------------------------------------------------------
--- drag()
---
--- Drag the mouse from (sourceX, sourceY) to (destX, destY)
--------------------------------------------------------------------------------
-
-function drag(sourceX, sourceY, destX, destY)
-  setWaitSpot(destX, destY);
-  srSetMousePos(sourceX, sourceY);
-  srMouseDown(sourceX, sourceY, 0);
-  srSetMousePos(destX, destY);
-  local result = waitForChange(500);
-  srMouseUp(destX, destY, 0);
-  return result;
 end
 
 -------------------------------------------------------------------------------
@@ -318,57 +202,8 @@ function promptFlaxNumbers()
     end
 
     lsDoFrame();
-    lsSleep(tick_time);
+    lsSleep(tick_delay);
   end
-end
-
--------------------------------------------------------------------------------
--- safeBegin()
---
--- Call this just before a click or a drag to make sure the user isn't
--- moving the mouse or clicking it. Reduces the chances of interference.
--------------------------------------------------------------------------------
-
-function safeBegin()
-  local oldX = 0;
-  local oldY = 0;
-  oldX, oldY = srMousePos();
-  local at_rest = false;
-  local loopCount = 0;
-  while not at_rest do
-    lsSleep(tick_time);
-    local currentX = 0;
-    local currentY = 0;
-    currentX, currentY = srMousePos();
-    at_rest = (currentX == oldX and currentY == oldY);
-    oldX = currentX;
-    oldY = currentY;
-    loopCount = loopCount + 1;
-    if loopCount > 200 then
-      error "Error: The mouse keeps moving"
-    end
-  end
-  srMouseUp(oldX, oldY);
-end
-
--------------------------------------------------------------------------------
--- safeClick()
---
--- Click the mouse without moving it.
--------------------------------------------------------------------------------
-
-function safeClick(x, y, rightClick)
-  safeBegin();
-  srClickMouseNoMove(x, y, rightClick);
-end
-
--------------------------------------------------------------------------------
--- safeDrag()
--------------------------------------------------------------------------------
-
-function safeDrag(sourceX, sourceY, destX, destY)
-  safeBegin();
-  return drag(sourceX, sourceY, destX, destY);
 end
 
 -------------------------------------------------------------------------------
@@ -420,9 +255,7 @@ end
 
 function doit()
   promptFlaxNumbers();
-
-  askForWindow("flax_stable v1.1 -- Script by Jimbly with tweaks from Cegaiel and KasumiGhia. Revised by Tallow\n\nMake sure the plant flax window is pinned and on the RIGHT side of the screen. Your VeggieTales window should also be on the RIGHT side of the screen. You must be in F8F8 cam zoomed in.  You may need to F12 at low resolutions or hide your chat window (if it starts planting and fails to move downward, it probably clicked on your chat window).  Will plant grid NE of current location.  'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON. Enable Hotkeys on flax must be OFF.");
-	
+  askForWindow(askText);
   initGlobals();
 
   for loop_count=1, num_loops do
@@ -470,9 +303,9 @@ function plantAndPin(loop_count)
         y_pos = y_pos + dy[dxi];
         safeClick(xyCenter[0] + walk_px_x*dx[dxi],
                   xyCenter[1] + walk_px_y*dy[dxi], 0);
-        setWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
+        local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
         lsSleep(walk_time);
-        waitForStasis(1000);
+        waitForStasis(spot, 1000);
         dt = dt - 1;
         if dt == 1 then
           dxi = dxi + 1;
@@ -510,10 +343,9 @@ end
 function plantHere(xyPlantFlax, y_pos)
   -- Plant
   lsPrintln('planting ' .. xyPlantFlax[0] .. ',' .. xyPlantFlax[1]);
-  setWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
+  local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
   safeClick(xyPlantFlax[0], xyPlantFlax[1], 0);
-  srSetMousePos(xyFlaxMenu[0], xyFlaxMenu[1]);
-  local plantSuccess = waitForChange(500);
+  local plantSuccess = waitForChange(spot, 500);
   if not plantSuccess then
     --error "No plant was placed. Abort this run.";
     return false;
@@ -521,40 +353,16 @@ function plantHere(xyPlantFlax, y_pos)
 
   -- Bring up menu
   lsPrintln('menu ' .. xyFlaxMenu[0] .. ',' .. xyFlaxMenu[1]);
-  safeBegin();
-  srClickMouse(xyFlaxMenu[0], xyFlaxMenu[1], 0);
-  local windowPos = waitForImageInRange(imgThisIs, xyFlaxMenu[0]-50,
-                                        xyFlaxMenu[1]-200, 300, 300, 500);
-  if not windowPos then
-    --error "No window came up. Abort this run.";
+  if not openAndPin(xyFlaxMenu[0], xyFlaxMenu[1], 500) then
+    error "No window came up. Abort this run.";
     return false;
   end
 
   -- Check for window size
   checkWindowSize(xyFlaxMenu[0], xyFlaxMenu[1]);
 
-  -- Pin
-  lsPrintln('pin ' .. windowPos[0] .. ',' .. windowPos[1]);
-  safeClick(windowPos[0], windowPos[1], 1);
-
   -- Move window into corner
-  srReadScreen();
-  local windowList = findAllImages(imgThisIs);
-  if #windowList >= 2 then
-    table.remove(windowList, 1);
-  end
-  for i=1,#windowList do
-    local bit = getToggle();
-    lsPrintln('move ' .. windowList[i][0] .. ',' .. windowList[i][1] ..
-              ' to ' .. 20 .. ',' .. (100+bit));
-    local dragged = safeDrag(windowList[i][0], windowList[i][1],
-                             20, 100 + bit, 0);
-    if not dragged then
-      --error "Drag failed. Abort this run.";
-      return false;
-    end
-    lsSleep(delay_time);
-  end
+  stashWindow(xyFlaxMenu[0] + 5, xyFlaxMenu[1], BOTTOM_RIGHT);
   return true;
 end
 
@@ -567,23 +375,7 @@ end
 function dragWindows(loop_count)
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ")  " ..
                "Dragging Windows into Grid");
-  local moveX = 1;
-  local moveY = 1;
-  lsSleep(delay_time);
-  srReadScreen();
-  local corner = srFindImageInRange(imgThisIs, 10, 40, 100, 100, 5000);
-  while corner do
-    safeDrag(corner[0], corner[1],
-             window_w*(grid_w - moveX + 1), window_h*(grid_h - moveY + 1));
-    moveX = moveX + 1;
-    if moveX > grid_w then
-      moveX = 1;
-      moveY = moveY + 1;
-    end
-    lsSleep(delay_time);
-    srReadScreen();
-    corner =  srFindImageInRange(imgThisIs, 10, 40, 100, 100, 5000);
-  end
+  arrangeStashed();
 end
 
 -------------------------------------------------------------------------------
@@ -605,7 +397,7 @@ function harvestFlax(loop_count)
     local tops = findAllImages(imgThisIs);
     for i=1,#tops do
       safeClick(tops[i][0], tops[i][1]);
-      lsSleep(delay_time);
+      lsSleep(click_delay);
     end
 
     if is_plant then
@@ -655,8 +447,10 @@ function harvestFlax(loop_count)
           seedIndex = 1;
           seedWave = seedWave + 1;
         end
-        local seedPos = srFindImageInRange(imgSeeds, tops[seedIndex][0],
-				    tops[seedIndex][1], 160, 100);
+        local seedPos = srFindImageInRange(imgSeeds,
+					   tops[#tops - seedIndex + 1][0],
+					   tops[#tops - seedIndex + 1][1],
+					   160, 100);
         if seedPos and seedWave <= seeds_per_pass then
           safeClick(seedPos[0] + 5, seedPos[1]);
           lsSleep(harvest_seeds_time);
@@ -689,35 +483,22 @@ function walkHome(loop_count, finalPos)
   statusScreen("(" .. loop_count .. "/" .. num_loops ..
                ") Waiting for flax beds to disappear...");
   lsSleep(2500);
-  unpinStragglers();
+  closeAllWindows(0, 0, srGetWindowSize()[0] - lsGetWindowSize()[0],
+		  srGetWindowSize()[1]);
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
 
   -- Walk back
   for x=1, finalPos[0] do
-    safeClick(xyCenter[0] + walk_px_x*-1, xyCenter[1], 0);
+    local spot = getWaitSpot(xyCenter[0] - walk_px_x, xyCenter[1]);
+    safeClick(xyCenter[0] - walk_px_x, xyCenter[1], 0);
     lsSleep(walk_time);
-    waitForStasis(1000);
+    waitForStasis(spot, 1000);
   end
   for x=1, -(finalPos[1]) do
+    local spot = getWaitSpot(xyCenter[0], xyCenter[1] + walk_px_y);
     safeClick(xyCenter[0], xyCenter[1] + walk_px_y, 0);
     lsSleep(walk_time);
-    waitForStasis(1000);
-  end
-end
-
--------------------------------------------------------------------------------
--- unpinStragglers()
---
--- If there are any empty windows left, unpin them.
--------------------------------------------------------------------------------
-function unpinStragglers()
-  local pins = findAllImages(imgUnpin);
-  local plant = getPlantWindowPos();
-  for i=1,#pins do
-    if pins[i][0] < plant[0] then
-      safeClick(pins[i][0] + 3, pins[i][1] + 3);
-      lsSleep(delay_time);
-    end
+    waitForStasis(spot, 1000);
   end
 end
 

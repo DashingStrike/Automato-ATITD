@@ -108,48 +108,59 @@ function isHomogenous(list)
 end
 
 -------------------------------------------------------------------------------
--- waitForImage(file, timeout)
+-- waitForImage(file, timeout, message, tol)
 --
 -- Wait for a particular image to appear subject to a timeout in ms.
 --
 -- file -- filename of image to search for
 -- timeout -- maximum time to wait in ms
+-- message (optional) -- Status message to show while waiting
+-- tol (optional) -- tolerance for comparison
 --
--- returns image on success or none recently
+-- returns image on success or none on failure
 -------------------------------------------------------------------------------
 
-function waitForImage(file, timeout)
+function waitForImage(file, timeout, message, tol)
+  local xyWindowSize = srGetWindowSize();
   if not file or not timeout then
     error("Incorrect number of arguments for waitForImage()");
   end
   return waitForImageInRange(file, 0, 0, xyWindowSize[0], xyWindowSize[1],
-                             timeout);
+                             timeout, message, tol);
 end
 
 -------------------------------------------------------------------------------
--- waitForImageInRange(file, x, y, width, height, timeout)
+-- waitForImageInRange(file, x, y, width, height, timeout, message, tol)
 --
 -- Wait for an image to appear within a box subject to a timeout in ms.
 --
 -- file -- image file to check against
 -- x, y -- upper-left corner of range to search
 -- width, height -- size of range to search
--- timeout (optional) -- how long to wait for image (ms) default is forever
+-- timeout -- how long to wait for image (ms)
+-- message (optional) -- message to print while waiting
+-- tol (optional) -- tolerance for comparison
 -------------------------------------------------------------------------------
 
-function waitForImageInRange(file, x, y, width, height, timeout)
-  if not file or not x or not y or not width or not height then
+function waitForImageInRange(file, x, y, width, height, timeout, message, tol)
+  if not file or not x or not y or not width or not height or not timeout then
     error("Incorrect number of arguments for waitForImageInRange()");
+  end
+  if not tol then
+    tol = 5000;
   end
   local done = false;
   local image = nil;
   local timestart = lsGetTimer();
   while not done do
+    if message then
+      statusScreen(message);
+    end
     lsSleep(tick_time);
     srReadScreen();
-    image = srFindImageInRange(file, x, y, width, height, 5000);
+    image = srFindImageInRange(file, x, y, width, height, tol);
     done = (image ~= nil) ;
-    if timeout and (lsGetTimer() > timestart + timeout) then
+    if lsGetTimer() > timestart + timeout then
       done = true;
     end
   end

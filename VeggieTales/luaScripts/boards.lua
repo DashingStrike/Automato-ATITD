@@ -3,23 +3,24 @@
 -- Run a set of sawmills to generate boards.
 --
 
-loadfile("luaScripts/common.inc")();
+assert(loadfile("luaScripts/common.inc"))();
 
 askText = singleLine([[
-  Board Maker v1.1 -- Revised by Tallow. Automatically planes boards
-  from any number of Wood Plane or Carpentry Shop windows. Make sure
-  the VT window is in the TOP-RIGHT corner of the screen.
+  Board Maker v1.1 (Revised by Tallow) --
+  Automatically planes boards from any number of Wood Plane or
+  Carpentry Shop windows. Make sure the VT window is in the TOP-RIGHT
+  corner of the screen.
 ]]);
 
 wmText = "Tap shift on Wood Planes or Carpentry Benches to open and pin.";
 
 --Amount of time to pause after clicking the plane woods button (ms)
-pause_time = 2500; 
+pause_time = 3000; 
 
 function doit()
   askForWindow(askText);
-  windowManager("Board Setup", wmText)
-  askForWindow("Switch focus back to client window if necessary");
+  windowManager("Board Setup", wmText);
+  askForWindow(focusMessage);
   unpinOnExit(planeBoards);
 end
 
