@@ -10,50 +10,52 @@
 --
 
 instructions = {
+0,0,0,0,99,
+0,0,0,0,99,
+0,0,0,0,99,
+0,0,3,0,99,
+0,0,1,0,99,
+0,0,0,0,99,
+0,0,0,1,99,
+0,0,1,0,99,
+0,0,1,0,99,
+0,0,0,1,99,
+0,0,1,1,33,
 0,0,0,1,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,1,1,33,
-0,0,1,1,33,
-0,0,0,2,33,
-0,0,1,1,99,
-0,0,2,0,99,
+0,0,0,3,99,
+0,0,1,0,99,
+0,0,0,1,99,
+0,0,0,0,99,
+0,0,0,0,99,
 0,0,1,1,99,
 0,0,1,0,99,
+0,0,0,1,99,
 0,0,0,0,99,
 0,0,1,0,99,
 0,0,0,0,99,
+0,0,0,0,33,
+0,0,0,0,99,
 0,0,1,0,99,
-0,0,1,0,99,
-0,0,0,4,99,
+0,0,0,0,99,
 0,0,1,0,33,
 0,0,0,0,33,
-0,0,0,0,33,
 0,0,1,1,99,
-0,0,0,0,33,
-0,0,0,1,33,
-0,0,0,0,99,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,1,99,
 0,0,0,2,99,
-0,0,4,0,99,
+0,0,2,1,33,
 0,0,1,1,33,
+0,0,1,0,33,
 0,0,0,1,33,
-0,0,1,0,99,
-0,0,0,1,33,
+0,0,0,0,33,
 0,0,0,0,99,
 0,0,0,0,99,
-0,0,0,2,33,
+0,0,1,2,99,
+0,0,2,0,33,
 0,0,0,0,33,
 };
 
 assert(loadfile("luaScripts/common.inc"))();
+
+tick_delay = 1;
 
 askText = singleLine([[
   Thistle v1.1 (Revised by Tallow) --
@@ -197,11 +199,11 @@ function runThistles()
 	waitForMonChange(message .. " done.");
       end
       -- Wait a moment after image changes before doing the next tick
-      sleepWithStatus(1500,
+      sleepWithStatus(500,
 		      "Waiting a moment for other beds to catch up...");
     end
 
-    lsSleep(3000);
+    sleepWithStatus(6000, "Waiting for all beds to finish");
     forAllWindows(clickHarvest, {"Harvest.png"}, "Harvesting");
     lsSleep(500);
     
@@ -363,11 +365,10 @@ function forAllWindows(f, image_names, message)
   for i=#window_locs, 1, -1 do
     if not first and overlap then
       -- focus
-      local spot = getWaitSpot(window_locs[i+1][0] + 24,
-			       window_locs[i+1][1] + 24);
+      local spot = getWaitSpot(window_locs[i + 1][0] - 9,
+			       window_locs[i + 1][1] - 8);
       safeClick(window_locs[i][0], window_locs[i][1]);
-      waitForChange(spot, 500);
-      lsSleep(50);
+      waitForChange(spot);
     end
     f(i, image_names);
     first = false;
@@ -377,10 +378,10 @@ function forAllWindows(f, image_names, message)
   if overlap then
     statusScreen(message .. " Refocusing...");
     for i=2, #window_locs do
-      local spot = getWaitSpot(window_locs[i][0] + 24,
-			       window_locs[i][1] + 24);
+      local spot = getWaitSpot(window_locs[i][0] - 9,
+			       window_locs[i][1] - 8);
       safeClick(window_locs[i][0], window_locs[i][1] + 310);
-      waitForChange(spot, 500);
+      waitForChange(spot);
     end
     lsSleep(100);
   end
@@ -423,6 +424,7 @@ end
 function clickHarvest(anchorIndex, image_names)
   local anchor = window_locs[anchorIndex];
   for i=1, #image_names do
+    lsSleep(200);
     srReadScreen();
     local pos = srFindImageInRange(image_names[i],
 				   anchor[0], anchor[1],
