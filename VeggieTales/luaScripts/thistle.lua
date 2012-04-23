@@ -106,7 +106,6 @@ function doit()
   promptThistles();
   --promptRecipe();
   windowManager("Thistle Window Setup", wmText, overlap);
-  askForWindow(focusMessage);
   unpinOnExit(runThistles);
 end
 
@@ -278,7 +277,7 @@ function waitForMonChange(message)
       done = true;
     end
     
-    local force, skip = monInterface(message);
+    local skip, force = monInterface(message);
     done = done or force;
     skip_next = skip_next or skip;
 
