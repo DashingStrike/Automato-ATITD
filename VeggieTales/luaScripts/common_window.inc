@@ -168,6 +168,10 @@ function arrangeStashed(cascade)
   screen[0] = screen[0] - lsGetWindowSize()[0];
   local currentX = 0;
   local currentY = 0;
+  if cascade then
+    currentX = 10;
+    currentY = 50;
+  end
   local lastX = 0;
   local lastY = 0;
   local xMax = 0;
@@ -204,7 +208,7 @@ function arrangeStashed(cascade)
     lastY = window[1] - bounds[1] + currentY;
     safeDrag(window[0], window[1], lastX, lastY);
     if cascade then
-      currentX = currentX + 24;
+      currentX = currentX + 8;
       currentY = currentY + 24;
     else
       currentX = currentX + width;
@@ -241,21 +245,21 @@ function closeAllWindows(x, y, width, height)
     height = srGetWindowSize()[1];
   end
   srReadScreen();
-  local current = srFindImageInRange("ThisIs.png", x, y, width, height);
-  while current do
-    safeClick(current[0], current[1], 1);
+  local images = findAllImagesInRange("ThisIs.png", x, y, width, height);
+  while #images >= 1 do
+    safeClick(images[#images][0], images[#images][1], 1);
     sleepWithStatus(200, "Closing Windows");
     srReadScreen();
-    current = srFindImageInRange("ThisIs.png", x, y, width, height);
+    images = findAllImagesInRange("ThisIs.png", x, y, width, height);
   end
 
   srReadScreen();
   current = srFindImageInRange("UnPin.png", x, y, width, height);
-  while current do
-    safeClick(current[0], current[1], 1);
+  while #images >= 1 do
+    safeClick(images[#images][0], images[#images][1], 1);
     sleepWithStatus(click_delay, "Closing Windows");
     srReadScreen();
-    current = srFindImageInRange("UnPin.png", x, y, width, height);
+    images = findAllImagesInRange("UnPin.png", x, y, width, height);
   end
 end
 
@@ -277,22 +281,34 @@ function windowManager(title, message, overlap)
   if not message then
     message = "Tap shift to open and pin a window."
   end
+  local pauseFocus = false;
   local shift = false;
   local done = false;
   while not done do
     lsPrint(10, 10, 0, 1.0, 1.0, 0xFFFFFFff, title);
     if lsButtonText(30, 60, 0, 250, 0x80D080ff, "Arrange Windows") then
       lsDoFrame();
+      if pauseFocus then
+	askForWindow(focusMessage);
+      end
       arrangeInGrid(overlap);
     end
-    if lsButtonText(30, 100, 0, 250, 0x80D080ff, "Stash Windows") then
+    if lsButtonText(30, 90, 0, 250, 0x80D080ff, "Stash Windows") then
       lsDoFrame();
+      if pauseFocus then
+	askForWindow(focusMessage);
+      end
       stashAllWindows(BOTTOM_RIGHT);
     end
-    if lsButtonText(30, 140, 0, 250, 0x80D080ff, "Un-Pin Windows") then
+    if lsButtonText(30, 120, 0, 250, 0x80D080ff, "Un-Pin Windows") then
       lsDoFrame();
+      if pauseFocus then
+	askForWindow(focusMessage);
+      end
       closeAllWindows();
     end
+    pauseFocus = lsCheckBox(30, 160, 10, 0xffffffff, "Pause for Focus",
+			    pauseFocus);
     lsPrintWrapped(10, 200, 0, 250, 0.7, 0.7, 0xd0d0d0ff,
 		   message);
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100,
@@ -316,6 +332,9 @@ function windowManager(title, message, overlap)
     checkBreak();
     lsDoFrame();
     lsSleep(tick_delay);
+  end
+  if pauseFocus then
+    askForWindow(focusMessage);
   end
 end
 
@@ -341,15 +360,21 @@ function unpinManager(title, message)
     lsSleep(tick_delay);
     lsDoFrame();
   end
+  local pauseFocus = false;
   local done = false;
   while not done do
     lsPrint(10, 10, 0, 1.0, 1.0, 0xFFFFFFff, title);
     lsPrintWrapped(10, 60, 0, lsScreenX - 20, 0.7, 0.7,
 		   0xd0d0d0ff, message);
-    if lsButtonText(30, 160, 0, 250, 0x80D080ff,
-		    "Un-Pin Windows") then
+    if lsButtonText(30, 160, 0, 250, 0x80D080ff, "Un-Pin Windows") then
+      lsDoFrame();
+      if pauseFocus then
+	askForWindow(focusMessage);
+      end
       closeAllWindows();
     end
+    pauseFocus = lsCheckBox(30, 200, 10, 0xffffffff, "Pause for Focus",
+			    pauseFocus);
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100,
 		    0xffffffff, "Done") then
       done = true;

@@ -15,19 +15,35 @@
 -------------------------------------------------------------------------------
 
 function findAllImages(image_name, tol)
-  if not image_name then
+  local size = srGetWindowSize();
+  return findAllImagesInRange(image_name, 0, 0, size[0], size[1], tol);
+end
+
+-------------------------------------------------------------------------------
+-- findAllImagesInRange(image_name, startX, startY, width, height, tol)
+--
+-- Returns an array of all positions matching the image.
+--
+-- image_name -- path and filename used to fetch the image
+-- startX, startY -- origin of search region
+-- width, height -- size of search region
+-- tol (optional) -- tolerance value used for comparison
+-------------------------------------------------------------------------------
+
+function findAllImagesInRange(image_name, startX, startY, width, height, tol)
+  if not image_name or not startX or not startY or not width or not height then
     error("Incorrect number of arguments for findAllImages()");
   end
   if not tol then
     tol = 5000;
   end
+  local endX = startX + width;
+  local endY = startY + height;
   local xyImageSize = srImageSize(image_name);
-  local xyWindowSize = srGetWindowSize();
-  local y = 0;
+  local y = startY;
   local buttons = {};
   while 1 do
-    local pos = srFindImageInRange(image_name, 0, y,
-                                   xyWindowSize[0], xyWindowSize[1]-y, tol);
+    local pos = srFindImageInRange(image_name, startX, y, width, endY-y, tol);
     if not pos then
       break;
     end
@@ -38,7 +54,8 @@ function findAllImages(image_name, tol)
     while 1 do
       local x = pos[0]+1;
       pos = srFindImageInRange(image_name, x, y,
-                               xyWindowSize[0]-x, xyImageSize[1], tol);
+                               endX - x, math.min(xyImageSize[1], endY - y),
+			       tol);
       if not pos then
         break;
       end
