@@ -14,7 +14,7 @@ loadfile("luaScripts/ui_utils.inc")();
 per_click_delay = 0;
 
 local expected_gardens = 33;
-local last_sun = 0;
+local last_sun = 99;
 
 instructions = {
 0,0,0,1,0,
@@ -264,26 +264,28 @@ function test()
 end
 
 function refillWater()
-	statusScreen("Refilling water...");
-	lsSleep(200);
+	lsSleep(100);
 	srReadScreen();
-	FindWater = srFindImage("iconWaterJugSmall.png", 1);
+	FindWater = srFindImage("iconWaterJugSmall.png");
 
 	if FindWater then
-	srClickMouseNoMove(FindWater[0]+3,FindWater[1]-5);
-	lsSleep(1500);
+	statusScreen("Refilling water...");
+	srClickMouseNoMove(FindWater[0]+3,FindWater[1]-5, right_click);
+	lsSleep(500);
 
 
 		srReadScreen();
-		FindMaxButton = srFindImage("Maxbutton.png", 1);
-
+		FindMaxButton = srFindImage("Maxbutton.png");
 
 		if FindMaxButton then
-		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3);
+		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
+		lsSleep(500);
 		end
 
 	end
 end
+
+
 
 function doit()
 	num_loops = promptNumber("How many passes ?", 1);
@@ -292,6 +294,8 @@ function doit()
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';
 	end
+
+	refillWater();
 
 	srReadScreen();	
 	window_locs = findAllImages("ThisIs.png");
