@@ -13,55 +13,61 @@ loadfile("luaScripts/ui_utils.inc")();
 
 per_click_delay = 0;
 
-local expected_gardens = 20;
-local last_sun = 0;
+local expected_gardens = 33;
+local last_sun = 99;
 
 instructions = {
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,1,0,0,
-0,0,0,1,0,
-0,0,2,0,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,1,0,0,
-0,0,0,1,0,
-0,0,1,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,1,1,0,
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,2,0,
-0,0,0,2,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,2,0,0,
-0,0,3,1,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,1,0,
-0,0,0,0,0,
+0,0,0,0,99,
+0,0,0,0,99,
+0,0,0,0,33,
+0,0,0,1,99,
+0,0,0,0,99,
+0,0,0,0,33,
+0,0,0,1,99,
+0,0,1,0,33,
+0,0,1,4,33,
+0,0,2,0,33,
+0,0,0,1,33,
+0,0,0,0,33,
+0,0,0,1,99,
+0,0,0,0,99,
+0,0,3,0,33,
+0,0,0,0,99,
+0,0,0,0,99,
+0,0,1,0,99,
+0,0,0,0,33,
+0,0,2,0,33,
+0,0,1,1,33,
+0,0,0,1,33,
+0,0,1,0,99,
+0,0,0,0,33,
+0,0,0,1,33,
+0,0,0,3,33,
+0,0,0,0,33,
+0,0,0,1,99,
+0,0,0,1,99,
+0,0,2,0,99,
+0,0,1,0,99,
+0,0,1,0,99,
+0,0,1,2,99,
+0,0,0,0,99,
+0,0,0,0,99,
+0,0,0,0,33,
+0,0,0,0,99,
+0,0,0,0,33,
+0,0,0,0,99,
+0,0,0,0,99,
+0,0,0,0,99,
 };
 
 
 local window_locs = {};
+local button_pos = {};
+
+local dpos = {};
+local pos = {};
+
+
 
 function setWaitSpot(x0, y0)
 	setWaitSpot_x = x0;
@@ -92,6 +98,7 @@ function clickAll(image_name, up)
 	if #buttons == 0 then
 		statusScreen("Could not find specified buttons...");
 		lsSleep(1500);
+
 	else
 		statusScreen("Clicking " .. #buttons .. "button(s)...");
 		if up then
@@ -106,6 +113,7 @@ function clickAll(image_name, up)
 			end
 		end
 		statusScreen("Done clicking (" .. #buttons .. " clicks).");
+
 		lsSleep(100);
 	end
 end
@@ -117,7 +125,6 @@ function clickAllComplex(image_names, message)
 		message = "";
 	end
 	-- Find buttons and click them!
-	local dpos = {};
 	statusScreen(message .. " Clicking " .. #window_locs .. " button(s)...");
 	local first = 1;
 	for i=#window_locs, 1, -1 do
@@ -127,21 +134,38 @@ function clickAllComplex(image_names, message)
 			srClickMouseNoMove(window_locs[i][0], window_locs[i][1]);
 			waitForChange();
 		end
-	srReadScreen();
-	for dindex=1, #image_names do
-		local pos = srFindImageInRange(image_names[dindex], window_locs[i][0], window_locs[i][1],
-						410, 312);
-		if not pos then
-			error ('Failed to find ' .. image_names[dindex]);
+
+		--lsSleep(85);
+
+
+		for dindex=1, #image_names do
+
+
+		  if not button_pos[i] then
+		    button_pos[i] = {};
+
+		  end
+		  pos = button_pos[i][image_names[dindex]];
+
+
+		  if not pos then
+		    srReadScreen();
+		    pos = srFindImageInRange(image_names[dindex], window_locs[i][0], window_locs[i][1],
+						   410, 312);
+		    if not pos then
+		      error ('Failed to find ' .. image_names[dindex]);
+		    end
+		    button_pos[i][image_names[dindex]] = pos;
+		  end
+		  dpos[dindex] = pos;
 		end
-		dpos[dindex] = pos;
-	end
 		-- click all buttons
 		for j=1, #image_names do
 			srClickMouseNoMove(dpos[j][0] + 5, dpos[j][1] + 5);
 		end
 		first = nil;
 	end
+
 	lsSleep(100);
 	statusScreen(message .. " Refocusing...");
 	-- refocus
@@ -149,8 +173,10 @@ function clickAllComplex(image_names, message)
 		setWaitSpot(window_locs[i][0], window_locs[i][1]);
 		srClickMouseNoMove(window_locs[i][0], window_locs[i][1] + 310);
 		waitForChange();
+
 	end
-	lsSleep(100);
+	--waitForChange();
+lsSleep(100);
 end
 
 
@@ -186,6 +212,8 @@ function waitForMonChange(message)
 	local skip_next = nil;
 	local first_loop = 1;
 	while not different do
+
+
 		srReadScreen();
 		for x=1, mon_w do
 			for y=1, mon_h do
@@ -202,7 +230,8 @@ function waitForMonChange(message)
 		
 		if different then
 			-- Make sure the screen was done refreshing and update again
-			lsSleep(60);
+			lsSleep(100);
+
 			srReadScreen();
 			for x=1, mon_w do
 				for y=1, mon_h do
@@ -241,9 +270,16 @@ function waitForMonChange(message)
 				lsDisplaySystemSprite(1, 10+x*size, 90+y*size, 0, size, size, last_mon[x][y]);
 			end
 		end
+
 		lsDoFrame();
+
 		lsSleep(100);
 	end
+
+
+
+
+
 	statusScreen("Changed, waiting a moment for other beds to catch up...");
 	if not first_loop then -- Don't wait, we might be behind already!
 		lsSleep(1500); -- Wait a moment after image changes before doing the next tick
@@ -265,34 +301,41 @@ function test()
 end
 
 function refillWater()
-	statusScreen("Refilling water...");
-	lsSleep(200);
+	water_count = 0;
+	refill_jugs = 40;
+	lsSleep(100);
 	srReadScreen();
-	FindWater = srFindImage("iconWaterJugSmall.png", 1);
+	FindWater = srFindImage("iconWaterJugSmall.png");
 
 	if FindWater then
-	srClickMouseNoMove(FindWater[0]+3,FindWater[1]-5);
-	lsSleep(1500);
+	statusScreen("Refilling water...");
+	srClickMouseNoMove(FindWater[0]+3,FindWater[1]-5, right_click);
+	lsSleep(500);
 
 
 		srReadScreen();
-		FindMaxButton = srFindImage("Maxbutton.png", 1);
-
+		FindMaxButton = srFindImage("Maxbutton.png");
 
 		if FindMaxButton then
-		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3);
+		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
+		lsSleep(500);
 		end
 
 	end
 end
 
+
+
 function doit()
+
+
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("This is a TEMPORARY fix for running a mixture of Upgraded and Non Upgraded Thistle Gardens. This version moves slow and you can only run 20 gardens max. Pin any number of thistle gardens, edit thistle_new_mix_beta with recipe. Press Shift to continue.");
+	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe.");
 	
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';
 	end
+
 
 	srReadScreen();	
 	window_locs = findAllImages("ThisIs.png");
@@ -309,6 +352,9 @@ function doit()
 --	end
 	
 	
+
+	refillWater();
+
 	-- test();
 	
 	for loops=1, num_loops do
@@ -316,8 +362,10 @@ function doit()
 		-- clickAll("ThisIs.png", 1);
 		-- lsSleep(100);
 		
-		srReadScreen();
-		
+
+
+	srReadScreen();
+
 		-- clickAllComplex({"Harvest.png"}, 1);
 		-- error 'done';
 
