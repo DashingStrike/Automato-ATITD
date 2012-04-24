@@ -28,13 +28,13 @@ end
 -- Wait for pixel at spot to change subject to a timeout.
 --
 -- spot -- 3-tuple of x, y, and the original color at that location
--- timeout -- Time in milliseconds to wait before giving up
+-- timeout (optional) -- Time in milliseconds to wait before giving up
 --
 -- returns true on change and false on timeout.
 -------------------------------------------------------------------------------
 
 function waitForChange(spot, timeout)
-  if not spot or not timeout then
+  if not spot then
     error("Incorrect number of arguments for waitForChange()");
   end
   if #spot ~= 3 then

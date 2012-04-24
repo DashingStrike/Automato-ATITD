@@ -71,13 +71,20 @@ end
 function ccMenu()
   while 1 do
     for i=1, #buttons do
-      if lsButtonText(buttons[i].buttonPos[0], buttons[i].buttonPos[1],
-		      0, buttons[i].buttonSize, 0xFFFFFFff, buttons[i].name)
-      then
-	clickAllImages(buttons[i].image,
-		       buttons[i].offset[0], buttons[i].offset[1]);
+      if showButton(buttons[i]) then
+	runCommand(buttons[i]);
       end
     end
     statusScreen("CC Control Center", 0x00d000ff);
   end
 end
+
+function showButton(button)
+  return lsButtonText(button.buttonPos[0], button.buttonPos[1],
+		      0, button.buttonSize, 0xFFFFFFff, button.name)
+end
+
+function runCommand(button)
+  clickAllImages(button.image, button.offset[0], button.offset[1]);
+end
+
