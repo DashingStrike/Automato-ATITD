@@ -61,29 +61,6 @@ function clickButton(pos, index)
   end
 end
 
-function getPixelDiffs(left, right)
-  local result = {};
-  for i=1,3 do
-    result[i] = math.abs((left % 256) - (right % 256));
-    left = math.floor(left / 256);
-    right = math.floor(right / 256);
-  end
-  return result;
-end
-
-function pixelCheck(oven, offset, color, tolerance)
-  local result = true;
-  local screenColor = srReadPixel(oven[0] + offset[0], oven[1] + offset[1]);
-  local diffs = getPixelDiffs(color, math.floor(screenColor/256));
-  for i=1,#diffs do
-    if diffs[i] > tolerance then
-      result = false;
-      break;
-    end
-  end
-  return result;
-end
-
 function ccRun(pass, passCount)
   local ovens = findOvens();
   local vents = setupVents(ovens);
@@ -127,9 +104,9 @@ barColor = 0x0706FD;
 
 function processOven(oven, vent)
   local newVent = vent;
-  if pixelCheck(oven, progressGreen, greenColor, 4) then
+  if pixelMatch(oven, progressGreen, greenColor, 4) then
     -- Progress is green
-    if pixelCheck(oven, maxDangerGreen, barColor, 4) then
+    if pixelMatch(oven, maxDangerGreen, barColor, 4) then
       -- Danger too high
       clickButton(oven, WATER);
     elseif vent ~= 3 then
@@ -138,21 +115,21 @@ function processOven(oven, vent)
     end
   else
     -- Progress is not green
-    if not pixelCheck(oven, minHeat, barColor, 8) then
+    if not pixelMatch(oven, minHeat, barColor, 8) then
       -- Heat too low
-      if not pixelCheck(oven, minWood, barColor, 8) then
+      if not pixelMatch(oven, minWood, barColor, 8) then
 	-- Wood too low
 	clickButton(oven, WOOD);
       end
     end
 
-    if not pixelCheck(oven, minOxy, barColor , 8) then
+    if not pixelMatch(oven, minOxy, barColor , 8) then
       -- Oxygen too low
       if vent ~= 3 then
 	newVent = 3;
 	clickButton(oven, FULL);
       end
-    elseif pixelCheck(oven, maxOxy, barColor, 8) then
+    elseif pixelMatch(oven, maxOxy, barColor, 8) then
       -- Oxygen too high
       if vent ~= 1 then
 	newVent = 1;
@@ -166,9 +143,9 @@ function processOven(oven, vent)
       end
     end
 
-    if pixelCheck(oven, maxDanger, barColor, 8) then
+    if pixelMatch(oven, maxDanger, barColor, 8) then
       -- Danger > 90%
-      if not pixelCheck(oven, minWater, barColor, 8) then
+      if not pixelMatch(oven, minWater, barColor, 8) then
 	-- Water < 2.6%
 	clickButton(oven, WATER);
       end

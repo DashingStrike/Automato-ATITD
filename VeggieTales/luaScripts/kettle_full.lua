@@ -1,667 +1,237 @@
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
-
-local per_click_delay = 0;
-
-function setWaitSpot(x0, y0)
-	setWaitSpot_x = x0;
-	setWaitSpot_y = y0;
-	setWaitSpot_px = srReadPixel(x0, y0);
-end
-
-function waitForChange()
-	local c=0;
-	while srReadPixel(setWaitSpot_x, setWaitSpot_y) == setWaitSpot_px do
-		lsSleep(1);
-		c = c+1;
-		if (lsShiftHeld() and lsControlHeld()) then
-			error 'broke out of loop from Shift+Ctrl';
-		end
-	end
-	-- lsPrintln('Waited ' .. c .. 'ms for pixel to change.');
-end
-
-function clickAll(image_name)
-	-- Find buttons and click them!
-	srReadScreen();
-	xyWindowSize = srGetWindowSize();
-	local buttons = findAllImages(image_name);
-	
-	if #buttons == 0 then
-		error 'Could not find \'Kettle\' windows.'
-		--statusScreen("Could not find specified buttons...");
-		--lsSleep(1500);
-	else
-		statusScreen("Clicking " .. #buttons .. "button(s)...");
-		if up then
-			for i=#buttons, 1, -1  do
-				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3);
-				lsSleep(per_click_delay);
-			end
-		else
-			for i=1, #buttons  do
-				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3);
-				lsSleep(per_click_delay);
-			end
-		end
-		statusScreen("Done clicking (" .. #buttons .. " clicks).");
-		lsSleep(100);
-	end
-end
-
-function clickAllRight(image_name)
-	-- Find windows and click them!
-	srReadScreen();
-	xyWindowSize = srGetWindowSize();
-	local buttons = findAllImages(image_name);
-	
-	if #buttons == 0 then
-		statusScreen("Could not find any pinned up windows...");
-		lsSleep(1500);
-	else
-		statusScreen("Clicking " .. #buttons .. "windows(s)...");
-		if up then
-			for i=#buttons, 1, -1  do
-				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, true);
-				lsSleep(per_click_delay);
-			end
-		else
-			for i=1, #buttons  do
-				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, true);
-				lsSleep(per_click_delay);
-			end
-		end
-		statusScreen("Done clicking (" .. #buttons .. " windows).");
-		lsSleep(100);
-	end
-end
-
-function refocus()
-	statusScreen("Refocusing...");
-	for i=2, #window_locs do
-		setWaitSpot(window_locs[i][0], window_locs[i][1]);
-		srClickMouseNoMove(window_locs[i][0] + 321, window_locs[i][1] + 74);
-		waitForChange();
-	end
-end
-
--- Begin Kettle functions
-
-function Unpin()
-	
-	askForWindow("Press Shift key to unpin/close all pinned windows. If you should get any errors, put ATITD window in focus first, before pressing Shift key.");
-	
-	srReadScreen();
-
-	window_locs = findAllImages("This.png");
-
-	clickAllRight("This.png", 1);
-	lsSleep(200);
-	
-end
-
-function FlowerFert()
-	num_loops = promptNumber("How many passes ?", 10);
-	askForWindow("Open and pin the Kettle menus.\nRequires: " .. num_loops*3 .. " Rotten Fish, " .. num_loops*5 .. " Wood, and " .. num_loops*5 .. " Water in Jugs per kettle.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Flower_Fert.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Begin.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(40*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Flower Fertilizer to finish");
-		
-		clickAll("Kettle_Take.png", 1);
-		lsSleep(200);
-		-- refocus();
-	end
-end
-
-function GrainFert()
-	num_loops = promptNumber("How many passes ?", 10);
-	askForWindow("Open and pin the Kettle menus.\nRequires: " .. num_loops*1 .. " Rotten Fish, " .. num_loops*1 .. " Dung, " .. num_loops*5 .. " Wood, and " .. num_loops*5 .. " Water in Jugs per kettle.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Grain_Fert.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Begin.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(40*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Grain Fertilizer to finish");
-		
-		clickAll("Kettle_Take.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-	end
-end
-
-function Acid()
-	
-	num_loops = promptNumber("How many passes ?", 10);
-	askForWindow("Open and pin the Kettle menus.\nRequires: " .. num_loops*25 .. " Sulphurous Water, " .. num_loops*1 .. " Salt, " .. num_loops*28 .. " Wood will be needed per kettle.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus()
-
-		clickAll("Kettle_Acid.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		clickAll("Begin.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		clickAll("Ignite.png", 1);
-		lsSleep(200);
-		-- refocus();
-	
-	for i=1, #window_locs do
-		clickAll("maxButton.png", 1);
-		lsSleep(1);
-		-- refocus();
-	end
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*230, "[" .. i .. "/" .. num_loops .. "] Waiting for 24 water to stroke");
-		
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*280, "[" .. i .. "/" .. num_loops .. "] Waiting for 19 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*280, "[" .. i .. "/" .. num_loops .. "] Waiting for 14 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*275, "[" .. i .. "/" .. num_loops .. "] Waiting for 9 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*170, "[" .. i .. "/" .. num_loops .. "] Waiting for 6 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*340, "[" .. i .. "/" .. num_loops .. "] Waiting for Acid to finish");
-
-		clickAll("Kettle_Take.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-	end
-
-end
-
-function Potash()
-	
-	num_loops = promptNumber("How many passes ?", 10);
-	askForWindow("Open and pin the Kettle menus.\nRequires: " .. num_loops*5 .. " Ash, " .. num_loops*28 .. " Wood, and " .. num_loops*25 .. " Water in Jugs per kettle.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus()
-
-		clickAll("Kettle_Potash.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		clickAll("Begin.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		clickAll("Ignite.png", 1);
-		lsSleep(200);
-		-- refocus();
-	
-	for i=1, #window_locs do
-		clickAll("maxButton.png", 1);
-		lsSleep(1);
-		-- refocus();
-	end
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*230, "[" .. i .. "/" .. num_loops .. "] Waiting for 24 water to stroke");
-		
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*280, "[" .. i .. "/" .. num_loops .. "] Waiting for 19 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*280, "[" .. i .. "/" .. num_loops .. "] Waiting for 14 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*275, "[" .. i .. "/" .. num_loops .. "] Waiting for 9 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*170, "[" .. i .. "/" .. num_loops .. "] Waiting for 6 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*340, "[" .. i .. "/" .. num_loops .. "] Waiting for Potash to finish");
-
-		clickAll("Kettle_Take.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-	end
-
-end
-
-function Sulfur()
-	
-	num_loops = promptNumber("How many passes ?", 10);
-	askForWindow("Open and pin the Kettle menus.\nRequires: " .. num_loops*25 .. " Sulphurous Water, " .. num_loops*28 .. " Wood will be needed per kettle.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus()
-
-		clickAll("Kettle_Sulfur.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		clickAll("Begin.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		clickAll("Ignite.png", 1);
-		lsSleep(200);
-		-- refocus();
-	
-	for i=1, #window_locs do
-		clickAll("maxButton.png", 1);
-		lsSleep(1);
-		-- refocus();
-	end
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*230, "[" .. i .. "/" .. num_loops .. "] Waiting for 24 water to stroke");
-		
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*280, "[" .. i .. "/" .. num_loops .. "] Waiting for 19 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*280, "[" .. i .. "/" .. num_loops .. "] Waiting for 14 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*275, "[" .. i .. "/" .. num_loops .. "] Waiting for 9 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*170, "[" .. i .. "/" .. num_loops .. "] Waiting for 6 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*340, "[" .. i .. "/" .. num_loops .. "] Waiting for sulfur to finish");
-
-		clickAll("Kettle_Take.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-	end
-
-end
-
-function Salt()
-	
-	num_loops = promptNumber("How many passes ?", 10);
-	askForWindow("Open and pin the Kettle menus.\nRequires: " .. num_loops*25 .. " Coconut Water, " .. num_loops*28 .. " Wood will be needed per kettle.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus()
-
-		clickAll("Kettle_Salt.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		clickAll("Begin.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		clickAll("Ignite.png", 1);
-		lsSleep(200);
-		-- refocus();
-	
-	for i=1, #window_locs do
-		clickAll("maxButton.png", 1);
-		lsSleep(1);
-		-- refocus();
-	end
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*230, "[" .. i .. "/" .. num_loops .. "] Waiting for 24 water to stroke");
-		
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*280, "[" .. i .. "/" .. num_loops .. "] Waiting for 19 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*280, "[" .. i .. "/" .. num_loops .. "] Waiting for 14 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*275, "[" .. i .. "/" .. num_loops .. "] Waiting for 9 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*170, "[" .. i .. "/" .. num_loops .. "] Waiting for 6 water to stroke");
-
-		clickAll("StokeMax.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-		sleepWithStatus(10*60*340, "[" .. i .. "/" .. num_loops .. "] Waiting for Salt to finish");
-
-		clickAll("Kettle_Take.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-	end
-
-end
-
-function WeedKiller()
-	num_loops = promptNumber("How many passes ?", 10);
-	askForWindow("Open and pin the Kettle menus.\nRequires: " .. num_loops*1 .. " Toad Skin Mushroom, " .. num_loops*5 .. " Wood, and " .. num_loops*5 .. " Water in Jugs per kettle.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Weed_Killer.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Begin.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(80*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Weed Killer to finish");
-		
-		clickAll("Kettle_Take.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-	end
-end
-
-function Arsenic()
-	num_loops = promptNumber("How many passes ?", 10);
-	askForWindow("Open and pin the Kettle menus.\nRequires: " .. num_loops*1 .. " Razors Edge Mushroom, " .. num_loops*1 .. " Scorpions Brood Mushroom, " .. num_loops*5 .. " Wood, and " .. num_loops*5 .. " Oil per kettle.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Arsenic.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Begin.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(40*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Arsenic to finish");
-		
-		clickAll("Kettle_Take.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-	end
-end
-
-function GebsTears()
-	num_loops = promptNumber("How many passes ?", 10);
-	askForWindow("Open and pin the Kettle menus.\nRequires: " .. num_loops*30 .. " Flower Bulbs, " .. num_loops*20 .. " Wood, and " .. num_loops*20 .. " Water in Jugs per kettle.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Gebs_Tears.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Kettle_Begin.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(40*1000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gebs Tears to finish");
-		
-		clickAll("Kettle_Take.png", 1);
-		lsSleep(200);
-		-- refocus();
-
-	end
-end
-
-button_names = {
-"Flower Fert",
-"Grain Fert",
-"Weed Killer",
-"Arsenic",
-"Gebs Tears",
-"Potash",
-"Sulfur",
-"Acid",
-"Salt",
-"Un-Pin Windows"
+-- kettle_full v1.1 by Bardoth. Revised by Tallow
+--
+-- Automatically runs many kettles, stoking as necessary.
+--
+
+assert(loadfile("luaScripts/common.inc"))();
+
+askText = singleLine([[
+  Kettles v1.1 (by Bardoth, revised by Tallow) --
+  Automatically runs many kettles, stoking as necessary. Make sure the
+  VT window is in the TOP-RIGHT corner of the screen.
+]])
+
+wmText = "Tap shift on kettles to open and pin.";
+
+actions = {
+  {
+    label = "Potash",
+    buttonPos = makePoint(30, 10);
+    stoked = true,
+    menuImage = "Kettle_Potash.png",
+    output = 5,
+    matLabels = {"Ash", "Water", "Wood"},
+    matCounts = {5, 25, 28}
+  },
+  {
+    label = "Flower Fert",
+    buttonPos = makePoint(30, 40);
+    stoked = false,
+    menuImage = "Kettle_Flower_Fert.png",
+    output = 50,
+    matLabels = {"Rotten Fish", "Water", "Wood"},
+    matCounts = {3, 5, 5}
+  },
+  {
+    label = "Grain Fert",
+    buttonPos = makePoint(30, 70);
+    stoked = false,
+    menuImage = "Kettle_Grain_Fert.png",
+    output = 50,
+    matLabels = {"Rotten Fish", "Dung", "Water", "Wood"},
+    matCounts = {1, 1, 5, 5}
+  },
+  {
+    label = "Weed Killer",
+    buttonPos = makePoint(30, 100);
+    stoked = false,
+    menuImage = "Kettle_Weed_Killer.png",
+    output = 50,
+    matLabels = {"Toad Skin Mushrooms", "Water", "Wood"},
+    matCounts = {1, 5, 5}
+  },
+  {
+    label = "Sulfur",
+    buttonPos = makePoint(30, 130);
+    stoked = true,
+    menuImage = "Kettle_Sulfur.png",
+    output = 25,
+    matLabels = {"Sulphurous Water", "Wood"},
+    matCounts = {25, 28}
+  },
+  {
+    label = "Salt",
+    buttonPos = makePoint(30, 160);
+    stoked = true,
+    menuImage = "Kettle_Salt.png",
+    output = 3,
+    matLabels = {"Coconut Water", "Wood"},
+    matCounts = {25, 28}
+  },
+  {
+    label = "Acid",
+    buttonPos = makePoint(30, 190);
+    stoked = true,
+    menuImage = "Kettle_Acid.png",
+    output = 3,
+    matLabels = {"Sulphurous Water", "Salt", "Wood"},
+    matCounts = {25, 1, 28}
+  },
+  {
+    label = "Arsenic",
+    buttonPos = makePoint(30, 210);
+    stoked = false,
+    menuImage = "Kettle_Arsenic.png",
+    output = 8,
+    matLabels = {"Razor's Edge Mushrooms", "Scorpion's Brood Mushrooms",
+                 "Oil", "Wood"},
+    matCounts = {1, 1, 5, 5}
+  },
+  {
+    label = "Geb's Tears",
+    buttonPos = makePoint(30, 240);
+    stoked = false,
+    menuImage = "Kettle_Gebs_Tears.png",
+    output = 1,
+    matLabels = {"Flower Bulbs", "Water", "Wood"},
+    matCounts = {30, 20, 20}
+  }
 };
 
-		
-function doit()
-	while 1 do
-		local num_kettles = 1;
-		-- Ask for which button
-		local image_name = nil;
-		local is_done = nil;	
-		while not is_done do
-			local y = nil;
-			local x = nil;
-			local bsize = nil;
-			for i=1, #button_names do
-				if button_names[i] == "Flower Fert" then
-					x = 30;
-					y = 10;
-					bsize = 250;
-				elseif button_names[i] == "Grain Fert" then
-					x = 30;
-					y = 40;
-					bsize = 250;
-				elseif button_names[i] == "Weed Killer" then
-					x = 30;
-					y = 70;
-					bsize = 250;
-				elseif button_names[i] == "Arsenic" then
-					x = 30;
-					y = 100;
-					bsize = 250;
-				elseif button_names[i] == "Gebs Tears" then
-					x = 30;
-					y = 130;
-					bsize = 250;
-				elseif button_names[i] == "Sulfur" then
-					x = 30;
-					y = 160;
-					bsize = 250;
-				elseif button_names[i] == "Potash" then
-					x = 30;
-					y = 190;
-					bsize = 250;
-				elseif button_names[i] == "Acid" then
-					x = 30;
-					y = 220;
-					bsize = 250;
-				elseif button_names[i] == "Salt" then
-					x = 30;
-					y = 250;
-					bsize = 250;
-				elseif button_names[i] == "Un-Pin Windows" then
-					x = 30;
-					y = 280;
-					bsize = 250;
-				end
-				if lsButtonText(x, y, 0, bsize, 0x80D080ff, button_names[i]) then
-					image_name = button_names[i];
-					is_done = 1;
-				end
-			end
+function runKettles(num_loops, action)
+  for i=1, num_loops do
+    refreshAll();
 
-			if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
-				error "Clicked End Script button";
-			end
-			lsDoFrame();
-			lsSleep(10);
-		end	
-		
-		if image_name == "Flower Fert" then
-			FlowerFert();
-		elseif image_name == "Grain Fert" then
-			GrainFert();
-		elseif image_name == "Weed Killer" then
-			WeedKiller();
-		elseif image_name == "Arsenic" then
-			Arsenic();
-		elseif image_name == "Gebs Tears" then
-			GebsTears();
-		elseif image_name == "Sulfur" then
-			Sulfur();
-		elseif image_name == "Potash" then
-			Potash();
-		elseif image_name == "Acid" then
-			Acid();
-		elseif image_name == "Salt" then
-			Salt();
-		elseif image_name == "Un-Pin Windows" then
-			Unpin();
-		end
+    clickAllImages(action.menuImage);
+    lsSleep(200);
+
+    clickAllImages("Kettle_Begin.png");
+    lsSleep(200);
+
+    local message = "(" .. i .. "/" .. num_loops .. ") Making "
+      .. action.label;
+
+    waitForKettles(message, action.stoked);
+
+    clickAllImages("kettle_take.png");
+    lsSleep(200);
+  end
+end
+
+function refreshAll()
+  clickAllImages("ThisIs.png");
+  lsSleep(200);
+end
+
+function waitForKettles(message, stoked)
+  local done = false;
+  while not done do
+    if stoked then
+      igniteAll();
+    end
+    srReadScreen();
+    local anchors = findAllImages("ThisIs.png");
+    done = true;
+    for i=1,#anchors do
+      if not stokeWindow(anchors[i], stoked) then
+	done = false;
+      end
+    end
+    sleepWithStatusPause(5000, message);
+  end
+end
+
+function igniteAll()
+  srReadScreen();
+  local ignite = findAllImages("Ignite.png");
+  for i=1,#ignite do
+    srClickMouseNoMove(ignite[i][0] + 5, ignite[i][1] + 5);
+    local maxButton = waitForImage("Kettle_Max.png", 500,
+				   "Waiting for Max button");
+    if maxButton then
+      safeClick(maxButton[0], maxButton[1])
+    else
+      error("Timed out waiting for max button.");
+    end
+    lsSleep(50);
+  end
+  if #ignite > 0 then
+    refreshAll();
+  end
+end
+
+function stokeWindow(anchor, stoked)
+  local done = true;
+  local bounds = srGetWindowBorders(anchor[0], anchor[1]);
+  local takePos = findImageInWindow("kettle_take.png", anchor[0], anchor[1],
+				    bounds);
+  if not takePos then
+    done = false;
+    if stoked then
+      local wood = nil;
+      local water = nil;
+      local woodPos = findImageInWindow("Kettle_wood.png", anchor[0], anchor[1],
+					bounds);
+      if woodPos then
+	wood = ocrNumber(woodPos[0] + 34, woodPos[1], SMALL_SET);
+      end
+      local waterPos = findImageInWindow("Kettle_water.png", anchor[0],
+					 anchor[1], bounds);
+      if waterPos then
+	water = ocrNumber(waterPos[0] + 34, waterPos[1], SMALL_SET);
+      end
+      if wood and water
+	and ((wood < 2 and water > 6)
+	     or (wood < 5 and water == 6))
+      then
+	local stoke = findImageInWindow("StokeMax.png", anchor[0], anchor[1],
+					bounds);
+	if stoke then
+	  safeClick(stoke[0] + 5, stoke[1] + 5);
 	end
+      end
+    end
+  end
+  return done;
+end
 
+function doit()
+  askForWindow(askText);
+  windowManager("Kettle Setup", wmText);
+  unpinOnExit(menuKettles());
+end
+
+function menuKettles()
+  -- Ask for which button
+  local selected = nil;
+  while not selected do
+    for i=1, #actions do
+      if lsButtonText(actions[i].buttonPos[0], actions[i].buttonPos[1],
+		      0, 250, 0x80D080ff, actions[i].label) then
+	selected = actions[i];
+      end
+    end
+      
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
+		    "End script")
+    then
+      selected = nil;
+      break;
+    end
+    lsDoFrame();
+    lsSleep(tick_delay);
+  end
+
+  if selected then
+    srReadScreen();
+    local kettles = #(findAllImages("ThisIs.png"));
+    local num_loops = promptNumber("How many passes ?", 10);
+    local message = "Making " .. selected.label .. " requires:\n";
+    for i=1,#(selected.matLabels) do
+      message = message .. "  " .. selected.matCounts[i]*num_loops*kettles
+	.. " " .. selected.matLabels[i] .. "\n";
+    end
+    askForWindow(message);
+    runKettles(num_loops, selected);
+  end
 end
