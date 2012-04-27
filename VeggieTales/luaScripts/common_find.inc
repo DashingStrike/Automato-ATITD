@@ -91,3 +91,75 @@ function findImageInWindow(image_name, x, y, bounds, tol)
   return srFindImageInRange(image_name, bounds[0], bounds[1],
 			    bounds[2] - bounds[0], bounds[3] - bounds[1], tol);
 end
+
+-------------------------------------------------------------------------------
+-- ocrNumber(startX, startY, characterSet)
+--
+-- Looks for a string of digits of a given character set and returns
+-- them as a number.
+--
+-- startX, startY -- position to start looking
+-- characterSet (optional) -- constant defining images and sizes:
+--                            NORMAL_SET (default), BOLD_SET, SMALL_SET
+-------------------------------------------------------------------------------
+
+NORMAL_SET = 0;
+BOLD_SET = 1;
+SMALL_SET = 2;
+
+function ocrNumber(startX, startY, characterSet)
+  if not startX or not startY then
+    error("Incorrect number of arguments for ocrNumber()");
+  end
+  local prefix, sizeX, sizeY = getCharacterSet(characterSet);
+
+  -- find first digit
+  local x = startX;
+  local y = startY;
+  local digit=nil;
+  local offset=0;
+  while (not digit) and (offset < 10) do
+    digit = findDigit(x, y, sizeX, sizeY, prefix);
+    if not digit then
+      x = x+1;
+      offset = offset + 1;
+    end
+  end
+  -- find remaining digits
+  local result = 0;
+  while digit do
+    result = result * 10 + digit;
+    x = x + sizeX + 1;
+    digit = findDigit(x, y, sizeX, sizeY, prefix);
+  end
+  return result;
+end
+
+function findDigit(x, y, sizeX, sizeY, prefix)
+  local result = nil;
+  for i=0, 9 do
+    if srFindImageInRange(prefix .. i .. ".png", x, y,
+			  sizeX, sizeY, tol)
+    then
+      result = i;
+      break;
+    end
+  end
+  return result;
+end
+
+function getCharacterSet(characterSet)
+  local prefix = "ocr/";
+  local sizeX = 6;
+  local sizeY = 9;
+  if characterSet and characterSet == BOLD_SET then
+    prefix = "ocr/bold_";
+    sizeX = 7;
+    sizeY = 9;
+  elseif characterSet and characterSet == SMALL_SET then
+    prefix = "ocr/small_";
+    sizeX = 5;
+    sizeY = 8;
+  end
+  return prefix, sizeX, sizeY;
+end
