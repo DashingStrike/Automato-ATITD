@@ -64,3 +64,23 @@ function getPixelDiffs(left, right)
   end
   return result;
 end
+
+-------------------------------------------------------------------------------
+-- csplit(str, sep)
+--
+-- Splits str into an array using sep as a single character seperator.
+-- From: http://lua-users.org/wiki/SplitJoin
+--
+-- str -- string to be separated
+-- sep -- single character
+-------------------------------------------------------------------------------
+
+function csplit(str,sep)
+  local ret={}
+  local n=1
+  for w in str:gmatch("([^"..sep.."]*)") do
+    ret[n]=ret[n] or w -- only set once (so the blank after a string is ignored)
+    if w=="" then n=n+1 end -- step forwards on a blank but not a string
+  end
+  return ret
+end

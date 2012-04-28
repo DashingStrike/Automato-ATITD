@@ -100,6 +100,7 @@ actions = {
 
 function runKettles(num_loops, action)
   for i=1, num_loops do
+    drawWater();
     refreshAll();
 
     clickAllImages(action.menuImage);
@@ -182,13 +183,15 @@ function stokeWindow(anchor, stoked)
       end
       if wood and water
 	and ((wood < 2 and water > 6)
-	     or (wood < 5 and water == 6))
+	     or (water <= 6 and wood < water - 1))
       then
 	local stoke = findImageInWindow("StokeMax.png", anchor[0], anchor[1],
 					bounds);
 	if stoke then
 	  safeClick(stoke[0] + 5, stoke[1] + 5);
 	end
+      elseif not woodPos and not waterPos then
+	done = true;
       end
     end
   end
@@ -197,8 +200,9 @@ end
 
 function doit()
   askForWindow(askText);
-  windowManager("Kettle Setup", wmText);
-  unpinOnExit(menuKettles());
+  windowManager("Kettle Setup", wmText, false, true);
+  askForFocus();
+  unpinOnExit(menuKettles);
 end
 
 function menuKettles()
