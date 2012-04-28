@@ -13,7 +13,7 @@ loadfile("luaScripts/ui_utils.inc")();
 
 per_click_delay = 0;
 
-local expected_gardens = 33;
+local expected_gardens = 20;
 local last_sun = 99;
 
 instructions = {
@@ -172,11 +172,12 @@ function clickAllComplex(image_names, message)
 	for i=2, #window_locs do
 		setWaitSpot(window_locs[i][0], window_locs[i][1]);
 		srClickMouseNoMove(window_locs[i][0], window_locs[i][1] + 310);
-		waitForChange();
-
+		--waitForChange();
+		--lsSleep(75);
 	end
-	--waitForChange();
-lsSleep(100);
+	lsSleep(300);
+	waitForChange();
+	lsSleep(100);
 end
 
 

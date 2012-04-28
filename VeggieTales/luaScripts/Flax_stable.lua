@@ -49,7 +49,7 @@ walk_time = 300;
 -- Don't touch. These are set according to Jimbly's black magic.
 walk_px_y = 340;
 walk_px_x = 380;
-xyWindowSize = srGetWindowSize();
+
 xyCenter = {};
 xyFlaxMenu = {};
 
@@ -65,6 +65,10 @@ window_h = 100;
 
 function initGlobals()
   -- Macro written with 1720 pixel wide window
+
+  srReadScreen();
+  xyWindowSize = srGetWindowSize();
+
   local pixel_scale = xyWindowSize[0] / 1720;
   lsPrintln("pixel_scale " .. pixel_scale);
 
@@ -73,8 +77,8 @@ function initGlobals()
 
   local walk_x_drift = 14;
   local walk_y_drift = 18;
-  if (lsScreenX < 1280) then
-    -- Have to click way off center in order to not move at high resoltuions
+  if (lsScreenX < 1280) then 
+    -- Have to click way off center in order to not move at high resolutions
     walk_x_drift = math.floor(walk_x_drift * pixel_scale);
     walk_y_drift = math.floor(walk_y_drift * pixel_scale);
   else
@@ -87,6 +91,8 @@ function initGlobals()
   xyCenter[1] = xyWindowSize[1] / 2 + walk_y_drift;
   xyFlaxMenu[0] = xyCenter[0] - 43*pixel_scale;
   xyFlaxMenu[1] = xyCenter[1] + 0;
+
+
 end
 
 -------------------------------------------------------------------------------
@@ -345,18 +351,21 @@ function plantHere(xyPlantFlax, y_pos)
   lsPrintln('planting ' .. xyPlantFlax[0] .. ',' .. xyPlantFlax[1]);
   local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
   safeClick(xyPlantFlax[0], xyPlantFlax[1], 0);
-  local plantSuccess = waitForChange(spot, 500);
+
+  local plantSuccess = waitForChange(spot, 1500);
   if not plantSuccess then
     --error "No plant was placed. Abort this run.";
     return false;
   end
 
+
   -- Bring up menu
   lsPrintln('menu ' .. xyFlaxMenu[0] .. ',' .. xyFlaxMenu[1]);
-  if not openAndPin(xyFlaxMenu[0], xyFlaxMenu[1], 500) then
-    error "No window came up. Abort this run.";
+  if not openAndPin(xyFlaxMenu[0], xyFlaxMenu[1], 750) then
+    --error "No window came up. Abort this run.";
     return false;
   end
+
 
   -- Check for window size
   checkWindowSize(xyFlaxMenu[0], xyFlaxMenu[1]);
