@@ -1,23 +1,24 @@
--- wheat.lua v1.1 -- Original macro by Bardoth - Revised by Cegaiel
+-- wheat.lua v1.1 -- by Cegaiel
 --
--- Waters and harvests wheat plants, but you still need to manually plant every seed.
--- You can Alt+Shift to Pause the macro and plant new beds/add new windows anytime. Then Alt+Shift again to Resume the macro. It will find any new pinned bed windows.
+-- Waters and harvests wheat plants, but you still need to manually plant every seed and pin up the window.
+-- You can Alt+Shift to Pause the macro and plant new beds/add new windows anytime.
+-- Then Alt+Shift again to Resume the macro. It will find any new pinned bed windows.
+-- Just make sure no windows overlap (The word 'This is'should be visibile in every window).
 --
 
 assert(loadfile("luaScripts/common.inc"))();
 
 askText = singleLine([[
- Wheat Tenderer v1.0 (Revised by Cegaiel) --
-Pin 'Plant Wheat' window up for easy access later. Manually plant and pin up any number of wheat beds.
-You must be standing with water icon present and 50 water jugs in inventory. Press Shift to continue.
+ Wheat Tenderer v1.1 (by Cegaiel) -- Pin 'Plant Wheat' window up for easy access later. Manually plant and pin up any number of wheat beds.
+You must be standing with water icon present and 50 water jugs in inventory. After you manually plant your wheat beds and pin up each window, Press Shift to continue.
 ]]);
 
 water_count = 0; 
 refill_jugs = 40;
 total_harvests = 0;
 total_waterings = 0;
-right_click = true; -- Do right clicks to help prevent the possibility of avatar running on a misclick.
-click_delay = 0;
+right_click = true; -- Do right clicks to help prevent the possibility of avatar running on a misclick. Right clicks works the same as left clicks!
+click_delay = 0; -- Overide the default of 50 in common.inc libarary. Run faster, clicks get queued and still execute, even when executed during a lag spike.
 
 function doit()
   askForWindow(askText);
@@ -64,31 +65,31 @@ function tendWheat()
 		end
 
 
-
     sleepWithStatusPause(300, "Searching " .. windowcount .. " windows for Harvest");
 
+
+	--Search for Harvest windows. Havest and Water will exist at same time in window, so we always search for Harvest first.
 
 	srReadScreen();
     	local harvest = findAllImages("Harvest.png");
 
 	if #harvest > 0 then
-
 	total_harvests = total_harvests + #harvest
 
-			--First click harvest buttons
+			--First, click harvest buttons
 			for i=#harvest, 1, -1  do
 				srClickMouseNoMove(harvest[i][0]+5, harvest[i][1]+3, right_click);
 				lsSleep(click_delay);
 			end
 
 
+			--Wait a long moment, it takes a while before the window turns blank, to allow a right click to close it.
 			sleepWithStatusPause(2000, "Harvested " .. windowcount .. " windows...");
-
 			local windowcount = clickAllImages("ThisIs.png");  --Refresh windows to make the harvest windows turn blank
 			sleepWithStatusPause(1000, "Refreshing " .. windowcount .. "/Preparing to Close windows...");
 
 
-			--Right click and close previously harvested windows
+			--Right click to close previously harvested windows
 			for i=#harvest, 1, -1  do
 				srClickMouseNoMove(harvest[i][0]+5, harvest[i][1]+3, right_click);  -- Right click the window to close it.
 				lsSleep(click_delay);
@@ -99,13 +100,13 @@ function tendWheat()
 
 	srReadScreen();
 
-    -- Click pin ups to refresh the window
+    -- Refresh windows again
     local windowcount = clickAllImages("ThisIs.png");
 
    sleepWithStatusPause(300, "Searching " .. windowcount .. " windows for Water");
 
 
-
+	-- Search for Water windows.
 	srReadScreen();
 
 
@@ -124,9 +125,7 @@ function tendWheat()
 
 	end
 
-
-
-
+	-- When 40+ water jugs has been consumed, Refill the jugs.
 	if water_count >= 40 then
 	refillWater();
 	end
