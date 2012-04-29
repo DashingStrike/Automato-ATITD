@@ -122,3 +122,60 @@ function clickAllImages(image_name, offsetX, offsetY, rightClick, tol)
   lsSleep(click_delay);
   return #buttons;
 end
+
+-------------------------------------------------------------------------------
+-- drawWater()
+--
+-- Attempts to draw water from an aqueduct, rain barrel, or pond.
+--
+-- Returns true on success
+-------------------------------------------------------------------------------
+
+function drawWater()
+  local result = false;
+  sleepWithStatus(200, "Refilling water...");
+  srReadScreen();
+
+  -- First, check for rain barrel
+  local rain = srFindImage("draw_water.png");
+  if rain then
+    safeClick(rain[0], rain[1]);
+    local max = waitForImage("crem-max.png", 500, "Waiting for Max button");
+    if max then
+      safeClick(max[0]+5, max[1]+5);
+      result = true;
+    end
+  end
+
+  -- Second, check for aqueduct
+  if not result then
+    local aqueduct = srFindImage("Aqueduct.png");
+    if not aqueduct then
+      aqueduct = srFindImage("Aqueduct2.png");
+    end
+    if aqueduct then
+      safeClick(aqueduct[0], aqueduct[1]);
+      sleepWithStatus(200, "Refreshing aqueduct...");
+      srReadScreen();
+      local fill = srFindImage("FillWithWater.png");
+      if fill then
+	safeClick(fill[0] + 5, fill[1]);
+	result = true;
+      end
+    end
+  end
+
+  -- Last, check for nearby pond
+  if not result then
+    local water = srFindImage("iconWaterJugSmall.png", 1);
+    if water then
+      safeClick(water[0]+3, water[1]-5);
+      local max = waitForImage("crem-max.png", 500, "Waiting for Max button");
+      if max then
+	safeClick(max[0]+5, max[1]+5);
+	result = true;
+      end
+    end
+  end
+  return result;
+end

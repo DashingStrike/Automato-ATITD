@@ -139,36 +139,38 @@ function openAndPin(x, y, timeout)
 end
 
 -------------------------------------------------------------------------------
--- arrangeInGrid(cascade)
+-- arrangeInGrid(cascade, waterGap)
 --
 -- Arrange all open windows into a grid on the screen. Stashes them first.
 --
--- cascade (optional) -- arrange windows into a overlapping cascade
+-- cascade (optional) -- arrange windows into an overlapping cascade
+-- waterGap (optional) -- leave a gap at the top for getting water
 -------------------------------------------------------------------------------
 
-function arrangeInGrid(cascade)
+function arrangeInGrid(cascade, waterGap)
   stashAllWindows(BOTTOM_LEFT);
   stashAllWindows(BOTTOM_RIGHT);
-  arrangeStashed(cascade);
+  arrangeStashed(cascade, waterGap);
 end
 
 -------------------------------------------------------------------------------
--- arrangeStashed(cascade)
+-- arrangeStashed(cascade, waterGap)
 --
 -- Arrange all open windows into a grid on the screen. Assumes they
 -- are pre-stashed.
 --
 -- cascade (optional) -- arrange windows into a overlapping cascade
+-- waterGap (optional) -- leave a gap at the top for getting water
 -------------------------------------------------------------------------------
 
-function arrangeStashed(cascade)
+function arrangeStashed(cascade, waterGap)
   local screen = srGetWindowSize();
   local bottomRightX = screen[0] - 20;
   local bottomRightY = screen[1] - 20;
   screen[0] = screen[0] - lsGetWindowSize()[0];
   local currentX = 0;
   local currentY = 0;
-  if cascade then
+  if waterGap then
     currentX = 10;
     currentY = 50;
   end
@@ -264,58 +266,88 @@ function closeAllWindows(x, y, width, height)
 end
 
 -------------------------------------------------------------------------------
--- windowManager(title, message, overlap)
+-- windowManager(title, message, allowCascade, allowWaterGap)
 --
 -- Run a window manager interface to let the user open, pin, arrange,
 -- or clear windows.
 --
 -- title (optional) -- title of window
 -- message (optional) -- extra instructions for the user
--- overlap (optional) -- cascade windows instead of putting them in a grid
+-- allowCascade (optional) -- allow the user to arrange in a cascade
+-- allowWaterGap (optional) -- allow the user to add a water gap
 -------------------------------------------------------------------------------
 
-function windowManager(title, message, overlap)
+pauseForFocus = false;
+
+function windowManager(title, message, allowCascade, allowWaterGap)
   if not title then
     title = "Window Manager";
   end
   if not message then
     message = "Tap shift to open and pin a window."
   end
-  local pauseFocus = false;
+  local waterGap = false;
   local shift = false;
   local done = false;
   while not done do
-    lsPrint(10, 10, 0, 1.0, 1.0, 0xFFFFFFff, title);
-    if lsButtonText(30, 60, 0, 250, 0x80D080ff, "Arrange Windows") then
+    local y = 10;
+    lsPrint(10, y, 0, 1.0, 1.0, 0xFFFFFFff, title);
+    y = y + 50;
+
+    if lsButtonText(30, y, 0, 250, 0x80D080ff, "Form Grid") then
       lsDoFrame();
-      if pauseFocus then
+      if pauseForFocus then
 	askForWindow(focusMessage);
       end
-      arrangeInGrid(overlap);
+      arrangeInGrid(false, waterGap);
     end
-    if lsButtonText(30, 90, 0, 250, 0x80D080ff, "Stash Windows") then
+    y = y + 30;
+
+    if allowCascade then
+      if lsButtonText(30, y, 0, 250, 0x80D080ff, "Form Cascade") then
+	lsDoFrame();
+	if pauseForFocus then
+	  askForWindow(focusMessage);
+	end
+	arrangeInGrid(true, waterGap);
+      end
+      y = y + 30;
+    end
+
+    if lsButtonText(30, y, 0, 250, 0x80D080ff, "Stash Windows") then
       lsDoFrame();
-      if pauseFocus then
+      if pauseForFocus then
 	askForWindow(focusMessage);
       end
       stashAllWindows(BOTTOM_RIGHT);
     end
-    if lsButtonText(30, 120, 0, 250, 0x80D080ff, "Un-Pin Windows") then
+    y = y + 30;
+
+    if lsButtonText(30, y, 0, 250, 0x80D080ff, "Un-Pin Windows") then
       lsDoFrame();
-      if pauseFocus then
+      if pauseForFocus then
 	askForWindow(focusMessage);
       end
       closeAllWindows();
     end
-    pauseFocus = lsCheckBox(30, 160, 10, 0xffffffff, "Pause for Focus",
-			    pauseFocus);
-    lsPrintWrapped(10, 200, 0, 250, 0.7, 0.7, 0xd0d0d0ff,
+    y = y + 40;
+
+    pauseForFocus = lsCheckBox(30, y, 10, 0xffffffff, "Pause for Focus",
+			    pauseForFocus);
+    y = y + 30;
+    if allowWaterGap then
+      waterGap = lsCheckBox(30, y, 10, 0xffffffff, "Leave Gap for Water",
+			    waterGap);
+      y = y + 30;
+    end
+
+    lsPrintWrapped(10, y, 0, lsScreenY - 20, 0.7, 0.7, 0xd0d0d0ff,
 		   message);
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100,
 		    0xffffffff, "End Script") then
       error(quitMessage);
     end
-    while lsShiftHeld() do
+    while lsControlHeld() do
       checkBreak();
       shift = true;
     end
@@ -332,9 +364,6 @@ function windowManager(title, message, overlap)
     checkBreak();
     lsDoFrame();
     lsSleep(tick_delay);
-  end
-  if pauseFocus then
-    askForWindow(focusMessage);
   end
 end
 
@@ -360,7 +389,6 @@ function unpinManager(title, message)
     lsSleep(tick_delay);
     lsDoFrame();
   end
-  local pauseFocus = false;
   local done = false;
   while not done do
     lsPrint(10, 10, 0, 1.0, 1.0, 0xFFFFFFff, title);
@@ -368,13 +396,11 @@ function unpinManager(title, message)
 		   0xd0d0d0ff, message);
     if lsButtonText(30, 160, 0, 250, 0x80D080ff, "Un-Pin Windows") then
       lsDoFrame();
-      if pauseFocus then
+      if pauseForFocus then
 	askForWindow(focusMessage);
       end
       closeAllWindows();
     end
-    pauseFocus = lsCheckBox(30, 200, 10, 0xffffffff, "Pause for Focus",
-			    pauseFocus);
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100,
 		    0xffffffff, "Done") then
       done = true;

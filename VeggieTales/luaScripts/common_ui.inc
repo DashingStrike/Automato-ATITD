@@ -9,7 +9,6 @@
 tick_delay = 10;
 
 quitMessage = "Macro aborted by user";
-focusMessage = "Switch focus back to client window if necessary";
 
 -------------------------------------------------------------------------------
 -- singleLine(message)
@@ -31,6 +30,10 @@ function singleLine(message)
   str = string.gsub(message, "%s+$", "");
   return string.gsub(str, "\n%s*", " ");
 end
+
+focusMessage = singleLine([[
+  Switch focus back to client window if necessary, then press shift
+]]);
 
 -------------------------------------------------------------------------------
 -- checkBreak()
@@ -98,7 +101,7 @@ function askForWindow(message)
   -- Wait for release if it's already held
   while lsShiftHeld() do
     checkBreak();
-  end;
+  end
 
   -- Display message until shift is held
   while not lsShiftHeld() do
@@ -109,6 +112,7 @@ function askForWindow(message)
                     0xFFFFFFff, "Exit") then
       error(quitMessage);
     end
+    lsSleep(tick_delay);
     checkBreak();
   end
   lsSetCaptureWindow();
@@ -117,8 +121,34 @@ function askForWindow(message)
   -- Wait for shift to be released
   while lsShiftHeld() do
     checkBreak();
-  end;
+  end
   return makePoint(mouseX, mouseY);
+end
+
+function askForFocus()
+  if pauseForFocus then
+    -- Wait for release if it's already held
+    while lsShiftHeld() do
+      checkBreak();
+    end
+
+    -- Display message until shift is held
+    while not lsShiftHeld() do
+      lsPrintWrapped(0, 0, 1, lsScreenX, 0.7, 0.7, 0xFFFFFFff, focusMessage);
+      lsDoFrame();
+      if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100,
+                      0xFFFFFFff, "Exit") then
+        error(quitMessage);
+      end
+      lsSleep(tick_delay);
+      checkBreak();
+    end
+
+    -- Wait for shift to be released
+    while lsShiftHeld() do
+      checkBreak();
+    end
+  end
 end
 
 -------------------------------------------------------------------------------

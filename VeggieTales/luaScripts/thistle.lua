@@ -10,47 +10,7 @@
 --
 
 instructions = {
-0,0,0,0,99,
-0,0,0,0,99,
-0,0,0,0,99,
-0,0,3,0,99,
-0,0,1,0,99,
-0,0,0,0,99,
-0,0,0,1,99,
-0,0,1,0,99,
-0,0,1,0,99,
-0,0,0,1,99,
-0,0,1,1,33,
-0,0,0,1,33,
-0,0,0,3,99,
-0,0,1,0,99,
-0,0,0,1,99,
-0,0,0,0,99,
-0,0,0,0,99,
-0,0,1,1,99,
-0,0,1,0,99,
-0,0,0,1,99,
-0,0,0,0,99,
-0,0,1,0,99,
-0,0,0,0,99,
-0,0,0,0,33,
-0,0,0,0,99,
-0,0,1,0,99,
-0,0,0,0,99,
-0,0,1,0,33,
-0,0,0,0,33,
-0,0,1,1,99,
-0,0,0,2,99,
-0,0,2,1,33,
-0,0,1,1,33,
-0,0,1,0,33,
-0,0,0,1,33,
-0,0,0,0,33,
-0,0,0,0,99,
-0,0,0,0,99,
-0,0,1,2,99,
-0,0,2,0,33,
-0,0,0,0,33,
+-- You can now paste the recipe when starting up.
 };
 
 assert(loadfile("luaScripts/common.inc"))();
@@ -104,7 +64,7 @@ first_nit = nil;
 function doit()
   askForWindow(askText);
   promptThistles();
-  --promptRecipe();
+  promptRecipe();
   windowManager("Thistle Window Setup", wmText, overlap);
   unpinOnExit(runThistles);
 end
@@ -161,6 +121,65 @@ function promptThistles()
     lastSun = 33;
   else
     lastSun = 99;
+  end
+end
+
+
+-------------------------------------------------------------------------------
+-- promptRecipe()
+--
+-- Won't work until VT allows pasting
+-------------------------------------------------------------------------------
+
+function promptRecipe()
+  local is_done = false;
+  local recipe = "";
+  while not is_done do
+    checkBreak();
+    lsPrint(10, 10, 0, 1.0, 1.0, 0xffffffff,
+            "Paste Recipe");
+    local y = 30;
+--    is_done, recipe = lsEditBox("recipe", 10, y, 0,
+--				lsScreenX - 20, lsScreenY - 70,
+--				0.5, 0.5,
+--				0x000000ff, recipe);
+    
+    if lsButtonText(100, lsScreenY - 30, 0, 80, 0xffffffff, "Paste") then
+      recipe = lsClipboardGet();
+    end
+
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
+                    "End script") then
+      error(quitMessage);
+    end
+
+    local badList = false;
+    local list = csplit(singleLine(recipe), ",");
+    if list[#list] == "" then
+      table.remove(list);
+    end
+    for i=1,#list do
+      list[i] = tonumber(list[i]);
+      if not list[i] then
+	badList = true;
+      end
+    end
+    if #list ~= 41*5 then
+      badList = true;
+    end
+    if badList then
+      is_done = false;
+      lsPrint(140, 15, 10, 0.7, 0.7, 0xFF2020ff, "INVALID RECIPE");
+    elseif lsButtonText(10, lsScreenY - 30, 0, 80, 0xFFFFFFff, "Next") then
+      is_done = true;
+    end
+    lsPrintWrapped(10, 40, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff,
+		   string.sub(recipe, 0, math.floor(string.len(recipe)/2)));
+    lsPrintWrapped(100, 40, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff,
+		   string.sub(recipe, math.floor(string.len(recipe)/2)));
+
+    lsSleep(50);
+    lsDoFrame();
   end
 end
 
@@ -432,55 +451,5 @@ function clickHarvest(anchorIndex, image_names)
       error ('Failed to find ' .. image_names[i]);
     end
     safeClick(pos[0] + 5, pos[1] + 5);
-  end
-end
-
-
-
-
-
-
-
-
-
-
-
-
-
--------------------------------------------------------------------------------
--- promptRecipe()
---
--- Won't work until VT allows pasting
--------------------------------------------------------------------------------
-
-function promptRecipe()
-  local is_done = false;
-  local recipe = "";
-  while not is_done do
-    checkBreak();
-    lsPrint(10, 10, 0, 1.0, 1.0, 0xffffffff,
-            "Paste Recipe");
-    local y = 30;
-    is_done, recipe = lsEditBox("recipe", 10, y, 0,
-				lsScreenX - 20, lsScreenY - 70,
-				0.5, 0.5,
-				0x000000ff, "");
---    count = tonumber(count);
---    if not count then
---      is_done = false;
---      lsPrint(10, y+18, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
---      count = 1;
---    end
-
-    if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
-        is_done = 1;
-    end
-    if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
-                    "End script") then
-      error(quitMessage);
-    end
-
-    lsSleep(50);
-    lsDoFrame();
   end
 end
