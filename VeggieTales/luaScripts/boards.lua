@@ -12,7 +12,7 @@ askText = singleLine([[
   corner of the screen.
 ]]);
 
-wmText = "Tap shift on Wood Planes or Carpentry Benches to open and pin.";
+wmText = "Tap Ctrl on Wood Planes or Carpentry Benches to open and pin.";
 
 --Amount of time to pause after clicking the plane woods button (ms)
 pause_time = 3000; 
@@ -20,7 +20,7 @@ pause_time = 3000;
 function doit()
   askForWindow(askText);
   windowManager("Board Setup", wmText);
-  askForWindow(focusMessage);
+  askForFocus();
   unpinOnExit(planeBoards);
 end
 

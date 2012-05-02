@@ -284,7 +284,7 @@ function windowManager(title, message, allowCascade, allowWaterGap)
     title = "Window Manager";
   end
   if not message then
-    message = "Tap shift to open and pin a window."
+    message = "Tap Ctrl to open and pin a window."
   end
   local waterGap = false;
   local shift = false;

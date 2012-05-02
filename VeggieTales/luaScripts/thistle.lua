@@ -173,6 +173,7 @@ function promptRecipe()
     elseif lsButtonText(10, lsScreenY - 30, 0, 80, 0xFFFFFFff, "Next") then
       is_done = true;
     end
+    instructions = list;
     lsPrintWrapped(10, 40, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff,
 		   string.sub(recipe, 0, math.floor(string.len(recipe)/2)));
     lsPrintWrapped(100, 40, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff,
