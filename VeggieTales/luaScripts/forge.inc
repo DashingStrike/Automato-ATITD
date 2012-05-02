@@ -56,929 +56,600 @@ wire_button_names = {
 };
 
 
+----------------- MAKE PROJECTS 'SUPPORTING' FUNCTIONS -----------------
+
+function waitMinutes(minutes)
+-- Teppy Minute is 66 seconds or 66000 ms
+-- Add a 3.5 second delay (3500 ms) in case of lag
+-- If forge is getting done AFTER the GUI says its done (and errors when trying to click project menu again (not ready)) frequently, then try increasing the wait_delay
+
+wait_delay = 3500; -- Extra delay on top of Teppy Time, for lag purposes. Default is 3500
+wait = (minutes * 66000) + wait_delay;
+end
+
+function checkProject()
+	if project_windows == 0 then
+	error("No buttons found. Verify the forges are lit.");
+	end
+end
+
+function doneGUI(totalPasses)
+wait = 5000;  -- Gives a 5 second delay to review the GUI stats, before quitting/returing to Main Menu.
+clickAllImages("This.png"); -- Refresh the screen. Update forge window so we know how much charcoal is currently in each forge before next project
+
+sleepWithStatusPause(wait, "[" .. totalPasses .. "/" .. totalPasses .. "] ALL DONE!\n----------------------------------------------\n[" .. made .. "/" .. batch*project_windows*num_loops .. "] " .. name .. " / Completed");
+
+lsPlaySound("Complete.wav");
+runForge(); -- Return to/Display Main Menu
+end
+
+
+function waitGUI(pass)
+	--If any forge menus shows the Forge_StartFire.png - refreshWindows() function, then display the stalledMessage in the GUI. Suggests its not lit (or out of charcoal)
+	if #stalled > 0 then
+	stalledMessage = "\n[" .. #stalled .. "] Forges STALLED (Needs Lit)"
+	else
+	stalledMessage = "";
+	end
+
+sleepWithStatusPause(wait, "[" .. pass .. "/" .. num_loops .. "] Total Passes\n----------------------------------------------\n[" .. batch .. "] " .. name .. " per forge\n[" .. project_windows .. "] Forges working" .. stalledMessage .. "\n----------------------------------------------\n[" .. batch*project_windows .. "] " .. name .. " per pass\n----------------------------------------------\n[" .. made .. "/" .. batch*project_windows*num_loops .. "] " .. name .. " / Completed");
+
+made = made + (batch*project_windows);
+end
+
+
+function refreshWindows()
+	pinned_windows = clickAllImages("This.png");
+	lsSleep(300);
+		if pinned_windows == 0 then
+		error("No pinned windows found!");
+		else
+		srReadScreen();
+		stalled = findAllImages("Forge/Forge_StartFire.png");
+			if #stalled == pinned_windows/2 then -- The /2 is because each forge has 'This' located in window twice. Can't use ThisIs.png either because idle/working forge has different words (Idle Forge shows 'This' only and Working Forge shows 'This Is'
+			error("No forges are lit!");
+			end
+		end
+end
+
+
+
+
+----------------- MAKE PROJECT FUNCTIONS -----------------
+
+
 function KnifeBlade()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Knife_Blade.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Knife Blades to finish");
-	end
+	batch = 1;
+	name = "Knife Blade";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Forge/Knife_Blade.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function ShovelBlade()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Shovel_Blade.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Shovel Blades to finish");
-	end
+	batch = 1;
+	name = "Shovel Blade";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Forge/Forge_Shovel_Blade.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
-
 
 function Nails()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill with charcoal, arrange, and pin the forges first before you light the fire.");
-
-	srReadScreen();	
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Nail.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for nails to finish");
-	end
+	batch = 12;
+	name = "Nails";
+	waitMinutes(1);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Forge/Forge_Nail.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function CopperPipe()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Copper_Pipe.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Pipe to finish");
-	end
+	batch = 1;
+	name = "Copper Pipe";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Forge/Forge_Copper_Pipe.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function LeadPipe()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Lead_Pipe.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Pipe to finish");
-	end
+	batch = 1;
+	name = "Lead Pipe";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Forge/Forge_Lead_Pipe.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function IronBar()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Bars.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Iron_Bar.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(1035000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Bars to finish");
+	batch = 1;
+	name = "Iron Bar";
+	waitMinutes(15);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Bars.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Iron_Bar.png");
+			checkProject();
+			waitGUI(i);
 		end
+	doneGUI(num_loops);
 end
 
 function GoldBar()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Bars.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Gold_Bar.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Bars to finish");
-	end
+	batch = 1;
+	name = "Gold Bar";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Bars.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Gold_Bar.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function SilverBar()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
+	batch = 1;
+	name = "Silver Bar";
+	waitMinutes(10);
 		for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Bars.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Silver_Bar.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Bars to finish");
-	end
+			refreshWindows();
+			clickAllImages("Forge/Forge_Bars.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Silver_Bar.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function LeadSheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Lead_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Sheeting to finish");
-	end
+	batch = 1;
+	name = "Lead Sheeting";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Lead_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function GoldSheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Gold_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Sheeting to finish");
-	end
+	batch = 4;
+	name = "Gold Sheeting";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Gold_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function CopperSheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Copper_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Sheeting to finish");
-	end
+	batch = 1;
+	name = "Copper Sheeting";
+	waitMinutes(1);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Copper_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function OctecsAlloySheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Octecs_Alloy_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(1380000, "[" .. i .. "/" .. num_loops .. "] Waiting for Octecs Alloy Sheeting to finish");
-	end
+	batch = 8;
+	name = "Octecs Alloy";
+	waitMinutes(20);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Octecs_Alloy_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function SilverSheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Silver_Sheeting.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Sheeting to finish");
-	end
+	batch = 1;
+	name = "Silver Sheeting";
+	waitMinutes(2);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Silver_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function SteelSheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Steel_Sheeting.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Steel Sheeting to finish");
-	end
+	batch = 6;
+	name = "Steel Sheeting";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Steel_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function GoldFoil()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Gold_Foil.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Foil to finish");
-	end
+	batch = 4;
+	name = "Gold Foil";
+	waitMinutes(1);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Gold_Foil.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function MetalBlueSheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Metal_Blue_Sheeting.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(1035000, "[" .. i .. "/" .. num_loops .. "] Waiting for Metal Blue Sheeting to finish");
-	end
+	batch = 1;
+	name = "Metal Blue Sheeting";
+	waitMinutes(15);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Metal_Blue_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function TinSheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Tin_Sheeting.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Tin Sheeting to finish");
-	end
+	batch = 1;
+	name = "Tin Sheeting";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Tin_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function MoonSteelSheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Moon_Steel_Sheeting.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Moon Steel Sheeting to finish");
-	end
+	batch = 1;
+	name = "Moon Steel Sheeting";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Moon_Steel_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function ThothsMetalSheeting()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Sheeting.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Thoths_Metal_Sheeting.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Thoths Metal Sheeting to finish");
-	end
+	batch = 1;
+	name = "Thoths Metal Sheeting";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Sheeting.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Thoths_Metal_Sheeting.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function WaterMetalStrap()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
+	batch = 1;
+	name = "Water Metal Strap";
+	waitMinutes(1);
 		for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Straps.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Water_Metal_Strap.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Water Metal Straps to finish");
+			refreshWindows();
+			clickAllImages("Forge/Forge_Straps.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Water_Metal_Strap.png");
+			checkProject();
+			waitGUI(i);
 		end
+	doneGUI(num_loops);
 end
 
 function IronStrap()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
+	batch = 1;
+	name = "Iron Strap";
+	waitMinutes(3);
 		for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Straps.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Iron_Strap.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(207000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Straps to finish");
+			refreshWindows();
+			clickAllImages("Forge/Forge_Straps.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Iron_Strap.png");
+			checkProject();
+			waitGUI(i);
 		end
+	doneGUI(num_loops);
 end
 
 function AluminumStrap()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
+	batch = 1;
+	name = "Aluminum Strap";
+	waitMinutes(1);
 		for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Straps.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Aluminum_Strap.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Aluminum Straps to finish");
+			refreshWindows();
+			clickAllImages("Forge/Forge_Straps.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Aluminum_Strap.png");
+			checkProject();
+			waitGUI(i);
 		end
+	doneGUI(num_loops);
 end
 	
 function CopperStrap()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
+	batch = 1;
+	name = "Copper Strap";
+	waitMinutes(2);
 		for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Straps.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Copper_Strap.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Straps to finish");
+			refreshWindows();
+			clickAllImages("Forge/Forge_Straps.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Copper_Strap.png");
+			checkProject();
+			waitGUI(i);
 		end
+	doneGUI(num_loops);
 end
 
 function IronPoker()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
+	batch = 1;
+	name = "Iron Poker";
+	waitMinutes(20);
 		for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Tools.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Iron_Poker.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(1380000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Pokers to finish");
+			refreshWindows();
+			clickAllImages("Forge/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Iron_Poker.png");
+			checkProject();
+			waitGUI(i);
 		end
+	doneGUI(num_loops);
 end
 
 function SteelBlade()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
+	batch = 1;
+	name = "Steel Blade";
+	waitMinutes(10);
 		for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Tools.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Steel_Blade.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Steel Blades to finish");
+			refreshWindows();
+			clickAllImages("Forge/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Steel_Blade.png");
+			checkProject();
+			waitGUI(i);
 		end
+	doneGUI(num_loops);
 end
 	
 function LeadChisel()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
+	batch = 1;
+	name = "Lead Chisel";
+	waitMinutes(6);
 		for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Forge/Forge_Bars.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Lead_Chisel.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(414000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Chisels to finish");
+			refreshWindows();
+			clickAllImages("Forge/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Lead_Chisel.png");
+			checkProject();
+			waitGUI(i);
 		end
+	doneGUI(num_loops);
 end
 
 function ThothsMetalWire()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Thoths_Metal_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Thoths Metal Wire to finish");
-	end
+	batch = 14;
+	name = "Thoths Metal Wire";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Wire.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Thoths_Metal_Wire.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function MetalBlueWire()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Metal_Blue_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Metal Blue Wire to finish");
-	end
+	batch = 12;
+	name = "Metal Blue Wire";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Wire.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Metal_Blue_Wire.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function MagnesiumWire()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Magnesium_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Magnesium Wire to finish");
-	end
+	batch = 10;
+	name = "Magnesium Wire";
+	waitMinutes(1);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Wire.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Magnesium_Wire.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function OctecsAlloyWire()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Octecs_Alloy_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Octecs Alloy Wire to finish");
-	end
+	batch = 16;
+	name = "Octecs Alloy Wire";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Wire.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Octecs_Alloy_Wire.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function SilverWire()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Silver_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Wire to finish");
-	end
+	batch = 5;
+	name = "Silver Wire";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Wire.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Silver_Wire.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function CopperWire()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Copper_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Copper Wire to finish");
-	end
+	batch = 20;
+	name = "Copper Wire";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Wire.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Copper_Wire.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function SteelWire()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Steel_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Steel Wire to finish");
-	end
+	batch = 20;
+	name = "Steel Wire";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Wire.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Steel_Wire.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function GoldWire()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill forges with charcoal, arrange, and fire the forges first before you pin the menu.");
-	
-	srReadScreen();
-
-	--local buttons = findAllImages(image_name);
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Forge/Forge_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Forge/Forge_Gold_Wire.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Gold Wire to finish");
-	end
+	batch = 10;
+	name = "Gold Wire";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Forge/Forge_Wire.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Forge/Forge_Gold_Wire.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 
@@ -1120,6 +791,8 @@ function Sheeting()
 			ThothsMetalSheeting();
 		end
 	end
+
+
 end
 
 function Straps()
