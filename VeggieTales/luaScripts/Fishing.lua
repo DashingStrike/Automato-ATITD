@@ -279,7 +279,8 @@ function ChatReadFish()
 	end
 				
 	if  string.len(Sfish) < 1 then
-		error("Unknown Fish! This fish name and .png file may need to be added to Fishing_Func.inc, under the CL_Fish array.");
+	-- This fish name and fishname.png file likely needs to be added to Fishing_Func.inc, under the CL_Fish array and the .png added to /Images/Fishing folder
+	error("Unknown Fish! PLEASE, Take screenshot (Alt+C) of main chat tab, share with Talescripts team!");
 	end
 				
 	--Find Size
