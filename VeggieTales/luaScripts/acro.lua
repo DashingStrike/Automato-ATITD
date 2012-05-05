@@ -6,7 +6,7 @@ loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
 
 function doit()
-	askForWindow();
+	askForWindow("This will randomly click your acro buttons (moves), but only when the \"Acro\" timer is not present. Hover ATITD window and Press Shift to continue.");
 	
 	local num_clicks = 0;
 	
