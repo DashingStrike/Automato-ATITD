@@ -65,6 +65,7 @@ function waitMinutes(minutes)
 
 wait_delay = 3500; -- Extra delay on top of Teppy Time, for lag purposes. Default is 3500
 wait = (minutes * 66000) + wait_delay;
+askForFocus(); -- Pause to allow user to focus back to ATITD (if they checked the Pause for Focus Box), before starting project.
 end
 
 function checkProject()
@@ -100,7 +101,7 @@ end
 
 function refreshWindows()
 	pinned_windows = clickAllImages("This.png");
-	lsSleep(300);
+	lsSleep(400);
 		if pinned_windows == 0 then
 		error("No pinned windows found!");
 		else
