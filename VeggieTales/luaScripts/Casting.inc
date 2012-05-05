@@ -34,481 +34,342 @@ tools_button_names = {
 "Pewter Incense Prong"
 };
 
+----------------- MAKE PROJECTS 'SUPPORTING' FUNCTIONS -----------------
+
+function waitMinutes(minutes)
+-- Teppy Minute is 66 seconds or 66000 ms
+-- Add a 3.5 second delay (3500 ms) in case of lag
+-- If casting box is getting done AFTER the GUI says its done (and errors when trying to click project menu again (not ready)) frequently, then try increasing the wait_delay
+
+wait_delay = 3500; -- Extra delay on top of Teppy Time, for lag purposes. Default is 3500
+wait = (minutes * 66000) + wait_delay;
+askForFocus(); -- Pause to allow user to focus back to ATITD (if they checked the Pause for Focus Box), before starting project.
+end
+
+function checkProject()
+	if project_windows == 0 then
+	error("No buttons found. Verify the casting boxes are lit.");
+	end
+end
+
+function doneGUI(totalPasses)
+wait = 5000;  -- Gives a 5 second delay to review the GUI stats, before quitting/returing to Main Menu.
+clickAllImages("This.png"); -- Refresh the screen. Update Casting box window so we know how much charcoal is currently in each box before next project
+
+sleepWithStatusPause(wait, "[" .. totalPasses .. "/" .. totalPasses .. "] ALL DONE!\n----------------------------------------------\n[" .. made .. "/" .. batch*project_windows*num_loops .. "] " .. name .. " / Completed");
+
+lsPlaySound("Complete.wav");
+runCasting(); -- Return to/Display Main Menu
+end
+
+
+function waitGUI(pass)
+	--If any casting menus shows the Forge_StartFire.png - refreshWindows() function, then display the stalledMessage in the GUI. Suggests its not lit (or out of charcoal)
+	if #stalled > 0 then
+	stalledMessage = "\n[" .. #stalled .. "] CB\'s STALLED (Needs Lit)"
+	else
+	stalledMessage = "";
+	end
+
+sleepWithStatusPause(wait, "[" .. pass .. "/" .. num_loops .. "] Total Passes\n----------------------------------------------\n[" .. batch .. "] " .. name .. " per CB\n[" .. project_windows .. "] CB\'s working" .. stalledMessage .. "\n----------------------------------------------\n[" .. batch*project_windows .. "] " .. name .. " per pass\n----------------------------------------------\n[" .. made .. "/" .. batch*project_windows*num_loops .. "] " .. name .. " / Completed");
+
+made = made + (batch*project_windows);
+end
+
+
+function refreshWindows()
+	pinned_windows = clickAllImages("This.png");
+	lsSleep(400);
+		if pinned_windows == 0 then
+		error("No pinned windows found!");
+		else
+		srReadScreen();
+		stalled = findAllImages("Forge/Forge_StartFire.png");
+			if #stalled == pinned_windows/2 then -- The /2 is because each box has 'This' located in window twice. Can't use ThisIs.png either because idle/working box has different words (Idle box shows 'This' only and Working box shows 'This Is'
+			error("No Casting Boxes are lit!");
+			end
+		end
+end
+
+
+----------------- MAKE PROJECT FUNCTIONS -----------------
 
 function heavyleadbowl()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/heavyleadbowl.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Heavy Lead Bowl to finish");
-	end
+	batch = 1;
+	name = "Heavy Lead Bowl";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Casting/HeavyLeadBowl.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function monkeywrench()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/monkeywrench.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(276000, "[" .. i .. "/" .. num_loops .. "] Waiting for Monkey Wrench to finish");
-	end
+	batch = 1;
+	name = "Monkey Wrench";
+	waitMinutes(4);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Casting/MonkeyWrench.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
-
 
 function silverbowl()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-
-	srReadScreen();	
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/silverbowl.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(1035000, "[" .. i .. "/" .. num_loops .. "] Waiting for Silver Bowl to finish");
-	end
+	batch = 1;
+	name = "Silver Bowl";
+	waitMinutes(15);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Casting/SilverBowl.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function ironcookpot()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/Ironcookingpot.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Iron Cookpot to finish");
-	end
+	batch = 1;
+	name = "Iron Cookpot";
+	waitMinutes(1);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Casting/IronCookingPot.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function anvilbed()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/anvilbed.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(207000, "[" .. i .. "/" .. num_loops .. "] Waiting for Anvil Bed to finish");
-	end
+	batch = 1;
+	name = "Anvil Bed";
+	waitMinutes(3);
+		for i=1, num_loops do
+			refreshWindows();
+			project_windows = clickAllImages("Casting/AnvilBed.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function orichalcumpellets()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Casting/fuel.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/orichalcumpellets.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(34500, "[" .. i .. "/" .. num_loops .. "] Waiting for Orichalcum Pellets to finish");
+	batch = 4;
+	name = "Orichalcum Pellet";
+	waitMinutes(.5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Fuel.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/OrichalcumPellets.png");
+			checkProject();
+			waitGUI(i);
 		end
+	doneGUI(num_loops);
 end
 
 function mediumgear()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Casting/gearwork.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/mediumgear.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Medium Gear to finish");
-	end
+	batch = 1;
+	name = "Medium Gear";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Gearwork.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/MediumGear.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function smallgear()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
+	batch = 1;
+	name = "Small Gear";
+	waitMinutes(1);
 		for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-				
-		-- refresh windows
-		clickAll("Casting/gearwork.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/smallgear.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for Small Gear to finish");
-	end
+			refreshWindows();
+			clickAllImages("Casting/Gearwork.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/SmallGear.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function bearing()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-	
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Casting/hardware.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/bearing.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Bearings to finish");
-	end
+	batch = 1;
+	name = "Bearings";
+	waitMinutes(2);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Hardware.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/Bearing.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function washers()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Casting/hardware.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/12washers.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Washers to finish");
-	end
+	batch = 12;
+	name = "Washers";
+	waitMinutes(2);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Hardware.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/12Washers.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function bolts()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Casting/hardware.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/4bolts.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(138000, "[" .. i .. "/" .. num_loops .. "] Waiting for Bolts to finish");
-	end
+	batch = 4;
+	name = "Bolts";
+	waitMinutes(2);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Hardware.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/4Bolts.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function heavymallethead()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Casting/Forge_Tools.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/heavymallethead.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Heavy Mallet Head to finish");
-	end
+	batch = 1;
+	name = "Heavy Mallet Head";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/HeavyMalletHead.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function widetungstenchisel()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Casting/Forge_Tools.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/widetungstenchisel.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Wide Tungsten Chisel to finish");
-	end
+	batch = 1;
+	name = "Wide Tungsten Chisel";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/WideTungstenChisel.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function roundhammer()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Casting/Forge_Tools.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/roundhammer.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Round Hammer to finish");
-	end
+	batch = 1;
+	name = "Round Hammer";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/RoundHammer.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function ballpeenhammer()
-
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		-- refresh windows
-		clickAll("Casting/Forge_Tools.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/ballpeenhammer.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Ball Peen Hammer to finish");
-	end
+	batch = 1;
+	name = "Ball Peen Hammer";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/BallPeenHammer.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function shapingmallet()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Casting/Forge_Tools.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/shapingmallet.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(345000, "[" .. i .. "/" .. num_loops .. "] Waiting for Shaping Mallet to finish");
-	end
+	batch = 1;
+	name = "Shaping Mallet";
+	waitMinutes(10);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/ShapingMallet.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function leadmallet()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Casting/Forge_Tools.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/leadmallet.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(690000, "[" .. i .. "/" .. num_loops .. "] Waiting for Lead Mallet to finish");
-	end
+	batch = 1;
+	name = "Lead Mallet";
+	waitMinutes(5);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/LeadMallet.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function pewterincenseprong()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Fill casting boxes with charcoal, arrange, and fire the casting boxes first before you pin the menu.");
-	
-	srReadScreen();
-
-
-	for i=1, num_loops do
-		window_locs = findAllImages("This.png");
-
-		-- refresh windows
-		clickAll("This.png");
-		lsSleep(200);
-		-- refocus();
-			
-		-- refresh windows
-		clickAll("Casting/Forge_Tools.png", 1);
-		lsSleep(200);
-		-- refocus();
-		
-		clickAll("Casting/pewterincenseprong.png");
-		lsSleep(200);
-		-- refocus();
-		
-		sleepWithStatus(207000, "[" .. i .. "/" .. num_loops .. "] Waiting for Pewter Incense Prong to finish");
-	end
+	batch = 1;
+	name = "Incense Prong";
+	waitMinutes(3);
+		for i=1, num_loops do
+			refreshWindows();
+			clickAllImages("Casting/Forge_Tools.png");
+			lsSleep(400);
+			project_windows = clickAllImages("Casting/PewterIncenseProng.png");
+			checkProject();
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
 end
 
 function fuel()
