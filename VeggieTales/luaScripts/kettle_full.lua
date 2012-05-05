@@ -79,7 +79,7 @@ actions = {
   },
   {
     label = "Arsenic",
-    buttonPos = makePoint(30, 210);
+    buttonPos = makePoint(30, 220);
     stoked = false,
     menuImage = "Kettle_Arsenic.png",
     output = 8,
@@ -89,7 +89,7 @@ actions = {
   },
   {
     label = "Geb's Tears",
-    buttonPos = makePoint(30, 240);
+    buttonPos = makePoint(30, 250);
     stoked = false,
     menuImage = "Kettle_Gebs_Tears.png",
     output = 1,
