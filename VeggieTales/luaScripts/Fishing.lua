@@ -42,7 +42,7 @@
 
 --CUSTOM VARIABLES -- EDIT HERE To Change Fishing Casts, Skips, Updates.
 
-TotalCasts=5; --Total Casts per lure, if a fish caught. If no fish then it skips.
+TotalCasts=3; --Total Casts per lure, if a fish caught. If no fish then it skips.
 SkipCommon = false; --Skips to next lure if fish caught is a common (Choose True or False).
 LureChangesToUpdateTimer = 7; --Total lures used before time is updated. Zero updates every new lure.
 
@@ -54,7 +54,7 @@ LureChangesToUpdateTimer = 7; --Total lures used before time is updated. Zero up
 
 -- Additional reporting in the log file
 -- Choose True or False.
-	-- Note LogStrange and LogOdd overrides LogFails setting.. 
+	-- Note 'LogStrangeUnusual' and 'LogOdd' (below) overrides LogFails setting. ie if LogStrange true, then it would still log even if LogFails = False
 	--If LogFails = false and LogStrangeUnusual or LogOdd = true, then failed catches those would still be included in the log file. 
 
 
@@ -118,7 +118,7 @@ function SetupLureGroup()
 			LastLure=nil;
 		end
 	else
-		error("Didn\'t find a pinned window.");
+		error("Didn\'t find Lures pinned window - Self Click->Skills, Fishing -> Use Lure, PIN THIS WINDOW!");
 	end
 	
 	
@@ -411,7 +411,6 @@ function GetTime()
 	
 	srReadScreen();
 	imgs = findAllImages("Fishing/chatlog_reddots.png");
-
 	Coords = imgs[#imgs];
 
 		-- Look for the ** red dots in main chat to see if they exist.	
@@ -547,7 +546,7 @@ function doit()
 
 
 	--Write an entry into log file to show this is a new session
-	WriteFishLog("[New Session]\n\n");
+	WriteFishLog("[New Session]\n");
 
 	
 	while 1 do
