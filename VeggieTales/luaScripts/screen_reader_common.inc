@@ -1,4 +1,3 @@
-
 function checkBreak()
 	if (lsShiftHeld() and lsControlHeld()) then
 		error "broke out with Shift+Ctrl";
