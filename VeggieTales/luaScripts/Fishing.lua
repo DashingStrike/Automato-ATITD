@@ -675,7 +675,7 @@ function doit()
 				GrandTotalStrange = GrandTotalStrange + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogStrangeUnusual == true then
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught a STRANGE fish, but your rod was to clumsy." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught a STRANGE fish, but your rod was just too clumbsy." .. "\n");
 					end
 
 			--	if AlmostCaughtAttempts > 0 then
@@ -683,6 +683,21 @@ function doit()
 			--	end
 			
 	
+			elseif ChatType == "strangelostlure" then
+				-- Strange Fish and lost lure
+				GrandTotalStrange = GrandTotalStrange + 1;
+				GrandTotalLostLures = GrandTotalLostLures + 1;
+				GrandTotalFailed = GrandTotalFailed + 1;
+					--Reset, skip to next lure
+					castcount=0;
+					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
+
+			--	if AlmostCaughtAttempts > 0 then
+			--		strangecounter = strangecounter +1;
+			--	end
+
+
+
 			elseif ChatType == "unusual" then
 				-- Unusual Fish
 				GrandTotalUnusual = GrandTotalUnusual + 1;
@@ -697,6 +712,29 @@ function doit()
 
 
 
+
+-- Can't uncomment below elseif statement until we get a screenshot of a message of you were not quick enough. You also lost your lure.
+-- This would need to be added to Fishing_Func.inc , in the Chat_Types {array} along with adding Chatlog_AlmostUnusualLostlure.png). Add above "unusual" line in the array				
+
+
+			--elseif ChatType == "unusuallostlure" then
+				-- Unusual Fish
+				--GrandTotalUnusual = GrandTotalUnusual + 1;
+				--GrandTotalLostLures = GrandTotalLostLures + 1;
+				--GrandTotalFailed = GrandTotalFailed + 1;
+					--if LogStrangeUnusual == true then
+					--WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an UNUSUAL fish, but you were not quick enough." .. "\n");
+					--end
+
+
+
+			--	if AlmostCaughtAttempts > 0 then
+			--		strangecounter = strangecounter +1;
+			--	end
+
+
+
+
 			elseif ChatType == "odd" then
 				-- Odd Fish
 				GrandTotalOdd = GrandTotalOdd + 1;
@@ -708,6 +746,7 @@ function doit()
 
 			elseif ChatType == "oddlostlure" then
 				-- Odd Fish and lost lure
+				GrandTotalOdd = GrandTotalOdd + 1;
 				GrandTotalLostLures = GrandTotalLostLures + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
 					--Reset, skip to next lure
@@ -715,14 +754,6 @@ function doit()
 					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an ODD fish, but were too late recognizing the bite. You also lost your lure." .. "\n");
 
 
-
-
-
--- Need to add "strangelostlure" and "unusuallostlure"  here. But can't do it until I can get a screenshot of losing a lure on those two fish.
--- strange would be an image like this [clumsy. You also lost your lure]
--- unusual would be an image like [enough. You also lost your lure]
--- Those need to also be added to Fishing_Func.inc , in the Chat_Types {array}				
-				
 
 
 			elseif ChatType == "carry" then
