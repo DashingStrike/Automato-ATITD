@@ -1,4 +1,4 @@
--- Forges v1.1 by Bardoth, Revised by Cegaiel
+-- Forges v1.2 by Bardoth, Revised by Cegaiel
 -- You must manually add charcoal and fire up each forge before pinning them up.
 -- Does not take items from forge.
 
@@ -6,7 +6,7 @@ assert(loadfile("luaScripts/common.inc"))();
 assert(loadfile("luaScripts/Forge.inc"))();
 
 askText = singleLine([[
-  Forges v1.1 (by Bardoth Revised by Cegaiel) --
+  Forges v1.2 (by Bardoth Revised by Cegaiel) --
   Automatically run one or more forges.
   Make sure the VT window is in the TOP-RIGHT
   corner of the screen.
@@ -85,7 +85,7 @@ function runForge()
 				end
 			end
 
-			if lsButtonText(lsScreenX - 220, lsScreenY - 30, z, 150, 0xFF0000ff, "End script") then
+		       if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
 				error "Clicked End Script button";
 			end
 			lsDoFrame();
