@@ -38,18 +38,11 @@ tools_button_names = {
 
 function waitMinutes(minutes)
 -- Teppy Minute is 66 seconds or 66000 ms
--- Add a 3.5 second delay (3500 ms) in case of lag
--- If casting box is getting done AFTER the GUI says its done (and errors when trying to click project menu again (not ready)) frequently, then try increasing the wait_delay
+-- Add a 3 second delay (3000 ms) in case of lag
 
-wait_delay = 3500; -- Extra delay on top of Teppy Time, for lag purposes. Default is 3500
+wait_delay = 3000; -- Extra delay on top of Teppy Time, for lag purposes. Default is 3000
 wait = (minutes * 66000) + wait_delay;
 askForFocus(); -- Pause to allow user to focus back to ATITD (if they checked the Pause for Focus Box), before starting project.
-end
-
-function checkProject()
-	if project_windows == 0 then
-	error("No buttons found. Verify the casting boxes are lit.");
-	end
 end
 
 function doneGUI(totalPasses)
@@ -78,6 +71,7 @@ end
 
 
 function refreshWindows()
+	checkBreak();
 	pinned_windows = clickAllImages("This.png");
 	lsSleep(400);
 		if pinned_windows == 0 then
@@ -100,9 +94,15 @@ function heavyleadbowl()
 	name = "Heavy Lead Bowl";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			project_windows = clickAllImages("Casting/HeavyLeadBowl.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -114,9 +114,15 @@ function monkeywrench()
 	name = "Monkey Wrench";
 	waitMinutes(4);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			project_windows = clickAllImages("Casting/MonkeyWrench.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -128,9 +134,15 @@ function silverbowl()
 	name = "Silver Bowl";
 	waitMinutes(15);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			project_windows = clickAllImages("Casting/SilverBowl.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -142,9 +154,15 @@ function ironcookpot()
 	name = "Iron Cookpot";
 	waitMinutes(1);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			project_windows = clickAllImages("Casting/IronCookingPot.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -156,9 +174,15 @@ function anvilbed()
 	name = "Anvil Bed";
 	waitMinutes(3);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			project_windows = clickAllImages("Casting/AnvilBed.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -170,11 +194,17 @@ function orichalcumpellets()
 	name = "Orichalcum Pellet";
 	waitMinutes(.5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Fuel.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/OrichalcumPellets.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -186,11 +216,17 @@ function mediumgear()
 	name = "Medium Gear";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Gearwork.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/MediumGear.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -202,11 +238,17 @@ function smallgear()
 	name = "Small Gear";
 	waitMinutes(1);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Gearwork.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/SmallGear.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -218,11 +260,17 @@ function bearing()
 	name = "Bearings";
 	waitMinutes(2);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Hardware.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/Bearing.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -234,11 +282,17 @@ function washers()
 	name = "Washers";
 	waitMinutes(2);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Hardware.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/12Washers.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -250,11 +304,17 @@ function bolts()
 	name = "Bolts";
 	waitMinutes(2);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Hardware.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/4Bolts.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -266,11 +326,17 @@ function heavymallethead()
 	name = "Heavy Mallet Head";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/HeavyMalletHead.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -282,11 +348,17 @@ function widetungstenchisel()
 	name = "Wide Tungsten Chisel";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/WideTungstenChisel.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -298,11 +370,17 @@ function roundhammer()
 	name = "Round Hammer";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/RoundHammer.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -314,11 +392,17 @@ function ballpeenhammer()
 	name = "Ball Peen Hammer";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/BallPeenHammer.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -330,11 +414,17 @@ function shapingmallet()
 	name = "Shaping Mallet";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/ShapingMallet.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -346,11 +436,17 @@ function leadmallet()
 	name = "Lead Mallet";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/LeadMallet.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -362,11 +458,17 @@ function pewterincenseprong()
 	name = "Incense Prong";
 	waitMinutes(3);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Casting/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/PewterIncenseProng.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);

@@ -6,7 +6,7 @@ assert(loadfile("luaScripts/common.inc"))();
 assert(loadfile("luaScripts/casting.inc"))();
 
 askText = singleLine([[
-  Casting Box v1.1 (by Bardoth Revised by Cegaiel) --
+  Casting Box v1.2 (by Bardoth Revised by Cegaiel) --
   Automatically run one or more casting boxes.
   Make sure the VT window is in the TOP-RIGHT
   corner of the screen.
