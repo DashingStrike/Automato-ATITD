@@ -13,7 +13,7 @@ function askForWindow(message)
 	-- Display message until shift is held
 	while not lsShiftHeld() do
 		lsPrintWrapped(0, 0, 1, lsScreenX, 0.7, 0.7, 0xFFFFFFff,
- 		"Mouse over the ATITD window and press Shift.  For best results, either put the ATITD window in focus first (click the ATITD window), or set Options | Interface Options | Priority to High Priority Mode.");
+  		"Mouse over the ATITD window and press Shift.  For best results, either put the ATITD window in focus first (click the ATITD window), or set Options | Interface Options | Priority to High Priority Mode.");
 		if message then
 			lsPrintWrapped(0, 85, 1, lsScreenX, 0.7, 0.7, 0xB0B0B0ff,
 				message);
