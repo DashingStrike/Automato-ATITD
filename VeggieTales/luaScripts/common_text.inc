@@ -1,4 +1,11 @@
--- Returns an array of all positions matching the given image
+-------------------------------------------------------------------------------
+-- findAllTextRegions
+--
+-- Finds all regions on the screen completely surrounded by 4 black lines.
+-- Intentionally does not find regions where a corner is covered up.
+--
+-- Returns an array of region objects on success, nil if no regions are found.
+-------------------------------------------------------------------------------
 function findAllTextRegions()
 	local xyWindowSize = srGetWindowSize();
 	local y = 0;
@@ -25,23 +32,25 @@ function findAllTextRegions()
 	return buttons;
 end
 
-function findOneImage(imgName, tol)
-	if not tol then
-		tol = 5000;
-	end
-	local xyImageSize = srImageSize(imgName);
-	local xyWindowSize = srGetWindowSize();
-	local y = 0;
-	local buttons = {};
-	local pos = srFindImageInRange(imgName, 0, y, xyWindowSize[0], xyWindowSize[1]-y, tol);
-	if not pos then
-		return buttons;
-	end
-	buttons[#buttons+1] = pos;
-	return buttons;
-end
+-------------------------------------------------------------------------------
+-- findText(text, isExact)
+--
+-- Searches for the specified text in normal papyrus regions.  Intentionally
+-- does not check the inventory region and chat regions.  if isExact is true,
+-- then looks for the exact text specified.
+--
+-- text - text to search for
+-- isExact (optional) - true if trying to find the exact text
+--
+-- Returns a parse object containing the entire line of text that the text
+-- object was found within. findText("Wood (") for instance will return
+-- "Wood (154)" if done on a chest with 154 wood.
+-------------------------------------------------------------------------------
 
-function findText(text)
+function findText(text, isExact)
+	if text == nil then
+		error "No text specified to find";
+	end
 	local regions = findAllTextRegions();
 	local table;
 	if regions then
@@ -50,9 +59,15 @@ function findText(text)
 			table = parseRegion(regions[i]);
 			if table then
 				for j = 1, #table, 1 do
+					if isExact and isExact == true then
+						if table[j][2] == text then
+							return table[j];
+						end
 					--Search all text within that block for the goal text
-					if string.find(table[j][2], text, 1, true) ~= nil then
-						return table[j];
+					else
+						if string.find(table[j][2], text, 1, true) ~= nil then
+							return table[j];
+						end
 					end
 				end
 			end
@@ -60,11 +75,30 @@ function findText(text)
 	end
 end
 
+-------------------------------------------------------------------------------
+-- stripRegion(region)
+--
+-- Strips a region of all background color.  Recommended to call only from
+-- Library functions.
+-- region - region to be stripped
+--
+-- always returns nil
+-------------------------------------------------------------------------------
+
 function stripRegion(region)
 	if region then
 		srStripRegion(region[0], region[1], region[2], region[3]);
 	end
 end
+
+-------------------------------------------------------------------------------
+-- parseRegion(region)
+--
+-- parses a region for text.
+-- region - region to be parsed
+--
+-- returns an array of parse objects, one per line of text in the region
+-------------------------------------------------------------------------------
 
 function parseRegion(region)
 	if region then
@@ -72,14 +106,26 @@ function parseRegion(region)
 	end
 end
 
-function findTextInRegion(region, text)
+-------------------------------------------------------------------------------
+-- findTextInRegion(region, text, isExact)
+--
+-- searches for the parse object containing the desired text in the specified
+-- region
+-- region - region which we're searching for the text in.
+-- text - text we're looking for
+-- isExact (optional) - true if we want to return true only if the line contains
+-- the exact text specified
+--
+-- returns the parse object containing the desired text.
+-------------------------------------------------------------------------------
+function findTextInRegion(region, text, isExact)
 	if region then
 		stripRegion(region);
 		local table = parseRegion(region);
 		local j;
 		if table then
 			for j = 1, #table do
-				local p = findTextInParse(table, text);
+				local p = findTextInParse(table, text, isExact);
 				if p then
 					return p;
 				end
@@ -88,30 +134,63 @@ function findTextInRegion(region, text)
 	end
 end
 
-function findTextInParse(parseData, text)
+-------------------------------------------------------------------------------
+-- findTextInParse(parseData, text, isExact)
+--
+-- Honestly, this probably needs depreciation, I'm not sure when you would call
+-- this instead of findText, or findTextInRegion
+-------------------------------------------------------------------------------
+
+function findTextInParse(parseData, text, isExact)
+	if text == nil then
+		error "No text specified to find";
+	end
 	if parseData then
 		for i = 1, #parseData, 1 do
-			if string.find(parseData[i][2], text, 1, true) then
-				local t;
-				t = {};
-				t[0] = parseData[i][0];
-				t[1] = parseData[i][1];
-				t[2] = parseData[i][2];
-				return t;
+			if isExact and isExact == true then
+				if parsedata[i][2] == text then
+					local t;
+					t = {};
+					t[0] = parseData[i][0];
+					t[1] = parseData[i][1];
+					t[2] = parseData[i][2];
+					return t;
+				end
+			else
+				if string.find(parseData[i][2], text, 1, true) then
+					local t;
+					t = {};
+					t[0] = parseData[i][0];
+					t[1] = parseData[i][1];
+					t[2] = parseData[i][2];
+					return t;
+				end
 			end
 		end
 	end
 	return nil;
 end
 
-function findAllRegionsWithText(text)
+-------------------------------------------------------------------------------
+-- findAllRegionsWithText(text, isExact)
+--
+-- Searches all regions on the screen for desired text.  Useful for times when
+-- you want to find all of a certain type of window, but click other buttons
+-- within that window, such as chemistry labs.
+-- text - text we're looking for
+-- isExact (optional) - true if we want to return true only if the line contains
+-- the exact text specified
+--
+-- returns an array of region objects, all of which contained the desired text.
+-------------------------------------------------------------------------------
+function findAllRegionsWithText(text, isExact)
 	local r1 = findAllTextRegions();
 	local count = 0;
 	local r2 = {}
 	if r1 then
 		local i;
 		for i = 1, #r1 do
-			if findTextInRegion(r1[i], text) then
+			if findTextInRegion(r1[i], text, isExact) then
 				r2[count + 1] = r1[i];
 				count = count + 1;
 			end
@@ -122,6 +201,16 @@ function findAllRegionsWithText(text)
 	end
 	return r2;
 end
+
+-------------------------------------------------------------------------------
+-- getChatText()
+--
+-- Reads the chat screen and finds all the text on it.
+--
+-- returns a list of parse objects for all the chat on the screen.  Chats that
+-- span multiple lines are combined into a single parse object, delineated by
+-- lines that start with [time]
+-------------------------------------------------------------------------------
 
 function getChatText()
 	local creg = srFindChatRegion();
@@ -168,6 +257,14 @@ function getChatText()
 	return p2;
 end
 
+-------------------------------------------------------------------------------
+-- getAllText()
+--
+-- finds all the text on the screen.  May need depreciation.
+--
+-- returns an array of parse objects of every item on the screen.
+-------------------------------------------------------------------------------
+
 function getAllText()
 	local r = findAllTextRegions();
 	local p;
@@ -193,46 +290,24 @@ function getAllText()
 		end
 	end
 end
-				
 
-function waitForText(text)
-	local r;
-	while r == nil do
-		srReadScreen();
-		r = findText(text);
-		lsSleep(20);
-		checkBreak();
-	end
-	return r;
-end	
+-------------------------------------------------------------------------------
+-- findRegionWithText(text, isExact)
+--
+-- Searches for the desired text
+-- text - text we're looking for
+-- isExact (optional) - true if we want to return true only if the line contains
+-- the exact text specified
+--
+-- returns the first region object containing the desired text
+-------------------------------------------------------------------------------
 
-function waitForNoText(text)
-	local r = {};
-	while r ~= nil do
-		srReadScreen();
-		r = findText(text);
-		lsSleep(20);
-		checkBreak();
-	end
-end	
-
-function waitForRegionWithText(text)
-	local r;
-	while r == nil do
-		srReadScreen();
-		r = findRegionWithText(text);
-		lsSleep(20);
-		checkBreak();
-	end
-	return r;
-end
-
-function findRegionWithText(text)
+function findRegionWithText(text, isExact)
 	f = findAllTextRegions();
 	local i;
 	if f then
 		for i = 1, #f do
-			if findTextInRegion(f[i], text) then
+			if findTextInRegion(f[i], text, isExact) then
 				return f[i];
 			end
 		end
@@ -240,16 +315,14 @@ function findRegionWithText(text)
 	return nil;
 end
 
-function waitForTextInRegion(region, text)
-	local r;
-	while r == nil do
-		srReadScreen();
-		r = findTextInRegion(region, text);
-		lsSleep(20);
-		checkBreak();
-	end
-	return r;
-end
+-------------------------------------------------------------------------------
+-- parseText (x, y, w, h)
+--
+-- wrapper for srParseTextRegion so that it returns data in an array of parses
+-- instead of a 1-dimensional array of parses.  Call parseRegion instead of this.
+--
+-- returns an array of parse objects
+-------------------------------------------------------------------------------
 
 function parseText(x, y, w, h)
 	local table = srParseTextRegion(x, y, w, h);
@@ -265,9 +338,4 @@ function parseText(x, y, w, h)
 		newTable[i][2] = table[(i-1)*3+2];
 	end
 	return newTable;
-end
-
-function clickText(parse)
-	srClickMouseNoMove(parse[0] + 20, parse[1] + 7);
-	lsSleep(per_click_delay);
 end
