@@ -17,14 +17,15 @@ per_click_delay = 150;  -- Time is in ms
 
 searchImage1 = "ThisIs.png"  -- Method 1
 searchImage2 = "Unpin.png"   -- Method 2
+searchImage3 = "Ok.png"      -- Method 3
 repeatMethod1 = 1;
 repeatMethod2 = 1;
-
+repeatMethod3 = 1;
 
 function doit()
 
 	-- Pause, say something to user, wait for Shift key to continue. Give opportunity to put ATITD in focus, if needed.
-	askForWindow("This will right click all windows, attempting to close any pinned windows. Press Shift key continue.");  
+	askForWindow("This will right click all windows, attempting to close any pinned windows. This will also close/click any PopUp windows with 'OK' buttons. Press Shift key continue.");  
 
 	--Keep looking for and closing windows with Image1 until no more found, then move to Method 2.
 
@@ -40,6 +41,17 @@ lsSleep(200);
 	while repeatMethod2 == 1 do
 	closeMethod2();
 	end
+
+
+lsSleep(200);
+
+	--Keep looking for and closing windows with Image3 until no more found, then done.
+
+	while repeatMethod3 == 1 do
+	closeMethod3();
+	end
+
+
 
 end
 
@@ -91,6 +103,35 @@ function closeMethod2()
 		
 		if #buttons == 0 then
 		repeatMethod2 = 0
+		else
+
+
+			for i=#buttons, 1, -1 do
+				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, right_click);
+				lsSleep(per_click_delay);
+
+			end
+
+		end
+
+		checkBreak();
+end
+
+
+function closeMethod3()
+
+
+		-- Search Method 3:
+
+
+		-- Find OK buttons with searchImage3
+		srReadScreen();
+
+		-- Count how many windows that were found and assign the value to #buttons
+		local buttons = findAllImages(searchImage3);
+		
+		if #buttons == 0 then
+		repeatMethod3 = 0
 		else
 
 

@@ -1,86 +1,34 @@
--- Open, Add Charcoal, Fire, Pin, and arrange your casting box windows
--- **Does not take items**
--- ***********************
---Below times are exact teppy minutes + 3 seconds *1000 (ms)
--- Times:
--- 1 Minute = 69000
--- 2 Minutes = 138000
--- 3 Minutes = 207000
--- 4 Minutes = 276000
--- 5 Minutes = 345000
--- 6 Minutes = 414000
--- 10 Minutes = 690000 
--- 15 Minutes = 1035000
--- 20 minutes = 1380000
--- 25 minutes = 1725000
--- 30 minutes = 2070000
--- ***********************
+-- Casting Box v1.1 by Bardoth, Revised by Cegaiel
+-- You must manually add charcoal and fire up each casting box before pinning them up.
+-- Does not take items from casting box.
 
+assert(loadfile("luaScripts/common.inc"))();
+assert(loadfile("luaScripts/casting.inc"))();
 
+askText = singleLine([[
+  Casting Box v1.2 (by Bardoth Revised by Cegaiel) --
+  Automatically run one or more casting boxes.
+  Make sure the VT window is in the TOP-RIGHT
+  corner of the screen.
+]]);
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
-loadfile("luaScripts/Casting.inc")();
--- loadfile("luaScripts/Forge_Bars.lua")();
+wmText = "1) Manually add charcoal and light CB\'s.\n2) Make sure CB\'s are lit before pinning!\n3) Tap Ctrl on CB\'s to open and pin.";
 
-local per_click_delay = 0;
+--Global Variables. Dont change!
+click_delay = 0;
+stalled = 0;
+made = 0;
+project_windows = 0;
 
-function setWaitSpot(x0, y0)
-	setWaitSpot_x = x0;
-	setWaitSpot_y = y0;
-	setWaitSpot_px = srReadPixel(x0, y0);
-end
-
-function waitForChange()
-	local c=0;
-	while srReadPixel(setWaitSpot_x, setWaitSpot_y) == setWaitSpot_px do
-		lsSleep(1);
-		c = c+1;
-		if (lsShiftHeld() and lsControlHeld()) then
-			error 'broke out of loop from Shift+Ctrl';
-		end
-	end
-	-- lsPrintln('Waited ' .. c .. 'ms for pixel to change.');
-end
-
-function clickAll(image_name)
-	-- Find buttons and click them!
-	srReadScreen();
-	xyWindowSize = srGetWindowSize();
-	local buttons = findAllImages(image_name);
-	
-	if #buttons == 0 then
-		error 'Could not find \'Casting Box\' windows.'
-		--statusScreen("Could not find specified buttons...");
-		--lsSleep(1500);
-	else
-		statusScreen("Clicking " .. #buttons .. "button(s)...");
-		if up then
-			for i=#buttons, 1, -1  do
-				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3);
-				lsSleep(per_click_delay);
-			end
-		else
-			for i=1, #buttons  do
-				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3);
-				lsSleep(per_click_delay);
-			end
-		end
-		statusScreen("Done clicking (" .. #buttons .. " clicks).");
-		lsSleep(100);
-	end
-end
-
-function refocus()
-	statusScreen("Refocusing...");
-	for i=2, #window_locs do
-		setWaitSpot(window_locs[i][0], window_locs[i][1]);
-		srClickMouseNoMove(window_locs[i][0] + 321, window_locs[i][1] + 74);
-		waitForChange();
-	end
-end
 
 function doit()
+  askForWindow(askText);
+  windowManager("Casting Box Setup", wmText);
+  unpinOnExit(runCasting);
+end
+
+
+function runCasting()
 	while 1 do
 		-- Ask for which button
 		local image_name = nil;
@@ -112,19 +60,19 @@ function doit()
 					bsize = 130;
 				elseif button_names[i] == "Fuel" then
 					x = 30;
-					y = 170;
+					y = 160;
 					bsize = 130;
 				elseif button_names[i] == "Gearwork" then
 					x = 30;
-					y = 200;
+					y = 190;
 					bsize = 130;
 				elseif button_names[i] == "Hardware" then
 					x = 30;
-					y = 230;
+					y = 220;
 					bsize = 130;
 				elseif button_names[i] == "Tools" then
 					x = 30;
-					y = 260;
+					y = 250;
 					bsize = 130;
 				end
 				if lsButtonText(x, y, 0, 250, 0xe5d3a2ff, button_names[i]) then
@@ -133,7 +81,8 @@ function doit()
 				end
 			end
 
-			if lsButtonText(lsScreenX - 220, lsScreenY - 30, z, 150, 0xFF0000ff, "End script") then
+
+		       if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
 				error "Clicked End Script button";
 			end
 			lsDoFrame();

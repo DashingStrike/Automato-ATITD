@@ -60,18 +60,13 @@ wire_button_names = {
 
 function waitMinutes(minutes)
 -- Teppy Minute is 66 seconds or 66000 ms
--- Add a 3.5 second delay (3500 ms) in case of lag
--- If forge is getting done AFTER the GUI says its done (and errors when trying to click project menu again (not ready)) frequently, then try increasing the wait_delay
+-- Add a 3 second delay (3000 ms) in case of lag
 
-wait_delay = 3500; -- Extra delay on top of Teppy Time, for lag purposes. Default is 3500
+wait_delay = 3000; -- Extra delay on top of Teppy Time, for lag purposes. Default is 3000
 wait = (minutes * 66000) + wait_delay;
+askForFocus(); -- Pause to allow user to focus back to ATITD (if they checked the Pause for Focus Box), before starting project.
 end
 
-function checkProject()
-	if project_windows == 0 then
-	error("No buttons found. Verify the forges are lit.");
-	end
-end
 
 function doneGUI(totalPasses)
 wait = 5000;  -- Gives a 5 second delay to review the GUI stats, before quitting/returing to Main Menu.
@@ -99,8 +94,9 @@ end
 
 
 function refreshWindows()
+	checkBreak();
 	pinned_windows = clickAllImages("This.png");
-	lsSleep(300);
+	lsSleep(400);
 		if pinned_windows == 0 then
 		error("No pinned windows found!");
 		else
@@ -113,10 +109,7 @@ function refreshWindows()
 end
 
 
-
-
 ----------------- MAKE PROJECT FUNCTIONS -----------------
-
 
 function KnifeBlade()
 	num_loops = promptNumber("How many passes ?", 1);
@@ -124,9 +117,15 @@ function KnifeBlade()
 	name = "Knife Blade";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
-			project_windows = clickAllImages("Forge/Knife_Blade.png");
-			checkProject();
+			project_windows = clickAllImages("Forge/Forge_Knife_Blade.png");
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -138,9 +137,15 @@ function ShovelBlade()
 	name = "Shovel Blade";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			project_windows = clickAllImages("Forge/Forge_Shovel_Blade.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -152,9 +157,15 @@ function Nails()
 	name = "Nails";
 	waitMinutes(1);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			project_windows = clickAllImages("Forge/Forge_Nail.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -166,9 +177,15 @@ function CopperPipe()
 	name = "Copper Pipe";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			project_windows = clickAllImages("Forge/Forge_Copper_Pipe.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -180,9 +197,15 @@ function LeadPipe()
 	name = "Lead Pipe";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			project_windows = clickAllImages("Forge/Forge_Lead_Pipe.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1500, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -194,11 +217,17 @@ function IronBar()
 	name = "Iron Bar";
 	waitMinutes(15);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Bars.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Iron_Bar.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -210,11 +239,17 @@ function GoldBar()
 	name = "Gold Bar";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Bars.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Gold_Bar.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -226,11 +261,17 @@ function SilverBar()
 	name = "Silver Bar";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Bars.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Silver_Bar.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -242,11 +283,17 @@ function LeadSheeting()
 	name = "Lead Sheeting";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Lead_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -258,11 +305,17 @@ function GoldSheeting()
 	name = "Gold Sheeting";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Gold_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -274,11 +327,17 @@ function CopperSheeting()
 	name = "Copper Sheeting";
 	waitMinutes(1);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Copper_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -290,11 +349,17 @@ function OctecsAlloySheeting()
 	name = "Octecs Alloy";
 	waitMinutes(20);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Octecs_Alloy_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -306,11 +371,17 @@ function SilverSheeting()
 	name = "Silver Sheeting";
 	waitMinutes(2);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Silver_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -322,11 +393,17 @@ function SteelSheeting()
 	name = "Steel Sheeting";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Steel_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -338,11 +415,17 @@ function GoldFoil()
 	name = "Gold Foil";
 	waitMinutes(1);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Gold_Foil.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -354,11 +437,17 @@ function MetalBlueSheeting()
 	name = "Metal Blue Sheeting";
 	waitMinutes(15);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Metal_Blue_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -370,11 +459,17 @@ function TinSheeting()
 	name = "Tin Sheeting";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Tin_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -386,11 +481,17 @@ function MoonSteelSheeting()
 	name = "Moon Steel Sheeting";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Moon_Steel_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -402,11 +503,17 @@ function ThothsMetalSheeting()
 	name = "Thoths Metal Sheeting";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Sheeting.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Thoths_Metal_Sheeting.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -418,11 +525,17 @@ function WaterMetalStrap()
 	name = "Water Metal Strap";
 	waitMinutes(1);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Straps.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Water_Metal_Strap.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -434,11 +547,17 @@ function IronStrap()
 	name = "Iron Strap";
 	waitMinutes(3);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Straps.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Iron_Strap.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -450,11 +569,17 @@ function AluminumStrap()
 	name = "Aluminum Strap";
 	waitMinutes(1);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Straps.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Aluminum_Strap.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -466,11 +591,17 @@ function CopperStrap()
 	name = "Copper Strap";
 	waitMinutes(2);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Straps.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Copper_Strap.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -482,11 +613,17 @@ function IronPoker()
 	name = "Iron Poker";
 	waitMinutes(20);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Iron_Poker.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -498,11 +635,17 @@ function SteelBlade()
 	name = "Steel Blade";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Steel_Blade.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -514,11 +657,17 @@ function LeadChisel()
 	name = "Lead Chisel";
 	waitMinutes(6);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Tools.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Lead_Chisel.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -530,11 +679,17 @@ function ThothsMetalWire()
 	name = "Thoths Metal Wire";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Wire.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Thoths_Metal_Wire.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -546,11 +701,17 @@ function MetalBlueWire()
 	name = "Metal Blue Wire";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Wire.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Metal_Blue_Wire.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -562,11 +723,17 @@ function MagnesiumWire()
 	name = "Magnesium Wire";
 	waitMinutes(1);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Wire.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Magnesium_Wire.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -578,11 +745,17 @@ function OctecsAlloyWire()
 	name = "Octecs Alloy Wire";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Wire.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Octecs_Alloy_Wire.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -594,11 +767,17 @@ function SilverWire()
 	name = "Silver Wire";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Wire.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Silver_Wire.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -610,11 +789,17 @@ function CopperWire()
 	name = "Copper Wire";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Wire.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Copper_Wire.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -626,11 +811,17 @@ function SteelWire()
 	name = "Steel Wire";
 	waitMinutes(5);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Wire.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Steel_Wire.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -642,11 +833,17 @@ function GoldWire()
 	name = "Gold Wire";
 	waitMinutes(10);
 		for i=1, num_loops do
+			while 1 do
 			refreshWindows();
 			clickAllImages("Forge/Forge_Wire.png");
 			lsSleep(400);
 			project_windows = clickAllImages("Forge/Forge_Gold_Wire.png");
-			checkProject();
+				if project_windows == 0 then
+				sleepWithStatusPause(1100, "Waiting for Project windows");
+				else
+				break;
+				end
+			end
 			waitGUI(i);
 		end
 	doneGUI(num_loops);
@@ -799,6 +996,8 @@ function Straps()
 	while 1 do
 		-- Ask for which button
 		local image_name = nil;
+
+
 		local is_done = nil;	
 		while not is_done do
 			local y = nil;
