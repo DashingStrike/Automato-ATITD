@@ -1,6 +1,7 @@
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+assert(loadfile("luaScripts/screen_reader_common.inc"))();
+assert(loadfile("luaScripts/ui_utils.inc"))();
+assert(loadfile("luaScripts/common.inc"))();
 
 
 essences = {};

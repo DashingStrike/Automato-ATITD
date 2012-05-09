@@ -179,3 +179,18 @@ function drawWater()
   end
   return result;
 end
+
+------------------------------------------------------------------------------
+-- clickText(parse)
+--
+-- convenient wrapper to click on text 20, 7 pixels in from where the top
+-- left of the parse object
+-- parse - parse object which we're clicking
+--
+-- always returns nil
+------------------------------------------------------------------------------
+
+function clickText(parse)
+	srClickMouseNoMove(parse[0] + 20, parse[1] + 7);
+	lsSleep(per_click_delay);
+end

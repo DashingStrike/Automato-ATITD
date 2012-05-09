@@ -212,3 +212,208 @@ function waitForImageWhileUpdating(file, x, y, delay)
   end
   return pos;
 end
+
+-------------------------------------------------------------------------------
+-- waitForTextInRegion(region, text, delay, timeout, isExact)
+--
+-- continually scrapes the screen and parses until it sees the desired text in
+-- the specified region
+-- region we're searching within
+-- text - text we're looking for
+-- delay (optional) - how long the loop sleeps between each screen scrapes.
+-- timeout (optional) - how long we'll search for the text before we quit anyway
+-- isExact (optional) - true if we want to return true only if the line contains
+-- the exact text specified
+--
+-- returns the parse object if the text is located, returns nil when the timeout
+-- is exceeded and the text still isn't found.
+-------------------------------------------------------------------------------
+
+function waitForTextInRegion(region, text, delay, timeout, isExact)
+	local r;
+	if delay == nil then
+		delay = 20;
+	end
+	if timeout ~= nil then
+		t0 = lsGetTimer();
+		while r == nil and lsGetTimer() - t0 < timeout do
+			srReadScreen();
+			r = findTextInRegion(region, text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+	else
+		while r == nil do
+			srReadScreen();
+			r = findTextInRegion(region, text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+	end
+	return r;
+end
+
+-------------------------------------------------------------------------------
+-- waitForTextInRegion(region, text, delay, timeout, isExact)
+--
+-- continually scrapes the screen and parses until it DOESN'T see the desired 
+-- text in the specified region
+-- region - region we're searching within
+-- text - text we're looking for NOT to appear
+-- delay (optional) - how long the loop sleeps between each screen scrapes.
+-- timeout (optional) - how long we'll search for the text before we quit anyway
+-- isExact (optional) - true if we want to return true only if the line contains
+-- the exact text specified
+--
+-- returns 1 if the text is no longer on the screen, 0 if the timout is
+-- exceeded
+-------------------------------------------------------------------------------
+
+function waitForNoTextInRegion(region, text, delay, timeout, isExact)
+	local r = {};
+	if delay == nil then
+		delay = 20;
+	end
+	if timeout ~= nil then
+		t0 = lsGetTimer();
+		while r ~= nil and lsGetTimer() - t0 < timeout do
+			srReadScreen();
+			r = findTextInRegion(region, text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+		--if true, means we hit the timeout
+		if r ~= nil then
+			return nil;
+		else
+			return 1;
+		end
+	else
+		while r ~= nil do
+			srReadScreen();
+			r = findTextInRegion(region, text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+		return 1;
+	end
+end
+
+-------------------------------------------------------------------------------
+-- waitForText(text, delay, timeout, isExact)
+--
+-- continually scrapes the screen and parses until it sees the desired text
+-- text - text we're looking for
+-- delay (optional) - how long the loop sleeps between each screen scrapes.
+-- timeout (optional) - how long we'll search for in ms the text before we quit anyway
+-- isExact (optional) - true if we want to return true only if the line contains
+-- the exact text specified
+--
+-- returns the parse object if the text is located, returns nil when the timeout
+-- is exceeded and the text still isn't found.
+-------------------------------------------------------------------------------
+
+function waitForText(text, delay, timeout, isExact)
+	local r;
+	if delay == nil then
+		delay = 20;
+	end
+	if timeout ~= nil then
+		t0 = lsGetTimer();
+		while r == nil and lsGetTimer() - t0 > timeout do
+			srReadScreen();
+			r = findText(text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+	else
+		while r == nil do
+			srReadScreen();
+			r = findText(text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+	end
+	return r;
+end	
+
+-------------------------------------------------------------------------------
+-- waitForNoText(text, delay, timeout, isExact)
+--
+-- continually scrapes the screen and parses until it DOESN"T see the desired text
+-- text - text we're looking for to disappear
+-- delay (optional) - how long the loop sleeps between each screen scrapes.
+-- timeout (optional) - how long we'll search for the text before we quit anyway
+-- isExact (optional) - true if we want to return true only if the line contains
+-- the exact text specified
+--
+-- 1 if the text successfully disappeared, nil if the timeout is exceeded
+-------------------------------------------------------------------------------
+
+function waitForNoText(text, delay, timeout, isExact)
+	local r = {};
+	if delay == nil then
+		delay = 20;
+	end
+	if timeout ~= nil then
+		t0 = lsGetTimer();
+		while r ~= nil and lsGetTimer() - t0 < timeout do
+			srReadScreen();
+			r = findText(text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+		--means we hit the timeout
+		if r ~= nil then
+			return nil;
+		else
+			return 1;
+		end
+	else
+		while r ~= nil do
+			srReadScreen();
+			r = findText(text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+		return 1;
+	end
+end
+
+-------------------------------------------------------------------------------
+-- waitForRegionWithText(text, delay, timeout, isExact)
+--
+-- continually scrapes the screen and parses until it sees the desired text
+-- text - text we're looking for
+-- delay (optional) - how long the loop sleeps between each screen scrapes.
+-- timeout (optional) - how long we'll search for in ms the text before we quit anyway
+-- isExact (optional) - true if we want to return true only if the line contains
+-- the exact text specified
+--
+-- returns the region that contained the specified text, returns nil if the
+-- timeout is exceeded.
+-------------------------------------------------------------------------------
+
+function waitForRegionWithText(text, delay, timeout, isExact)
+	local r;
+	if delay == nil then
+		delay = 20;
+	end
+	if timeout ~= nil then
+		t0 = lsGetTimer();
+		while r == nil and lsGetTimer() - t0 < timeout do
+			srReadScreen();
+			r = findRegionWithText(text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+	else
+		while r == nil do
+			srReadScreen();
+			r = findRegionWithText(text, isExact);
+			lsSleep(delay);
+			checkBreak();
+		end
+	end
+	return r;
+end
