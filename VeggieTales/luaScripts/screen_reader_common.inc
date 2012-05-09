@@ -57,3 +57,19 @@ function findAllImages(imgName, tol)
 	end
 	return buttons;
 end
+
+function findOneImage(imgName, tol)
+	if not tol then
+		tol = 5000;
+	end
+	local xyImageSize = srImageSize(imgName);
+	local xyWindowSize = srGetWindowSize();
+	local y = 0;
+	local buttons = {};
+	local pos = srFindImageInRange(imgName, 0, y, xyWindowSize[0], xyWindowSize[1]-y, tol);
+	if not pos then
+		return buttons;
+	end
+	buttons[#buttons+1] = pos;
+	return buttons;
+end
