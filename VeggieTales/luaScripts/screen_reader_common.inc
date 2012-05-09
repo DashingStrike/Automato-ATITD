@@ -1,3 +1,4 @@
+loadfile("luaScripts/common_text.inc")();
 
 function checkBreak()
 	if (lsShiftHeld() and lsControlHeld()) then
