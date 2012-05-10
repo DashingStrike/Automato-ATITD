@@ -14,28 +14,92 @@ askText = singleLine([[
 
 
 clickList = {};
-
+mineList = {};
 
 function doit()
   askForWindow(askText);
   promptDelays();
+  getMineLoc();
   getPoints();
   clickSequence();
 end
 
 
-function getPoints()
+function getMineLoc()
   local was_shifted = lsShiftHeld();
   local is_done = false;
-  local mx = 0;
-  local my = 0;
-  local z = 0;
+  mx = 0;
+  my = 0;
+  z = 0;
   while not is_done do
     mx, my = srMousePos();
     local is_shifted = lsShiftHeld();
     if is_shifted and not was_shifted then
+      mineList[#mineList + 1] = {mx, my};
+    end
+    was_shifted = is_shifted;
+
+    checkBreak();
+    lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
+	    "Select Mine Location");
+    local y = 60;
+
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "1) Lock ATITD screen (Alt+L).");
+y = y+18;
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "2) Hover and Tap shift over the MINE.");
+    y = y + 30;
+    local start = math.max(1, #mineList - 20);
+    local index = 0;
+    for i=start,#mineList do
+	mineX = mineList[i][1];
+	mineY = mineList[i][2];
+    end
+
+  if #mineList >= 1 then
+    --if lsButtonText(10, lsScreenY - 30, z, 100, 0x80ff80ff, "Work") then
+      is_done = 1;
+    --end
+end
+
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
+                    "End script") then
+      error "Clicked End Script button";
+    end
+    lsDoFrame();
+    lsSleep(10);
+  end
+end
+
+function fetchTotalCombos()
+  totalCombos = 0;
+	for i=1,#clickList do
+		for j=i+1,#clickList do
+			for k=j+1,#clickList do
+			totalCombos = totalCombos + 1;
+			end
+		end
+	end
+  statusScreenPause("[1/" .. totalCombos .. "] Nodes Worked:");
+end
+
+
+
+
+
+
+
+function getPoints()
+  local was_shifted = lsShiftHeld();
+  local is_done = false;
+  local nx = 0;
+  local ny = 0;
+  local z = 0;
+  while not is_done do
+    nx, ny = srMousePos();
+    local is_shifted = lsShiftHeld();
+    if is_shifted and not was_shifted then
       nodeError = 0;
-      clickList[#clickList + 1] = {mx, my};
+      clickList[#clickList + 1] = {nx, ny};
     end
     was_shifted = is_shifted;
 
@@ -50,8 +114,15 @@ function getPoints()
     y = y + 30
     end
 
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Hover and Tap shift over each node.");
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "1) Hover and Tap shift over each node.");
+    y = y + 18;
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "2) Make sure chat is MINIMIZED!");
+    y = y + 18
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "3) Press Work button when done.");
+
+
     y = y + 30;
+
     local start = math.max(1, #clickList - 20);
     local index = 0;
     for i=start,#clickList do
@@ -129,6 +200,14 @@ function clickSequence()
 
 			end
 
+
+  --Work the mine!
+  srSetMousePos(mineX, mineY);
+  lsSleep(120);
+  srKeyEvent('W'); 
+  sleepWithStatusPause(2000, "Working Mine...");
+  --Reset the node click points and restart
+  mineList = {};
   clickList = {};
   getPoints();
   clickSequence();
@@ -173,13 +252,13 @@ function promptDelays()
 
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
       is_done, popDelay = lsEditBox("delay2", 160, y, 0, 50, 30, 1.0, 1.0,
-                                      0x000000ff, 250);
+                                      0x000000ff, 300);
 
       popDelay = tonumber(popDelay);
       if not popDelay then
         is_done = false;
         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-        popDelay = 250;
+        popDelay = 300;
       end
 
 
@@ -187,7 +266,6 @@ function promptDelays()
       lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Click Delay: Hover/Select each node.");
 	y = y + 18
       lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Popup Delay: Wait for Popup to close.");
-
 
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
