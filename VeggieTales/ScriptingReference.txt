@@ -22,6 +22,8 @@ The functions prefixed with "sr" (short for Screen Reader) generally operate on
 the ATITD window, so srGetWindowSize() gets the width and height of the ATITD
 window.
 
+The functions with neither an sr or ls prefix are lua-script library functions.
+
 * Note that you *MUST* call srReadScreen to update the screen before calling srFindImageInRange etc.
 
 == Function List ==
@@ -56,6 +58,33 @@ window.
   Vec2[] lsAnalyzePapyrus(int minsize, int maxsize, int debug, int relevant_radius)
   Vec2[] lsAnalyzeSilt(int minsize, int maxsize, int debug, int relevant_radius)
   [l,t,r,b] srGetWindowBorders(int x, int y)
+  Vec2[] findAllImages(String imgName, int tol)
+=== Text Parsing ===
+  Region object is a table where region[0] = x0, region[1] = y0, region[2] = width, region[3] = height
+  Parse object is a table where parse[0] = x0, parse[1] = y0, parse[2] = text
+  region[] findAllTextRegions()
+  parse findText(String s, bool isExact)
+  void stripRegion(region r)
+  parse[] parseRegion(region r)
+  parse findTextInRegion(region r, String t, bool isExact)
+  region[] findAllRegionsWithText(String t, bool isExact)
+  parse waitForText(String t, int delay, int timeout, bool isExact)
+  int waitForNoText(String t, int delay, int timeout, bool isExact)
+  region waitForRegionWithText(String t, int delay, int timeout, bool isExact)
+  parse waitForTextInRegion(Region r, String t, int delay, int timeout, bool isExact)
+  int waitForNoTextInRegion(Region r, String t, int delay, int timeout, bool isExact)
+  void clickText(parse p)
+  parse[] getChatText()
+  parse[] getAllText()
+  region srFindInvRegion()
+I recommend not using the below functions unless you're modifying lua library functions.
+  void srStripScreen()
+  void srStripRegion(int x0, int y0, int w, int h)
+  region srFindFirstTextRegion()
+  region srFindNextTextRegion()
+  parse[] srParseTextRegion(int x0, int y0, int w, int h)
+  region srFindChatRegion()
+  void srTrainTextReader(int x, int y, const char *c)
 === User Interface ===
   int lsScreenX
   int lsScreenY
@@ -82,7 +111,9 @@ window.
   void lsTopmost(int value)
   {bool done, selection} lsEditBox(const char *key, int x, int y, int z, int w, int h, float xsc, float ysc, const char *color, const char *def)
   int lsGetTimer()
-
+  const char *lsClipboardGet()
+  void lsClipboardSet(const char *str)
+  void askForWindow(String t)
 == Specific reference ==
 === void srKeyEvent(const char *s) ===
 
