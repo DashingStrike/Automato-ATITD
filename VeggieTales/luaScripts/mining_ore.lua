@@ -62,17 +62,12 @@ function getPoints()
       index = index + 1;
     end
 
-    if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Begin") then
-
-	if #clickList < 7 then
-	nodeError = 1
-	else
-	nodeError = 0;
+  if #clickList >= 7 then
+    if lsButtonText(10, lsScreenY - 30, z, 100, 0x80ff80ff, "Work") then
       is_done = 1;
-end
-
     end
 
+end
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
                     "End script") then
@@ -147,7 +142,7 @@ function PopUp()
 		if OK then
 		srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
 		--lsSleep(clickDelay)
-		PopUp();
+		PopUp(); -- Keep repeating to make sure popup was closed, in case of long lag spike.
 		else
 		break;
 		end
@@ -178,13 +173,13 @@ function promptDelays()
 
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
       is_done, popDelay = lsEditBox("delay2", 160, y, 0, 50, 30, 1.0, 1.0,
-                                      0x000000ff, 300);
+                                      0x000000ff, 250);
 
       popDelay = tonumber(popDelay);
       if not popDelay then
         is_done = false;
         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-        popDelay = 300;
+        popDelay = 250;
       end
 
 
