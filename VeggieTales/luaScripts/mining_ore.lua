@@ -1,4 +1,4 @@
--- mining_ore.lua v1.0 -- by Cegaiel
+-- mining_ore.lua v1.1 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations
@@ -7,7 +7,7 @@
 assert(loadfile("luaScripts/common.inc"))();
 
 askText = singleLine([[
-  Ore Mining v1.0 (by Cegaiel) --
+  Ore Mining v1.1 (by Cegaiel) --
   Brute Force method. Will try every possible 3 node/stone combination.
   Make sure chat is MINIMIZED! Press Shift over ATITD window.
 ]]);
@@ -15,6 +15,8 @@ askText = singleLine([[
 
 clickList = {};
 mineList = {};
+dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
+dropdown_cur_value = 1;
 
 function doit()
   askForWindow(askText);
@@ -27,6 +29,20 @@ end
 
 function getMineLoc()
   local was_shifted = lsShiftHeld();
+  if (dropdown_cur_value == 1) then
+  was_shifted = lsShiftHeld();
+  key = "tap Shift";
+  elseif (dropdown_cur_value == 2) then
+  was_shifted = lsControlHeld();
+  key = "tap Ctrl";
+  elseif (dropdown_cur_value == 3) then
+  was_shifted = lsAltHeld();
+  key = "tap Alt";
+  elseif (dropdown_cur_value == 4) then
+  was_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
+  key = "click MWheel ";
+  end
+
   local is_done = false;
   mx = 0;
   my = 0;
@@ -34,19 +50,28 @@ function getMineLoc()
   while not is_done do
     mx, my = srMousePos();
     local is_shifted = lsShiftHeld();
+
+  if (dropdown_cur_value == 1) then
+  is_shifted = lsShiftHeld();
+  elseif (dropdown_cur_value == 2) then
+  is_shifted = lsControlHeld();
+  elseif (dropdown_cur_value == 3) then
+  is_shifted = lsAltHeld();
+  elseif (dropdown_cur_value == 4) then
+  is_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
+  end
+
     if is_shifted and not was_shifted then
       mineList[#mineList + 1] = {mx, my};
     end
     was_shifted = is_shifted;
-
     checkBreak();
     lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
-	    "Select Mine Location");
+	    "Set Mine Location");
     local y = 60;
-
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "1) Lock ATITD screen (Alt+L).");
-    y = y+18;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "2) Hover and Tap shift over the MINE.");
+    y = y+16;
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "2) Hover and " .. key .. " over the MINE.");
     y = y + 30;
     local start = math.max(1, #mineList - 20);
     local index = 0;
@@ -56,10 +81,8 @@ function getMineLoc()
     end
 
   if #mineList >= 1 then
-    --if lsButtonText(10, lsScreenY - 30, z, 100, 0x80ff80ff, "Work") then
       is_done = 1;
-    --end
-end
+  end
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
                     "End script") then
@@ -85,6 +108,16 @@ end
 
 function getPoints()
   local was_shifted = lsShiftHeld();
+  if (dropdown_cur_value == 1) then
+  was_shifted = lsShiftHeld();
+  elseif (dropdown_cur_value == 2) then
+  was_shifted = lsControlHeld();
+  elseif (dropdown_cur_value == 3) then
+  was_shifted = lsAltHeld();
+  elseif (dropdown_cur_value == 4) then
+  was_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
+  end
+
   local is_done = false;
   local nx = 0;
   local ny = 0;
@@ -92,15 +125,24 @@ function getPoints()
   while not is_done do
     nx, ny = srMousePos();
     local is_shifted = lsShiftHeld();
+  if (dropdown_cur_value == 1) then
+  is_shifted = lsShiftHeld();
+  elseif (dropdown_cur_value == 2) then
+  is_shifted = lsControlHeld();
+  elseif (dropdown_cur_value == 3) then
+  is_shifted = lsAltHeld();
+  elseif (dropdown_cur_value == 4) then
+  is_shifted = lsMouseIsDown(2);
+  end
+
     if is_shifted and not was_shifted then
       nodeError = 0;
       clickList[#clickList + 1] = {nx, ny};
     end
     was_shifted = is_shifted;
-
     checkBreak();
     lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
-	    "Nodes Selected (" .. #clickList .. ")");
+	    "Set Node Locations (" .. #clickList .. ")");
     local y = 60;
 
     if nodeError == 1 then
@@ -109,10 +151,10 @@ function getPoints()
     y = y + 30
     end
 
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "1) Hover and Tap shift over each node.");
-    y = y + 18;
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "1) Hover and " .. key .. " over each node.");
+    y = y + 16;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "2) Make sure chat is MINIMIZED!");
-    y = y + 18
+    y = y + 16
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "3) Press Work button when done.");
     y = y + 30;
     local start = math.max(1, #clickList - 20);
@@ -128,7 +170,7 @@ function getPoints()
   if #clickList >= 7 then
     if lsButtonText(10, lsScreenY - 30, z, 100, 0x80ff80ff, "Work") then
       is_done = 1;
-    end
+   end
 
 end
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
@@ -150,7 +192,8 @@ function fetchTotalCombos()
 			end
 		end
 	end
-  statusScreenPause("[1/" .. totalCombos .. "] Nodes Worked:");
+  statusScreenPause("DON\'T MOVE MOUSE !!!");
+  lsSleep(750);
 end
 
 
@@ -192,9 +235,9 @@ function clickSequence()
 			end
 
 
-  --Work the mine!
+  --Click 'Work the mine'!
   srSetMousePos(mineX, mineY);
-  lsSleep(120);
+  lsSleep(clickDelay);
   srKeyEvent('W'); 
   sleepWithStatusPause(2000, "Working Mine...");
   --Reset the mine/node points and restart
@@ -225,11 +268,20 @@ function promptDelays()
   local count = 1;
   while not is_done do
     checkBreak();
-    lsPrint(10, 10, 0, 1.0, 1.0, 0xffffffff,
-            "Set Delays:");
+
+    lsPrint(12, 10, 0, 0.9, 0.9, 0xffffffff,
+            "Key / Click to Select Nodes:");
     local y = 60;
-      lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Click Delay (ms):");
-      is_done, clickDelay = lsEditBox("delay", 160, y, 0, 50, 30, 1.0, 1.0,
+    lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
+    dropdown_cur_value = lsDropdown("ArrangerDropDown", 15, y, 0, 320, dropdown_cur_value, dropdown_values);
+    lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+    y = y + 30
+    lsPrint(12, y, 0, 0.9, 0.9, 0xffffffff,
+            "Set Delays:");
+	y = y + 40
+
+      lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
+      is_done, clickDelay = lsEditBox("delay", 165, y, 0, 50, 30, 1.0, 1.0,
                                       0x000000ff, 150);
 
       clickDelay = tonumber(clickDelay);
@@ -239,8 +291,8 @@ function promptDelays()
         clickDelay = 150;
       end
 	y = y + 50;
-      lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
-      is_done, popDelay = lsEditBox("delay2", 160, y, 0, 50, 30, 1.0, 1.0,
+      lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
+      is_done, popDelay = lsEditBox("delay2", 165, y, 0, 50, 30, 1.0, 1.0,
                                       0x000000ff, 300);
       popDelay = tonumber(popDelay);
       if not popDelay then
@@ -249,10 +301,12 @@ function promptDelays()
         popDelay = 300;
       end
 
-	y = y + 80
-      lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Click Delay: Hover/Select each node.");
-	y = y + 18
-      lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Popup Delay: Wait for Popup to close.");
+	y = y + 55
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Hover / Select each node delay.");
+	y = y + 16
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay: Wait for / Close Popup delay.");
+	y = y + 16
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Decrease values to run faster (try increments of 50)");
 
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
