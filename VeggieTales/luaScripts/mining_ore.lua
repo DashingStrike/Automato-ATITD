@@ -201,9 +201,9 @@ function getPoints()
     y = y + 16;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "2) Make sure chat is MINIMIZED!");
     y = y + 40;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mining: " .. ore);
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Ore:  " .. ore);
     y = y + 16;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Select " .. nodeleft .. " nodes to automatically mine.");
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Select " .. nodeleft .. " more nodes to activate auto-mine!");
     y = y + 30;
     local start = math.max(1, #clickList - 20);
     local index = 0;
@@ -316,7 +316,6 @@ function promptDelays()
   while not is_done do
     checkBreak();
     local y = 10;
-
     lsPrint(12, y, 0, 0.8, 0.8, 0xffffffff,
             "Key / Click to Select Nodes:");
     y = y + 35;
