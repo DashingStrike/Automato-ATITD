@@ -501,11 +501,7 @@ function labTick(region, state)
 		else
 			statusScreen("Could not find start Essential, updating menu");
 			--otherwise, search for place, and and update the menu
-			local image2
-			image2 = srFindImage("PlaceEssence.png");
-			if image2 then
-				srClickMouseNoMove(image2[0] -2, image2[1] - 3);
-			end
+			srClickMouseNoMove(t[0] + 10, t[1] + 5);
 			lsSleep(200);
 		end
 	end
