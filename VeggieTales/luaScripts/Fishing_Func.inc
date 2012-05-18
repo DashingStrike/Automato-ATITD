@@ -87,6 +87,7 @@ CL_Fish = {
 "Chatlog_Fish_Abdju.png",
 "ChatLog_Fish_Ayu.png",
 "Chatlog_Fish_BayLobster.png",
+"Chatlog_Fish_BottlenoseSquid.png",
 "Chatlog_Fish_Camelfish.png",
 "Chatlog_Fish_Carp.png",
 "Chatlog_Fish_Catfish.png",
