@@ -12,7 +12,7 @@ askText = singleLine([[
   corner of the screen.
 ]]);
 
-wmText = "Tap Ctrl on Wood Planes or Carpentry Benches to open and pin.";
+wmText = "Tap control on Wood Planes or Carpentry Benches to open and pin.";
 
 --Amount of time to pause after clicking the plane woods button (ms)
 pause_time = 3000; 
@@ -28,13 +28,13 @@ function planeBoards()
   while 1 do
     -- Click pin ups to refresh the window
     clickAllImages("ThisIs.png");
-    sleepWithStatusPause(200, "Refreshing");
+    sleepWithStatus(200, "Refreshing");
 
     image_name = "PlaneAPiece.png";
     
     -- Find buttons and click them!
     local clickCount = clickAllImages("PlaneAPiece.png");
-    sleepWithStatusPause(pause_time, "Clicked " .. clickCount .. " windows");
+    sleepWithStatus(pause_time, "Clicked " .. clickCount .. " windows");
   end
-  return quitMessage;
+  return quit_message;
 end

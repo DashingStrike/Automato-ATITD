@@ -5,32 +5,6 @@
 -- DO NOT INCLUDE THIS FILE! Include common.inc instead
 --
 
--- Time to wait between iterations when polling for state change.
-tick_delay = 10;
-
-quitMessage = "Macro aborted by user";
-
--------------------------------------------------------------------------------
--- singleLine(message)
---
--- Useful for embedding long text messages in code.
---
--- Converts a multi-line text blob into a single line. Whitespace at
--- the beginning and end is removed. Any newline followed by
--- whitespace is replaced by a single space.
---
--- message -- Blob of text to convert
--------------------------------------------------------------------------------
-
-function singleLine(message)
-  if not message then
-    error("Incorrect number of arguments for singleLine()");
-  end
-  local str = string.gsub(message, "^%s+", "");
-  str = string.gsub(message, "%s+$", "");
-  return string.gsub(str, "\n%s*", " ");
-end
-
 focusMessage = singleLine([[
   Switch focus back to client window if necessary, then press shift
 ]]);
@@ -43,35 +17,22 @@ focusMessage = singleLine([[
 
 function checkBreak()
   if lsShiftHeld() and lsControlHeld() then
-    error(quitMessage);
+    error(quit_message);
   end
-end
-
--------------------------------------------------------------------------------
--- checkPause()
---
--- Pause the macro if the user is pressing both shift and alt.
--------------------------------------------------------------------------------
-
-function checkPause()
-  checkBreak();
-  if lsAltHeld() and lsShiftHeld() then
+  if allow_pause and lsAltHeld() and lsShiftHeld() then
     -- Pause
     while lsAltHeld() or lsShiftHeld() do
-      statusScreen("Please release Alt+Shift", 0x808080ff);
-      checkBreak();
+      statusScreen("Please release Alt+Shift", 0x808080ff, false);
     end
     local done = false;
     while not done do
       local unpaused = lsButtonText(lsScreenX - 110, lsScreenY - 60,
 				    z, 100, 0xFFFFFFff, "Unpause");
-      statusScreen("Hold Alt+Shift to resume", 0xFFFFFFff);
-      checkBreak();
+      statusScreen("Hold Alt+Shift to resume", 0xFFFFFFff, false);
       done = (unpaused or (lsAltHeld() and lsShiftHeld()));
     end
     while lsAltHeld() or lsShiftHeld() do
-      statusScreen("Please release Alt+Shift", 0x808080ff);
-      checkBreak();
+      statusScreen("Please release Alt+Shift", 0x808080ff, false);
     end
   end
 end
@@ -110,7 +71,7 @@ function askForWindow(message)
     lsDoFrame();
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100,
                     0xFFFFFFff, "Exit") then
-      error(quitMessage);
+      error(quit_message);
     end
     lsSleep(tick_delay);
     checkBreak();
@@ -138,7 +99,7 @@ function askForFocus()
       lsDoFrame();
       if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100,
                       0xFFFFFFff, "Exit") then
-        error(quitMessage);
+        error(quit_message);
       end
       lsSleep(tick_delay);
       checkBreak();
@@ -152,51 +113,41 @@ function askForFocus()
 end
 
 -------------------------------------------------------------------------------
--- statusScreen(message, color, can_pause)
+-- statusScreen(message, color, allow_break)
 --
 -- Print status message and a cancel button.
 --
 -- message (optional) -- status to show user
 -- color (optional) -- color of message (defaults to white)
--- can_pause (optional) -- allow the user to pause (defaults to false)
+-- allow_break (optional) -- allow the user to break/pause (defaults to true)
 -------------------------------------------------------------------------------
 
-function statusScreen(message, color, can_pause)
+function statusScreen(message, color, allow_break)
   if not message then
     message = "";
   end
   if not color then
     color = 0xFFFFFFff;
   end
+  if allow_break == nil then
+    allow_break = true;
+  end
   lsPrintWrapped(10, 80, 0, lsScreenX - 20, 0.8, 0.8, color, message);
   if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100,
 		  0xFFFFFFff, "End script") then
-    error(quitMessage);
+    error(quit_message);
   end
-  lsPrint(10, 10, 0, 0.7, 0.7, 0xB0B0B0ff,
-	  "Hold Ctrl+Shift to end this script.");
-  if not can_pause then
+  if allow_break then
+    lsPrint(10, 10, 0, 0.7, 0.7, 0xB0B0B0ff,
+	    "Hold Ctrl+Shift to end this script.");
+    if allow_pause then
+      lsPrint(10, 24, 0, 0.7, 0.7, 0xB0B0B0ff,
+	      "Hold Alt+Shift to pause this script.");
+    end
     checkBreak();
-  else
-    lsPrint(10, 24, 0, 0.7, 0.7, 0xB0B0B0ff,
-	    "Hold Alt+Shift to pause this script.");
-    checkPause();
   end
   lsSleep(tick_delay);
   lsDoFrame();
-end
-
--------------------------------------------------------------------------------
--- statusScreenPause(message, color)
---
--- Print status message, a cancel button, and a pause button.
---
--- message (optional) -- status to show user
--- color (optional) -- color of message (defaults to white)
--------------------------------------------------------------------------------
-
-function statusScreenPause(message, color)
-  statusScreen(message, color, true);
 end
 
 -------------------------------------------------------------------------------
@@ -208,10 +159,9 @@ end
 -- delay_time -- minimum amount of time to wait
 -- message (optional) -- status to show user
 -- color (optional) -- color of status message
--- can_pause (optional) -- allow the user to pause (defaults to false)
 -------------------------------------------------------------------------------
 
-function sleepWithStatus(delay_time, message, color, can_pause)
+function sleepWithStatus(delay_time, message, color)
   if not color then
     color = 0xffffffff;
   end
@@ -225,29 +175,10 @@ function sleepWithStatus(delay_time, message, color, can_pause)
       lsPrintWrapped(10, 50, 0, lsScreenX - 20, 1, 1, 0xd0d0d0ff,
 		     "Waiting " .. time_left .. "ms...");
     end
-    statusScreen(message, color, can_pause);
+    statusScreen(message, color);
     lsSleep(tick_delay);
   end
 end
-
--------------------------------------------------------------------------------
--- sleepWithStatusPause(delay_time, message, color)
---
--- Waits at least delay_time before returning. Show the message and
--- allow the user to cancel or pause the macro while waiting.
---
--- delay_time -- minimum amount of time to wait
--- message (optional) -- status to show user
--- color (optional) -- color of status message
--------------------------------------------------------------------------------
-
-function sleepWithStatusPause(delay_time, message, color)
-  if not delay_time then
-    error("Incorrect number of arguments for sleepWithStatusPause()");
-  end
-  sleepWithStatus(delay_time, message, color, true);
-end
-
 
 -------------------------------------------------------------------------------
 -- promptNumber(prompt_string, default_value, scale)
@@ -290,12 +221,12 @@ function promptNumber(prompt_string, default_value, scale)
     end
     
     if is_done and not value then
-      error(quitMessage);
+      error(quit_message);
     end
     
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100,
 		    0xFFFFFFff, "End script") then
-      error(quitMessage);
+      error(quit_message);
     end
     
     if not tonumber(value) then

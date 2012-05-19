@@ -95,7 +95,7 @@ function promptRun()
     end
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
                     "End script") then
-      error(quitMessage);
+      error(quit_message);
     end
 
     lsSleep(50);
@@ -107,16 +107,16 @@ end
 function clickSequence(count)
   for i=1,count do
     for j=1,#clickList do
-      checkPause();
+      checkBreak();
       safeClick(clickList[j][1], clickList[j][2]);
 
       local message = "Pass " .. i .. "/" .. count .. " -- ";
       message = message .. "Clicked " .. j .. "/" .. #clickList .. "\n";
       if is_stats then
-	sleepWithStatusPause(500, message .. "Waiting between clicks");
+	sleepWithStatus(500, message .. "Waiting between clicks");
         waitForStats(message .. "Waiting For Stats");
       else
-        sleepWithStatusPause(clickDelay, message .. "Waiting Fixed Delay");
+        sleepWithStatus(clickDelay, message .. "Waiting Fixed Delay");
       end
     end
   end
@@ -130,7 +130,7 @@ function doit()
   while not is_done do
     local count = promptRun();
     if count > 0 then
-      askForWindow(focusMessage);
+      askForFocus();
       clickSequence(count);
     else
       is_done = true;
@@ -141,7 +141,7 @@ end
 function waitForStats(message)
   local stats = findStats();
   while not stats do
-    sleepWithStatusPause(500, message, 0xff3333ff);
+    sleepWithStatus(500, message, 0xff3333ff);
     stats = findStats();
   end
 end

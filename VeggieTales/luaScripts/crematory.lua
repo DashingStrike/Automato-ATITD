@@ -11,7 +11,7 @@ askText = singleLine([[
   Automatically runs one or more crematories.
 ]]);
 
-wmText = "Tap shift on Crematories to open and pin.";
+wmText = "Tap control on Crematories to open and pin.";
 
 OPP = 0;
 SAME_UP = 1;
@@ -80,7 +80,7 @@ end
 
 function runCrematories()
   promptLoad();
-  askForWindow(focusMessage);
+  askForFocus();
   for i=1,passCount do
     currentPass = i;
     takeAll();
@@ -558,7 +558,7 @@ function loadSingle(pos, offset, type)
   sleepWithStatus(200, "Waiting to load");
   safeClick(pos[0]+5, pos[1]+5+16);
   local limePos = waitForImage("crem-limestone.png", maxWait,
-			       "Loading " .. type .. " Into Crematory", 1000);
+			       "Loading " .. type .. " Into Crematory");
   if limePos then
     safeClick(limePos[0] + 5, limePos[1] + 5 + offset);
     local maxPos = waitForImage("crem-max.png", maxWait,

@@ -5,11 +5,8 @@
 -- DO NOT INCLUDE THIS FILE! Include common.inc instead
 --
 
--- Time to wait between independent clicks
-click_delay = 50;
-
 -------------------------------------------------------------------------------
--- drag()
+-- drag(sourceX, sourceY, destX, destY, timeout)
 --
 -- Drag the mouse from (sourceX, sourceY) to (destX, destY)
 -------------------------------------------------------------------------------
@@ -18,11 +15,14 @@ function drag(sourceX, sourceY, destX, destY)
   if not sourceX or not sourceY or not destX or not destY then
     error("Incorrect number of arguments for drag()");
   end
+  if not timeout then
+    timeout = 500;
+  end
   local spot = getWaitSpot(destX, destY);
   srSetMousePos(sourceX, sourceY);
   srMouseDown(sourceX, sourceY, 0);
   srSetMousePos(destX, destY);
-  local result = waitForChange(spot, 500);
+  local result = waitForChange(spot, timeout);
   srMouseUp(destX, destY, 0);
   return result;
 end
@@ -57,7 +57,7 @@ function safeBegin()
 end
 
 -------------------------------------------------------------------------------
--- safeClick()
+-- safeClick(x, y, rightClick)
 --
 -- Click the mouse without moving it.
 -------------------------------------------------------------------------------
@@ -71,7 +71,7 @@ function safeClick(x, y, rightClick)
 end
 
 -------------------------------------------------------------------------------
--- safeDrag()
+-- safeDrag(sourceX, sourceY, destX, destY, timeout)
 -------------------------------------------------------------------------------
 
 function safeDrag(sourceX, sourceY, destX, destY)
@@ -79,11 +79,44 @@ function safeDrag(sourceX, sourceY, destX, destY)
     error("Incorrect number of arguments for safeDrag()");
   end
   safeBegin();
-  return drag(sourceX, sourceY, destX, destY);
+  return drag(sourceX, sourceY, destX, destY, timeout);
 end
 
 -------------------------------------------------------------------------------
--- clickAllImages(image_name, tol)
+-- clickAllPoints(points, offsetX, offsetY, rightClick)
+--
+-- Click all points in a list.
+--
+-- offsetX, offsetY (optional) -- distance from each point to click (default 5)
+-- rightClick (optional) -- make each click a right click (default false)
+-------------------------------------------------------------------------------
+
+function clickAllPoints(points, offsetX, offsetY, rightClick)
+  if not points then
+    error("Incorrect number of arguments for clickAllPoints()");
+  end
+  if not offsetX then
+    offsetX = 5;
+  end
+  if not offsetY then
+    offsetY = 5;
+  end
+
+  for i=1, #points  do
+    if click_delay > 0 and #points > 1 then
+      statusScreen("Clicking " .. #points .. " button(s)...");
+    end
+    safeClick(points[i][0]+offsetX, points[i][1]+offsetY, rightClick);
+    lsSleep(click_delay);
+  end
+  if click_delay > 0 and #points > 1 then
+    statusScreen("Done clicking (" .. #points .. " clicks).");
+  end
+  lsSleep(click_delay);
+end
+
+-------------------------------------------------------------------------------
+-- clickAllImages(image_name, offsetX, offsetY, rightClick, tol)
 --
 -- Find all positions matching a given image and click them.
 --
@@ -100,26 +133,21 @@ function clickAllImages(image_name, offsetX, offsetY, rightClick, tol)
   if not image_name then
     error("Incorrect number of arguments for clickAllImages()");
   end
-  if not offsetX then
-    offsetX = 5;
-  end
-  if not offsetY then
-    offsetY = 5;
+
+  srReadScreen();
+  local buttons = findAllImages(image_name, nil, tol);
+  clickAllPoints(buttons);
+  return #buttons;
+end
+
+function clickAllText(text, offsetX, offsetY, rightClick)
+  if not text then
+    error("Incorrect number of arguments for clickAllText()");
   end
 
   srReadScreen();
-  local buttons = findAllImages(image_name, tol);
-  for i=1, #buttons  do
-    if click_delay > 0 then
-      statusScreen("Clicking " .. #buttons .. " button(s)...");
-    end
-    safeClick(buttons[i][0]+offsetX, buttons[i][1]+offsetY, rightClick);
-    lsSleep(click_delay);
-  end
-  if click_delay > 0 then
-    statusScreen("Done clicking (" .. #buttons .. " clicks).");
-  end
-  lsSleep(click_delay);
+  local buttons = findAllText(text);
+  clickAllPoints(buttons);
   return #buttons;
 end
 

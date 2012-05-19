@@ -108,25 +108,154 @@ function isHomogenous(list)
 end
 
 -------------------------------------------------------------------------------
--- waitForImage(file, timeout, message, tol)
+-- waitForPixel(anchor, offset, color, tolerance, timeout)
+--
+-- Waits for a given pixel to change to a particular color.
+--
+-- anchor -- Base location to check
+-- offset -- Offset from base location
+-- color -- Color to wait for
+-- tolerance -- 0 means exact match, >= 255 means any color (default 0)
+-- message -- Message to print while waiting (default none)
+-- timeout -- Max time to wait in ms (default forever)
+--
+-- Returns true if the colors match within tolerance.
+-------------------------------------------------------------------------------
+
+function waitForPixel(anchor, offset, color, tolerance, message, timeout)
+  if not anchor or not offset or not color then
+    error("Incorrect number of arguments for waitForPixel()");
+  end
+  return waitForPixelList(anchor, offset, {color}, tolerance, timeout);
+end
+
+-------------------------------------------------------------------------------
+-- waitForPixelList(anchor, offset, colors, tolerance, timeout)
+--
+-- Waits for a given pixel to change to one from a list of colors.
+--
+-- anchor -- Base location to check
+-- offset -- Offset from base location
+-- colors -- Colors to wait for
+-- tolerance -- 0 means exact match, >= 255 means any color (default 0)
+-- message -- Message to print while waiting (default none)
+-- timeout -- Max time to wait in ms (default forever)
+--
+-- Returns true if the colors match within tolerance.
+-------------------------------------------------------------------------------
+
+function waitForPixelList(anchor, offset, colors, tolerance, message, timeout)
+  if not anchor or not offset or not colors then
+    error("Incorrect number of arguments for waitForPixelList()");
+  end
+  local success = false;
+  local done = false;
+  local timestart = lsGetTimer();
+  while not done do
+    if message then
+      statusScreen(message);
+    else
+      checkBreak();
+    end
+    lsSleep(tick_time);
+    if pixelMatchList(anchor, offset, colors, tolerance) then
+      done = true;
+      success = true;
+      break;
+    end
+    if timeout and lsGetTimer() > timestart + timeout then
+      done = true;
+    end
+  end
+  return success;
+end
+
+function iterateImage(args)
+  local file = args[1];
+  local range = args[2];
+  local tol = args[3];
+  if not tol then
+    tol = 5000;
+  end
+  srReadScreen();
+  return srFindImageInRange(file, range.x, range.y,
+			    range.width, range.height, tol);
+end
+
+function iterateText(args)
+  local text = args[1];
+  local range = args[2];
+  local flags = args[3];
+  srReadScreen();
+  return findText(text, range, flag);
+end
+
+function waitForFunction(f, args, timeout, message)
+  if not f then
+    error("Incorrect number of arguments for waitForFunction()");
+  end
+  local result = nil;
+  local done = false;
+  local timestart = lsGetTimer();
+  while not done do
+    if message then
+      statusScreen(message);
+    else
+      checkBreak();
+    end
+    lsSleep(tick_time);
+    result = f(args);
+    if result ~= nil or (timeout and lsGetTimer() > timestart + timeout) then
+      done = true;
+    end
+  end
+  return result;
+end
+
+-------------------------------------------------------------------------------
+-- waitForImage(file, timeout, message, range, tol)
 --
 -- Wait for a particular image to appear subject to a timeout in ms.
 --
 -- file -- filename of image to search for
--- timeout -- maximum time to wait in ms
+-- timeout (optional) -- maximum time to wait in ms (defaults to forever)
 -- message (optional) -- Status message to show while waiting
+-- range (optional) -- box to restrict search
 -- tol (optional) -- tolerance for comparison
 --
 -- returns image on success or none on failure
 -------------------------------------------------------------------------------
 
-function waitForImage(file, timeout, message, tol)
-  local xyWindowSize = srGetWindowSize();
-  if not file or not timeout then
+function waitForImage(file, timeout, message, range, tol)
+  if not file then
     error("Incorrect number of arguments for waitForImage()");
   end
-  return waitForImageInRange(file, 0, 0, xyWindowSize[0], xyWindowSize[1],
-                             timeout, message, tol);
+  if not range then
+    local size = srGetWindowSize();
+    range = makeBox(0, 0, size[0], size[1]);
+  end
+  return waitForFunction(iterateImage, {file, range, tol}, timeout, message);
+end
+
+-------------------------------------------------------------------------------
+-- waitForText(text, timeout, message, range, flags)
+--
+-- Wait for a particular image to appear subject to a timeout in ms.
+--
+-- text -- text string to search for
+-- timeout (optional) -- maximum time to wait in ms (defaults to forever)
+-- message (optional) -- Status message to show while waiting
+-- range (optional) -- box to restrict search
+-- flags (optional) -- same flags as findText()
+--
+-- returns image on success or none on failure
+-------------------------------------------------------------------------------
+
+function waitForText(text, timeout, message, range, flags)
+  if not text then
+    error("Incorrect number of arguments for waitForText()");
+  end
+  return waitForFunction(iterateText, {text, range, flags}, timeout, message);
 end
 
 -------------------------------------------------------------------------------
@@ -155,6 +284,8 @@ function waitForImageInRange(file, x, y, width, height, timeout, message, tol)
   while not done do
     if message then
       statusScreen(message);
+    else
+      checkBreak();
     end
     lsSleep(tick_time);
     srReadScreen();

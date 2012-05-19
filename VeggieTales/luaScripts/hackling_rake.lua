@@ -71,7 +71,7 @@ function doit()
 
 		
 		if not stats_black and not stats_black2 and not stats_black3 then
-			sleepWithStatusPause(1200, "Next Step: " .. step .. "/4 - " .. task .. "\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. num_loops*10 .. "\n2) Tow Seperated: " .. tow .. "/" .. num_loops*10 .. "\n3) Lint Refined: " .. lint .. "/" .. num_loops*10 .. "\n4) Cleanings: " .. clean .. "/" .. num_loops .. "\n----------------------------------------------\nFlax Processed: " .. (loop_count-1)*10 .. "\nFlax Remaining: " .. num_flax - ((loop_count-1)*10) .. "\n" .. warning);
+			sleepWithStatus(1200, "Next Step: " .. step .. "/4 - " .. task .. "\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. num_loops*10 .. "\n2) Tow Seperated: " .. tow .. "/" .. num_loops*10 .. "\n3) Lint Refined: " .. lint .. "/" .. num_loops*10 .. "\n4) Cleanings: " .. clean .. "/" .. num_loops .. "\n----------------------------------------------\nFlax Processed: " .. (loop_count-1)*10 .. "\nFlax Remaining: " .. num_flax - ((loop_count-1)*10) .. "\n" .. warning);
 
 
 		elseif loop_count > num_loops then
@@ -111,7 +111,7 @@ function doit()
 
 end
 	if num_loops == nil then
-			sleepWithStatusPause(5000, "ALL DONE!\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. clean*10 .. "\n2) Tow Seperated: " .. tow .. "/" .. clean*10 .. "\n3) Lint Refined: " .. lint .. "/" .. clean*10 .. "\n4) Cleanings: " .. clean .. "/" .. clean .. "\n----------------------------------------------\nFlax Processed: " .. (loop_count-1)*10 .. "\nFlax Remaining: " .. num_flax - ((loop_count-1)*10));
+			sleepWithStatus(5000, "ALL DONE!\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. clean*10 .. "\n2) Tow Seperated: " .. tow .. "/" .. clean*10 .. "\n3) Lint Refined: " .. lint .. "/" .. clean*10 .. "\n4) Cleanings: " .. clean .. "/" .. clean .. "\n----------------------------------------------\nFlax Processed: " .. (loop_count-1)*10 .. "\nFlax Remaining: " .. num_flax - ((loop_count-1)*10));
 
 	lsPlaySound("Complete.wav");
 	end

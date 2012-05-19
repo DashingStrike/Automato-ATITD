@@ -24,7 +24,7 @@ function doit()
   local mousePos = askForWindow(askText);
 
   local clickCount = 0;
-	
+  local lastClickTime = lsGetTimer();
   while 1 do
     srReadScreen();
     local warning = "";
@@ -45,15 +45,18 @@ function doit()
     local message = ""
     local color = 0xffffffff;
     if not stats then
-      message = message .. "Waiting (stats not black or not visible). ";
-      color = 0xff3333ff;
+      message = message .. "Waiting (stats not black or not visible).\n\n";
+      if lsGetTimer() - lastClickTime > 60000 then
+	color = 0xff3333ff;
+      end
     else
+      lastClickTime = lsGetTimer();
       safeClick(mousePos[0], mousePos[1]);
       clickCount = clickCount + 1;
       message = message .. "Clicking. ";
     end
     message = message .. clickCount .. " clicks so far. " .. warning;
 
-    sleepWithStatusPause(250, message, color);
+    sleepWithStatus(250, message, color);
   end
 end

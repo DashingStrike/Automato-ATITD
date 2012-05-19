@@ -3,12 +3,39 @@
 -- Common utility functions useful for most macros
 --
 
-assert(loadfile("luaScripts/common_ui.inc"))();
-assert(loadfile("luaScripts/common_wait.inc"))();
-assert(loadfile("luaScripts/common_click.inc"))();
-assert(loadfile("luaScripts/common_find.inc"))();
-assert(loadfile("luaScripts/common_window.inc"))();
-assert(loadfile("luaScripts/common_text.inc"))();
+-- Time to wait between iterations when polling for state change.
+tick_delay = 10;
+
+-- Time to wait between independent clicks
+click_delay = 50;
+
+-- Whether to allow the user to pause the macro
+allow_pause = true;
+
+-- Standard message to print when the user aborts the macro.
+quit_message = "Macro aborted by user";
+
+
+-------------------------------------------------------------------------------
+-- singleLine(message)
+--
+-- Useful for embedding long text messages in code.
+--
+-- Converts a multi-line text blob into a single line. Whitespace at
+-- the beginning and end is removed. Any newline followed by
+-- whitespace is replaced by a single space.
+--
+-- message -- Blob of text to convert
+-------------------------------------------------------------------------------
+
+function singleLine(message)
+  if not message then
+    error("Incorrect number of arguments for singleLine()");
+  end
+  local str = string.gsub(message, "^%s+", "");
+  str = string.gsub(message, "%s+$", "");
+  return string.gsub(str, "\n%s*", " ");
+end
 
 -------------------------------------------------------------------------------
 -- makePoint(x, y)
@@ -29,41 +56,29 @@ function makePoint(x, y)
 end
 
 -------------------------------------------------------------------------------
--- pixelCheck(anchor, offset, color, tolerance)
+-- makeBox(x, y, width, height)
 --
--- Checks to see whether the screen pixel at anchor+offset matches a
--- given color.
+-- Make a table representing a box which bounds a rectangular region.
 --
--- anchor -- Base location to check
--- offset -- Offset from base location
--- color -- Color to check against
--- tolerance -- 0 means exact match, >= 255 means any color
---
--- Returns true if the colors match within tolerance.
+-- x, y -- Position of upper-left corner of the box
+-- width, height -- Size of box
 -------------------------------------------------------------------------------
 
-function pixelMatch(anchor, offset, color, tolerance)
-  local result = true;
-  local screenColor = srReadPixel(anchor[0] + offset[0],
-				  anchor[1] + offset[1]);
-  local diffs = getPixelDiffs(color, math.floor(screenColor/256));
-  for i=1,#diffs do
-    if diffs[i] > tolerance then
-      result = false;
-      break;
-    end
+function makeBox(x, y, width, height)
+  if not x or not y or not width or not height then
+    error("Incorrect number of arguments for makeBox()");
   end
-  return result;
-end
-
-function getPixelDiffs(left, right)
-  local result = {};
-  for i=1,3 do
-    result[i] = math.abs((left % 256) - (right % 256));
-    left = math.floor(left / 256);
-    right = math.floor(right / 256);
-  end
-  return result;
+  return
+    {
+      x = x,
+      y = y,
+      width = width,
+      height = height,
+      left = x,
+      top = y,
+      right = x + width,
+      bottom = y + height
+    };
 end
 
 -------------------------------------------------------------------------------
@@ -85,3 +100,12 @@ function csplit(str,sep)
   end
   return ret
 end
+
+assert(loadfile("luaScripts/common_fix.inc"))();
+assert(loadfile("luaScripts/common_ui.inc"))();
+assert(loadfile("luaScripts/common_wait.inc"))();
+assert(loadfile("luaScripts/common_click.inc"))();
+assert(loadfile("luaScripts/common_find.inc"))();
+assert(loadfile("luaScripts/common_window.inc"))();
+assert(loadfile("luaScripts/common_text.inc"))();
+assert(loadfile("luaScripts/common_gps.inc"))();

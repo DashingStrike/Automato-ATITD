@@ -118,9 +118,11 @@ function openAndPin(x, y, timeout)
   if not x or not y or not timeout then
     error("Incorrect number of arguments for openAndPin()");
   end
-  local result = false;
+  local success = false;
   local spot = getWaitSpot(x+5, y);
   safeBegin();
+  srSetMousePos(x, y);
+  lsSleep(50);
   srClickMouse(x, y, 1);
   lsDoFrame();
   statusScreen("Clicking to open window");
@@ -246,22 +248,26 @@ function closeAllWindows(x, y, width, height)
   if not height then
     height = srGetWindowSize()[1];
   end
-  srReadScreen();
-  local images = findAllImagesInRange("ThisIs.png", x, y, width, height);
-  while #images >= 1 do
-    safeClick(images[#images][0], images[#images][1], 1);
-    sleepWithStatus(200, "Closing Windows");
-    srReadScreen();
-    images = findAllImagesInRange("ThisIs.png", x, y, width, height);
-  end
 
-  srReadScreen();
-  current = srFindImageInRange("UnPin.png", x, y, width, height);
-  while #images >= 1 do
-    safeClick(images[#images][0], images[#images][1], 1);
-    sleepWithStatus(click_delay, "Closing Windows");
-    srReadScreen();
-    images = findAllImagesInRange("UnPin.png", x, y, width, height);
+  local closeImages = {"ThisIs.png", "UnPin.png", "Ok.png"};
+  local closeRight = {1, 1, nil};
+
+  local found = true;
+  while found do
+    found = false;
+    for i=1,#closeImages do
+      local image = closeImages[i];
+      local right = closeRight[i];
+      srReadScreen();
+      local images = findAllImagesInRange(image, x, y, width, height);
+      while #images >= 1 do
+	done = true;
+	safeClick(images[#images][0], images[#images][1], right);
+	sleepWithStatus(200, "Closing Windows");
+	srReadScreen();
+	images = findAllImagesInRange(image, x, y, width, height);
+      end
+    end
   end
 end
 
@@ -345,7 +351,7 @@ function windowManager(title, message, allowCascade, allowWaterGap)
 		   message);
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100,
 		    0xffffffff, "End Script") then
-      error(quitMessage);
+      error(quit_message);
     end
     while lsControlHeld() do
       checkBreak();

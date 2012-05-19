@@ -5,12 +5,12 @@
 
 assert(loadfile("luaScripts/cc_Assist.lua"))();
 
-askText = singleLine([[
-  CC Auto v1.0 (by Tallow, based on Tak's cc program) --
-  Automatically runs many charcoal hearths or ovens
-  simultaneously. Make sure the VT window is in the TOP-RIGHT corner
-  of the screen.
-]]);
+askText = singleLine("
+  CC Auto v1.0 (by Tallow, based on Tak's cc program) --\
+  Automatically runs many charcoal hearths or ovens\
+  simultaneously. Make sure the VT window is in the TOP-RIGHT corner\
+  of the screen.\
+");
 
 BEGIN = 1;
 WOOD = 2;
@@ -21,7 +21,7 @@ FULL = 6;
 
 function ccMenu()
   local passCount = promptNumber("How many passes?", 1, 1.0);
-  askForWindow(focusMessage);
+  askForFocus();
   for i=1,passCount do
     runCommand(buttons[1]);
     ccRun(i, passCount);
@@ -36,7 +36,7 @@ function findOvens()
     if not corner then
       error("Failed to find corner of cc window.");
     end
-    result[i][1] = corner[1] - 102;
+    result[i][1] = corner[1];-- - 102;
   end
   return result;
 end
@@ -66,6 +66,8 @@ function ccRun(pass, passCount)
   local vents = setupVents(ovens);
   local done = false;
   while not done do
+    sleepWithStatus(2000, "(" .. pass .. " / " .. passCount .. ")\n" ..
+		    "Waiting for next tick");
     done = true;
     for i=1,#ovens do
       if not findButton(ovens[i], BEGIN) then
@@ -73,8 +75,6 @@ function ccRun(pass, passCount)
 	done = false;
       end
     end
-    sleepWithStatusPause(2000, "(" .. pass .. " / " .. passCount .. ")\n" ..
-			 "Waiting for next tick");
   end
 end
 
@@ -90,14 +90,15 @@ end
 --px85 = 162
 --px90 = 168
 
-progressGreen = makePoint(70, 174);
-maxDangerGreen = makePoint(150, 162);
-minHeat = makePoint(144, 115);
-minWood = makePoint(104, 139);
-minOxy = makePoint(80, 126);
-maxOxy = makePoint(100, 126);
-maxDanger = makePoint(158, 162);
-minWater = makePoint(67, 150);
+progressGreen = makePoint(70, 174-102);
+maxDangerGreen = makePoint(150, 162-102);
+minHeat = makePoint(147, 115-102);
+minWood = makePoint(98, 139-102);
+minOxy = makePoint(80, 126-102);
+maxOxy = makePoint(100, 126-102);
+maxDanger = makePoint(165, 162-102);
+uberDanger = makePoint(174, 162-102);
+minWater = makePoint(67, 150-102);
 
 greenColor = 0x07FE05;
 barColor = 0x0706FD;
@@ -144,10 +145,14 @@ function processOven(oven, vent)
     end
 
     if pixelMatch(oven, maxDanger, barColor, 8) then
-      -- Danger > 90%
+      -- Danger > 85%
       if not pixelMatch(oven, minWater, barColor, 8) then
 	-- Water < 2.6%
 	clickButton(oven, WATER);
+	-- Splash more water if it > 90%
+	if pixelMatch(oven, uberDanger, barColor, 8) then
+	  clickButton(oven, WATER);
+	end
       end
     end
   end

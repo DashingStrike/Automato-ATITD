@@ -12,25 +12,25 @@ askText = singleLine([[
 
 knownVineNames = {
   { name = "Appreciation",
-    image = "vineyard/Vine_Appreciation.png" },
+    image = "Appreciation" },
   { name = "Balance",
-    image = "vineyard/Vine_Balance.png" },
+    image = "Balance" },
   { name = "Contemplation",
-    image = "vineyard/Vine_Contemplation.png" },
+    image = "Contemplation" },
   { name = "Distraction",
-    image = "vineyard/Vine_Distraction.png" },
+    image = "Distraction" },
   { name = "P Dexaglucose 10S",
-    image = "vineyard/Vine_P_Dexaglucose_10S.png" },
+    image = "" },
   { name = "P FOUR Skin KKKK",
-    image = "vineyard/Vine_P_FOUR_Skin_KKKK.png" },
+    image = "Pascarella FOUR Skin KKKK" },
   { name = "P Rainbow AACCC",
-    image = "vineyard/Vine_P_Rainbow_AACCC.png" },
+    image = "Pascarella Rainbow AACCC" },
   { name = "P Sugar High 11S",
-    image = "vineyard/Vine_P_Sugar_High_11S.png" }
+    image = "Pascarella Sugar High (11S)" }
 };
 
 vineyardActions = { "Tend", "Harvest", "Cutting" };
-vineyardImages = { "", "vineyard/Harvest.png", "vineyards/Cutting.png" };
+vineyardImages = { "", "Harvest the Grapes", "Take a Cutting of the Vine" };
 
 stateNames = {"Fat", "Musty", "Rustle", "Sagging", "Shimmer",
 	      "Shrivel", "Wilting"};
@@ -66,8 +66,9 @@ function doit()
   parseVines();
 
   local status = "";
+  local action = 1;
   while 1 do
-    local action = promptVineyard(status);
+    action = promptVineyard(status, action);
 
     local x, y = srMousePos();
     openAndPin(x, y, 500);
@@ -76,9 +77,15 @@ function doit()
       status = processVineyard();
     else
       srReadScreen();
-      local clickPos = srFindImage(vineyardImages[action]);
+      local clickPos = findText(vineyardImages[action]);
       if clickPos then
-	safeClick(clickPos[0], clickPos[1]);
+	safeClick(clickPos[0] + 5, clickPos[1] + 5);
+	if action == 2 then
+	  local yes = waitForImage("Yes.png", 500);
+	  if yes then
+	    safeClick(yes[0] + 5, yes[1] + 5);
+	  end
+	end
 	tendedCount = tendedCount + 1;
 	status = "(" .. tendedCount .. ") " .. vineyardActions[action]
 	  .. " complete";
@@ -90,16 +97,15 @@ function doit()
   end
 end
 
-function promptVineyard(status)
-  local action = 1;
+function promptVineyard(status, action)
   while not lsControlHeld() do
     local edit = lsButtonText(10, lsScreenY - 30, 0, 120, 0xffffffff,
 			      "Edit Tends");
---    action = lsDropdown("VineyardAction", 80, lsScreenY - 120, 0, 150, action,
---			vineyardActions);
+    action = lsDropdown("VineyardAction", 80, lsScreenY - 120, 0, 150, action,
+			vineyardActions);
     lsPrint(10, lsScreenY - 90, 0, 0.7, 0.7, 0xd0d0d0ff,
 	    "Tap control over a vineyard");
-    statusScreenPause(status);
+    statusScreen(status);
     if edit then
       promptTends();
     end
@@ -135,7 +141,7 @@ function promptTends()
     done = lsButtonText(10, lsScreenY - 30, 0, 100, 0xffffffff, "Done");
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xffffffff,
 		    "End Script") then
-      error(quitMessage);
+      error(quit_message);
     end
     checkBreak();
     lsSleep(tick_delay);
@@ -176,7 +182,7 @@ function promptAdd()
 				"Cancel");
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xffffffff,
 		    "End Script") then
-      error(quitMessage);
+      error(quit_message);
     end
     
     addIndex = lsDropdown("VineAddIndex", 30, 50, 0, 250, addIndex,
@@ -184,10 +190,10 @@ function promptAdd()
     local vineName, vineImage;
     if addIndex == otherIndex then
       local foo;
-      lsPrint(5, 100, 0, 1.0, 1.0, 0xd0d0d0ff, "Name:");
+      lsPrint(5, 100, 0, 1.0, 1.0, 0xd0d0d0ff, "Short Name:");
       foo, vineName = lsEditBox("aVineName", 80, 100, 0, 200, 30, 1.0, 1.0,
 				0x000000ff, "Custom");
-      lsPrint(5, 140, 0, 1.0, 1.0, 0xd0d0d0ff, "Image:");
+      lsPrint(5, 140, 0, 1.0, 1.0, 0xd0d0d0ff, "Full Name:");
       foo, vineImage = lsEditBox("aVineImage", 80, 140, 0, 200, 30, 1.0, 1.0,
 				 0x000000ff, "vineyard/Custom.png");
     else
@@ -197,11 +203,11 @@ function promptAdd()
 
     if vinesUsed[vineName] then
       done = false;
-      lsPrint(10, 220, 10, 0.7, 0.7, 0xFF2020ff, "Vine Name In Use");
+      lsPrint(10, 220, 10, 0.7, 0.7, 0xFF2020ff, "Short Name In Use");
     elseif vineImagesUsed[vineImage] then
       done = false;
-      lsPrint(10, 220, 10, 0.7, 0.7, 0xFF2020ff, "Image In Use");
-    else
+      lsPrint(10, 220, 10, 0.7, 0.7, 0xFF2020ff, "Long Name In Use");
+    elseif string.match(vineImage, ".png$") then
       local status, error = pcall(srImageSize, vineImage);
       if not status then
 	done = false;
@@ -253,7 +259,7 @@ function promptEdit(vine)
 				"Cancel");
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xffffffff,
 		    "End Script") then
-      error(quitMessage);
+      error(quit_message);
     end
 
     checkBreak();
@@ -283,15 +289,17 @@ function processVineyard()
     return "Could not find Vigor";
   end
 
-  local vigor = ocrNumber(vigorPos[0]+44, vigorPos[1], BOLD_SET);
+  local vigorSize = srImageSize("vineyard/Number_Vigor.png")
+  local vigor = ocrNumber(vigorPos[0] + vigorSize[0], vigorPos[1], BOLD_SET);
   if not vigor then
     return "Could not read Vigor";
   end
 
   local vineType = nil;
+  srReadScreen();
   for i=1,#vines do
     lsPrintln("Testing " .. vines[i].image);
-    if srFindImage(vines[i].image, 10000) then
+    if findVine(vines[i].image) then
       lsPrintln("Found " .. vines[i].image);
       vineType = vines[i];
       break;
@@ -319,6 +327,14 @@ function processVineyard()
   return statusSuccess(vineType);
 end
 
+function findVine(image)
+  if string.match(image, ".png$") then
+    return srFindImage(image, 10000);
+  else
+    return findText(image);
+  end
+end
+
 function statusSuccess(vine)
   srReadScreen();
   tendedCount = tendedCount + 1;
@@ -338,7 +354,7 @@ function statusNumber(name)
   local image = "vineyard/Number_" .. name .. ".png"
   local anchor = srFindImage(image);
   if anchor then
-    local number = ocrNumber(anchor[0] + srImageSize(image)[0] + 5,
+    local number = ocrNumber(anchor[0] + srImageSize(image)[0],
 			     anchor[1], BOLD_SET);
     if number then
       result = name .. ": " .. number .. "\n";
@@ -367,6 +383,7 @@ end
 
 function findVineState()
   local result = 0;
+  srReadScreen();
   for i=1,#vineStates do
     if srFindImage(vineStates[i]) then
       result = i;

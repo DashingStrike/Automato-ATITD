@@ -364,7 +364,7 @@ function clickAll(image_name, up)
 	-- Find buttons and click them!
 	srReadScreen();
 	xyWindowSize = srGetWindowSize();
-	local buttons = findAllImages(image_name, 1000);
+	local buttons = findAllImages(image_name, nil, 1000);
 	
 	if #buttons ~= 0 then
 		statusScreen("Clicking " .. #buttons .. "button(s)...");
@@ -502,7 +502,7 @@ function labTick(region, state)
 			statusScreen("Could not find start Essential, updating menu");
 			--otherwise, search for place, and and update the menu
 			local image2
-			image2 = srFindImage("PlaceEssence.png");
+			image2 = srFindImage("Chem/PlaceEssence.png");
 			if image2 then
 				srClickMouseNoMove(image2[0] -2, image2[1] - 3);
 			end
@@ -543,6 +543,7 @@ function doit()
 	labState[1].active = true;
 	
 	while 1 do
+	  statusScreen("Ticking");
 		-- Tick
 		srReadScreen();
 		labWindows2 = findAllRegionsWithText("This is a Chemistry Laboratory");
