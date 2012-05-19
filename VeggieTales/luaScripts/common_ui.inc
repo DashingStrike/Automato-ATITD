@@ -121,6 +121,9 @@ end
 -- color (optional) -- color of message (defaults to white)
 -- allow_break (optional) -- allow the user to break/pause (defaults to true)
 -------------------------------------------------------------------------------
+function statusScreenPause(message, color, allow_break)
+  statusScreen(message, color, allow_break);
+end
 
 function statusScreen(message, color, allow_break)
   if not message then
@@ -160,6 +163,10 @@ end
 -- message (optional) -- status to show user
 -- color (optional) -- color of status message
 -------------------------------------------------------------------------------
+
+function sleepWithStatusPause(delay_time, message, color)
+  sleepWithStatus(delay_time, message, color);
+end
 
 function sleepWithStatus(delay_time, message, color)
   if not color then
