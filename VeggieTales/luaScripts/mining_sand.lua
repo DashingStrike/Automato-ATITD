@@ -317,9 +317,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
   end
-  findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set1 .. " Nodes Worked: " .. table.concat(set1, ", "));
 	worked = worked + 1
+      findClosePopUp();
 
 
   for i = 1, #set2 do
@@ -328,9 +328,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
   end
-  findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set2 .. " Nodes Worked: " .. table.concat(set2, ", "));
 	worked = worked + 1
+      findClosePopUp();
 
 
   for i = 1, #set3 do
@@ -339,9 +339,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
   end
-  findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set3 .. " Nodes Worked: " .. table.concat(set3, ", "));
 	worked = worked + 1
+      findClosePopUp();
 
 
   if #set4 > 0 then
@@ -351,9 +351,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set4 .. " Nodes Worked: " .. table.concat(set4, ", "));
 	worked = worked + 1
+      findClosePopUp();
   end
 
   if #set5 > 0 then
@@ -363,9 +363,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set5 .. " Nodes Worked: " .. table.concat(set5, ", "));
 	worked = worked + 1
+      findClosePopUp();
   end
 
 
@@ -376,9 +376,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set6 .. " Nodes Worked: " .. table.concat(set6, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -389,9 +389,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set7 .. " Nodes Worked: " .. table.concat(set7, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -402,9 +402,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set8 .. " Nodes Worked: " .. table.concat(set8, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -415,9 +415,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set9 .. " Nodes Worked: " .. table.concat(set9, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -428,9 +428,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set10 .. " Nodes Worked: " .. table.concat(set10, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -441,9 +441,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set11 .. " Nodes Worked: " .. table.concat(set11, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -453,9 +453,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set12 .. " Nodes Worked: " .. table.concat(set12, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -466,9 +466,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set13 .. " Nodes Worked: " .. table.concat(set13, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -479,9 +479,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set14 .. " Nodes Worked: " .. table.concat(set14, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -492,9 +492,9 @@ function clickSequence()
 	lsSleep(clickDelay);
 	srKeyEvent('A');
 	end
-	findClosePopUp();
 	statusScreenPause("[" .. worked .. "/" .. sets .. "] " .. #set15 .. " Nodes Worked: " .. table.concat(set15, ", "));
 	worked = worked + 1
+	findClosePopUp();
   end
 
 
@@ -560,13 +560,13 @@ function promptDelays()
       end
 
 	y = y + 55;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Delay before highlighting next node.");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Delay before selecting next node.");
 	y = y + 16;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Decrease value to run faster (try increments of 25)");
 	y = y + 16;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay: After Finalizing, delay to find Popup.");
 	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Change value as last resort to fine tune.");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Change Popup Delay as last resort to fine tune.");
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
         is_done = 1;

@@ -331,7 +331,7 @@ function doit()
 
 
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Pin any number of thistle gardens, edit thistle_new_mix with recipe. This macro should only be used when running mixed upgraded and non upgraded thistle gardens!");
+	askForWindow("Pin any number of thistle gardens, edit thistle_new_mix with recipe. This macro can run any combination of non upgraded and upgraded thistle gardens.");
 	
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';
