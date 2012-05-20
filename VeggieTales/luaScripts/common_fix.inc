@@ -13,11 +13,7 @@
 -------------------------------------------------------------------------------
 
 function regionToBox(region)
-  if not region or #region ~= 4 then
-    return nil;
-  else
-    return makeBox(region[0], region[1], region[2], region[3]);
-  end
+  return makeBox(region[0], region[1], region[2], region[3]);
 end
 
 -------------------------------------------------------------------------------

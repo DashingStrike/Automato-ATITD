@@ -135,8 +135,10 @@ function findAllText(text, window, flag)
   if not window then
     windowList = findAllWindows();
   end
+
   for i=1,#windowList do
-    local current = windowList[i];
+    local current = makeBox(windowList[i].x + 4, windowList[i].y + 3,
+			    windowList[i].width - 8, windowList[i].height - 6);
     if not nopin then
       current = makeBox(current.x, current.y,
 			current.width - 30, current.height);

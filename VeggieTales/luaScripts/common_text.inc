@@ -47,7 +47,7 @@ end
 -- "Wood (154)" if done on a chest with 154 wood.
 -------------------------------------------------------------------------------
 
-function findText(text, isExact)
+function findTextOld(text, isExact)
 	if text == nil then
 		error "No text specified to find";
 	end
