@@ -338,6 +338,10 @@ function findchat(line)
 	
 	if line and line > 0 then
 		Coords = imgs[(#imgs) - line];
+			if not Coords then
+			error 'Main chat tab is not showing or the chat window needs to be adjusted!'
+			end
+
 	end
 	
 	--Find What Happened
