@@ -57,6 +57,10 @@ xyFlaxMenu = {};
 window_w = 174;
 window_h = 100;
 
+FLAX = 0;
+ONIONS = 1;
+plantType = FLAX;
+
 -------------------------------------------------------------------------------
 -- initGlobals()
 --
@@ -89,10 +93,13 @@ function initGlobals()
 
   xyCenter[0] = xyWindowSize[0] / 2 - walk_x_drift;
   xyCenter[1] = xyWindowSize[1] / 2 + walk_y_drift;
-  xyFlaxMenu[0] = xyCenter[0] - 43*pixel_scale;
-  xyFlaxMenu[1] = xyCenter[1] + 0;
-
-
+  if plantType == FLAX then
+    xyFlaxMenu[0] = xyCenter[0] - 43*pixel_scale;
+    xyFlaxMenu[1] = xyCenter[1] + 0;
+  else
+    xyFlaxMenu[0] = xyCenter[0] - 20;
+    xyFlaxMenu[1] = xyCenter[1] - 10;
+  end
 end
 
 -------------------------------------------------------------------------------
@@ -217,10 +224,11 @@ end
 -------------------------------------------------------------------------------
 
 lastPlantPos = null;
+seedImage = imgFlax1;
 
 function getPlantWindowPos()
   srReadScreen();
-  local plantPos = srFindImage(imgFlax1);
+  local plantPos = srFindImage(seedImage);
   if plantPos then
     plantPos[0] = plantPos[0] + 5;
   else
@@ -263,12 +271,20 @@ function doit()
   promptFlaxNumbers();
   askForWindow(askText);
   initGlobals();
+  local startPos = findCoords();
+  if not startPos then
+    error("Could not find clockloc window");
+  end
+
+  drawWater();
 
   for loop_count=1, num_loops do
     local finalPos = plantAndPin(loop_count);
     dragWindows(loop_count);
-    harvestFlax(loop_count);
-    walkHome(loop_count, finalPos);
+    harvestAll(loop_count);
+--    walkHome(loop_count, finalPos);
+    walkHome(loop_count, startPos);
+    drawWater();
   end
   lsPlaySound("Complete.wav");
 end
@@ -311,7 +327,7 @@ function plantAndPin(loop_count)
                   xyCenter[1] + walk_px_y*dy[dxi], 0);
         local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
         lsSleep(walk_time);
-        waitForStasis(spot, 1000);
+        waitForStasis(spot, 1500);
         dt = dt - 1;
         if dt == 1 then
           dxi = dxi + 1;
@@ -349,29 +365,51 @@ end
 function plantHere(xyPlantFlax, y_pos)
   -- Plant
   lsPrintln('planting ' .. xyPlantFlax[0] .. ',' .. xyPlantFlax[1]);
+  local bed = xyFlaxMenu;
   local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
   safeClick(xyPlantFlax[0], xyPlantFlax[1], 0);
+  lsSleep(click_delay);
 
-  local plantSuccess = waitForChange(spot, 1500);
-  if not plantSuccess then
-    --error "No plant was placed. Abort this run.";
-    return false;
+
+  if plantType == ONIONS then
+--    waitForChange(spot, 500);
+
+
+
+--define a global (prob not idea) to pass to onions_stable to refresh plant window, in case we used last seed and onions does not appear anymore
+plantX = xyPlantFlax[0];
+plantY = xyPlantFlax[1];
+
+
+    bed = nil;
+    while not bed do
+      bed = searchForGreen(xyFlaxMenu);
+    end
+    if not bed then
+      error "Could not find green. Abort this run.";
+      return false;
+    end
+  else
+    local plantSuccess = waitForChange(spot, 1500);
+    if not plantSuccess then
+      error "No plant was placed. Abort this run.";
+      return false;
+    end
   end
 
-
   -- Bring up menu
-  lsPrintln('menu ' .. xyFlaxMenu[0] .. ',' .. xyFlaxMenu[1]);
-  if not openAndPin(xyFlaxMenu[0], xyFlaxMenu[1], 750) then
-    --error "No window came up. Abort this run.";
+  lsPrintln('menu ' .. bed[0] .. ',' .. bed[1]);
+  if not openAndPin(bed[0], bed[1], 3500) then
+    error "No window came up. Abort this run.";
     return false;
   end
 
 
   -- Check for window size
-  checkWindowSize(xyFlaxMenu[0], xyFlaxMenu[1]);
+  checkWindowSize(bed[0], bed[1]);
 
   -- Move window into corner
-  stashWindow(xyFlaxMenu[0] + 5, xyFlaxMenu[1], BOTTOM_RIGHT);
+  stashWindow(bed[0] + 5, bed[1], BOTTOM_RIGHT);
   return true;
 end
 
@@ -388,13 +426,13 @@ function dragWindows(loop_count)
 end
 
 -------------------------------------------------------------------------------
--- harvestFlax(loop_count)
+-- harvestAll(loop_count)
 --
 -- Harvest all the flax or seeds and clean up the windows afterwards.
 -------------------------------------------------------------------------------
 
-function harvestFlax(loop_count)
-  local did_harvest=false;
+function harvestAll(loop_count)
+  local did_harvest = false;
   local harvestLeft = 0;
   local seedIndex = 1;
   local seedWave = 1;
@@ -496,19 +534,21 @@ function walkHome(loop_count, finalPos)
 		  srGetWindowSize()[1]);
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
 
+  walkTo(finalPos);
+
   -- Walk back
-  for x=1, finalPos[0] do
-    local spot = getWaitSpot(xyCenter[0] - walk_px_x, xyCenter[1]);
-    safeClick(xyCenter[0] - walk_px_x, xyCenter[1], 0);
-    lsSleep(walk_time);
-    waitForStasis(spot, 1000);
-  end
-  for x=1, -(finalPos[1]) do
-    local spot = getWaitSpot(xyCenter[0], xyCenter[1] + walk_px_y);
-    safeClick(xyCenter[0], xyCenter[1] + walk_px_y, 0);
-    lsSleep(walk_time);
-    waitForStasis(spot, 1000);
-  end
+--  for x=1, finalPos[0] do
+--    local spot = getWaitSpot(xyCenter[0] - walk_px_x, xyCenter[1]);
+--    safeClick(xyCenter[0] - walk_px_x, xyCenter[1], 0);
+--    lsSleep(walk_time);
+--    waitForStasis(spot, 1000);
+--  end
+--  for x=1, -(finalPos[1]) do
+--    local spot = getWaitSpot(xyCenter[0], xyCenter[1] + walk_px_y);
+--    safeClick(xyCenter[0], xyCenter[1] + walk_px_y, 0);
+--    lsSleep(walk_time);
+--    waitForStasis(spot, 1000);
+--  end
 end
 
 -------------------------------------------------------------------------------
