@@ -64,14 +64,14 @@ function clickAll(image_name, up)
 			end
 		end
 		statusScreen("Done clicking (" .. #buttons .. " clicks).");
-		lsSleep(50);
+		lsSleep(150);
 	end
 end
 
 recipe = "aaaaaaaaaaaaaaaaammmmmmmmmmmmmmmmmmmbmmbmmbmmbmmmqm"
 
 
-keyDelay = 50;
+keyDelay = 150;
 function doit()
 	local num_rounds;
 	num_rounds = promptNumber("How many thermos?", 1);
