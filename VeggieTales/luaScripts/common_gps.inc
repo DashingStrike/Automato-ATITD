@@ -1,7 +1,7 @@
 function findCoords()
   lsPrintln("findCoords");
   local result = nil;
-  local anchor = findText("Year 2,");
+  local anchor = findText("2,");
   if anchor then
     lsPrintln("anchor");
     local window = getWindowBorders(anchor[0], anchor[1]);

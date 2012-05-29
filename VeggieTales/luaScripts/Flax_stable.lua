@@ -276,6 +276,8 @@ function doit()
     error("Could not find clockloc window");
   end
 
+  drawWater();
+
   for loop_count=1, num_loops do
     local finalPos = plantAndPin(loop_count);
     dragWindows(loop_count);
@@ -325,7 +327,7 @@ function plantAndPin(loop_count)
                   xyCenter[1] + walk_px_y*dy[dxi], 0);
         local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
         lsSleep(walk_time);
-        waitForStasis(spot, 1000);
+        waitForStasis(spot, 1500);
         dt = dt - 1;
         if dt == 1 then
           dxi = dxi + 1;
@@ -366,9 +368,17 @@ function plantHere(xyPlantFlax, y_pos)
   local bed = xyFlaxMenu;
   local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
   safeClick(xyPlantFlax[0], xyPlantFlax[1], 0);
+  lsSleep(click_delay);
+
 
   if plantType == ONIONS then
 --    waitForChange(spot, 500);
+
+--define a global (prob not idea) to pass to onions_stable to refresh plant window, in case we used last seed and onions does not appear anymore
+plantX = xyPlantFlax[0];
+plantY = xyPlantFlax[1];
+
+
     bed = nil;
     while not bed do
       bed = searchForGreen(xyFlaxMenu);
@@ -387,7 +397,7 @@ function plantHere(xyPlantFlax, y_pos)
 
   -- Bring up menu
   lsPrintln('menu ' .. bed[0] .. ',' .. bed[1]);
-  if not openAndPin(bed[0], bed[1], 1500) then
+  if not openAndPin(bed[0], bed[1], 3500) then
     error "No window came up. Abort this run.";
     return false;
   end

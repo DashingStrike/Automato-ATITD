@@ -1,22 +1,58 @@
 assert(loadfile("luaScripts/Flax_stable.lua"))();
 plantType = ONIONS;
 
+--walk_px_y = 170;
+--walk_px_x = 190;
+
+walk_px_y = 140;  --Override flax default
+walk_px_x = 170; --Override flax default
+
+walk_time = 500; --Override flax default, allow a few ms more in case lag messed the walk. Less forgiving, by lag, on tight grids from onions vs flax.
+
+
+ -- This is clicking each window very slow. So it dont do a double or triple watering animation on same plant (caused by clicking to fast)
+-- Too many double or triple watering animations will steal some of the time. Just as long as it clicks all windows before you can walk from first to last plant is fine.
+
+click_water_delay = 1400;
+
+
+refresh_time = 200; --Override flax_stable default
+click_delay = 150;
+
+
+-- timing = 24000; --default
+-- harvest_timing = 15000; --default
+
+
+
 seedImage = "OnionSeeds.png";
 waterImage = "WaterThese.png";
 harvestImage = "HarvestThese.png";
 
-walk_px_y = 170;
-walk_px_x = 190;
-
 function harvestAll(loop_count)
+
+if grid_w < 4 then
+set = "Small";
+timing = 3000;
+harvest_timing = 13000;
+else
+set = "Large";
+timing = 0;
+harvest_timing = 14000;
+end
+
+
   for i=1,4 do
     srReadScreen();
     local waters = findAllImages(waterImage);
     for i=#waters,1,-1 do
-      safeClick(waters[i][0] + 5, waters[i][1] + 5);
-      lsSleep(click_delay);
+--      safeClick(waters[i][0] + 5, waters[i][1] + 5);
+      srClickMouse(waters[i][0] + 5, waters[i][1] + 5);
+      statusScreen("[" .. i .. "] Watering plants...");
+      lsSleep(click_water_delay);
     end
-    sleepWithStatus(20000, "(" .. loop_count .. "/" .. num_loops
+
+    sleepWithStatus(timing, "(" .. loop_count .. "/" .. num_loops
 		    .. ") Waiting for growth");
   end
   local done = false;
@@ -28,6 +64,7 @@ function harvestAll(loop_count)
       safeClick(harvests[i][0], harvests[i][1]);
       lsSleep(click_delay);
       safeClick(harvests[i][0], harvests[i][1] - 15, 1);
+      statusScreen("[" .. i .. "] Harvesting plants...");
       lsSleep(click_delay);
     end
     local waters = findAllImages(waterImage);
@@ -35,7 +72,16 @@ function harvestAll(loop_count)
     lsSleep(10);
     checkBreak();
   end
-  sleepWithStatus(15000, "Harvesting");
+--  sleepWithStatus(15000, "Harvesting");
+    sleepWithStatus(harvest_timing, "Harvesting");
+
+
+--Refresh plant window in case we used our last seed and plant window is now displaying a blank screen.
+--srSetMousePos(plantX-7, plantY);
+--lsSleep(100);
+safeClick(plantX-7, plantY);
+
+
 end
 
 function searchForGreen(centerBad)
@@ -45,15 +91,18 @@ function searchForGreen(centerBad)
   local center = makePoint(srGetWindowSize()[0]/2,
 			   srGetWindowSize()[1]/2);
   lsPrintln("checkForGreen");
-  checkBreak();
+checkBreak();
 --  local green = 0x4b7420;
 --  local green = 0x557614;
   local green = 0x6c8516;
   local result = nil
   local closestMax = 65000;
   srReadScreen();
-  for y=-70,70 do
-    for x=-70,70 do
+
+--70
+
+  for y=-40,40 do
+    for x=-35,35 do
       local passed = true;
       local vals;
       local current = 0;
@@ -62,7 +111,7 @@ function searchForGreen(centerBad)
 			  center[1] + y + tests[i][1], green);
 	current = vals[1]*vals[1] + vals[3]*vals[3]
 	  + vals[2]*vals[2];
-	if current > 250 then
+	if current > 1000 then
 	  passed = false;
 	  break;
 	end

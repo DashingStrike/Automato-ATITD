@@ -205,6 +205,7 @@ function drawWater()
       local max = waitForImage("crem-max.png", 500, "Waiting for Max button");
       if max then
 	safeClick(max[0]+5, max[1]+5);
+        sleepWithStatus(3500, "Waiting for water pickup animation...");
 	result = true;
       end
     end

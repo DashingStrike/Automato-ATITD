@@ -24,8 +24,10 @@ function ccMenu()
   askForFocus();
   for i=1,passCount do
     runCommand(buttons[1]);
+    lsSleep(1000);
     ccRun(i, passCount);
   end
+  lsPlaySound("Complete.wav");
 end
 
 function findOvens()
