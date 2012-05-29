@@ -9,7 +9,7 @@ function findCoords()
     if #lines == 2 then
       local str = lines[2][2];
       lsPrintln("lines: " .. str);
-      local a, b, x, y = string.find(str, ": (%d+)\, (%d+)");
+      local a, b, x, y = string.find(str, ": ([0-9-]+)\, ([0-9-]+)");
       result = makePoint(tonumber(x), tonumber(y));
     end
   end

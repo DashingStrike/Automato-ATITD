@@ -187,7 +187,7 @@ function iterateText(args)
   local range = args[2];
   local flags = args[3];
   srReadScreen();
-  return findText(text, range, flag);
+  return findText(text, range, flags);
 end
 
 function waitForFunction(f, args, timeout, message)
@@ -444,7 +444,7 @@ end
 -- is exceeded and the text still isn't found.
 -------------------------------------------------------------------------------
 
-function waitForText(text, delay, timeout, isExact)
+function waitForTextOld(text, delay, timeout, isExact)
 	local r;
 	if delay == nil then
 		delay = 20;

@@ -141,10 +141,11 @@ function findAllText(text, window, flag)
 			    windowList[i].width - 8, windowList[i].height - 6);
     if not nopin then
       current = makeBox(current.x, current.y,
-			current.width - 30, current.height);
+			current.width - 20, current.height);
     end
     local parses = parseWindow(current);
     for j=1,#parses do
+--      lsPrintln("parse: " .. parses[j][2]);
       if not text
 	or (exact and parses[j][2] == text)
 	or (not exact and string.find(parses[j][2], text, 1, true))
@@ -181,7 +182,7 @@ function breakupRegion(region, windows)
   end
   if region.height - current.height > 4 then
     breakupRegion(makeBox(region.x, region.y + current.height + 2,
-			  current.width + 8, region.height - current.heigh - 2),
+			  current.width + 8, region.height - current.height - 2),
 		  windows);
   end
 end

@@ -5,6 +5,9 @@ seedImage = "OnionSeeds.png";
 waterImage = "WaterThese.png";
 harvestImage = "HarvestThese.png";
 
+walk_px_y = 170;
+walk_px_x = 190;
+
 function harvestAll(loop_count)
   for i=1,4 do
     srReadScreen();
@@ -13,7 +16,7 @@ function harvestAll(loop_count)
       safeClick(waters[i][0] + 5, waters[i][1] + 5);
       lsSleep(click_delay);
     end
-    sleepWithStatus(24000, "(" .. loop_count .. "/" .. num_loops
+    sleepWithStatus(20000, "(" .. loop_count .. "/" .. num_loops
 		    .. ") Waiting for growth");
   end
   local done = false;
@@ -42,6 +45,7 @@ function searchForGreen(centerBad)
   local center = makePoint(srGetWindowSize()[0]/2,
 			   srGetWindowSize()[1]/2);
   lsPrintln("checkForGreen");
+  checkBreak();
 --  local green = 0x4b7420;
 --  local green = 0x557614;
   local green = 0x6c8516;

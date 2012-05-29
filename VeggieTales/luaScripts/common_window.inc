@@ -119,22 +119,47 @@ function openAndPin(x, y, timeout)
     error("Incorrect number of arguments for openAndPin()");
   end
   local success = false;
-  local spot = getWaitSpot(x+5, y);
+  srReadScreen();
+  local anchors = findAllImages("ThisIs.png");
+  local startTime = lsGetTimer();
   safeBegin();
   srSetMousePos(x, y);
   lsSleep(50);
   srClickMouse(x, y, 1);
   lsDoFrame();
   statusScreen("Clicking to open window");
-  if waitForChange(spot, timeout) then
-    statusScreen("Looking for anchor");
-    local anchor = waitForImageInWindow("ThisIs.png", x+5, y, timeout);
-    if anchor then
-      success = true;
-      if not findImageInWindow("UnPin.png", x+5, y) then
-	safeClick(anchor[0], anchor[1], 1);
-	statusScreen("Pinning window");
+  local done = false;
+  local anchor = nil;
+  while not done do
+    srReadScreen();
+    local newAnchors = findAllImages("ThisIs.png");
+    done = false;
+    local limit = math.min(#anchors, #newAnchors);
+    for i=1,limit do
+      if anchors[i][0] ~= newAnchors[i][0]
+	or anchors[i][1] ~= newAnchors[i][1]
+      then
+	anchor = newAnchors[i];
+	done = true;
+	break;
       end
+    end
+    if not done and #anchors ~= #newAnchors then
+      done = true;
+      anchor = newAnchors[#newAnchors];
+    end
+    if not done and lsGetTimer() > startTime + timeout then
+      done = true;
+    end
+    anchors = newAnchors;
+    statusScreen("Waiting for window to open");
+    lsSleep(tick_delay);
+  end
+  if anchor then
+    success = true;
+    if not findImageInWindow("UnPin.png", x+5, y) then
+      safeClick(anchor[0], anchor[1], 1);
+      statusScreen("Pinning window");
     end
   end
   return success;
@@ -215,7 +240,7 @@ function arrangeStashed(cascade, waterGap)
       currentX = currentX + 8;
       currentY = currentY + 24;
     else
-      currentX = currentX + width;
+      currentX = currentX + width + 5;
     end
     xMax = math.max(xMax, width);
     yMax = math.max(yMax, height);

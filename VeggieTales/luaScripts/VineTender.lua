@@ -30,7 +30,7 @@ knownVineNames = {
 };
 
 vineyardActions = { "Tend", "Harvest", "Cutting" };
-vineyardImages = { "", "Harvest the Grapes", "Take a Cutting of the Vine" };
+vineyardImages = { "", "Harvest the Gr", "Take a Cutting of the V" };
 
 stateNames = {"Fat", "Musty", "Rustle", "Sagging", "Shimmer",
 	      "Shrivel", "Wilting"};
@@ -79,7 +79,7 @@ function doit()
       srReadScreen();
       local clickPos = findText(vineyardImages[action]);
       if clickPos then
-	safeClick(clickPos[0] + 5, clickPos[1] + 5);
+	safeClick(clickPos[0] + 10, clickPos[1] + 5);
 	if action == 2 then
 	  local yes = waitForImage("Yes.png", 500);
 	  if yes then

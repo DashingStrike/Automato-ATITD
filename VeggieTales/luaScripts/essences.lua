@@ -403,19 +403,19 @@ function labTick(region, state)
 	while outer == nil do
 		srClickMouseNoMove(region[0] + 12, region[1] + 5);
 		srReadScreen();
-		outer = findTextInRegion(region, "Manufacture...");
+		outer = findTextInRegion(region, "Manufacture");
 		lsSleep(per_read_delay);
 		checkBreak();
 	end
 	srClickMouseNoMove(outer[0] + 12, outer[1] + 5);
-	lsSleep(per_click_delay);
+--	lsSleep(per_click_delay);
 	
-	local t = waitForText("Essential Distillation...");
+	local t = waitForTextOld("Essential Distill");
 	srClickMouseNoMove(t[0] + 12, t[1] + 5);
-	lsSleep(per_click_delay);
-	t = waitForText("Place Essential Material");
+--	lsSleep(per_click_delay);
+	t = waitForTextOld("Place Essential Mat");
 	srClickMouseNoMove(t[0] + 12, t[1] + 5);
-	lsSleep(per_click_delay);
+--	lsSleep(per_click_delay);
 	
 	--search for something to add
 	local rc = waitForRegionWithText("Choose a material");
@@ -463,29 +463,29 @@ function labTick(region, state)
 	
 	for i = 1, #spiritsNeeded do
 		--Add the alcohol
-		t = waitForTextInRegion(region, "Manufacture...");
+		t = waitForTextInRegion(region, "Manufacture");
 		srClickMouseNoMove(t[0] + 10, t[1] + 5);
 		lsSleep(per_click_delay);
-		t = waitForText("Alcohol Lamp...");
+		t = waitForTextOld("Alcohol Lamp.");
 		srClickMouseNoMove(t[0] + 10, t[1] + 5);
 		lsSleep(per_click_delay);
-		t = waitForText("Fill Alcohol Lamp with Spirits...");
+		t = waitForTextOld("Fill Alcohol Lamp");
 		srClickMouseNoMove(t[0] + 10, t[1] + 5);
 		lsSleep(per_click_delay);
 		
 		--click on the spirit itself
-		t = waitForText(spiritsNeeded[i][1]);
+		t = waitForTextOld(spiritsNeeded[i][1]);
 		srClickMouseNoMove(t[0] + 12, t[1] + 5);
 		lsSleep(per_click_delay);
-		waitForText("How much");
+		waitForTextOld("How much");
 		srKeyEvent(spiritsNeeded[i][2] .. "\n");
 		lsSleep(per_click_delay + per_read_delay)
 	end
 	
-	t = waitForTextInRegion(region, "Manufacture...");
+	t = waitForTextInRegion(region, "Manufacture");
 	srClickMouseNoMove(t[0] + 7, t[1] + 7);
 	lsSleep(per_click_delay + per_read_delay);
-	t = waitForText("Essential Distillation...");
+	t = waitForTextOld("Essential Distill");
 	srClickMouseNoMove(t[0] + 10, t[1] + 5);
 	lsSleep(per_click_delay);
 	

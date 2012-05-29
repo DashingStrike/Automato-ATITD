@@ -136,7 +136,7 @@ function clickAllImages(image_name, offsetX, offsetY, rightClick, tol)
 
   srReadScreen();
   local buttons = findAllImages(image_name, nil, tol);
-  clickAllPoints(buttons);
+  clickAllPoints(buttons, offsetX, offsetY, rightClick);
   return #buttons;
 end
 
@@ -145,9 +145,13 @@ function clickAllText(text, offsetX, offsetY, rightClick)
     error("Incorrect number of arguments for clickAllText()");
   end
 
+  if not offsetX then
+    offsetX = 10;
+  end
+
   srReadScreen();
   local buttons = findAllText(text);
-  clickAllPoints(buttons);
+  clickAllPoints(buttons, offsetX, offsetY, rightClick);
   return #buttons;
 end
 
