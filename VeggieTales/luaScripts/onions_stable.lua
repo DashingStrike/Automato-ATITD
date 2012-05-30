@@ -30,45 +30,58 @@ waterImage = "WaterThese.png";
 harvestImage = "HarvestThese.png";
 
 function harvestAll(loop_count)
+  if grid_w == 1 then
+    -- 1x1 grid
+    timing = 19000;
+    harvest_timing = 0;
+    
+  elseif grid_w == 2 then
+    -- 2x2 grid
+    timing = 15000;
+    harvest_timing = 1000;
 
-if grid_w < 4 then
-set = "Small";
-timing = 3000;
-harvest_timing = 13000;
-else
-set = "Large";
-timing = 0;
-harvest_timing = 14000;
-end
+  elseif grid_w == 3 then
+    -- 3x3 grid
+    timing = 9000;
+    harvest_timing = 6000;
 
+  else
+    -- 4x4 grid 
+    timing = 0;
+    harvest_timing = 10000;
+  end
 
-  for i=1,4 do
+  for pass=1,4 do
     srReadScreen();
     local waters = findAllImages(waterImage);
     for i=#waters,1,-1 do
---      safeClick(waters[i][0] + 5, waters[i][1] + 5);
-      srClickMouse(waters[i][0] + 5, waters[i][1] + 5);
+      safeClick(waters[i][0] + 5, waters[i][1] + 5);
+--      srClickMouse(waters[i][0] + 5, waters[i][1] + 5);
       statusScreen("[" .. i .. "] Watering plants...");
       lsSleep(click_water_delay);
     end
 
-    sleepWithStatus(timing, "(" .. loop_count .. "/" .. num_loops
-		    .. ") Waiting for growth");
+    sleepWithStatus(timing, "[" .. loop_count .. "/" .. num_loops .. "] Passes" .. "\n[" .. 5-pass .. "] Growths until Harvest");
   end
-  local done = false;
-  while not done do
+  local anchors = findAllImages(waterImage);
+  local current = #anchors;
+  local range = getWindowBorders(anchors[current][0], anchors[current][1]);
+  while current > 0 do
+    local updates = findAllImages("ThisIs.png", range);
+    clickAllPoints(updates);
     srReadScreen();
-    clickAllImages("ThisIs.png");
-    local harvests = findAllImages(harvestImage);
+    local harvests = findAllImages(harvestImage, range);
     for i=1,#harvests do
       safeClick(harvests[i][0], harvests[i][1]);
       lsSleep(click_delay);
       safeClick(harvests[i][0], harvests[i][1] - 15, 1);
       statusScreen("[" .. i .. "] Harvesting plants...");
       lsSleep(click_delay);
+      current = current - 1;
+      if current > 0 then
+	range = getWindowBorders(anchors[current][0], anchors[current][1]);
+      end
     end
-    local waters = findAllImages(waterImage);
-    done = (#waters == 0);
     lsSleep(10);
     checkBreak();
   end
@@ -101,8 +114,8 @@ checkBreak();
 
 --70
 
-  for y=-40,40 do
-    for x=-35,35 do
+  for y=-43,43 do
+    for x=-38,38 do
       local passed = true;
       local vals;
       local current = 0;
