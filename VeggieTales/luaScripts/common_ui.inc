@@ -136,6 +136,8 @@ function statusScreen(message, color, allow_break)
     allow_break = true;
   end
   lsPrintWrapped(10, 80, 0, lsScreenX - 20, 0.8, 0.8, color, message);
+  lsPrintWrapped(10, lsScreenY-100, 0, lsScreenX - 20, 0.8, 0.8, 0xffd0d0ff,
+		 error_status);
   if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100,
 		  0xFFFFFFff, "End script") then
     error(quit_message);

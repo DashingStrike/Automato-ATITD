@@ -12,6 +12,9 @@ click_delay = 50;
 -- Whether to allow the user to pause the macro
 allow_pause = true;
 
+-- Error message to appear in statusScreen() calls
+error_status = "";
+
 -- Standard message to print when the user aborts the macro.
 quit_message = "Macro aborted by user";
 
