@@ -30,7 +30,7 @@ grid_h = 5;
 is_plant = true;
 seeds_per_pass = 5;
 
-imgFlax1 = "FlaxGeneric.png";
+imgFlax1 = "Flax:";
 imgHarvest = "HarvestThisFlax.png";
 imgWeedAndWater = "WeedAndWater.png";
 imgWeed = "WeedThisFlaxBed.png";
@@ -227,9 +227,9 @@ seedImage = imgFlax1;
 
 function getPlantWindowPos()
   srReadScreen();
-  local plantPos = srFindImage(seedImage);
+  local plantPos = findText(seedImage);
   if plantPos then
-    plantPos[0] = plantPos[0] + 5;
+    plantPos[0] = plantPos[0] + 10;
   else
     plantPos = lastPlantPos;
     if plantPos then
@@ -377,12 +377,24 @@ function plantHere(xyPlantFlax, y_pos)
     return false;
   end
 
+--  if plantType == ONIONS then
+--    lsPrintln("Onions");
+--    lsSleep(200);
+--    srReadScreen();
+--    local waters = findAllImages("WaterThese.png");
+--    for i = 1,#waters do
+--      lsPrintln("Water");
+--      safeClick(waters[i][0]+5, waters[i][1]+5);
+--    end
+--    sleepWithStatus(1000, "First Water");
+--  end
 
   -- Check for window size
   checkWindowSize(bed[0], bed[1]);
 
   -- Move window into corner
   stashWindow(bed[0] + 5, bed[1], BOTTOM_RIGHT);
+
   return true;
 end
 

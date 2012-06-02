@@ -38,9 +38,13 @@ click_water_delay = 1400;
 refresh_time = 200;
 click_delay = 150;
 
-seedImage = "OnionSeeds.png";
+seedImage = "Onion Seeds";
 waterImage = "WaterThese.png";
 harvestImage = "HarvestThese.png";
+leafImage = "OnionLeaf.png";
+
+yLeafRadius = 43;
+xLeafRadius = 38;
 
 function harvestAll(loop_count)
   local timing = 24000;
@@ -104,16 +108,17 @@ function harvestAll(loop_count)
   end
   sleepWithStatus(harvest_timing,
 		  globalStr .. "Waiting for harvest to finish.");
-
-  -- Refresh plant window in case we used our last seed and plant window
-  -- is now displaying a blank screen.
-  local plantFlax = getPlantWindowPos();
-  safeClick(plantFlax[0]-7, plantFlax[1]);
 end
 
 function clickPlant(plantButton)
-  local bed = nil;
-  local before = searchForGreen(xyFlaxMenu);
+  local tol = 1000;
+  srReadScreen();
+  local searchRegion = makeBox(xyFlaxMenu[0] - xLeafRadius,
+			       xyFlaxMenu[1] - yLeafRadius,
+			       xLeafRadius*2 + 1, yLeafRadius*2 + 1);
+  local before = srFindImageInRange(leafImage, searchRegion.x, searchRegion.y,
+				    searchRegion.width, searchRegion.height,
+				    tol);
   if before then
     error_status = "Found onion leaf before planting.";
     return nil;
@@ -122,13 +127,18 @@ function clickPlant(plantButton)
   safeClick(plantButton[0], plantButton[1], 0);
   lsSleep(click_delay);
 
-  local startTime = lsGetTimer();
-  while not bed and lsGetTimer() - startTime < 2000 do
-    bed = searchForGreen(xyFlaxMenu);
-    statusScreen("Waiting for onion leaves to appear");
-  end
+  local bed = waitForImage(leafImage, 3500, "Waiting for onion leaf",
+			   searchRegion, tol);
+--  local startTime = lsGetTimer();
+--  while not bed and lsGetTimer() - startTime < 3500 do
+--    bed = searchForGreen(xyFlaxMenu);
+--    statusScreen("Waiting for onion leaves to appear");
+--  end
   if not bed then
     error_status = "Could not find onion leaf after planting.";
+  else
+    bed[0] = bed[0] + 2;
+    bed[1] = bed[1] + 2;
   end
   return bed;
 end
@@ -147,15 +157,24 @@ function searchForGreen(centerBad)
   srReadScreen();
 
 --70
+  local diffTable = {};
 
-  for y=-43,43 do
-    for x=-38,38 do
+  for y=-yLeafRadius-1, yLeafRadius+1 do
+    diffTable[y] = {};
+    for x=-xLeafRadius-1, xLeafRadius+1 do
+      diffTable[y][x] = pixelDiffs(center[0] + x, center[1] + y, green);
+    end
+  end
+
+  for y=-yLeafRadius,yLeafRadius do
+    for x=-xLeafRadius,xLeafRadius do
       local passed = true;
       local vals;
       local current = 0;
       for i=1,#tests do
-	vals = pixelDiffs(center[0] + x + tests[i][0],
-			  center[1] + y + tests[i][1], green);
+	vals = diffTable[y + tests[i][1]][x + tests[i][0]];
+--pixelDiffs(center[0] + x + tests[i][0],
+--			  center[1] + y + tests[i][1], green);
 	current = vals[1]*vals[1] + vals[3]*vals[3]
 	  + vals[2]*vals[2];
 	if current > 1000 then
