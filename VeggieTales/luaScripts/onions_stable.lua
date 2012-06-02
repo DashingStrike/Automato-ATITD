@@ -108,6 +108,7 @@ function harvestAll(loop_count)
   end
   sleepWithStatus(harvest_timing,
 		  globalStr .. "Waiting for harvest to finish.");
+  getPlantWindowPos();
 end
 
 function clickPlant(plantButton)
