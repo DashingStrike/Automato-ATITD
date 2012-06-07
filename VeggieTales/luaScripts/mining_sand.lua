@@ -212,11 +212,13 @@ function getMineLoc()
 	    "Set Mine Location");
     local y = 60;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Lock ATITD screen (Alt+L) .");
-    y = y+20;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Suggest F5 view, zoomed almost all the way out.");
-    y = y+40;
+    y = y + 20;
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Suggest F5 view, zoomed about 75% out.");
+    y = y + 60;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Hover and " .. key .. " over the MINE.");
     y = y + 70;
+    lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "TIP (Optional):");
+    y = y + 20;
     lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "For Maximum Performance (least lag) Uncheck:");
     y = y + 16;
     lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Options, Interface, Other: 'Use Flyaway Messages'");
@@ -362,17 +364,31 @@ function checkAbort()
 end
 
 function workMine()
-	lsSleep(clickDelay);
-      --Send 'W' key over Mine to Work it (Get new nodes)
       srSetMousePos(mineX, mineY);
       lsSleep(clickDelay);
+      --Send 'W' key over Mine to Work it (Get new nodes)
       srKeyEvent('W'); 
       sleepWithStatus(1000, "Working mine (Fetching new nodes)");
-      findClosePopUp();
+	findClosePopUp();
+end
+
+function findClosePopUp()
+  lsSleep(popDelay);
+    while 1 do
+      checkBreak();
+      srReadScreen();
+      OK = srFindImage("OK.png");
+	  if OK then  
+	    srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
+	    lsSleep(clickDelay);
+	  else
+	    break;
+	  end
+    end
 end
 
 function clickSequence()
-  sleepWithStatus(100, "Working...");
+  sleepWithStatus(150, "Starting...");
   local worked = 1;
   local sets = allSets[dropdown_pattern_cur_value];
   for i = 1, #sets do
@@ -399,7 +415,7 @@ function clickSequence()
   y = y + 16;
   lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Popup Delay: " .. popDelay .. " ms");
   y = y + 40;
-  lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Hold Shift to Abort and Return to Menu!");
+  lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Hold Shift to Abort and Return to Menu.");
   y = y + 40;
   lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Don't touch mouse until finished!");
   lsDoFrame();
@@ -410,21 +426,6 @@ function clickSequence()
 	workMine();
 	end
   reset();
-end
-
-function findClosePopUp()
-  lsSleep(popDelay);
-    while 1 do
-      checkBreak();
-      srReadScreen();
-      OK = srFindImage("OK.png");
-	  if OK then  
-	    srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
-	    lsSleep(clickDelay);
-	  else
-	    break;
-	  end
-    end
 end
 
 function promptDelays()
@@ -442,12 +443,12 @@ function promptDelays()
     y = y + 35;
     lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
     is_done, clickDelay = lsEditBox("delay", 165, y, 0, 50, 30, 1.0, 1.0,
-                                     0x000000ff, 150);
+                                     0x000000ff, 200);
      clickDelay = tonumber(clickDelay);
        if not clickDelay then
          is_done = false;
          lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-         clickDelay = 150;
+         clickDelay = 200;
        end
      y = y + 50;
       lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");

@@ -12,6 +12,7 @@ askText = singleLine([[
   Make sure chat is MINIMIZED! Press Shift over ATITD window.
 ]]);
 
+autoWorkMine = true;
 timesworked = 0;
 dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
 dropdown_cur_value = 1;
@@ -70,14 +71,16 @@ function getMineLoc()
 	    "Set Mine Location");
     local y = 60;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Lock ATITD screen (Alt+L) .");
-    y = y+20;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Suggest F5 view, zoomed almost all the way out.");
-    y = y+40;
+    y = y + 20;
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Suggest F5 view, zoomed about 75% out.");
+    y = y + 60;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Hover and " .. key .. " over the MINE.");
-	y = y + 70;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "For Maximum Performance (least lag) Uncheck:");
-	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Options, Interface, Other: 'Use Flyaway Messages'");
+    y = y + 70;
+    lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "TIP (Optional):");
+    y = y + 20;
+    lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "For Maximum Performance (least lag) Uncheck:");
+    y = y + 16;
+    lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Options, Interface, Other: 'Use Flyaway Messages'");
     local start = math.max(1, #mineList - 20);
     local index = 0;
     for i=start,#mineList do
@@ -182,7 +185,6 @@ function getPoints()
   end
 
     if is_shifted and not was_shifted then
-      nodeError = 0;
       clickList[#clickList + 1] = {nx, ny};
       nodeleft = nodeleft - 1;
     end
@@ -191,23 +193,20 @@ function getPoints()
     lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
 	    "Set Node Locations (" .. #clickList .. "/" .. stonecount .. ")");
     local y = 60;
-
-    if nodeError == 1 then
-    clickList = {};
-    lsPrint(5, y, z, 0.7, 0.7, 0xff4040ff, "Not enough nodes! Minimum is 7.");
-    y = y + 30
-    end
-
+    lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
+    autoWorkMine = lsCheckBox(15, y, z, 0xffffffff, " Auto 'Work Mine'", autoWorkMine);
+    lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+    y = y + 10
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Hover and " .. key .. " over each node.");
     y = y + 15;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Make sure chat is MINIMIZED!");
     y = y + 30;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Type:  " .. ore);
-    y = y + 30;
+    y = y + 20;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Worked:  " .. timesworked .. " times");
-    y = y + 40;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Select " .. nodeleft .. " more nodes to activate auto-mine!");
-    y = y + 40;
+    y = y + 30;
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Select " .. nodeleft .. " more nodes to automatically start!");
+    y = y + 30;
     local start = math.max(1, #clickList - 20);
     local index = 0;
     for i=start,#clickList do
@@ -218,16 +217,14 @@ function getPoints()
       index = index + 1;
     end
 
-
-  -- Old way (v1.0-1.1), now it doesn't need you to click the button to continue.
-  --Now it automatically detects if you've clicked the correct amount of nodes.
-  --if #clickList >= 7 then
-    --if lsButtonText(10, lsScreenY - 30, z, 100, 0x80ff80ff, "Work") then
-      --is_done = 1;
-   --end
-
     if #clickList >= stonecount then
       is_done = 1;
+    end
+
+    if #clickList == 0 then
+      if lsButtonText(10, lsScreenY - 30, z, 110, 0xffff80ff, "Work Mine") then
+        workMine();
+      end
     end
 
     if #clickList > 0 then
@@ -245,7 +242,6 @@ function getPoints()
   end
 end
 
-
 function fetchTotalCombos()
   TotalCombos = 0;
 	for i=1,#clickList do
@@ -257,10 +253,9 @@ function fetchTotalCombos()
 	end
 end
 
-
 function clickSequence()
   fetchTotalCombos();
-  sleepWithStatus(100, "Working...");
+  sleepWithStatus(150, "Starting...");
   local worked = 1;
 	for i=1,#clickList do
 		for j=i+1,#clickList do
@@ -294,7 +289,7 @@ function clickSequence()
 			y = y + 16;
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Popup Delay: " .. popDelay .. " ms");
 			y = y + 40;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Hold Shift to Abort and Return to Menu!");
+			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Hold Shift to Abort and Return to Menu.");
 			y = y + 40;
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Don't touch mouse until finished!");
 			lsDoFrame();
@@ -308,14 +303,21 @@ function clickSequence()
 
 			end
 
-  --Send 'W' key over Mine to Work it (Get new nodes)
-  srSetMousePos(mineX, mineY);
-  lsSleep(clickDelay);
-  srKeyEvent('W'); 
-  sleepWithStatus(1000, "Working mine (Fetching new nodes)");
   timesworked = timesworked + 1;
+  if autoWorkMine then
+    workMine();
+  end
   reset();
- end
+end
+
+function workMine()
+      srSetMousePos(mineX, mineY);
+      lsSleep(clickDelay);
+      --Send 'W' key over Mine to Work it (Get new nodes)
+      srKeyEvent('W'); 
+      sleepWithStatus(1000, "Working mine (Fetching new nodes)");
+	findClosePopUp();
+end
 
 function reset()
   getPoints();
@@ -364,12 +366,12 @@ function promptDelays()
 	lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 	y = y + 10;
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
-      is_done, clickDelay = lsEditBox("delay", 170, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 150);
+      is_done, clickDelay = lsEditBox("delay", 170, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 200);
       clickDelay = tonumber(clickDelay);
       if not clickDelay then
         is_done = false;
         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-        clickDelay = 150;
+        clickDelay = 200;
       end
 	y = y + 40;
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
