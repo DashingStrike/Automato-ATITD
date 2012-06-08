@@ -170,6 +170,9 @@ function sleepWithStatusPause(delay_time, message, color)
   sleepWithStatus(delay_time, message, color);
 end
 
+local waitChars = {"-", "\\", "|", "/"};
+local waitFrame = 1;
+
 function sleepWithStatus(delay_time, message, color)
   if not color then
     color = 0xffffffff;
@@ -179,13 +182,17 @@ function sleepWithStatus(delay_time, message, color)
   end
   local start_time = lsGetTimer();
   while delay_time > (lsGetTimer() - start_time) do
+    local frame = math.floor(waitFrame/5) % #waitChars + 1;
     time_left = delay_time - (lsGetTimer() - start_time);
+    local waitMessage = "Waiting ";
     if delay_time >= 1000 then
-      lsPrintWrapped(10, 50, 0, lsScreenX - 20, 1, 1, 0xd0d0d0ff,
-		     "Waiting " .. time_left .. "ms...");
+      waitMessage = waitMessage .. time_left .. "ms... ";
     end
+    lsPrintWrapped(10, 50, 0, lsScreenX - 20, 1, 1, 0xd0d0d0ff,
+		   waitMessage .. waitChars[frame]);
     statusScreen(message, color);
     lsSleep(tick_delay);
+    waitFrame = waitFrame + 1;
   end
 end
 
