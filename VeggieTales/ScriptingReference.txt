@@ -26,208 +26,94 @@ The functions with neither an sr or ls prefix are lua-script library functions.
 
 * Note that you *MUST* call srReadScreen to update the screen before calling srFindImageInRange etc.
 
-== Data Structures ==
-  Vec2 (or Point) is a table where point[0] = x and point[1] = y representing a screen coordinate or size
-  Region object is a table where region[0] = x0, region[1] = y0, region[2] = width, region[3] = height
-  Parse object is a table where parse[0] = x0, parse[1] = y0, parse[2] = text
-  [l,t,r,b] is a bounds table where bounds[0] = left, bounds[1] = top, bounds[2] = right, and bouds[3] = bottom
-  Box is a table representing a rectangular region with fields (x, y, width, height, left, top, right, bottom)
-
 == Function List ==
 === General ===
-;void lsSetCaptureWindow()
-:Attaches screen-reader/clicking functions to the window under the mouse cursor. Call it once at the very beginning of script execution.
-:Use askForWindow() instead in most cases.
-
-;void lsSleep(int ms)
-:Pauses execution for a set period.
-:For long waits, use sleepWithStatus() or sleepWithStatusPause().
-
+  void lsSetCaptureWindow()
+  void lsSleep(int ms)
 === Sending Input ===
-;void srClickMouse(int x, int y, bool bRightClick)
-:Moves mouse cursor (x, y) and sends a click event.
-:Use safeClick() instead in most cases.
-
-;void srClickMouseNoMove(int x, int y, bool bRightClick)
-:Sends a click event at (x, y) without moving the mouse cursor.
-:Use safeClick() instead in most cases.
-
-;void srKeyEvent(const char *s)
-:Sends keyboard events.
-:Avoid when possible as it may interact badly with the player's chat.
-
-;void srLeftArrow()
-;void srRightArrow()
-;void srUpArrow()
-;void srDownArrow()
-:Sends arrow keypress events.
-:Avoid when possible because chat state and settings may interfere with it.
-
-;void srDrag(int x0, int y0, int x1, int y1, bool rightClick)
-:Drags the mouse from (x0, y0) to (x1, y1), moving the mouse cursor.
-:Use safeDrag() instead in most cases.
-
-;void srSetMousePos(int x, int y)
-:Moves the mouse cursor to (x, y).
-:Usually call only immediately after safeBegin() to minimize interference by the user.
-
-;void srMouseDown(int x, int y, bool rightClick)
-;void srMouseUp(int x, int y, bool rightClick)
-:Send mouse down/up event at position (x, y).
-:Usually call only immediately after safeBegin() to minimize interference by the user.
-
-;x, y srMousePos()
-:Get the current mouse position.
-:Use getMousePos() instead as it returns a standard Vec2 (Point) rather than two integers.
-
+  void srClickMouse(int x, int y, bool bRightClick)
+  void srClickMouseNoMove(int x, int y, bool bRightClick)
+  void srKeyEvent(const char *s)
+  void srLeftArrow()
+  void srRightArrow()
+  void srUpArrow()
+  void srDownArrow()
+  void srDrag(int x0, int y0, int x1, int y1, bool rightClick)
+  void srSetMousePos(int x, int y)
+  void srMouseDown(int x, int y, bool rightClick)
+  void srMouseUp(int x, int y, bool rightClick)
+  Vec2 srMousePos()
 === Screen Reading ===
-;Vec2 srGetWindowSize()
-:Returns the capture window size. This is generally the atitd window.
-:Call only after lsSetCaptureWindow() or askForWindow() have been called.
-
-;Vec2 srImageSize(const char *fn)
-:Returns the size in pixels of the image at a given path.
-
-;void srMakeImage(const char *name, int x, int y, int w, int h)
-:Create a new image file at the given path based on the pixels found on part of the atitd screen.
-
-;Vec2 srFindImage(const char *fn, int tol)
-:Search the screen for a match on a particular image and return the coordinates of its upper-left corner. lsSetCaptureWindow() or askForWindow() must have been called. This function searches the screen as it was when srReadScreen() was last called. This function finds the top-most then left-most match.
-:To find multiple matches, see findAllImages().
-
-;void srShowImageDebug(const char *fn, float x, float y, float z, float scale)
-:Show an image in the VT window?
-
-;Vec2 srFindImageInRange(const char *fn, int x0, int y0, int w, int h, int tol)
-:Like srFindImage(), but only searches a portion of the screen.
-
-;void srReadScreen()
-:Refresh the screen buffer. Functions which search the screen use the screen as it was when this function was last called.
-;Make sure to call this before any screen searching and any time you think the screen may have changed in a way important to your script.
-
-;int srReadPixel(int x, int y)
-:Get the pixel value at a particular location in RGBA format (to get RGB format, divide by 256 rounding down). This function always refreshes the screen buffer so it is expensive but timely.
-
-;int srReadPixelFromBuffer(int x, int y)
-:Similar to the above function but fetches the pixel at a location as of the last srReadScreen() call.
-
-;void srSaveLastReadScreen(const char *fn)
-:Save whole screen buffer to file?
-
-;void lsShowScreengrab(const char *_color)
-:Unknown
-
-;Vec2[] lsAnalyzePapyrus(int minsize, int maxsize, int debug, int relevant_radius)
-:Unknown
-
-;Vec2[] lsAnalyzeSilt(int minsize, int maxsize, int debug, int relevant_radius)
-:Unknown
-
-;[l,t,r,b] srGetWindowBorders(int x, int y)
-:Returns the bounds of the in-game window surrounding (x, y). It may return odd results if (x, y) is not inside an in-game window or if the window that (x, y) is over is behind other windows. The result looks at the screen as of the last time srReadScreen() was called.
-:Use getWindowBorders() instead as it returns a standard Box rather than a bounds.
-
+  Vec2 srGetWindowSize()
+  Vec2 srImageSize(const char *fn)
+  void srMakeImage(const char *name, int x, int y, int w, int h)
+  Vec2 srFindImage(const char *fn, int tol)
+  void srShowImageDebug(const char *fn, float x, float y, float z, float scale)
+  Vec2 srFindImageInRange(const char *fn, int x0, int y0, int w, int h, int tol)
+  void srReadScreen()
+  int srReadPixel(int x, int y)
+  int srReadPixelFromBuffer(int x, int y)
+  void srSaveLastReadScreen(const char *fn)
+  void lsShowScreengrab(const char *_color)
+  Vec2[] lsAnalyzePapyrus(int minsize, int maxsize, int debug, int relevant_radius)
+  Vec2[] lsAnalyzeSilt(int minsize, int maxsize, int debug, int relevant_radius)
+  [l,t,r,b] srGetWindowBorders(int x, int y)
+  Vec2[] findAllImages(String imgName, int tol)
 === Text Parsing ===
-  It is better to use the library functions below as they provide a higher level interface than the raw API.
-
-;region srFindInvRegion()
-:Returns the text region enclosing the inventory/skills area.
-:Use findInventoryRegion() instead as it returns a standard Box rather than a region.
-
-;void srStripScreen()
-;void srStripRegion(int x0, int y0, int w, int h)
-:Removes the background color from a particular area. Used internally by the text library below.
-
-;region srFindFirstTextRegion()
-:Finds the first text region on the screen and resets the internal iterator. Used internally by the text library below.
-
-;region srFindNextTextRegion()
-:Returns the next region based on the internal iterator or nil. Used internally by the text library below.
-
-;parse[] srParseTextRegion(int x0, int y0, int w, int h)
-:Finds all text in a particular part of the screen. Used internally by the text library below.
-
-;region srFindChatRegion()
-:Returns the region enclosing the chat area.
-:Use findChat Region() instead as it returns a standard Bo rather than a region.
-
-;void srTrainTextReader(int x, int y, const char *c)
-:Used internally by the text library below.
-
+  Region object is a table where region[0] = x0, region[1] = y0, region[2] = width, region[3] = height
+  Parse object is a table where parse[0] = x0, parse[1] = y0, parse[2] = text
+  region[] findAllTextRegions()
+  parse findText(String s)
+  void stripRegion(region r)
+  parse[] parseRegion(region r)
+  parse findTextInRegion(region r, String t)
+  region[] findAllRegionsWithText(String t)
+  parse waitForText(String t)
+  void waitForNoText(String t)
+  region waitForRegionWithText(String t)
+  parse waitForTextInRegion(Region r, String t)
+  void clickText(parse p)
+  parse[] getChatText()
+  parse[] getAllText()
+  parse findTextInParse(parse[] p, String t)
+I recommend not using the below functions unless you're modifying lua library functions.
+  void srStripScreen()
+  void srStripRegion(int x0, int y0, int w, int h)
+  region srFindFirstTextRegion()
+  region srFindNextTextRegion()
+  parse[] srParseTextRegion(int x0, int y0, int w, int h)
+  region srFindInvRegion()
+  region srFindChatRegion()
+  void srTrainTextReader(int x, int y, const char *c)
 === User Interface ===
-;int lsScreenX
-;int lsScreenY
-;Vec2 lsGetWindowSize()
-:Width/height of the VT interface window.
-
-;Vec2 lsMouseClick(int x, int y, int w, int h, int button)
-:Unknown
-
-;bool lsMouseIsDown(int button)
-:Returns true if the given mouse button is currently being pressed by the user. 1 = Left, 2 = Middle, 3 = Right.
-
-;void lsPrintln(const char *s)
-:Print a string to the console. You can open the console from the VT main menu. Used for debugging.
-
-;bool lsShiftHeld()
-;bool lsAltHeld()
-;bool lsControlHeld()
-:Returns true if the player is currently holding the given button. Make sure to check for the user releasing the button between taking actions based on the button state.
-
-;void lsPlaySound(const char *sound)
-:Play an audio file at the given path.
-
-;int lsPrint(int x, int y, int z, float xsc, float ysc, const char *color, const char *str)
-:Print text to the VT interface. Displayed when lsDoFrame() is called.
-
-;void lsFontShadow(int on)
-:Unknown
-
-;int lsMessageBox(const char *title, const char *msg, int buttons)
-:Unknown
-
-;int lsPrintWrapped(int x, int y, int z, int w, float xsc, float ysc, const char *color, const char *str)
-:Print wrapped text on the VT interface. Displayed when lsDoFrame() is called.
-
-;void lsDisplaySystemSprite(int tile, int x, int y, int z, float w, float h, const char *color)
-:Display image on the VT interface?
-
-;bool lsButtonText(int x, int y, int z, int w, const char *color, const char *txt)
-:Display a text button on the VT interface and return true if it was clicked. Displayed when lsDoFrame() is called.
-
-;bool lsCheckBox(int x, int y, int z, const char *color, const char *txt, bool value)
-:Display a check box that the user can toggle. Returns the current value of the check box. Displayed when lsDoFrame() is called.
-
-:int lsDropdown(const char *key, int x, int y, int z, int w, int val)
-;Display a dropdown menu of items the user can select. Returns the index currently selected. Displayed when lsDoFrame() is called.
-
-:void lsScrollAreaBegin(const char *key, int x, int y, int z, int w, int h)
-;Unknown
-
-:void lsScrollAreaEnd(int h)
-;Unknown
-
-:void lsSetCamera(float x0, float y0, float x1, float y1)
-;Unknown
-
-:void lsDoFrame()
-;Update the screen with the set of buttons/text/controls invoked since the last lsDoFrame(). lsDoFrame() called twice in a row will produce a blank screen.
-
-;void lsTopmost(int value)
-:Unknown
-
-;{bool done, selection} lsEditBox(const char *key, int x, int y, int z, int w, int h, float xsc, float ysc, const char *color, const char *def)
-:Provide an edit box for the user to enter text into. selection returns the current contents of the box. Not sure what the purpose of done is.
-
-;int lsGetTimer()
-:Returns the current time in milliseconds.
-
-;const char *lsClipboardGet()
-:Returns the current contents of the clipboard.
-
-;void lsClipboardSet(const char *str)
-:Sets the contents of the clipboard.
-
+  int lsScreenX
+  int lsScreenY
+  Vec2 lsGetWindowSize()
+  Vec2 lsMouseClick(int x, int y, int w, int h, int button)
+  bool lsMouseIsDown(int button)
+  void lsPrintln(const char *s)
+  bool lsShiftHeld()
+  bool lsAltHeld()
+  bool lsControlHeld()
+  void lsPlaySound(const char *sound)
+  int lsPrint(int x, int y, int z, float xsc, float ysc, const char *color, const char *str)
+  void lsFontShadow(int on)
+  int lsMessageBox(const char *title, const char *msg, int buttons)
+  int lsPrintWrapped(int x, int y, int z, int w, float xsc, float ysc, const char *color, const char *str)
+  void lsDisplaySystemSprite(int tile, int x, int y, int z, float w, float h, const char *color)
+  bool lsButtonText(int x, int y, int z, int w, const char *color, const char *txt)
+  bool lsCheckBox(int x, int y, int z, const char *color, const char *txt, bool value)
+  int lsDropdown(const char *key, int x, int y, int z, int w, int val)
+  void lsScrollAreaBegin(const char *key, int x, int y, int z, int w, int h)
+  void lsScrollAreaEnd(int h)
+  void lsSetCamera(float x0, float y0, float x1, float y1)
+  void lsDoFrame()
+  void lsTopmost(int value)
+  {bool done, selection} lsEditBox(const char *key, int x, int y, int z, int w, int h, float xsc, float ysc, const char *color, const char *def)
+  int lsGetTimer()
+  const char *lsClipboardGet()
+  void lsClipboardSet(const char *str)
+  void askForWindow(String t)
 == Specific reference ==
 === void srKeyEvent(const char *s) ===
 
@@ -243,99 +129,3 @@ Sends a character or sequence of characters to the captured window.  Example:
 This will send the string "username" followed by a tab (\t) and then the string
 "password" and then enter (\n).
 
-=== User Interface ===
-
-The user interface is active rather than event driven. This means that in order to present a consistent user interface to the user, you need to wrap a bunch of controls in a loop:
-
-while not done do
-  -- Code to print text to the screen and provide controls the user can interact with
-  lsDoFrame();
-  lsSleep(tick_delay);
-  checkBreak();
-  -- Code to act based on button clicks, etc. and set done if necessary.
-end
-
-lsDoFrame() actually displays content in the VT window while adding a short sleep prevents the loop from consuming too many system resources. The code to actually implement user actions should be after the lsDoFrame() because if not, there will be graphical glitches if the action tries to update the VT screen.
-
-checkBreak() will exit the program if the user is pressing both shift and control. In any indefinite loop you make, this should be included to allow the user to abort your macro without waiting.
-
-Two library functions are provided to help in the common cases of providing a user interface.
-
-statusScreen() allows you to post a status message to the user while providing an explicit button allowing the user to quit the script. You can use this periodically in long-running tasks to make sure that the user knows what is going on and can abort the script at any time.
-
-sleepWithStatus() allows you to pause for long periods of time while giving feedback to the user and allowing them to abort the script in the middle. 
-
-== Library Functions ==
-
-=== Global Variables ===
-
-;tick_delay
-:The amount of time to wait between iterations in a polling loop (in ms). Default: 10
-
-;click_delay
-:The amount of time to wait between clicks when making many clicks at once (in ms). Default: 50
-
-;allow_pause
-:Whether to allow the user to pause the macro or not. Affects checkBreak(), statusScreen(), sleepWithStatus(). Set to false if your code requires delicate timing. Default: true
-
-;quit_message
-:Standard message to print to the user if they explicitly abort the macro.
-
-=== General Functions ===
-;void askForWindow(String t)
-:Pause and tell the user to press shift over the target window. Should be run only once and near the beginning of the macro.
-
-;Vec2 makePoint(x, y)
-:Make a Vec2 (or Point) data structure from a pair of coordinates.
-
-;Box makeBox(x, y, width, height)
-:Make a box data structure which represents a portion of the screen.
-
-=== Mouse ===
-
-;void safeBegin()
-:Performs various checks to make sure that we don't interfere with the user. This takes a small amount of additional time and should be used before performing mouse actions using the standard API.
-
-;void safeClick(x, y, rightClick)
-:Clicks without moving the mouse after checking to make sure we don't interfere with the user.
-
-;bool safeDrag(sourceX, sourceY, destX, destY, timeout)
-:Drags from source to destination after checking to make sure we don't interfere with the user. Waits until drag completes by examining the destination pixel for change. Timeout (in ms) is the maximum amount of time it will wait. Returns true on success, false on timeout.
-
-;void clickAllPoints(points, offsetX, offsetY, rightClick)
-:Click every point in a list in sequence adding (offsetX, offsetY) to each click position. (offsetX, offsetY) defaults to (5, 5).
-
-;int clickAllImages(image, offsetX, offsetY, rightClick, tol)
-:Click all matching images, but add (offsetX, offsetY) to each click position (offset defaults to 5, 5). Returns the number of clicks performed.
-
-;bool drawWater()
-:Attempts to draw water by first looking for a rain barrel, second trying to find an aqueduct, and third attempting to find the fill water icon. Returns true on success, false if no water source was found.
-
-;Vec2 getMousePos()
-:Returns the current location of the mouse.
-
-=== Find and Search ===
-All of these functions use the screen buffer and so search the screen as it was when srReadScreen() was last called.
-
-;Vec2[] findAllImages(String imgName, int tol)
-:Returns a list of all image positions on the screen which match the given image.
-
-=== Text Reading ===
-  region[] findAllTextRegions()
-  parse findText(String s, bool isExact)
-
-  void stripRegion(region r)
-  parse[] parseRegion(region r)
-  parse findTextInRegion(region r, String t, bool isExact)
-  region[] findAllRegionsWithText(String t, bool isExact)
-  parse waitForText(String t, int delay, int timeout, bool isExact)
-  int waitForNoText(String t, int delay, int timeout, bool isExact)
-  region waitForRegionWithText(String t, int delay, int timeout, bool isExact)
-  parse waitForTextInRegion(Region r, String t, int delay, int timeout, bool isExact)
-  int waitForNoTextInRegion(Region r, String t, int delay, int timeout, bool isExact)
-  void clickText(parse p)
-  parse[] getChatText()
-  parse[] getAllText()
-
-;int clickAllText(text, offsetX, offsetY, rightClick)
-:Click all matching text fragments (excluding chat and inventory) adding (offsetX, offsetY) to each click position (offset defaults to 5, 5). Returns number of clicks performed.
