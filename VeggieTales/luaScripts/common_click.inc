@@ -172,7 +172,7 @@ function drawWater()
   local rain = srFindImage("draw_water.png");
   if rain then
     safeClick(rain[0], rain[1]);
-    local max = waitForImage("crem-max.png", 500, "Waiting for Max button");
+    local max = waitForImage("crem-max.png", 3000, "Waiting for Max button");
     if max then
       safeClick(max[0]+5, max[1]+5);
       result = true;
