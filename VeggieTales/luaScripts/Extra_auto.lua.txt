@@ -1,0 +1,35 @@
+It uses data in chem-all.txt and chem-cheap.txt. The 'cheap' one is
+recipes that only involve common herbs, most resins, salts, and
+powdered gems. The 'all' is recipes involving every known essence
+except hyssop and hazlewort. Currently 'all' is used for Thoth's and
+Ra's extracts, and 'cheap' for everything else. If there is a recipe
+that you do not want to use, delete it from those files.
+
+Running the macro involves pressing 'shift' to mark the window like
+normal, but here is what you need to have pinned before you run:
+
+- A 3-callibrated chemistry lab on its main menu.
+- The extracts menu from a different chemistry lab.
+- Some number of 'take' menus. Each essence you want to use must be
+visible without scrolling. I use 6 warehouses, and have 6 pinned take
+menus.
+
+None of these windows can overlap with the middle of the screen where
+the select-compound menu will appear. Before starting the macro, make
+sure that the select-compound menu is closed. Otherwise you'll get the
+'chemistry lab is busy' message.
+
+While the macro is running, it will check requirements of Ra, Thoth,
+Osiris, Set, Maat, Geb in that order and will make it if it can find
+the ingredients.
+
+If it can't find the ingredients, it will pop up a window letting you
+know the recipe it couldn't find. You can then either exit the macro
+(useful if you want to produce the needed essences) or press shift to
+let it skip that recipe and try to find other requirements.
+
+IMPORTANT: If it gets into a bad state where it has added essences to
+a mixture but not finished, close the macro. You can then run
+'notepad.lua' which will let you select the type/requirememts and give
+you the recipe it was going for. You can then finish up adding any
+essences needed, mixing/etc. by hand.

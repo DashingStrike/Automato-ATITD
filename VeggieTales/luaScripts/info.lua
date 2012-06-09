@@ -1,7 +1,7 @@
 assert(loadfile("luaScripts/common.inc"))();
 
 function doit()
-  askForWindow();
+  askForWindow("Shows currently hovered mouse position and RGB color values. Press shift over ATITD window to continue.");
   while true do
     srReadScreen();
     local pos = getMousePos();

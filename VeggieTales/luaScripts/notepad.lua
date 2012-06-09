@@ -2,7 +2,7 @@
 assert(loadfile("luaScripts/common.inc"))();
 
 function doit()
-  local tree = loadNotes("chem-cheap.txt");
+  local tree = loadNotes("luascripts/chem-cheap.txt");
   browseMenu(tree);
 end
 

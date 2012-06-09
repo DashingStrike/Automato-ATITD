@@ -72,7 +72,7 @@ isRising = {};
 isSmall = {};
 
 function doit()
-  askForWindow("Alembic Control");
+  askForWindow("Alembic Control -- Runs any alembic windows you have pinned. Press shift over ATITD window to continue.");
   alembicControl();
 end
 
