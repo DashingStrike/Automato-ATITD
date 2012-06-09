@@ -11,7 +11,7 @@ askText = singleLine([[
   VT window is in the TOP-RIGHT corner of the screen.
 ]])
 
-wmText = "Tap shift on kettles to open and pin.";
+wmText = "Tap control on kettles to open and pin.";
 
 actions = {
   {
@@ -138,7 +138,7 @@ function waitForKettles(message, stoked)
 	done = false;
       end
     end
-    sleepWithStatusPause(5000, message);
+    sleepWithStatus(5000, message);
   end
 end
 

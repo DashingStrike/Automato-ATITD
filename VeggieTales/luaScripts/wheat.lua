@@ -65,7 +65,7 @@ function tendWheat()
 		end
 
 
-    sleepWithStatusPause(300, "Searching " .. windowcount .. " windows for Harvest");
+    sleepWithStatus(300, "Searching " .. windowcount .. " windows for Harvest");
 
 
 	--Search for Harvest windows. Havest and Water will exist at same time in window, so we always search for Harvest first.
@@ -84,9 +84,9 @@ function tendWheat()
 
 
 			--Wait a long moment, it takes a while before the window turns blank, to allow a right click to close it.
-			sleepWithStatusPause(2000, "Harvested " .. windowcount .. " windows...");
+			sleepWithStatus(2000, "Harvested " .. windowcount .. " windows...");
 			local windowcount = clickAllImages("ThisIs.png");  --Refresh windows to make the harvest windows turn blank
-			sleepWithStatusPause(1000, "Refreshing " .. windowcount .. "/Preparing to Close windows...");
+			sleepWithStatus(1000, "Refreshing " .. windowcount .. "/Preparing to Close windows...");
 
 
 			--Right click to close previously harvested windows
@@ -103,7 +103,7 @@ function tendWheat()
     -- Refresh windows again
     local windowcount = clickAllImages("ThisIs.png");
 
-   sleepWithStatusPause(300, "Searching " .. windowcount .. " windows for Water");
+   sleepWithStatus(300, "Searching " .. windowcount .. " windows for Water");
 
 
 	-- Search for Water windows.
@@ -130,7 +130,7 @@ function tendWheat()
 	refillWater();
 	end
 
-    sleepWithStatusPause(3000, "----------------------------------------------\nIf you want to plant more wheat Press Alt+Shift to Pause\n----------------------------------------------\nWaterings SINCE Jugs Refill: " .. water_count .. "\nWaterings UNTIL Jugs Refill: " .. refill_jugs .. "\n----------------------------------------------\nTotal Waterings: " .. total_waterings .. "\nTotal Harvests: " .. total_harvests);
+    sleepWithStatus(3000, "----------------------------------------------\nIf you want to plant more wheat Press Alt+Shift to Pause\n----------------------------------------------\nWaterings SINCE Jugs Refill: " .. water_count .. "\nWaterings UNTIL Jugs Refill: " .. refill_jugs .. "\n----------------------------------------------\nTotal Waterings: " .. total_waterings .. "\nTotal Harvests: " .. total_harvests);
   end
-  return quitMessage;
+  return quit_message;
 end

@@ -1,0 +1,6 @@
+common_click: drawWater() - Add sleepWithStatus(3500, "Waiting for water pickup animation...");
+
+common_gps: findCoords() - Change local a, b, x, y = string.find(str, ": ([0-9-]+)\, ([0-9-]+)");
+Also changed local anchor = findText("2,"); from "Year 2," (Until we can figure out why findText doesn't work on double digit hours, in River Plains
+
+common_window: openAndPin - changed 50 delay to 100

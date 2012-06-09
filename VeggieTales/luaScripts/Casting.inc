@@ -49,7 +49,7 @@ function doneGUI(totalPasses)
 wait = 5000;  -- Gives a 5 second delay to review the GUI stats, before quitting/returing to Main Menu.
 clickAllImages("This.png"); -- Refresh the screen. Update Casting box window so we know how much charcoal is currently in each box before next project
 
-sleepWithStatusPause(wait, "[" .. totalPasses .. "/" .. totalPasses .. "] ALL DONE!\n----------------------------------------------\n[" .. made .. "/" .. batch*project_windows*num_loops .. "] " .. name .. " / Completed");
+sleepWithStatus(wait, "[" .. totalPasses .. "/" .. totalPasses .. "] ALL DONE!\n----------------------------------------------\n[" .. made .. "/" .. batch*project_windows*num_loops .. "] " .. name .. " / Completed");
 
 lsPlaySound("Complete.wav");
 runCasting(); -- Return to/Display Main Menu
@@ -64,7 +64,7 @@ function waitGUI(pass)
 	stalledMessage = "";
 	end
 
-sleepWithStatusPause(wait, "[" .. pass .. "/" .. num_loops .. "] Total Passes\n----------------------------------------------\n[" .. batch .. "] " .. name .. " per CB\n[" .. project_windows .. "] CB\'s working" .. stalledMessage .. "\n----------------------------------------------\n[" .. batch*project_windows .. "] " .. name .. " per pass\n----------------------------------------------\n[" .. made .. "/" .. batch*project_windows*num_loops .. "] " .. name .. " / Completed");
+sleepWithStatus(wait, "[" .. pass .. "/" .. num_loops .. "] Total Passes\n----------------------------------------------\n[" .. batch .. "] " .. name .. " per CB\n[" .. project_windows .. "] CB\'s working" .. stalledMessage .. "\n----------------------------------------------\n[" .. batch*project_windows .. "] " .. name .. " per pass\n----------------------------------------------\n[" .. made .. "/" .. batch*project_windows*num_loops .. "] " .. name .. " / Completed");
 
 made = made + (batch*project_windows);
 end
@@ -98,7 +98,7 @@ function heavyleadbowl()
 			refreshWindows();
 			project_windows = clickAllImages("Casting/HeavyLeadBowl.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1500, "Waiting for Project windows");
+				sleepWithStatus(1500, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -118,7 +118,7 @@ function monkeywrench()
 			refreshWindows();
 			project_windows = clickAllImages("Casting/MonkeyWrench.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1500, "Waiting for Project windows");
+				sleepWithStatus(1500, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -138,7 +138,7 @@ function silverbowl()
 			refreshWindows();
 			project_windows = clickAllImages("Casting/SilverBowl.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1500, "Waiting for Project windows");
+				sleepWithStatus(1500, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -158,7 +158,7 @@ function ironcookpot()
 			refreshWindows();
 			project_windows = clickAllImages("Casting/IronCookingPot.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1500, "Waiting for Project windows");
+				sleepWithStatus(1500, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -178,7 +178,7 @@ function anvilbed()
 			refreshWindows();
 			project_windows = clickAllImages("Casting/AnvilBed.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1500, "Waiting for Project windows");
+				sleepWithStatus(1500, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -200,7 +200,7 @@ function orichalcumpellets()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/OrichalcumPellets.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -222,7 +222,7 @@ function mediumgear()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/MediumGear.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -244,7 +244,7 @@ function smallgear()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/SmallGear.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -266,7 +266,7 @@ function bearing()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/Bearing.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -288,7 +288,7 @@ function washers()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/12Washers.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -310,7 +310,7 @@ function bolts()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/4Bolts.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -332,7 +332,7 @@ function heavymallethead()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/HeavyMalletHead.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -354,7 +354,7 @@ function widetungstenchisel()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/WideTungstenChisel.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -376,7 +376,7 @@ function roundhammer()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/RoundHammer.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -398,7 +398,7 @@ function ballpeenhammer()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/BallPeenHammer.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -420,7 +420,7 @@ function shapingmallet()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/ShapingMallet.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -442,7 +442,7 @@ function leadmallet()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/LeadMallet.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end
@@ -464,7 +464,7 @@ function pewterincenseprong()
 			lsSleep(400);
 			project_windows = clickAllImages("Casting/PewterIncenseProng.png");
 				if project_windows == 0 then
-				sleepWithStatusPause(1100, "Waiting for Project windows");
+				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
 				end

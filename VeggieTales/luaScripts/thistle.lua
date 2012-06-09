@@ -25,6 +25,8 @@ askText = singleLine([[
   Make sure the VT window is in the TOP-RIGHT corner of the screen.
 ]]);
 
+wmText = "Tap Control on Thistle Gardens to open and pin.";
+
 -- Variables set by prompt.
 lastSun = 0;
 passCount = 1;
@@ -65,7 +67,7 @@ function doit()
   askForWindow(askText);
   promptThistles();
   promptRecipe();
-  windowManager("Thistle Window Setup", wmText, overlap);
+  windowManager("Thistle Window Setup", wmText, overlap, true);
   unpinOnExit(runThistles);
 end
 
@@ -108,7 +110,7 @@ function promptThistles()
     end
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
                     "End script") then
-      error(quitMessage);
+      error(quit_message);
     end
 
     lsSleep(50);
@@ -150,7 +152,7 @@ function promptRecipe()
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
                     "End script") then
-      error(quitMessage);
+      error(quit_message);
     end
 
     local badList = false;
@@ -341,7 +343,7 @@ function monInterface(message)
   if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
 		  "End script")
   then
-    error(quitMessage);
+    error(quit_message);
   end
     
   force = lsButtonText(40, lsScreenY - 60, z, 200, 0xFFFFFFff, "Force tick");
@@ -383,6 +385,7 @@ function forAllWindows(f, image_names, message)
   local first = true;
   for i=#window_locs, 1, -1 do
     if not first and overlap then
+      statusScreen(message);
       -- focus
       local spot = getWaitSpot(window_locs[i + 1][0] - 9,
 			       window_locs[i + 1][1] - 8);
@@ -392,17 +395,20 @@ function forAllWindows(f, image_names, message)
     f(i, image_names);
     first = false;
   end
-  lsSleep(100);
+  lsSleep(10);
   -- refocus
   if overlap then
     statusScreen(message .. " Refocusing...");
     for i=2, #window_locs do
-      local spot = getWaitSpot(window_locs[i][0] - 9,
-			       window_locs[i][1] - 8);
+--      local spot = getWaitSpot(window_locs[i][0] - 9,
+--			       window_locs[i][1] - 8);
       safeClick(window_locs[i][0], window_locs[i][1] + 310);
-      waitForChange(spot);
+      lsSleep(tick_delay);
+--      waitForChange(spot);
     end
-    lsSleep(100);
+--    lsSleep(100);
+    waitForPixelList(window_lost[#window_locs], makePoint(-9, -8),
+		     WINDOW_COLORS, 4, message .. " Refocusing...", 2000);
   end
 end
 
