@@ -186,7 +186,7 @@ function sleepWithStatus(delay_time, message, color)
     time_left = delay_time - (lsGetTimer() - start_time);
     local waitMessage = "Waiting ";
     if delay_time >= 1000 then
-      waitMessage = waitMessage .. time_left .. "ms... ";
+      waitMessage = waitMessage .. time_left .. " ms ";
     end
     lsPrintWrapped(10, 50, 0, lsScreenX - 20, 1, 1, 0xd0d0d0ff,
 		   waitMessage .. waitChars[frame]);
