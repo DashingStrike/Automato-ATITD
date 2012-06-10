@@ -19,14 +19,6 @@ knownVineNames = {
     image = "Contemplation" },
   { name = "Distraction",
     image = "Distraction" },
-  { name = "P Dexaglucose 10S",
-    image = "" },
-  { name = "P FOUR Skin KKKK",
-    image = "Pascarella FOUR Skin KKKK" },
-  { name = "P Rainbow AACCC",
-    image = "Pascarella Rainbow AACCC" },
-  { name = "P Sugar High 11S",
-    image = "Pascarella Sugar High (11S)" }
 };
 
 vineyardActions = { "Tend", "Harvest", "Cutting" };
@@ -71,7 +63,7 @@ function doit()
     action = promptVineyard(status, action);
 
     local x, y = srMousePos();
-    openAndPin(x, y, 500);
+    openAndPin(x, y, 1500);
 
     if action == 1 then
       status = processVineyard();
@@ -101,8 +93,11 @@ function promptVineyard(status, action)
   while not lsControlHeld() do
     local edit = lsButtonText(10, lsScreenY - 30, 0, 120, 0xffffffff,
 			      "Edit Tends");
-    action = lsDropdown("VineyardAction", 80, lsScreenY - 120, 0, 150, action,
+    lsPrint(10, 120, 0, 0.7, 0.7, 0xffffffff, "Action to Perform:");
+    lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
+    action = lsDropdown("VineyardAction", 30, 180, 0, 150, action,
 			vineyardActions);
+    lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     lsPrint(10, lsScreenY - 90, 0, 0.7, 0.7, 0xd0d0d0ff,
 	    "Tap control over a vineyard");
     statusScreen(status);
@@ -131,8 +126,10 @@ function promptTends()
       for i=1,#vines do
 	tends[i] = vines[i].name;
       end
-      vineIndex = lsDropdown("TendIndex", 30, 80, 0, 250, vineIndex,
+      lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
+      vineIndex = lsDropdown("TendIndex", 30, 100, 0, 250, vineIndex,
 			     tends);
+      lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
       edit = lsButtonText(lsScreenX/2 - 60, 120, 0, 120, 0xffffffff,
 			  "Edit Tend");
       delete = lsButtonText(lsScreenX/2 - 60, 150, 0, 120, 0xffffffff,
@@ -176,7 +173,7 @@ function promptAdd()
 
   local done = false;
   while not done do
-    lsPrint(10, 10, 0, 1.0, 1.0, 0xffffffff, "Adding New Vine");
+    lsPrint(10, 10, 0, 0.9, 0.9, 0xffffffff, "Adding New Vine");
     done = lsButtonText(10, lsScreenY - 30, 0, 80, 0xffffffff, "Next");
     local cancel = lsButtonText(100, lsScreenY - 30, 0, 80, 0xffffffff,
 				"Cancel");
@@ -185,17 +182,29 @@ function promptAdd()
       error(quit_message);
     end
     
+    lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
     addIndex = lsDropdown("VineAddIndex", 30, 50, 0, 250, addIndex,
 			  vineNames);
+    lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+
     local vineName, vineImage;
     if addIndex == otherIndex then
       local foo;
-      lsPrint(5, 100, 0, 1.0, 1.0, 0xd0d0d0ff, "Short Name:");
-      foo, vineName = lsEditBox("aVineName", 80, 100, 0, 200, 30, 1.0, 1.0,
+      lsPrint(10, 80, 0, 0.7, 0.7, 0xd0d0d0ff, "Title Name (Displayed in menus):");
+      lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
+      foo, vineName = lsEditBox("aVineName", 30, 125, 0, 250, 30, 1.0, 1.0,
 				0x000000ff, "Custom");
-      lsPrint(5, 140, 0, 1.0, 1.0, 0xd0d0d0ff, "Full Name:");
-      foo, vineImage = lsEditBox("aVineImage", 80, 140, 0, 200, 30, 1.0, 1.0,
-				 0x000000ff, "vineyard/Custom.png");
+      lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+      lsPrint(10, 155, 0, 0.7, 0.7, 0xd0d0d0ff, "Vine Cut Name (or filename):");
+      lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
+      foo, vineImage = lsEditBox("aVineImage", 30, 210, 0, 250, 30, 1.0, 1.0,
+				 0x000000ff);
+      lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+      lsPrint(10, 225, 0, 0.6, 0.6, 0xd0d0d0ff, "Vine Cut Name is case sensitive!");
+      lsPrint(10, 240, 0, 0.6, 0.6, 0xd0d0d0ff, "ie \"Pascarella Hexkin 6K\" - enter exactly.");
+      lsPrint(10, 255, 0, 0.6, 0.6, 0xd0d0d0ff, "Above \"Text\" searched in vineyard windows.");
+      lsPrint(10, 270, 0, 0.6, 0.6, 0xd0d0d0ff, "OR enter path/filename, ie vineyard/Custom.png");
+
     else
       vineName = vineNames[addIndex];
       vineImage = vineImages[addIndex];
@@ -203,15 +212,15 @@ function promptAdd()
 
     if vinesUsed[vineName] then
       done = false;
-      lsPrint(10, 220, 10, 0.7, 0.7, 0xFF2020ff, "Short Name In Use");
+      lsPrint(30, 135, 10, 0.7, 0.7, 0xFF2020ff, "Title Name In Use");
     elseif vineImagesUsed[vineImage] then
       done = false;
-      lsPrint(10, 220, 10, 0.7, 0.7, 0xFF2020ff, "Long Name In Use");
+      lsPrint(30, 205, 10, 0.7, 0.7, 0xFF2020ff, "Vine Cut Name In Use");
     elseif string.match(vineImage, ".png$") then
       local status, error = pcall(srImageSize, vineImage);
       if not status then
 	done = false;
-	lsPrint(10, 220, 10, 0.7, 0.7, 0xFF2020ff, "Image Not Found");
+	lsPrint(30, 205, 10, 0.7, 0.7, 0xFF2020ff, "Image Not Found");
       end
     end
 
@@ -240,18 +249,19 @@ function promptEdit(vine)
   local done = false;
   while not done do
     lsPrint(10, 10, 0, 1.0, 1.0, 0xffffffff, "Editing " .. vine.name);
-    lsPrint(80, 50, 0, 0.7, 0.7, 0xd0d0d0ff, "Action");
-    lsPrint(160, 50, 0, 0.7, 0.7, 0xd0d0d0ff, "Vigor");
-    local y = 70;
+    lsPrint(74, 60, 0, 0.7, 0.7, 0xd0d0d0ff, "Action");
+    lsPrint(139, 60, 0, 0.7, 0.7, 0xd0d0d0ff, "Vigor");
+    local y = 100;
     for i=1,#stateNames do
+      lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
       lsPrint(10, y, 0, 0.7, 0.7, 0xd0d0d0ff, stateNames[i] .. ":");
       local tendIndex = tendIndices[vine.tends[i]];
       local tend  = lsDropdown(stateNames[i] .. "T" .. "-" .. vine.name,
-			       80, y, 0, 60, tendIndex, tendActions);
+			       85, y, 0, 60, tendIndex, tendActions);
       vine.tends[i] = tendActions[tend];
       vine.vigors[i] = lsDropdown(stateNames[i] .. "V" .. "-" .. vine.name,
 				  160, y, 0, 60, vine.vigors[i], vigorNames);
-				  
+      lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
       y = y + 30;
     end
     done = lsButtonText(10, lsScreenY - 30, 0, 80, 0xffffffff, "Save");

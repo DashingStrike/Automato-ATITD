@@ -12,6 +12,7 @@ askText = singleLine([[
   Make sure chat is MINIMIZED! Press Shift over ATITD window.
 ]]);
 
+miningTime = 0;
 autoWorkMine = true;
 timesworked = 0;
 dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
@@ -203,7 +204,12 @@ function getPoints()
     y = y + 30;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Type:  " .. ore);
     y = y + 20;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Worked:  " .. timesworked .. " times");
+    miningTimeGUI = "N/A";
+    if miningTime ~= 0 then
+      --miningTimeGUI = math.floor(miningTime/100)/10 .. " secs";
+      miningTimeGUI = (miningTime/100)/10 .. " secs";
+    end
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Worked:  " .. timesworked .. " times  (Last: " .. miningTimeGUI .. ")");
     y = y + 30;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Select " .. nodeleft .. " more nodes to automatically start!");
     y = y + 30;
@@ -255,14 +261,18 @@ end
 
 function clickSequence()
   fetchTotalCombos();
-  sleepWithStatus(150, "Starting...");
+  sleepWithStatus(150, "Starting... Don\'t move mouse!");
   local worked = 1;
+  local startMiningTime = lsGetTimer();
+
 	for i=1,#clickList do
 		for j=i+1,#clickList do
 			for k=j+1,#clickList do
+	checkCloseWindows();
 	-- 1st Node
 	checkBreak();
       checkAbort();
+	local startSetTime = lsGetTimer();
 	srSetMousePos(clickList[i][1], clickList[i][2]);
 	lsSleep(clickDelay);
 	srKeyEvent('A'); 
@@ -280,33 +290,43 @@ function clickSequence()
 			srSetMousePos(clickList[k][1], clickList[k][2]);
 			lsSleep(clickDelay);
 			srKeyEvent('S'); 
+			lsSleep(popDelay);
+			findClosePopUp();
+
+			worked = worked + 1
+			local elapsedTime = lsGetTimer() - startMiningTime;
+			local setTime = lsGetTimer() - startSetTime;
+
 		       local y = 10;
 		       lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
 		       y = y +50
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "[" .. worked .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k);
-			y = y + 40;
+			y = y + 32;
+			--lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. math.floor(setTime/100)/10 .. " secs");
+			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. (setTime/100)/10 .. " secs");
+			y = y + 32;
+			--lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Time Elapsed: " .. math.floor(elapsedTime/100)/10 .. " secs");
+			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. (elapsedTime/100)/10 .. " secs");
+			y = y + 16;
+			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Last Time Elapsed: " .. miningTimeGUI);
+			y = y + 32;
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Node Delay: " .. clickDelay .. " ms");
 			y = y + 16;
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Popup Delay: " .. popDelay .. " ms");
-			y = y + 40;
+			y = y + 32;
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Hold Shift to Abort and Return to Menu.");
-			y = y + 40;
+			y = y + 32;
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Don't touch mouse until finished!");
 			lsDoFrame();
-			worked = worked + 1
-			lsSleep(popDelay);
-			findClosePopUp();
-
+			end
+		end
 	end
 
-		end
-
-			end
-
+  miningTime = lsGetTimer() - startMiningTime;
   timesworked = timesworked + 1;
-  if autoWorkMine then
-    workMine();
-  end
+    if autoWorkMine then
+      workMine();
+    end
   reset();
 end
 
@@ -317,6 +337,23 @@ function workMine()
       srKeyEvent('W'); 
       sleepWithStatus(1000, "Working mine (Fetching new nodes)");
 	findClosePopUp();
+end
+
+function checkCloseWindows()
+-- Rare situations a click can cause a window to appear for a node, blocking the view to other nodes.
+-- This is a safeguard to keep random windows that could appear, from remaining on screen and blocking the view of other nodes from being selected.
+	srReadScreen();
+	local closeWindows = findAllImages("thisis.png");
+
+	  if #closeWindows > 0 then
+		for i=#closeWindows, 1, -1 do
+		  -- 2 right clicks in a row to close window (1st click pins it, 2nd unpins it
+		  srClickMouseNoMove(closeWindows[i][0]+5, closeWindows[i][1]+10, true);
+		  lsSleep(100);
+		  srClickMouseNoMove(closeWindows[i][0]+5, closeWindows[i][1]+10, true);
+		end
+		lsSleep(clickDelay);
+	  end
 end
 
 function reset()
@@ -366,29 +403,29 @@ function promptDelays()
 	lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 	y = y + 10;
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
-      is_done, clickDelay = lsEditBox("delay", 170, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 200);
+      is_done, clickDelay = lsEditBox("delay", 170, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 100);
       clickDelay = tonumber(clickDelay);
       if not clickDelay then
         is_done = false;
         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-        clickDelay = 200;
+        clickDelay = 100;
       end
 	y = y + 40;
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
       is_done, popDelay = lsEditBox("delay2", 170, y, 0, 50, 30, 1.0, 1.0,
-                                      0x000000ff, 500);
+                                      0x000000ff, 250);
       popDelay = tonumber(popDelay);
       if not popDelay then
         is_done = false;
         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-        popDelay = 500;
+        popDelay = 250;
       end
 	y = y + 40;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Delay between selecting each node.");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Pause between selecting each node.");
 	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Decrease value to run faster (try increments of 25)");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Raise value to run slower (try increments of 25)");
 	y = y + 22;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay: Finalize, wait to see if popup appears.");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay: Finalize, pause and wait for Popup.");
 	y = y + 16;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Raise increments of 100 if you are laggy.");
 	y = y + 16;
@@ -408,3 +445,12 @@ function promptDelays()
   end
   return count;
 end
+
+
+
+
+
+
+
+
+

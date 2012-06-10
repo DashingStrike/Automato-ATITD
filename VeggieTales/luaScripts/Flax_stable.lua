@@ -272,7 +272,7 @@ function doit()
   initGlobals();
   local startPos = findCoords();
   if not startPos then
-    error("Could not find clockloc window");
+    error("Could not find ATITD clock.\Verify entire clock is displaying and all window borders showing.");
   end
 
   drawWater();
