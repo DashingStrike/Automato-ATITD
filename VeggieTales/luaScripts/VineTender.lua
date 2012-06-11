@@ -8,6 +8,10 @@ loadfile("luaScripts/common.inc")( );
 askText = singleLine([[
   Vine Tender v1.1 (by Teti, revised by Tallow) --
   Automatically tends vineyards based on vine type.
+  Make sure you are standing to where vinyard windows
+  open away from VT screen. This version uses OCR and 
+  reads text, that will fail if the window is even partially
+  blocked from view.
 ]]);
 
 knownVineNames = {
@@ -19,10 +23,22 @@ knownVineNames = {
     image = "Contemplation" },
   { name = "Distraction",
     image = "Distraction" },
+  { name = "P Bright Bunch CCG",
+    image = "Pascarella Bright Bunch CCG" },
+  { name = "P Dexaglucose 10S",
+    image = "Pascarella Dexaglucose 10S" },
+  { name = "P FOUR Skin KKKK",
+    image = "Pascarella FOUR Skin KKKK" },
+  { name = "P Rainbow AACCC",
+    image = "Pascarella Rainbow AACCC" },
+  { name = "P Sugar High 11S",
+    image = "Pascarella Sugar High (11S)" }
 };
+
 
 vineyardActions = { "Tend", "Harvest", "Cutting" };
 vineyardImages = { "", "Harvest the Gr", "Take a Cutting of the V" };
+
 
 stateNames = {"Fat", "Musty", "Rustle", "Sagging", "Shimmer",
 	      "Shrivel", "Wilting"};
@@ -93,9 +109,9 @@ function promptVineyard(status, action)
   while not lsControlHeld() do
     local edit = lsButtonText(10, lsScreenY - 30, 0, 120, 0xffffffff,
 			      "Edit Tends");
-    lsPrint(10, 120, 0, 0.7, 0.7, 0xffffffff, "Action to Perform:");
+
     lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
-    action = lsDropdown("VineyardAction", 30, 180, 0, 150, action,
+    action = lsDropdown("VineyardAction", 125, lsScreenY - 80, 0, 100, action,
 			vineyardActions);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     lsPrint(10, lsScreenY - 90, 0, 0.7, 0.7, 0xd0d0d0ff,
@@ -348,7 +364,7 @@ end
 function statusSuccess(vine)
   srReadScreen();
   tendedCount = tendedCount + 1;
-  local result = "(" .. tendedCount .. ") Tended " .. vine.name .. "\n\n";
+  local result = "(" .. tendedCount .. ") Tended " .. vine.name .. "\n";
   result = result .. statusNumber("Acid");
   result = result .. statusNumber("Color");
   result = result .. statusNumber("Grapes");
