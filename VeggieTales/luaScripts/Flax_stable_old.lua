@@ -24,13 +24,14 @@ askText = singleLine([[
 ]]);
 
 -- Global parameters set by prompt box.
-num_loops = 5;
 grid_w = 5;
 grid_h = 5;
 is_plant = true;
 seeds_per_pass = 5;
 
-imgFlax1 = "Flax:";
+loadfile("luaScripts/ui_utils.inc")();
+
+imgFlax1 = "FlaxGeneric.png";
 imgHarvest = "HarvestThisFlax.png";
 imgWeedAndWater = "WeedAndWater.png";
 imgWeed = "WeedThisFlaxBed.png";
@@ -55,10 +56,6 @@ xyFlaxMenu = {};
 -- The flax bed window
 window_w = 174;
 window_h = 100;
-
-FLAX = 0;
-ONIONS = 1;
-plantType = FLAX;
 
 -------------------------------------------------------------------------------
 -- initGlobals()
@@ -92,13 +89,10 @@ function initGlobals()
 
   xyCenter[0] = xyWindowSize[0] / 2 - walk_x_drift;
   xyCenter[1] = xyWindowSize[1] / 2 + walk_y_drift;
-  if plantType == FLAX then
-    xyFlaxMenu[0] = xyCenter[0] - 43*pixel_scale;
-    xyFlaxMenu[1] = xyCenter[1] + 0;
-  else
-    xyFlaxMenu[0] = xyCenter[0] - 20;
-    xyFlaxMenu[1] = xyCenter[1] - 10;
-  end
+  xyFlaxMenu[0] = xyCenter[0] - 43*pixel_scale;
+  xyFlaxMenu[1] = xyCenter[1] + 0;
+
+
 end
 
 -------------------------------------------------------------------------------
@@ -135,7 +129,7 @@ function promptFlaxNumbers()
   -- Edit box and text display
   while not is_done do
     -- Make sure we don't lock up with no easy way to escape!
-    checkBreak();
+    checkBreak("disallow pause");
 
     lsPrint(10, 10, z, scale, scale, 0xFFFFFFff, "Choose passes and grid size");
 
@@ -146,7 +140,7 @@ function promptFlaxNumbers()
 
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
     is_done, num_loops = lsEditBox("passes", 110, y, z, 50, 30, scale, scale,
-                                   0x000000ff, num_loops);
+                                   0x000000ff, 5);
     if not tonumber(num_loops) then
       is_done = nil;
       lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
@@ -223,13 +217,12 @@ end
 -------------------------------------------------------------------------------
 
 lastPlantPos = null;
-seedImage = imgFlax1;
 
 function getPlantWindowPos()
   srReadScreen();
-  local plantPos = findText(seedImage);
+  local plantPos = srFindImage(imgFlax1);
   if plantPos then
-    plantPos[0] = plantPos[0] + 10;
+    plantPos[0] = plantPos[0] + 5;
   else
     plantPos = lastPlantPos;
     if plantPos then
@@ -270,21 +263,12 @@ function doit()
   promptFlaxNumbers();
   askForWindow(askText);
   initGlobals();
-  local startPos = findCoords();
-  if not startPos then
-    error("ATITD clock not found.\Verify entire clock and borders are visible. Try moving clock slightly.");
-  end
-
-  drawWater();
 
   for loop_count=1, num_loops do
-    error_status = "";
     local finalPos = plantAndPin(loop_count);
     dragWindows(loop_count);
-    harvestAll(loop_count);
---    walkHome(loop_count, finalPos);
-    walkHome(loop_count, startPos);
-    drawWater();
+    harvestFlax(loop_count);
+    walkHome(loop_count, finalPos);
   end
   lsPlaySound("Complete.wav");
 end
@@ -327,7 +311,7 @@ function plantAndPin(loop_count)
                   xyCenter[1] + walk_px_y*dy[dxi], 0);
         local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
         lsSleep(walk_time);
-        waitForStasis(spot, 1500);
+        waitForStasis(spot, 1000);
         dt = dt - 1;
         if dt == 1 then
           dxi = dxi + 1;
@@ -365,51 +349,30 @@ end
 function plantHere(xyPlantFlax, y_pos)
   -- Plant
   lsPrintln('planting ' .. xyPlantFlax[0] .. ',' .. xyPlantFlax[1]);
-  local bed = clickPlant(xyPlantFlax);
-  if not bed then
-    return false;
-  end
-
-  -- Bring up menu
-  lsPrintln('menu ' .. bed[0] .. ',' .. bed[1]);
-  if not openAndPin(bed[0], bed[1], 3500) then
-    error_status = "No window came up after planting.";
-    return false;
-  end
-
---  if plantType == ONIONS then
---    lsPrintln("Onions");
---    lsSleep(200);
---    srReadScreen();
---    local waters = findAllImages("WaterThese.png");
---    for i = 1,#waters do
---      lsPrintln("Water");
---      safeClick(waters[i][0]+5, waters[i][1]+5);
---    end
---    sleepWithStatus(1000, "First Water");
---  end
-
-  -- Check for window size
-  checkWindowSize(bed[0], bed[1]);
-
-  -- Move window into corner
-  stashWindow(bed[0] + 5, bed[1], BOTTOM_RIGHT);
-
-  return true;
-end
-
-function clickPlant(xyPlantFlax)
-  local result = xyFlaxMenu;
   local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
   safeClick(xyPlantFlax[0], xyPlantFlax[1], 0);
-  lsSleep(click_delay);
 
   local plantSuccess = waitForChange(spot, 1500);
   if not plantSuccess then
-    error_status = "No flax bed was placed when planting.";
-    result = nil;
+    --error "No plant was placed. Abort this run.";
+    return false;
   end
-  return result;
+
+
+  -- Bring up menu
+  lsPrintln('menu ' .. xyFlaxMenu[0] .. ',' .. xyFlaxMenu[1]);
+  if not openAndPin(xyFlaxMenu[0], xyFlaxMenu[1], 750) then
+    --error "No window came up. Abort this run.";
+    return false;
+  end
+
+
+  -- Check for window size
+  checkWindowSize(xyFlaxMenu[0], xyFlaxMenu[1]);
+
+  -- Move window into corner
+  stashWindow(xyFlaxMenu[0] + 5, xyFlaxMenu[1], BOTTOM_RIGHT);
+  return true;
 end
 
 -------------------------------------------------------------------------------
@@ -425,13 +388,13 @@ function dragWindows(loop_count)
 end
 
 -------------------------------------------------------------------------------
--- harvestAll(loop_count)
+-- harvestFlax(loop_count)
 --
 -- Harvest all the flax or seeds and clean up the windows afterwards.
 -------------------------------------------------------------------------------
 
-function harvestAll(loop_count)
-  local did_harvest = false;
+function harvestFlax(loop_count)
+  local did_harvest=false;
   local harvestLeft = 0;
   local seedIndex = 1;
   local seedWave = 1;
@@ -516,9 +479,6 @@ function harvestAll(loop_count)
     end
     checkBreak();
   end
-  -- Wait for last flax bed to disappear
-  sleepWithStatus(2500, "(" .. loop_count .. "/" .. num_loops ..
-		  ") ... Waiting for flax beds to disappear");
 end
 
 -------------------------------------------------------------------------------
@@ -528,25 +488,27 @@ end
 -------------------------------------------------------------------------------
 
 function walkHome(loop_count, finalPos)
+  -- Wait for last flax bed to disappear
+  statusScreen("(" .. loop_count .. "/" .. num_loops ..
+               ") Waiting for flax beds to disappear...");
+  lsSleep(2500);
   closeAllWindows(0, 0, srGetWindowSize()[0] - lsGetWindowSize()[0],
 		  srGetWindowSize()[1]);
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
 
-  walkTo(finalPos);
-
   -- Walk back
---  for x=1, finalPos[0] do
---    local spot = getWaitSpot(xyCenter[0] - walk_px_x, xyCenter[1]);
---    safeClick(xyCenter[0] - walk_px_x, xyCenter[1], 0);
---    lsSleep(walk_time);
---    waitForStasis(spot, 1000);
---  end
---  for x=1, -(finalPos[1]) do
---    local spot = getWaitSpot(xyCenter[0], xyCenter[1] + walk_px_y);
---    safeClick(xyCenter[0], xyCenter[1] + walk_px_y, 0);
---    lsSleep(walk_time);
---    waitForStasis(spot, 1000);
---  end
+  for x=1, finalPos[0] do
+    local spot = getWaitSpot(xyCenter[0] - walk_px_x, xyCenter[1]);
+    safeClick(xyCenter[0] - walk_px_x, xyCenter[1], 0);
+    lsSleep(walk_time);
+    waitForStasis(spot, 1000);
+  end
+  for x=1, -(finalPos[1]) do
+    local spot = getWaitSpot(xyCenter[0], xyCenter[1] + walk_px_y);
+    safeClick(xyCenter[0], xyCenter[1] + walk_px_y, 0);
+    lsSleep(walk_time);
+    waitForStasis(spot, 1000);
+  end
 end
 
 -------------------------------------------------------------------------------

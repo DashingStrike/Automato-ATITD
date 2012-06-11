@@ -5,12 +5,12 @@
 
 assert(loadfile("luaScripts/cc_Assist.lua"))();
 
-askText = singleLine("
-  CC Auto v1.0 (by Tallow, based on Tak's cc program) --\
-  Automatically runs many charcoal hearths or ovens\
-  simultaneously. Make sure the VT window is in the TOP-RIGHT corner\
-  of the screen.\
-");
+askText = singleLine([[
+  CC Auto v1.0 (by Tallow, based on Tak's cc program) --
+  Automatically runs many charcoal hearths or ovens 
+  simultaneously. Make sure the VT window is in the TOP-RIGHT corner 
+  of the screen. 
+]]);
 
 BEGIN = 1;
 WOOD = 2;
