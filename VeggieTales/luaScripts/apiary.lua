@@ -81,7 +81,7 @@ clickList = {};
     y = y + 20;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Hover mouse, Tap Shift over each apiary.")
     y = y + 30;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "2) After setting all apiariy locations:")
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "2) After setting all apiary locations:")
     y = y + 20;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Click Start to begin checking apiaries.")
 
