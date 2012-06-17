@@ -1,4 +1,4 @@
--- acrobat.lua v1.0 by Cegaiel
+-- acrobat_master.lua v1.0 by Cegaiel
 --
 -- Immediately upon Starting:
 -- Searches your acro menu for all of your acro buttons. It will not include acro move names on the list, that is not inside of a button.
