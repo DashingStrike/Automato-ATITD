@@ -15,7 +15,7 @@ local props = {"Ar", "As", "Bi", "Sa", "So", "Sp", "Sw", "To"};
 function doit()
   cheapRecipes = loadNotes("luascripts/chem-cheap.txt");
   allRecipes = loadNotes("luascripts/chem-all.txt");
-  askForWindow("Magical Chemistry Vibes of Doom!!!!!!\nView 'extra_auto.lua.txt' to read more detailed instructions. If you wish to view instructions: Click Exit button, Open Folder button, double click 'extra_auto.lua.txt' to view detailed instructions! Othersise, click Shift over ATITD window to continue.");
+  askForWindow("Magical Chemistry Vibes of Doom!!!!!!\n \n To view detailed instructions:\n \nClick Exit button, Open Folder button\nDouble click 'chem_extract_auto.txt' to view detailed instructions!\n \nClick Shift over ATITD window to continue.");
   while true do
     tryAllTypes();
     sleepWithStatus(2000, "Making more magic");
