@@ -94,5 +94,5 @@ function findStuff()
     end
 
   lsDoFrame();
-  lsSleep(50);
+  lsSleep(10);
 end
