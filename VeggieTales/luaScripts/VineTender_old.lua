@@ -324,7 +324,7 @@ end
 function statusSuccess(vine)
   srReadScreen();
   tendedCount = tendedCount + 1;
-  local result = "(" .. tendedCount .. ") Tended " .. vine.name .. "\n";
+  local result = "(" .. tendedCount .. ") Tended " .. vine.name .. "\n \n";
   result = result .. statusNumber("Acid");
   result = result .. statusNumber("Color");
   result = result .. statusNumber("Grapes");

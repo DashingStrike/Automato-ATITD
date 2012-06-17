@@ -1,18 +1,11 @@
--- VineTender.lua v1.1 by Teti, revised by Tallow)
+-- VineTender.lua v1.2 by Teti, revised by Tallow)
 --
 -- Automatically tends vines based on the tends you specify.
 --
 
 loadfile("luaScripts/common.inc")( );
 
-askText = singleLine([[
-  Vine Tender v1.1 (by Teti, revised by Tallow) --
-  Automatically tends vineyards based on vine type.
-  Make sure you are standing to where vinyard windows
-  open away from VT screen. This version uses OCR and 
-  reads text, that will fail if the window is even partially
-  blocked from view.
-]]);
+askText = "Vine Tender v1.2 (by Teti, revised by Tallow)\n \nAutomatically tends vineyards based on vine type.\n \nMake sure you are standing to where vineyard windows open away from VT screen. This version uses OCR and reads text, that will fail if the window (or borders) is even slightly blocked from view.";
 
 knownVineNames = {
   { name = "Appreciation",
@@ -111,11 +104,11 @@ function promptVineyard(status, action)
 			      "Edit Tends");
 
     lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
-    action = lsDropdown("VineyardAction", 125, lsScreenY - 80, 0, 100, action,
+    action = lsDropdown("VineyardAction", 125, lsScreenY - 60, 0, 100, action,
 			vineyardActions);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-    lsPrint(10, lsScreenY - 90, 0, 0.7, 0.7, 0xd0d0d0ff,
-	    "Tap control over a vineyard");
+    lsPrint(10, lsScreenY - 75, 0, 0.7, 0.7, 0xd0d0d0ff,
+	    "Tap Ctrl key over a vineyard");
     statusScreen(status);
     if edit then
       promptTends();
@@ -124,7 +117,7 @@ function promptVineyard(status, action)
   end
 
   while lsControlHeld() do
-    statusScreen("Release control");
+    statusScreen("Release control (Ctrl)");
   end
   return action;
 end
@@ -364,7 +357,7 @@ end
 function statusSuccess(vine)
   srReadScreen();
   tendedCount = tendedCount + 1;
-  local result = "(" .. tendedCount .. ") Tended " .. vine.name .. "\n";
+  local result = "(" .. tendedCount .. ") Tended " .. vine.name .. "\n \n";
   result = result .. statusNumber("Acid");
   result = result .. statusNumber("Color");
   result = result .. statusNumber("Grapes");

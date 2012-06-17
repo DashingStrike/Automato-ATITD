@@ -5,6 +5,7 @@
 grid_w = 5;
 grid_h = 5;
 watered = {};
+loop_count = 0;
 
 loadfile("luaScripts/Flax_common.inc")();
 loadfile("luaScripts/screen_reader_common.inc")();
@@ -89,6 +90,7 @@ function doit()
   initGlobals();
   -- Find the plant barley button
   srReadScreen();
+
   local imgBarley = "barley.png";
   local xyPlantBarley = srFindImage(imgBarley);
   if not xyPlantBarley then
@@ -96,37 +98,44 @@ function doit()
   end
   xyPlantBarley[0] = xyPlantBarley[0] + 5;
   
+  -- Find the Rain Barrel
+  local imgDrawWater = "draw_water.png";
+  local xyDrawWater = srFindImage(imgDrawWater);
+  if not xyDrawWater then
+    error 'Could not find rain barrel';
+  end 
+  xyDrawWater[0] = xyDrawWater[0] + 5;
 
-  
+ 
 
   for loop_count=1, num_loops do
-  local start_time = lsGetTimer();
+    local start_time = lsGetTimer();
     harvested = 0;
-	-- Init watered array to 0
-	for y=grid_h, 1, -1 do
+    -- Init watered array to 0
+    for y=grid_h, 1, -1 do
       for x=grid_w, 1, -1 do 
         watered[x+((y-1)*grid_w)] = 1;
-       end
+      end
     end	
 	  -- Local variables
-  local xyCenter = getCenterPos();
-  local xyBarleyMenu = {};
-  xyBarleyMenu[0] = xyCenter[0] - 43;
-  xyBarleyMenu[1] = xyCenter[1] + 0;
-  local dxi=1;
-  local dt_max=grid_w;
-  local dt=grid_w;
-  local dx={1, 0, -1, 0};
-  local dy={0, -1, 0, 1};
-  local num_at_this_length = 3;
-  local x_pos = 0;
-  local y_pos = 0;
+    local xyCenter = getCenterPos();
+    local xyBarleyMenu = {};
+    xyBarleyMenu[0] = xyCenter[0] - 43;
+    xyBarleyMenu[1] = xyCenter[1] + 0;
+    local dxi=1;
+    local dt_max=grid_w;
+    local dt=grid_w;
+    local dx={1, 0, -1, 0};
+    local dy={0, -1, 0, 1};
+    local num_at_this_length = 3;
+    local x_pos = 0;
+    local y_pos = 0;
     for y=1, grid_h do
       for x=1, grid_w do
         lsPrintln('doing ' .. x .. ',' .. y .. ' of ' .. grid_w .. ',' .. grid_h);
         statusScreen("Planting " .. x .. ", " .. y);
         
-		-- Plant
+        -- Plant
         lsPrintln('planting ' .. xyPlantBarley[0] .. ',' .. xyPlantBarley[1]);
         setWaitSpot(xyBarleyMenu[0], xyBarleyMenu[1]);
         srClickMouseNoMove(xyPlantBarley[0], xyPlantBarley[1], 0);
@@ -152,12 +161,20 @@ function doit()
         lsPrintln('move ' .. (xyBarleyMenu[0]+5) .. ',' .. xyBarleyMenu[1] .. ' to ' .. pp[0] .. ',' .. pp[1]);
         drag(xyBarleyMenu[0] + 5, xyBarleyMenu[1], pp[0], pp[1], 0);
 		
-		-- Add 2 water now
-		srReadScreen();
-		local barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
-		local barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
+        -- Add 2 water now
+        srReadScreen();
+        local barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
+        local barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
+        if not barleyAddButton or not barleyWater then
+          -- bugfix maybe for lag.
+          lsSleep(100);
+          srReadScreen();
+          barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
+          barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
+        end
+
         srClickMouseNoMove(barleyAddButton[0]+8, barleyWater[1]);
-		srClickMouseNoMove(barleyAddButton[0]+8, barleyWater[1]);
+        srClickMouseNoMove(barleyAddButton[0]+8, barleyWater[1]);
         watered[x+((y-1)*grid_w)] = watered[x+((y-1)*grid_w)] + 2;
 
         -- move to next position
@@ -185,7 +202,7 @@ function doit()
         end
         checkBreak();
       end
-	end
+    end
   
     statusScreen("Refocusing windows...");
     -- Bring windows to front
@@ -198,77 +215,78 @@ function doit()
     end
     lsSleep(refocus_time); -- Wait for last window to bring to the foreground before clicking again
   
-      -- Barley has been planted, pinned and refocused	
+    -- Barley has been planted, pinned and refocused	
  
-      while 1 do
-        for y=1, grid_h do
-          for x=1, grid_w do 
-            local pp = pinnedPos(x, y);
-            local rp = refreshPosDown(x, y);
-            srClickMouse(rp[0],rp[1]);
-            lsSleep(200);
-            srReadScreen();
-            local leftBar = srFindImageInRange("barleyBarLeft.png", pp[0], pp[1] - 50, 120, 100);
+    while 1 do
+      for y=1, grid_h do
+        for x=1, grid_w do 
+          local pp = pinnedPos(x, y);
+          local rp = refreshPosDown(x, y);
+          srClickMouse(rp[0],rp[1]);
+          lsSleep(200);
+          srReadScreen();
+          local leftBar = srFindImageInRange("barleyBarLeft.png", pp[0], pp[1] - 50, 120, 100);
+          if leftBar then
+            leftBar[0] = leftBar[0] + 4;
+          end
+          local rightBar = srFindImageInRange("barleyBarRight.png", pp[0], pp[1] - 50, 220, 200);
+          if rightBar then
+            rightBar[0] = rightBar[0] + 1;
+          end
+          if not rightBar then
+            error 'Could not find rightbar';
+          end
+          local barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
+          if not barleyWater then error 'Could not find water button.'; end
+          local barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
+          if not barleyAddButton then error 'Could not find add button. Ended at batch '; end
+
+          while 1 do
             if leftBar then
-              leftBar[0] = leftBar[0] + 4;
-            end
-            local rightBar = srFindImageInRange("barleyBarRight.png", pp[0], pp[1] - 50, 220, 200);
-            if rightBar then
-              rightBar[0] = rightBar[0] + 1;
-		    end
-            if not rightBar then
-              error 'Could not find rightbar';
-            end
-            local barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
-            if not barleyWater then error 'Could not find water button'; end
-            local barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
-            if not barleyAddButton then error 'Could not find add button'; end
-            while 1 do
-              if leftBar then
-                waterBlue = 0;
-                if rightBar then
-                  if barleyWater then
-                    srReadScreen();
-                    for i=leftBar[0],rightBar[0] do
-                      pxval = srReadPixelFromBuffer(i, barleyWater[1]);
-                      b = (math.floor(pxval/256) % 256);
-                      if b > 220 then
-                        waterBlue = waterBlue + 1;
-                      end
+              waterBlue = 0;
+              if rightBar then
+                if barleyWater then
+                  srReadScreen();
+                  for i=leftBar[0],rightBar[0] do
+                    pxval = srReadPixelFromBuffer(i, barleyWater[1]);
+                    b = (math.floor(pxval/256) % 256);
+                    if b > 220 then
+                      waterBlue = waterBlue + 1;
                     end
-                  waterBlue = (waterBlue/(rightBar[0]-leftBar[0])*100);
                   end
+                  waterBlue = (waterBlue/(rightBar[0]-leftBar[0])*100);
                 end
               end
+            end
             checkBreak();
 			
             if watered[x+((y-1)*grid_w)] < 5 then
-			  statusScreen("Watering " .. x .. "," .. y .. "step " .. watered[x+((y-1)*grid_w)] .. ".");
+              statusScreen("Watering " .. x .. "," .. y .. "step " .. watered[x+((y-1)*grid_w)] .. ".");
               if waterBlue < 90 then
-			    if watered[x+((y-1)*grid_w)] == 0 then
-				end
+                if watered[x+((y-1)*grid_w)] == 0 then
+                end
                 srClickMouseNoMove(barleyAddButton[0]+8, barleyWater[1]);
                 watered[x+((y-1)*grid_w)] = watered[x+((y-1)*grid_w)] + 1;
                 lsSleep(100);
                 break;
               end
             else
-			  statusScreen("Harvesting " .. x .. "," .. y .. ".");
+              statusScreen("Harvesting " .. x .. "," .. y .. ".");
               if waterBlue < 90 then
-			    srClickMouseNoMove(pp[0]+90, pp[1]+90);
+                srClickMouseNoMove(pp[0]+90, pp[1]+90);
                 lsSleep(100);
                 srClickMouseNoMove(pp[0]+180, pp[1]-25);
-				if watered[x+((y-1)*grid_w)] == 5 then
-					harvested = 1;
-				end
+                if watered[x+((y-1)*grid_w)] == 5 then
+                  harvested = 1;
+                end
                 break;
               end
             end
           end
         end
-	    
       end
-	  if harvested == 0 then
+
+      if harvested == 0 then
         statusScreen("Refocusing windows...");
         -- Bring windows to front
         for y=grid_h, 1, -1 do
@@ -278,21 +296,107 @@ function doit()
             lsSleep(refocus_click_time);
           end
         end
-		lsSleep(refocus_time); -- Wait for last window to bring to the foreground before clicking again
-	  else
-	  	for x=1, x_pos do
-		  srClickMouseNoMove(xyCenter[0] + walk_px_x*-1, xyCenter[1], 0);
-	      lsSleep(walk_time);
-		end
-		for x=1, -y_pos do
-		  srClickMouseNoMove(xyCenter[0], xyCenter[1] + walk_px_y, 0);
-		  lsSleep(walk_time);
-		end
-	    break;
-	  end
-	end
-	local end_time = lsGetTimer();
-	statusScreen("Time taken: " .. (end_time-start_time)/1000);
-		
+        lsSleep(refocus_time); -- Wait for last window to bring to the foreground before clicking again
+      else
+        for x=1, x_pos do
+          srClickMouseNoMove(xyCenter[0] + walk_px_x*-1, xyCenter[1], 0);
+          lsSleep(walk_time);
+        end
+        for x=1, -y_pos do
+          srClickMouseNoMove(xyCenter[0], xyCenter[1] + walk_px_y, 0);
+          lsSleep(walk_time);
+        end
+        break;
+      end
+    end
+    local end_time = lsGetTimer();
+    statusScreen("Time taken: " .. (end_time-start_time)/1000);
+    -- move X and Y every 4 batches, but skip the Y move every 20th batch
+    if loop_count % 4 == 0 and loop_count % 5 == 0 then
+      doCorrectiveMove('x')
+    elseif loop_count % 4 == 0 then
+      doCorrectiveMove('xy')
+    end 
+    --doStashWH(num_loops*grid_w*grid_w);
+    --doRefillWater(4*numloops*grid_w*grid_w);
+    doStashWH(grid_w*grid_w);
+    doRefillWater(4*grid_w*grid_w);
+    debug('end of batch #' .. loop_count)
   end
- end
+end
+
+function doCorrectiveMove(move)
+  statusScreen("Moving to correct for drift");
+  local xyCenter = getCenterPos();
+  if move == 'xy' or move == 'x' then
+    srClickMouseNoMove(xyCenter[0] + walk_px_x*-1, xyCenter[1], 0);
+    lsSleep(walk_time);
+  end
+  if move == 'xy' or move == 'y' then
+    srClickMouseNoMove(xyCenter[0], xyCenter[1] + walk_px_y, 0);
+    lsSleep(walk_time);
+  end
+end
+
+function doStashWH(qty)
+  local wh = srFindImage("stash.png");
+  if wh then
+    srClickMouseNoMove(wh[0]+9,wh[1]+9)
+    debug('found stash, clicked it');
+    lsSleep(250);
+
+    srReadScreen();
+    local insects = srFindImage("stashInsectEllipsis.png");
+
+    local stashes = srFindImage("stashBarley.png");
+    if not stashes then
+      error "no barley to stash"
+    end
+    srClickMouseNoMove(stashes[0],stashes[1]);
+
+    lsSleep(250);
+    -- stash exactly the right amount by number so we don't lose our seed barley
+    srKeyEvent(qty);
+    srKeyEvent('\n');
+
+    if insects then
+      srClickMouseNoMove(wh[0]+9,wh[1]+9)
+      lsSleep(250);
+      srReadScreen();
+
+      local insects = srFindImage("stashInsectEllipsis.png");
+      if insects then
+        srClickMouseNoMove(insects[0],insects[1]);
+        lsSleep(250);
+
+        srReadScreen();
+        insects = srFindImage("stashAllTheInsects.png");
+        if not insects then
+          error "found insects but couldn't stash them";
+        end
+        srClickMouseNoMove(insects[0],insects[1]);
+      end
+    end
+  end
+end
+
+function doRefillWater(qty)
+  debug("in refill")
+  local rb = srFindImage("draw_water.png");
+  if rb then
+    srClickMouseNoMove(rb[0]+5,rb[1]+5)
+    lsSleep(250);
+    srKeyEvent(qty);
+    srKeyEvent('\n');
+  end
+
+end
+
+
+function debug(msg)
+  if 0 then
+    statusScreen(msg);
+    lsSleep(1000);
+  end 
+end
+

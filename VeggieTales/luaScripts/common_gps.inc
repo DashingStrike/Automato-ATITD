@@ -82,5 +82,5 @@ function stepTo(dir)
   initStep();
   safeClick(gpsCenter[0] + dir[0] * gpsStep[0],
 	    gpsCenter[1] + dir[1] * gpsStep[1]);
-  sleepWithStatus(500, "Walking");
+  sleepWithStatus(500, "Walking...");
 end

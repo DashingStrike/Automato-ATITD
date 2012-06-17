@@ -14,39 +14,44 @@ askText = singleLine([[
   Press Shift over ATITD window to continue.
 ]]);
 
+askText = "Apiary Checker v1.0 by Cegaiel\n \nAllows you to quickly set all of your apiary locations by tapping Shift over each one.\n \nThen run and it will Check, wait for OK box, then Take everything from all of your apiaries.\n \nMake sure CHAT IS MINIMIZED!\n \nPress Shift over ATITD window to continue.";
+
+
 function doit()
   askForWindow(askText);
   getPoints();
   clickSequence();
-  error 'Done, checked all apiaries!';
 end
 
 function clickSequence()
-  sleepWithStatus(200, "Starting... Don\'t move mouse!");
+  sleepWithStatus(500, "Starting... Don\'t move mouse!");
     for i=1,#clickList do
 	checkBreak();
 	srSetMousePos(clickList[i][1], clickList[i][2]);
 	lsSleep(100); -- ~65+ delay needed before the mouse can actually move.
 	checkHives(i);
+	count = i;
     end
+  sleepWithStatus(2500, "[" .. count .. "/" .. #clickList .."] All finished!");
+  lsPlaySound("Complete.wav");
 end
 
 function checkHives(apiary)
   checkBreak();
   local OK = true;
   srKeyEvent('c'); --Check [C]
-  sleepWithStatus(500, "[" .. apiary .. "/" .. #clickList .."] Checking...");
+  sleepWithStatus(500, "[" .. apiary .. "/" .. #clickList .."] Checking");
 
     while OK do
 	--Wait, loop forever if OK box is present. Only when OK box is not present, then continue and Take
 	checkBreak();
 	srReadScreen();
 	OK = srFindImage("OK.png"); -- If OK box present, then OK = true. If OK box not present, then OK = false
-	lsSleep(50);
+      sleepWithStatus(50, "[" .. apiary .. "/" .. #clickList .."] Waiting for OK");
     end
 
   srKeyEvent('t');  -- Take [T]
-  sleepWithStatus(150, "[" .. apiary .. "/" .. #clickList .."] Taking...");
+  sleepWithStatus(150, "[" .. apiary .. "/" .. #clickList .."] Taking");
 end
 
 function getPoints()
@@ -97,6 +102,6 @@ clickList = {};
     end
 
     lsDoFrame();
-    lsSleep(10);
+    lsSleep(50);
   end
 end

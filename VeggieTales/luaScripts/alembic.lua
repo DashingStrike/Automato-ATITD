@@ -72,7 +72,7 @@ isRising = {};
 isSmall = {};
 
 function doit()
-  askForWindow("Alembic Control -- Runs any alembic windows you have pinned. Press shift over ATITD window to continue.");
+  askForWindow("Alembic Control v1.0 by Tallow\n \nAutomatically maintain the temperature on an alembic at a given point.\n \nPress shift over ATITD window to continue.");
   alembicControl();
 end
 
