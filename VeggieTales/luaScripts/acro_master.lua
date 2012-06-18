@@ -192,7 +192,7 @@ function doMoves()
 					  skip = true;
 		    			end
 			    	  statusScreen(status .. GUI);
-				  lsSleep(500);
+				  lsSleep(3000);
 			   end --if #acro == 2
 
 		       end --while acroTimer
