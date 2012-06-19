@@ -192,16 +192,7 @@ function doMoves()
 					  skip = true;
 		    			end
 			    	  statusScreen(status .. GUI);
-
-					while not acroTimer do
-					  checkBreak();
-					  srReadScreen();
-					  acro = findAllImages("Acro.png");
-						if #acro == 2 then
-						  break;
-						end
-					end
-
+				  lsSleep(1500);
 			   end --if #acro == 2
 
 		       end --while acroTimer
