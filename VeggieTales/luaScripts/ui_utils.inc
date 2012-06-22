@@ -145,3 +145,16 @@ function sleepWithStatus(delay_time, message, no_break)
 		lsSleep(100);
 	end
 end
+
+function fatalError(message)
+	error_status = "Press Shift+Control to exit";
+	statusScreen(message,0xFF0000ff);
+	for curr = 0, 6 do
+		lsPlaySound("Clank.wav");
+		lsSleep(100);
+	end
+	while(1) do
+		checkBreak();
+		lsSleep(10);
+	end
+end

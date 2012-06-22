@@ -73,3 +73,16 @@ function findOneImage(imgName, tol)
 	buttons[#buttons+1] = pos;
 	return buttons;
 end
+
+function parseColor(color)
+	rgb = {};
+	local c = color / 256;
+	rgb[0] = math.floor(c / 65536);
+	c1 = c - (rgb[0] * 65536);
+	if(rgb[0] < 0) then
+		rgb[0] = rgb[0] + 256;
+	end
+	rgb[1] = math.floor(c1 / 256);
+	rgb[2] = math.floor(c1 - (rgb[1] * 256));
+	return rgb;
+end
