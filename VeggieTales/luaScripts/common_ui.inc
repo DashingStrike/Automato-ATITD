@@ -265,9 +265,12 @@ end
 -- prompt_string -- string giving the user a message
 -------------------------------------------------------------------------------
 
-function promptOkay(prompt_string)
+function promptOkay(prompt_string, color)
   if not prompt_string then
     error("Incorrect number of arguments for promptOkay()");
+  end
+  if not color then
+	color = 0xFFFFFFff;
   end
   local z = 0;
   local is_done = nil;
