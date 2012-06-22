@@ -83,6 +83,56 @@ function safeDrag(sourceX, sourceY, destX, destY)
 end
 
 -------------------------------------------------------------------------------
+-- clickPoint(point, offsetX, offsetY, rightClick)
+--
+-- Click one point with an offset
+--
+-- offsetX, offsetY (optional) -- distance from each point to click (default 5)
+-- rightClick (optional) -- make each click a right click (default false)
+-------------------------------------------------------------------------------
+
+function clickPoint(point, offsetX, offsetY, rightClick)
+  if not point then
+    error("Incorrect number of arguments for clickPoint()");
+  end
+  if not offsetX then
+    offsetX = 5;
+  end
+  if not offsetY then
+    offsetY = 5;
+  end
+
+  safeClick(point[0]+offsetX, point[1]+offsetY, rightClick);
+  lsSleep(click_delay);
+end
+
+-------------------------------------------------------------------------------
+-- clickXY(x, y, offsetX, offsetY, rightClick)
+--
+-- Click one point with an offset
+--
+-- x, y -- Point to click
+-- offsetX, offsetY (optional) -- distance from each point to click (default 5)
+-- rightClick (optional) -- make each click a right click (default false)
+-------------------------------------------------------------------------------
+
+function clickXY(x, y, offsetX, offsetY, rightClick)
+  if not x then
+    error("Incorrect number of arguments for clickPoint()");
+  end
+  if not y then
+    error("Incorrect number of arguments for clickPoint()");
+  end
+  if not offsetX then
+    offsetX = 5;
+  end
+  if not offsetY then
+    offsetY = 5;
+  end
+  clickPoint(makePoint(x,y),offsetX,offsetY,rightClick);
+end
+
+-------------------------------------------------------------------------------
 -- clickAllPoints(points, offsetX, offsetY, rightClick)
 --
 -- Click all points in a list.
