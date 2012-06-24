@@ -643,7 +643,7 @@ function loadRoutes()
 end
 
 function goto(waypoint,thisRoute)
-	askForWindow("Make sure your chats are minimized, then hover ATITD window and press Shift to continue.");
+	prepareForWalking(false);
 	local x = tonumber(thisRoute[1][waypoint][1]);
 	local y = tonumber(thisRoute[1][waypoint][2]);
 	moveTo(x, y, true)
@@ -695,7 +695,7 @@ function followRoute(route)
 			end
 		end
 	end
-	askForWindow("Make sure your chats are minimized, then hover ATITD window and press Shift to continue.");
+	prepareForWalking(true);
 	local curr = 1;
 	local fails = 0;
 	local direction = 1;
@@ -1141,5 +1141,43 @@ function stashAllButWood()
 	end
 end
 
+function prepareForWalking(zoomIn)
+	askForWindow("Make sure your chats are minimized then hover ATITD window and press Shift to continue.");
+	lsSleep(150);
+	local xyWindowSize = srGetWindowSize();
+	local mid = {};
+	mid[0] = xyWindowSize[0] / 2;
+	mid[1] = xyWindowSize[1] / 2;
+	srSetMousePos(mid[0],mid[1]);
+	lsSleep(150);
+	local escape = "\27";
+	srKeyEvent(escape);
+	lsSleep(150);
+	srReadScreen();
+	local options = findText("Options...");
+	if(options) then
+		srClickMouse(options[0]+10,options[1]+5);
+		lsSleep(150);
+		srReadScreen();
+		local camera = findText("Camera");
+		if(camera) then
+			clickText(camera);
+			srReadScreen();
+			local cartCam = findText("Cartographer's Cam");
+			if(cartCam) then
+				clickText(cartCam);
+				srReadScreen();
+				local ok = srFindImage("ok-faint.png");
+				if(ok) then
+					clickText(ok);
+				end
+				if(zoomIn) then
+					srSetMousePos(100,-20);
+					sleepWithStatus(7000,"Zooming in");
+				end
+			end
+		end
+	end
+end
 
 
