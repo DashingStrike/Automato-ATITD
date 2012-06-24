@@ -399,8 +399,8 @@ function editRoute(route)
 			x = x + waypointw*scale + 2;
 			sy = sy + 32;
 		end
-		local height = math.max(#thisRoute[1],#WaypointTypes);
-		lsScrollAreaEnd(32 * height);
+		local height = #thisRoute[1] + #WaypointTypes;
+		lsScrollAreaEnd(25 * height);
 		y = y + 362;
 		done = nil;
 		if lsButtonText(10, y, z, 90, 0xFFFFFFff, "Save") then
