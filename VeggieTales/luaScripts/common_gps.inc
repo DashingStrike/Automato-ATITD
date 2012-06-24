@@ -6,11 +6,13 @@ function findCoords()
     lsPrintln("anchor");
     local window = getWindowBorders(anchor[0], anchor[1]);
     local lines = findAllText(nil, window, NOPIN);
-    if #lines == 2 then
-      local str = lines[2][2];
+    if #lines >= 2 then
+      local str = lines[#lines][2];
       lsPrintln("lines: " .. str);
       local a, b, x, y = string.find(str, ": ([0-9-]+)\, ([0-9-]+)");
-      result = makePoint(tonumber(x), tonumber(y));
+	  if x ~= nil and y ~= nil then
+		result = makePoint(tonumber(x), tonumber(y));
+	  end
     end
   end
   return result;
