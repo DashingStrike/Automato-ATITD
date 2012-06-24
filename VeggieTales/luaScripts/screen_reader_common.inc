@@ -75,7 +75,7 @@ function findOneImage(imgName, tol)
 end
 
 function parseColor(color)
-	rgb = {};
+	local rgb = {};
 	local c = color / 256;
 	rgb[0] = math.floor(c / 65536);
 	c1 = c - (rgb[0] * 65536);
@@ -86,3 +86,28 @@ function parseColor(color)
 	rgb[2] = math.floor(c1 - (rgb[1] * 256));
 	return rgb;
 end
+
+function compareColor(left, right)
+	local leftRgb = parseColor(left);
+	local rightRgb = parseColor(right);
+	local max = 0;
+	local i;
+	for i = 0, 2 do
+		-- Compare raw RGB values
+		if(math.abs(leftRgb[i] - rightRgb[i]) > max) then
+			max = math.abs(leftRgb[i] - rightRgb[i]);
+		end
+		-- Compare hue
+		if(i < 2) then
+			if(math.abs((leftRgb[i] - leftRgb[i+1] + 256) - (rightRgb[i] - rightRgb[i+1] + 256)) > max) then
+				max = math.abs((leftRgb[i] - leftRgb[i+1] + 256) - (rightRgb[i] - rightRgb[i+1] + 256));
+			end
+		else
+			if(math.abs((leftRgb[i] - leftRgb[0] + 256) - (rightRgb[i] - rightRgb[0] + 256)) > max) then
+				max = math.abs((leftRgb[i] - leftRgb[0] + 256) - (rightRgb[i] - rightRgb[0] + 256));
+			end
+		end
+	end
+	return max;
+end
+
