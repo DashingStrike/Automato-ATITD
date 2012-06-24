@@ -197,6 +197,26 @@ function sleepWithStatus(delay_time, message, color)
 end
 
 -------------------------------------------------------------------------------
+-- sleepWithBreak(delay_time)
+--
+-- Waits at least delay_time before returning.
+-- Allow the user to cancel the macro while waiting.
+--
+-- delay_time -- minimum amount of time to wait
+-------------------------------------------------------------------------------
+
+function sleepWithBreak(delay_time, message, color)
+  if not delay_time then
+    error("Incorrect number of arguments for sleepWithBreak()");
+  end
+  local start_time = lsGetTimer();
+  while delay_time > (lsGetTimer() - start_time) do
+	checkBreak();
+    lsSleep(tick_delay);
+  end
+end
+
+-------------------------------------------------------------------------------
 -- promptNumber(prompt_string, default_value, scale)
 --
 -- Ask the user for a number and return the result.
