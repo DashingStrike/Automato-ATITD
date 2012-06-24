@@ -344,7 +344,7 @@ function editRoute(route)
 			5, y, z, 404, 30, scale, scale, 0x000000ff, thisRoute[0]);
 		done = nil;
 		y = y + 50;
-		lsScrollAreaBegin("routeScrollArea" .. unique,
+		lsScrollAreaBegin("routeScrollArea",
 			5, y, z, 405, 330);
 		y = y + 5;
 		local i;
@@ -365,6 +365,7 @@ function editRoute(route)
 			end
 			x = x + buttonw + 2;
 			if lsButtonText(x, sy, z, buttonw, 0xFFFFFFff, "G") then
+				clearScrollArea("routeScrollArea");
 				goto(i, thisRoute);
 			end
 			x = x + buttonw + 2;
@@ -418,13 +419,18 @@ function editRoute(route)
 			end
 		end
 		if lsButtonText(190*scale, y, z, 90, 0xFFFFFFff, "Cancel") then
-			routes = deserialize(routeFileName);
+			loadRoutes();
 			done = true;
 		end
 		lsDoFrame();
 		lsSleep(tick_delay);
 	end
 	return false;
+end
+
+function clearScrollArea(area)
+	lsPrintln(">>clearScrollArea()");
+	lsScrollAreaEnd(1);
 end
 
 function loadDefaults()
@@ -637,8 +643,6 @@ function loadRoutes()
 end
 
 function goto(waypoint,thisRoute)
-	lsDoFrame();
-	lsDoFrame();
 	askForWindow("Make sure your chats are minimized, then hover ATITD window and press Shift to continue.");
 	local x = tonumber(thisRoute[1][waypoint][1]);
 	local y = tonumber(thisRoute[1][waypoint][2]);
