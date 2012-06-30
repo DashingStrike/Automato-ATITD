@@ -270,6 +270,7 @@ function doit()
   promptFlaxNumbers();
   askForWindow(askText);
   initGlobals();
+  srReadScreen();
   local startPos = findCoords();
   if not startPos then
     error("ATITD clock not found.\Verify entire clock and borders are visible. Try moving clock slightly.");

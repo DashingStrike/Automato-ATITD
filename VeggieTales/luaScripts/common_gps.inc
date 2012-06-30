@@ -1,18 +1,21 @@
 function findCoords()
   lsPrintln("findCoords");
   local result = nil;
-  local anchor = findText("2,");
+  local anchor = findText("Year");
   if anchor then
     lsPrintln("anchor");
     local window = getWindowBorders(anchor[0], anchor[1]);
     local lines = findAllText(nil, window, NOPIN);
-    if #lines >= 2 then
-      local str = lines[#lines][2];
-      lsPrintln("lines: " .. str);
-      local a, b, x, y = string.find(str, ": ([0-9-]+)\, ([0-9-]+)");
-	  if x ~= nil and y ~= nil then
-		result = makePoint(tonumber(x), tonumber(y));
-	  end
+    for i=1,#lines do
+      lsPrintln("LINE " .. i .. " : " .. table.concat(lines[i], ","));
+    end
+    local str = lines[#lines][2];
+    lsPrintln("lines: " .. str);
+    local a, b, x, y = string.find(str, ": ([0-9-]+)\, ([0-9-]+)");
+    result = makePoint(tonumber(x), tonumber(y));
+    if not result[0] or not result[1] then
+      result = nil;
+      lsPrintln("Failed to find coords");
     end
   end
   return result;
