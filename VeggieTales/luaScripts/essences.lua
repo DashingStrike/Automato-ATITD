@@ -539,7 +539,6 @@ function doit()
 	labState[1].active = true;
 	
 	while 1 do
-	  statusScreen("Ticking");
 		-- Tick
 		srReadScreen();
 		labWindows2 = findAllRegionsWithText("This is a Chemistry Laboratory");
