@@ -30,6 +30,7 @@ The functions with neither an sr or ls prefix are lua-script library functions.
 === General ===
   void lsSetCaptureWindow()
   void lsSleep(int ms)
+  string lsScriptName()
 === Sending Input ===
   void srClickMouse(int x, int y, bool bRightClick)
   void srClickMouseNoMove(int x, int y, bool bRightClick)
@@ -38,6 +39,8 @@ The functions with neither an sr or ls prefix are lua-script library functions.
   void srRightArrow()
   void srUpArrow()
   void srDownArrow()
+  void srKeyDown(int key)
+  void srKeyUp(int key)
   void srDrag(int x0, int y0, int x1, int y1, bool rightClick)
   void srSetMousePos(int x, int y)
   void srMouseDown(int x, int y, bool rightClick)
@@ -54,6 +57,8 @@ The functions with neither an sr or ls prefix are lua-script library functions.
   int srReadPixel(int x, int y)
   int srReadPixelFromBuffer(int x, int y)
   void srSaveLastReadScreen(const char *fn)
+  void srMatchHue(lua_State *L, int color, int x, int y, int radius, int tol)
+  void srFindNearestPixel(lua_State *L, int color, int x, int y, bool checkRgb, bool checkHue, int radius, int rgbTol, int hueTol)
   void lsShowScreengrab(const char *_color)
   Vec2[] lsAnalyzePapyrus(int minsize, int maxsize, int debug, int relevant_radius)
   Vec2[] lsAnalyzeSilt(int minsize, int maxsize, int debug, int relevant_radius)
@@ -129,3 +134,14 @@ Sends a character or sequence of characters to the captured window.  Example:
 This will send the string "username" followed by a tab (\t) and then the string
 "password" and then enter (\n).
 
+=== void srKeyDown(int key) ===
+srKeyDown() sends a key down message.  When most keyboard keys are pressed, 
+they trigger repeating messages.  To simulate this, call srKeyDown() repeatedly
+with the same key.  srKeyDown() will recognize multiple calls prior to the 
+srKeyUp() call and send appropriate repeating key messages.  Multiple keys may 
+be down at once.
+
+
+=== void srKeyUp(int key) ===
+srKeyUp() sends a key up message, releasing a key pressed with srKeyDown().  To
+release all pressed keys, send the special key code -1.
