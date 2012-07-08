@@ -2,7 +2,7 @@
 
 -- Serialize a variable (number, string, table, or nested table) to and from a file
 
-function example(filename)
+function serializeExample(filename)
 	local t1 = { { 1, 2, 3 }, { "one", "two", "three" } };
 	serialize(t1,filename);
 	local t2 = deserialize(filename);
@@ -17,7 +17,11 @@ function serialize(o, filename)
 end
 
 function deserialize(filename)
-	return dofile(filename);
+	if(pcall(dofile,filename)) then
+		return true, dofile(filename);
+	else
+		return false, nil;
+	end
 end
 
 
@@ -32,6 +36,12 @@ function serializeInternal(o,outputFile,indentStr)
 		outputFile:write(o);
 	elseif type(o) == "string" then
 		outputFile:write(string.format("%q", o));
+	elseif type(o) == "boolean" then
+		if(o) then
+			outputFile:write("true");
+		else
+			outputFile:write("false");
+		end
 	elseif type(o) == "table" then
 		outputFile:write(indentStr .. "{\n");
 		for k,v in pairs(o) do
