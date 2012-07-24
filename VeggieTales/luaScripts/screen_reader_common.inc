@@ -111,3 +111,32 @@ function compareColor(left, right)
 	return max;
 end
 
+function compareColorEx(left, right, rgbTol, hueTol)
+	local leftRgb = parseColor(left);
+	local rightRgb = parseColor(right);
+	local i;
+	local d;
+	local rgbTotal = 0;
+	local hueTotal = 0;
+	for i = 0, 2 do
+		-- Compare raw RGB values
+		d = leftRgb[i] - rightRgb[i];
+		rgbTotal = rgbTotal + (d * d);
+		if(rgbTotal > rgbTol) then
+			return false;
+		end
+		-- Compare hue
+		if(i < 2) then
+			d = (leftRgb[i] - leftRgb[i+1]) - (rightRgb[i] - rightRgb[i+1]);
+			hueTotal = hueTotal + (d * d);
+		else
+			d = (leftRgb[i] - leftRgb[0]) - (rightRgb[i] - rightRgb[0]);
+			hueTotal = hueTotal + (d * d);
+		end
+		if(hueTotal > hueTol) then
+			return false;
+		end
+	end
+	return true;
+end
+

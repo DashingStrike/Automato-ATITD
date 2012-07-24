@@ -4,6 +4,8 @@ loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
 loadfile("luaScripts/common.inc")();
 loadfile("luaScripts/serialize.inc")();
+loadfile("luaScripts/settings.inc")();
+loadfile("luaScripts/constants.inc")();
 
 routeFileName = "gatherRoutes.txt";
 defaultRoutesFileName = "luaScripts\\defaultRoutes.inc";
@@ -52,12 +54,11 @@ CeruleanBlue = 39;
 ButterleafTree = 40;
 BroadLeafPalm = 41;
 BrambleHedge = 42;
-BrambleHedge = 43;
-BottleTree = 44;
-Bloodbark = 45;
-Beetlenut = 46;
-AshPalm = 47;
-Anaxi = 48;
+BottleTree = 43;
+Bloodbark = 44;
+Beetlenut = 45;
+AshPalm = 46;
+Anaxi = 47;
 
 WaypointTypes = {};
 WaypointTypes[Waypoint] = "Waypoint";
@@ -110,15 +111,15 @@ WaypointTypes[Cricklewood] = "Cricklewood";
 WaypointTypes[GiantCricklewood] = "Giant Cricklewood";
 
 WaypointColors = {};
-WaypointColors[Bonfire] = 1329403647;
+WaypointColors[Bonfire] = 437126143; -- 1329403647;
 WaypointColors[Warehouse] = 959060991;
-WaypointColors[ToweringPalm] = 2124039935;
+WaypointColors[ToweringPalm] = -1749467393; -- 1313688319; -- 2124039935;
 WaypointColors[RoyalPalm] = 138019071;
 WaypointColors[StoutPalm] = -1919065601;
 WaypointColors[FernPalm] = -2070857985;
 WaypointColors[BottleTree] = 983295;
 WaypointColors[Hokkaido] = 676680447;
-WaypointColors[Ranyahn] = 1731867647;
+WaypointColors[Ranyahn] = -575760641;
 WaypointColors[BrambleHedge] = 1869507071;
 WaypointColors[CeruleanBlue] = 1349224959;
 WaypointColors[Bloodbark] = 1378758911;
@@ -172,6 +173,8 @@ gather_iterations = 0;
 gather_randomNumber = 0;
 unique = 0;
 
+walkingRoute = false;
+routeStartTime = 0;
 
 function doit()
 	if(not promptOkay("WARNING! This macro requires your chats to be minimized and your \"Use arrow keys for movement\" option to be enabled.")) then
@@ -198,21 +201,21 @@ function queryRoute()
 	local nada = nil;
 
 	while not done do
+		local showEditRoute = nil;
 		checkBreak();
 		lsSetCamera(0,0,lsScreenX*scale,lsScreenY*scale);
 		local y = 10;
 		lsPrint(5, y, z, 1, 1, 0xFFFFFFff, "Route:");
 		y = y + 32;
+		route = readSetting("route",route);
 		route = lsDropdown("routeToWalk" .. unique, 5, y, 0, 405, route, routeNames);
+		writeSetting("route",route);
 		y = y + 32;
 		if lsButtonText(5, y, z, 80, 0xFFFFFFff, "New") then
-			if(editRoute(#routeNames+1)) then
-				route = #routeNames;
-				updateUnique();
-			end
+			showEditRoute = #routeNames+1;
 		end
 		if lsButtonText(93, y, z, 80, 0xFFFFFFff, "Edit") then
-			editRoute(route);
+			showEditRoute = route;
 		end
 		if lsButtonText(181, y, z, 80, 0xFFFFFFff, "Delete") then
 			if(promptOkay("Are you sure you want to delete route \"" .. routeNames[route]) .. "\"?") then
@@ -229,23 +232,35 @@ function queryRoute()
 			loadDefaults();
 		end
 		y = y + 64;
+		wood = readSetting("wood",wood);
 		wood = lsCheckBox(10, y, z, 0xFFFFFFff, "Gather wood", wood);
+		writeSetting("wood",wood);
 		y = y + 32;
+		slate = readSetting("slate",slate);
 		slate = lsCheckBox(10, y, z, 0xFFFFFFff, "Gather slate", slate);
+		writeSetting("slate",slate);
 		y = y + 32;
+		grass = readSetting("grass",grass);
 		grass = lsCheckBox(10, y, z, 0xFFFFFFff, "Gather grass", grass);
+		writeSetting("grass",grass);
 		y = y + 32;
+		clay = readSetting("clay",clay);
 		clay = lsCheckBox(10, y, z, 0xFFFFFFff, "Gather clay and flint", clay);
+		writeSetting("clay",clay);
 		y = y + 32;
 		lsPrint(35, y+5, z, 1, 1, 0xFFFFFFff, "Number of jugs:");
+		numJugs = readSetting("numJugs",numJugs);
 		nada, numJugs = lsEditBox("jugCount", 
 			200, y, z, 50, 30, scale, scale, 0x000000ff, numJugs);
+		writeSetting("numJugs",numJugs);
 		if (clay and (not tonumber(numJugs))) then
 			lsPrint(35, y+32, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
 		end
 		y = y + 32;
 		y = y + 32;
+		repeatForever = readSetting("repeatForever",repeatForever);
 		repeatForever = lsCheckBox(10, y, z, 0xFFFFFFff, "Repeat forever", repeatForever);
+		writeSetting("repeatForever",repeatForever);
 		lsSetCamera(0,0,lsScreenX,lsScreenY);
 		if lsButtonText(10, 320, z, 90, 0xFFFFFFff, "GO!") then
 			if (clay and (not tonumber(numJugs))) then
@@ -260,6 +275,13 @@ function queryRoute()
 		end
 		lsDoFrame();
 		lsSleep(tick_delay);
+		if(showEditRoute) then
+			if(editRoute(showEditRoute)) then
+				route = showEditRoute;
+				updateUnique();
+			end
+			showEditRoute = nil;
+		end
 	end
 end
 
@@ -336,6 +358,7 @@ function editRoute(route)
 	updateUnique();
 	while not done do
 		checkBreak();
+		local gotoRoute = nil;
 		local y = 10;
 		lsSetCamera(0,0,lsScreenX*scale,lsScreenY*scale);
 		lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Route:");
@@ -365,8 +388,7 @@ function editRoute(route)
 			end
 			x = x + buttonw + 2;
 			if lsButtonText(x, sy, z, buttonw, 0xFFFFFFff, "G") then
-				clearScrollArea("routeScrollArea");
-				goto(i, thisRoute);
+				gotoRoute = i;
 			end
 			x = x + buttonw + 2;
 			local t;
@@ -424,6 +446,10 @@ function editRoute(route)
 		end
 		lsDoFrame();
 		lsSleep(tick_delay);
+		if(gotoRoute) then
+			goto(gotoRoute, thisRoute);
+			updateUnique();
+		end
 	end
 	return false;
 end
@@ -523,23 +549,6 @@ function deleteNamedRoute(name)
 	end
 end
 
-function tableToText(route)
-	local text = {};
-	local i;
-	for i = 1, #route do
-		text[i] = route[i][1] .. ", " .. route[i][2] .. ", " .. WaypointTypes[route[i][3]] .. "\n";
-	end
-	return text;
-end
-
-function textToTable(routeText)
-	local route={};
-	local lines = string.match(routeText,"\n\n");
-	statusScreen(#lines);
-	lsSleep(3000);
-	return route;
-end
-
 function insertWaypointAfter(where,thisRoute)
 	local temp = {};
 	local i;
@@ -627,14 +636,16 @@ end
 function loadRoutes()
 	routes = {};
 	routeNames = {};
+	local success = false;
 	if(pcall(dofile,routeFileName)) then
-		routes = deserialize(routeFileName);
+		success, routes = deserialize(routeFileName);
 	else
 		if(pcall(dofile,defaultRoutesFileName)) then
-			routes = deserialize(defaultRoutesFileName);
-		else
-			error("Cannot find any routes.  Please try updating the macros again.");
+			success, routes = deserialize(defaultRoutesFileName);
 		end
+	end
+	if(not success) then
+		error("Cannot find any routes.  Please try updating the macros again.");
 	end
 	local i;
 	for k,v in pairs(routes) do
@@ -643,10 +654,10 @@ function loadRoutes()
 end
 
 function goto(waypoint,thisRoute)
-	prepareForWalking(false);
+	prepareForWalking();
 	local x = tonumber(thisRoute[1][waypoint][1]);
 	local y = tonumber(thisRoute[1][waypoint][2]);
-	moveTo(x, y, true)
+	moveTo(x, y, true);
 end
 
 
@@ -661,6 +672,7 @@ end
 
 
 function followRoute(route)
+	prepareForWalking();
 	if(wood) then
 		local haveBonfire = false;
 		local i;
@@ -695,101 +707,127 @@ function followRoute(route)
 			end
 		end
 	end
-	prepareForWalking(true);
+	if(wood) then
+		zoomIn();
+	end
 	local curr = 1;
 	local fails = 0;
 	local direction = 1;
 	local lastPos = {0,0};
 	local r = routes[route][1];
+	routeStartTime = lsGetTimer();
+	walkingRoute = true;
 	while (1) do
-		checkBreak();
+		updateStatus();
 		srReadScreen();
 		local pos;
 		pos = findCoords();
 		if (pos) then
 			lastPos = pos;
 		end
-		statusScreen("Moving to " .. WaypointTypes[r[curr][3]] .. "\n(" .. r[curr][1] .. ", " .. r[curr][2] .. ")");
+		setStatus("Moving to " .. WaypointTypes[r[curr][3]] .. "\n(" .. r[curr][1] .. ", " .. r[curr][2] .. ")");
 		moveTo(r[curr][1],r[curr][2]);
-		if(r[curr][3] == Waypoint) then
-			curr = curr + 1;
-		else
-			if(r[curr][3] == Bonfire) then
-				if(clickWaypoint(r[curr][3])) then
-					stashWood();
-				end
-			elseif(r[curr][3] == Wharehouse) then
-				if(clickWaypoint(r[curr][3])) then
-					stashAllButWood();
-				end
-			elseif(wood) then
-				if(clickWaypoint(r[curr][3])) then
+		if(r[curr][3] == Bonfire) then
+			if(ensureClickWaypoint(r,curr)) then
+				stashWood();
+			end
+		elseif(r[curr][3] == Wharehouse) then
+			if(ensureClickWaypoint(r,curr)) then
+				stashAllButWood();
+			end
+		elseif(wood and r[curr][3] ~= Waypoint) then
+			if(ensureClickWaypoint(r,curr)) then
+				lsSleep(250);
+				srReadScreen();
+				noWoodMenuPos = findText("no Wood");
+				if(noWoodMenuPos) then
+					safeClick(noWoodMenuPos[0]-7,noWoodMenuPos[1]);
 					lsSleep(250);
-					srReadScreen();
-					noWoodMenuPos = findText("no Wood");
-					if(noWoodMenuPos) then
-						safeClick(noWoodMenuPos[0]-7,noWoodMenuPos[1]);
+				else
+					utilityPos = findText("Utility");
+					if(utilityPos) then
+						safeClick(utilityPos[0]-7,utilityPos[1]);
 						lsSleep(250);
 					else
-						utilityPos = findText("Utility");
-						if(utilityPos) then
-							safeClick(utilityPos[0]-7,utilityPos[1]);
-							lsSleep(250);
-						else
-							sleepWithBreak(1000);
-						end
-					end
-					srReadScreen();
-				end
-				fails = 0;
-				curr = curr + 1;
-				direction = 1;
-			else
-				fails = fails + 1;
-				if(fails > 10) then
-					curr = curr + 1;
-					direction = 1;
-				else
-					if(fails == 1) then
-						if(lastPos[0] < r[curr][1]) then
-							if(lastPos[1] < r[curr][2]) then
-								direction = 1;
-							else
-								direction = 2;
-							end
-						else
-							if(lastPos[1] < r[curr][2]) then
-								direction = 3;
-							else
-								direction = 4;
-							end
-						end
-					else
-						direction = direction + 1
-						if(direction > 4) then
-							direction = 1;
-						end
-					end
-					if(direction == 1) then					
-						moveTo(r[curr][1]-1,r[curr][2]-1);
-						moveTo(r[curr][1]+1,r[curr][2]+1);
-					elseif (direction == 2) then
-						moveTo(r[curr][1]-1,r[curr][2]+1);
-						moveTo(r[curr][1]+1,r[curr][2]-1);
-					elseif (direction == 3) then
-						moveTo(r[curr][1]+1,r[curr][2]-1);
-						moveTo(r[curr][1]-1,r[curr][2]+1);
-					else
-						moveTo(r[curr][1]+1,r[curr][2]+1);
-						moveTo(r[curr][1]-1,r[curr][2]-1);
+						sleepWithBreak(1000);
 					end
 				end
+				srReadScreen();
 			end
 		end
+		curr = curr + 1;
 		if(curr > #r) then
 			curr = 1;
 			if(not repeatForever) then
+				routeStartTime = 0;
+				walkingRoute = false;
 				return;
+			end
+		end
+	end
+	routeStartTime = 0;
+	walkingRoute = false;
+end
+
+function sign(x)
+	if(x > 0) then
+		return 1;
+	end
+	if(x == 0) then
+		return 0;
+	end
+	return -1;
+end
+
+function ensureClickWaypoint(route,waypoint)
+	lsSleep(300);
+	local typeOfWaypoint = route[waypoint][3];
+	local lastWaypoint;
+	if(waypoint > 1) then
+		lastWaypoint = waypoint - 1;
+	else
+		lastWaypoint = #r;
+	end
+	local dx = sign(route[waypoint][1] - route[lastWaypoint][1]);
+	local dy = sign(route[waypoint][2] - route[lastWaypoint][2]);
+	local direction;
+	if(dx < 0) then
+		if(dy < 0) then
+			direction = 1;
+		else
+			direction = 2;
+		end
+	else
+		if(dx < 0) then
+			direction = 3;
+		else
+			direction = 4;
+		end
+	end
+	local fails;
+	for fails = 1, 4 do
+		if(clickWaypoint(route[waypoint][3])) then
+			return true;
+		end
+		pos = findCoords();
+		if(pos) then
+			if(direction == 1) then					
+				moveTo(route[waypoint][1]-1,route[waypoint][2]-1);
+				moveTo(route[waypoint][1]+1,route[waypoint][2]+1);
+			elseif (direction == 2) then
+				moveTo(route[waypoint][1]-1,route[waypoint][2]+1);
+				moveTo(route[waypoint][1]+1,route[waypoint][2]-1);
+			elseif (direction == 3) then
+				moveTo(route[waypoint][1]+1,route[waypoint][2]-1);
+				moveTo(route[waypoint][1]-1,route[waypoint][2]+1);
+			else
+				moveTo(route[waypoint][1]+1,route[waypoint][2]+1);
+				moveTo(route[waypoint][1]-1,route[waypoint][2]-1);
+			end
+			moveTo(route[waypoint][1],route[waypoint][2]);
+			direction = direction + 1
+			if(direction > 4) then
+				direction = 1;
 			end
 		end
 	end
@@ -805,23 +843,33 @@ function clickWaypoint(typeOfWaypoint)
 	local dy;
 	local delta;
 	local offset = {};
-	statusScreen("Looking for " .. WaypointTypes[typeOfWaypoint]);
+	setStatus("Looking for " .. WaypointTypes[typeOfWaypoint]);
 	srReadScreen();
-	for delta = 1, 300, 2 do
-		for dx = (delta * -1), delta do
-			if(clickWaypointPixel(mid[0]+dx,mid[1]+delta,typeOfWaypoint)) then
-				return true;
-			end
-			if(clickWaypointPixel(mid[0]+dx,mid[1]-delta,typeOfWaypoint)) then
-				return true;
+	local xyWindowSize = srGetWindowSize();
+	local maxDelta = math.max(xyWindowSize[0] / 2.1, xyWindowSize[1] / 2.1);
+	for delta = 1, maxDelta, 5 do
+		local minX = math.max(0, mid[0] - delta);
+		local minY = math.max(0, mid[1] - delta);
+		local maxX = math.min(mid[0] + delta, xyWindowSize[0]-1);
+		local maxY = math.min(mid[1] + delta, xyWindowSize[1]-1);
+		for dx = (delta * -1), delta, 3 do
+			if(mid[0]+dx < xyWindowSize[0]) then
+				if(clickWaypointPixel(mid[0]+dx,maxY,typeOfWaypoint)) then
+					return true;
+				end
+				if(clickWaypointPixel(mid[0]+dx,minY,typeOfWaypoint)) then
+					return true;
+				end
 			end
 		end
-		for dy = (delta * -1), delta do
-			if(clickWaypointPixel(mid[0]+delta,mid[1]+dy,typeOfWaypoint)) then
-				return true;
-			end
-			if(clickWaypointPixel(mid[0]-delta,mid[1]-dy,typeOfWaypoint)) then
-				return true;
+		for dy = (delta * -1), delta, 3 do
+			if(mid[1]+dy < xyWindowSize[1]) then
+				if(clickWaypointPixel(maxX,mid[1]+dy,typeOfWaypoint)) then
+					return true;
+				end
+				if(clickWaypointPixel(minX,mid[1]-dy,typeOfWaypoint)) then
+					return true;
+				end
 			end
 		end
 	end
@@ -830,24 +878,132 @@ end
 
 function clickWaypointPixel(x, y, typeOfWaypoint)
 	local pos = {};
-	pos[0] = x;
-	pos[1] = y;
-	local offset = {};
-	offset[0] = 0;
-	offset[1] = 0;
-	local color = srReadPixelFromBuffer(x, y);
+	local xyWindowSize = srGetWindowSize();
+
 	checkBreak();
--- 	if(pixelMatch(pos,offset,WaypointColors[typeOfWaypoint],10)) then
-	local diff = compareColor(color,WaypointColors[typeOfWaypoint]);
-	if(diff < 5) then
-		safeClick(pos[0],pos[1]);
-		statusScreen(WaypointTypes[typeOfWaypoint] .. " clicked");
+	if(typeOfWaypoint == Bonfire) then
+		local currColor = srReadPixelFromBuffer(x, y);
+		if(compareColorEx(WaypointColors[typeOfWaypoint],currColor,6,2)) then
+			safeClick(x,y);
+			lsSleep(150);
+			srReadScreen();
+			local pos = findText("This is");
+			if(not pos) then
+				lsPrintln("Looking for " .. WaypointTypes[typeOfWaypoint] .. " but clicking didn't bring up a menu.");
+				return false;
+			end
+			setStatus(WaypointTypes[typeOfWaypoint] .. " clicked");
+			lsPrintln(WaypointTypes[typeOfWaypoint] .. " clicked");
+			return true;
+		end
+		return false;
+	end
+	local radius = 2;
+	local rgbTol = 450;
+	local hueTol = 450;
+	local roughness = 20;
+	if(typeOfWaypoint == Ranyahn) then
+		roughness = 100;
+	end
+	local foundSomething = false;
+	if(pixelBlockCheck(x, y, WaypointColors[typeOfWaypoint], rgbTol, hueTol, roughness, radius)) then
+		if(typeOfWaypoint == Wharehouse) then
+			safeClick(x,y);
+			lsSleep(150);
+			srReadScreen();
+			local pos = findText("Stash...");
+			if(not pos) then
+				lsPrintln("Looking for " .. WaypointTypes[typeOfWaypoint] .. " but clicking didn't bring up a menu.");
+				return false;
+			end
+			setStatus(WaypointTypes[typeOfWaypoint] .. " clicked");
+			lsPrintln(WaypointTypes[typeOfWaypoint] .. " clicked");
+			safeClick(x-5,y);
+			lsSleep(150);
+			srReadScreen();
+			return true;
+		else
+			if(pixelBlockCheck(x + radius*2, y + radius*2, WaypointColors[typeOfWaypoint], rgbTol, hueTol, roughness, radius) and
+			   pixelBlockCheck(x - radius*2, y - radius*2, WaypointColors[typeOfWaypoint], rgbTol, hueTol, roughness, radius)) then
+				foundSomething = true;
+			end
+			if(pixelBlockCheck(x - radius*2, y + radius*2, WaypointColors[typeOfWaypoint], rgbTol, hueTol, roughness, radius) and
+			   pixelBlockCheck(x + radius*2, y - radius*2, WaypointColors[typeOfWaypoint], rgbTol, hueTol, roughness, radius)) then
+				foundSomething = true;
+			end
+			if(pixelBlockCheck(x, y + radius*2, WaypointColors[typeOfWaypoint], rgbTol, hueTol, roughness, radius) and
+			   pixelBlockCheck(x, y - radius*2, WaypointColors[typeOfWaypoint], rgbTol, hueTol, roughness, radius)) then
+				foundSomething = true;
+			end
+			if(pixelBlockCheck(x - radius*2, y, WaypointColors[typeOfWaypoint], rgbTol, hueTol, roughness, radius) and
+			   pixelBlockCheck(x + radius*2, y, WaypointColors[typeOfWaypoint], rgbTol, hueTol, roughness, radius)) then
+				foundSomething = true;
+			end
+		end
+	end
+	if(foundSomething) then
+		safeClick(x,y);
+		lsSleep(150);
+		srReadScreen();
+		pos = findText("Examine this");
+		if(pos) then
+			safeClick(x-5,y);
+			lsPrintln("Found a plant, but didn't want that.");
+			return false;
+		end
+		pos = findText("This is");
+		if(pos) then
+			safeClick(x-5,y);
+			lsPrintln("Found something other than " .. WaypointTypes[typeOfWaypoint]);
+			return false;
+		end
+		setStatus(WaypointTypes[typeOfWaypoint] .. " clicked");
+		lsPrintln(WaypointTypes[typeOfWaypoint] .. " clicked");
 		return true;
 	end
 	return false;
 end
 
+function pixelBlockCheck(x, y, color, rgbTol, hueTol, roughness, size)
+	local startX = x - size;
+	local startY = y - size;
+	local endX = x + size;
+	local endY = y + size;
+	local i;
+	for i = startX, endX do
+		local j;
+		for j = startY, endY do
+			local currColor = srReadPixelFromBuffer(x, y);
+			if(not compareColorEx(color,currColor,rgbTol,hueTol)) then
+				return false;
+			end
+			local totalRoughness = 0;
+			local dx;
+			for dx = -1, 1 do
+				local dy;
+				for dy = -1, 1 do
+					if(dx ~= 0 or dy ~= 0) then
+						local neighbor = srReadPixelFromBuffer(x + dx, y + dy);
+						totalRoughness = totalRoughness + compareColor(currColor,neighbor);
+						if(totalRoughness > roughness) then
+							return false;
+						end
+					end
+				end
+			end
+		end
+	end
+	return true;
+end
+
 function moveTo(x, y, showStatus)
+	local moveDelay = 1; -- 25;
+	local movingRight = false;
+	local movingLeft = false;
+	local movingUp = false;
+	local movingDown = false;
+	local lastRightLeftChange = 0;
+	local lastUpDownChange = 0;
 	local xn = tonumber(x);
 	local yn = tonumber(y);
 	if(not showStatus) then
@@ -855,20 +1011,22 @@ function moveTo(x, y, showStatus)
 	end
 	local direction = 1;
 	local errorCount = 0;
-	local notMoving = 0;
+	local moving = false;
+	local lastMoveTime = lsGetTimer();
 	local lastPos = {};
 	lastPos[0] = 0;
 	lastPos[1] = 0;
 	while(1) do
-		checkBreak();
+		updateStatus();
 		srReadScreen();
 		overloaded = findText("Do you want to drop something?");
 		if(overloaded) then
 			fatalError("You are overloaded.");
 		end
-		checkSlate();
-		checkClay();
-		checkGrass();
+		if(checkSlate() or checkClay() or checkGrass()) then
+			moving = true;
+			lastMoveTime = lsGetTimer();
+		end
 		local pos;
 		pos = findCoords();
 		if (pos) then
@@ -876,41 +1034,100 @@ function moveTo(x, y, showStatus)
 				fatalError("#pos < 2 in moveTo() ... (" .. #pos .. ")");
 			end
 			if(pos[0] == lastPos[0] and pos[1] == lastPos[1]) then
-				notMoving = notMoving + 1;
-				if(notMoving > 20) then
+				moving = false;
+				if(lsGetTimer() > lastMoveTime + 3000) then
 					if(not promptOkay("You don't appear to be moving.  Are your chats minimized?  Is your \"Use arrow keys for movement\" option enabled?")) then
 						error("Macro aborted by user");
 					end
 				end
 			else
-				notMoving = 0;
+				moving = true;
+				lastMoveTime = lsGetTimer();
 				lastPos = pos;
 			end
 			if(showStatus) then
-				statusScreen("Moving from (" .. pos[0] .. ", " .. pos[1] .. ")\nTo (" .. xn .. ", " .. yn .. ")");
+				setStatus("Moving from (" .. pos[0] .. ", " .. pos[1] .. ")\nTo (" .. xn .. ", " .. yn .. ")");
 			end
 			errorCount = 0;
 			if((pos[0] == xn) and (pos[1] == yn)) then
 				srReadScreen();
+				srKeyUp(VK_ALL);
 				return;
 			end
 			if(pos[0] < xn) then
-				srRightArrow();
-				lsSleep(keyDelay);
+				if(movingLeft) then
+					srKeyUp(VK_LEFT);
+					movingLeft = false;
+					lastRightLeftChange = 0;
+				end
+				t = lsGetTimer();
+				if(lastRightLeftChange < t - 100 or not movingRight) then
+					srKeyDown(VK_RIGHT);
+					movingRight = true;
+					lastRightLeftChange = t;
+				end
 			elseif(pos[0] > xn) then
-				srLeftArrow();
-				lsSleep(keyDelay);
+				if(movingRight) then
+					srKeyUp(VK_RIGHT);
+					movingRight = false;
+					lastRightLeftChange = 0;
+				end
+				t = lsGetTimer();
+				if(lastRightLeftChange < t - 100 or not movingLeft) then
+					srKeyDown(VK_LEFT);
+					movingLeft = true;
+					lastRightLeftChange = t;
+				end
+			else
+				if(movingLeft) then
+					srKeyUp(VK_LEFT);
+					movingLeft = false;
+					lastRightLeftChange = 0;
+				elseif(movingRight) then
+					srKeyUp(VK_RIGHT);
+					movingRight = false;
+					lastRightLeftChange = 0;
+				end
 			end
 			if(pos[1] < yn) then
-				srUpArrow();
-				lsSleep(keyDelay);
+				if(movingDown) then
+					srKeyUp(VK_DOWN);
+					movingDown = false;
+					lastUpDownChange = 0;
+				end
+				t = lsGetTimer();
+				if(lastUpDownChange < t - 100 or not movingUp) then
+					srKeyDown(VK_UP);
+					movingUp = true;
+					lastUpDownChange = t;
+				end
 			elseif(pos[1] > yn) then
-				srDownArrow();
-				lsSleep(keyDelay);
+				if(movingUp) then
+					srKeyUp(VK_UP);
+					movingUp = false;
+					lastUpDownChange = 0;
+				end
+				t = lsGetTimer();
+				if(lastUpDownChange < t - 100 or not movingDown) then
+					srKeyDown(VK_DOWN);
+					movingDown = true;
+					lastUpDownChange = t;
+				end
+			else
+				if(movingDown) then
+					srKeyUp(VK_DOWN);
+					movingDown = false;
+					lastUpDownChange = 0;
+				elseif(movingUp) then
+					srKeyUp(VK_UP);
+					movingUp = false;
+					lastUpDownChange = 0;
+				end
 			end
+			lsSleep(moveDelay);
 		else
 			errorCount = errorCount + 1;
-			statusScreen("Can't find position.  Make sure clockloc is shown. (" .. errorCount .. ")");
+			setStatus("Can't find position.  Make sure clockloc is shown. (" .. errorCount .. ")");
 			lsSleep(1000);
 			if(direction == 1) then
 				srRightArrow();
@@ -928,37 +1145,42 @@ function moveTo(x, y, showStatus)
 			end
 		end
 	end
+	srKeyUp(VK_ALL);
 end
 
 function checkSlate()
 	if(not slate) then
-		return;
+		return false;
 	end
 	local xyWindowSize = srGetWindowSize();
 	local midX = xyWindowSize[0] / 2;
-	local pos = srFindImageInRange("slate.png",0,0,midX,100,5000);
+	local pos = srFindImageInRange("slate.png",0,0,midX,100,1000);
 	if(pos) then
 		safeClick(pos[0] + 3, pos[1] + 3);
-		sleepWithBreak(750);
+		sleepWithBreak(1250);
+		return true;
 	end
+	return false;
 end
 
 function checkGrass()
 	if(not grass) then
-		return;
+		return false;
 	end
 	local xyWindowSize = srGetWindowSize();
 	local midX = xyWindowSize[0] / 2;
 	local pos = srFindImageInRange("grass.png",0,0,midX,100,5000);
 	if(pos) then
 		safeClick(pos[0] + 3, pos[1] + 3);
-		sleepWithBreak(750);
+		sleepWithBreak(1250);
+		return true;
 	end
+	return false;
 end
 
 function checkClay()
 	if(not clay) then
-		return;
+		return false;
 	end
 	local xyWindowSize = srGetWindowSize();
 	local midX = xyWindowSize[0] / 2;
@@ -970,10 +1192,11 @@ function checkClay()
 			srReadScreen();
 			clickMax();
 			emptyJugs = 0;
+			sleepWithBreak(1250);
 		end
 	end
 	if(emptyJugs == numJugs) then
-		return
+		return false;
 	end
 	local xyWindowSize = srGetWindowSize();
 	local midX = xyWindowSize[0] / 2;
@@ -981,7 +1204,10 @@ function checkClay()
 	if(pos) then
 		safeClick(pos[0] + 3, pos[1] + 3);
 		emptyJugs = emptyJugs + 1;
+		sleepWithBreak(1250);
+		return true;
 	end
+	return false;
 end
 
 function clickColor(color)
@@ -994,7 +1220,7 @@ function clickColor(color)
 	local dy;
 	local delta;
 	local offset = {};
-	statusScreen("Searching...");
+	setStatus("Searching...");
 	srReadScreen();
 	for delta = 1, 300, 2 do
 		for dx = (delta * -1), delta do
@@ -1058,7 +1284,7 @@ function stashWood()
 	else
 		fatalError("Unable to find the Add some Wood menu item.");
 	end
-	statusScreen("Wood stashed");
+	setStatus("Wood stashed");
 end
 
 function stashAllButWood()
@@ -1078,37 +1304,27 @@ function stashAllButWood()
 		srReadScreen();
 		local pos = findText("Clay");
 		if(pos) then
-			safeClick(pos[0] + 10, pos[1] + 5);
-			lsSleep(150);
-			srReadScreen();
+			stashItem(pos,true);
 			stashedSomething = true;
 		else
 			pos = findText("Flint");
 			if(pos) then
-				safeClick(pos[0] + 10, pos[1] + 5);
-				lsSleep(150);
-				srReadScreen();
+				stashItem(pos,true);
 				stashedSomething = true;
 			else
 				pos = findText("Slate");
 				if(pos) then
-					safeClick(pos[0] + 10, pos[1] + 5);
-					lsSleep(150);
-					srReadScreen();
+					stashItem(pos,true);
 					stashedSomething = true;
 				else
 					pos = findText("Grass");
 					if(pos) then
-						safeClick(pos[0] + 10, pos[1] + 5);
-						lsSleep(150);
-						srReadScreen();
+						stashItem(pos,true);
 						stashedSomething = true;
 					else
 						pos = findText("Tadpoles");
 						if(pos) then
-							safeClick(pos[0] + 10, pos[1] + 5);
-							lsSleep(150);
-							srReadScreen();
+							stashItem(pos,true);
 							stashedSomething = true;
 						else
 							pos = findText("Insect...");
@@ -1118,11 +1334,8 @@ function stashAllButWood()
 								srReadScreen();
 								pos = findText("Stash All Insect");
 								if(pos) then
-									safeClick(pos[0] + 10, pos[1] + 5);
-									lsSleep(150);
-									srReadScreen();
+									stashItem(pos,false);
 									stashedSomething = true;
-									needMax = false;
 								end
 							end
 						end
@@ -1131,9 +1344,6 @@ function stashAllButWood()
 			end
 		end
 		if(stashedSomething) then
-			if(needMax) then
-				clickMax();
-			end
 			clickWaypoint(Wharehouse);
 		else
 			safeClick(10,200);
@@ -1141,7 +1351,22 @@ function stashAllButWood()
 	end
 end
 
-function prepareForWalking(zoomIn)
+function stashItem(pos,clickMax)
+	safeClick(pos[0] + 10, pos[1] + 5);
+	lsSleep(150);
+	srReadScreen();
+	clickMax();
+	lsSleep(150);
+	srReadScreen();
+end
+
+local prepareForWalkingInitialized = false;
+
+function prepareForWalking()
+	if(prepareForWalkingInitialized) then
+		return;
+	end
+	prepareForWalkingInitialized = true;
 	askForWindow("Make sure your chats are minimized then hover ATITD window and press Shift to continue.");
 	lsSleep(150);
 	local xyWindowSize = srGetWindowSize();
@@ -1170,14 +1395,66 @@ function prepareForWalking(zoomIn)
 				local ok = srFindImage("ok-faint.png");
 				if(ok) then
 					clickText(ok);
+				else
+					error("Unable to find the Ok button.");
 				end
-				if(zoomIn) then
-					srSetMousePos(100,-20);
-					sleepWithStatus(7000,"Zooming in");
-				end
+			else
+				error("Unable to find the Cartographer's Cam item.");
 			end
+		else
+			error("Unable to find the Camera menu item.");
 		end
+	else
+		error("Unable to find the Options menu item.");
 	end
 end
 
+function zoomIn()
+	srReadScreen();
+	local year = findText("Year");
+	if(not year) then
+		error("Unable to find the clock.");
+	end
+	srClickMouse(year[0]+10, year[1]+10);
+	srSetMousePos(100,-20);
+	sleepWithStatus(10000,"Zooming in");
+end
 
+local statusMessage = "";
+
+function setStatus(message)
+	if not message then
+		message = "";
+	end
+	statusMessage = message;
+	updateStatus();
+end
+
+function updateStatus()
+	local color = 0xFFFFFFff;
+	local allow_break = true;
+	lsPrintWrapped(10, 80, 0, lsScreenX - 20, 0.8, 0.8, color, statusMessage);
+	lsPrintWrapped(10, lsScreenY-100, 0, lsScreenX - 20, 0.8, 0.8, 0xffd0d0ff,error_status);
+	if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100,0xFFFFFFff, "End script") then
+		error(quit_message);
+	end
+	if allow_break then
+		lsPrint(10, 10, 0, 0.7, 0.7, 0xB0B0B0ff,"Hold Ctrl+Shift to end this script.");
+		if allow_pause then
+			lsPrint(10, 24, 0, 0.7, 0.7, 0xB0B0B0ff,"Hold Alt+Shift to pause this script.");
+		end
+		checkBreak();
+	end
+
+	if(walkingRoute) then
+		local duration = math.floor((lsGetTimer() - routeStartTime) / 1000);
+		local hours = math.floor(duration / 60 / 60);
+		local minutes = math.floor((duration - hours * 60 * 60) / 60);
+		local seconds = duration - hours * 60 * 60 - minutes * 60;
+--		lsPrint(10, 38, 0, 0.7, 0.7, 0xB0B0B0ff,"Elapsed: " .. hours .. ":" .. minutes .. ":" .. seconds);
+		lsPrint(10, 38, 0, 0.7, 0.7, 0xB0B0B0ff,string.format("Elapsed: %02d:%02d:%02d",hours,minutes,seconds));
+	end
+
+	lsSleep(tick_delay);
+	lsDoFrame();
+end
