@@ -1,13 +1,5 @@
-function checkBreak(disallow_pause, cleanupCallback)
+function checkBreak(disallow_pause)
 	if (lsShiftHeld() and lsControlHeld()) then
-		if(cleanupCallback) then
-			lsPrintln("calling cleanup call back");
-			pcall(cleanupCallback);
-			lsPrintln("cleanup call back returned");
-		else
-			lsPrintln("cleanupCallback == " .. type(cleanupCallback));
-		end
-		srKeyUp(-1);
 		error "broke out with Shift+Ctrl";
 	end
 	if ((not disallow_pause) and (lsShiftHeld() and lsAltHeld())) then
