@@ -9,6 +9,19 @@ focusMessage = singleLine([[
   Switch focus back to client window if necessary, then press shift
 ]]);
 
+cleanupCallback = nil;
+
+-------------------------------------------------------------------------------
+-- setCleanupCallback()
+--
+-- Specify the callback function to call when a macro stops
+-------------------------------------------------------------------------------
+
+function setCleanupCallback(callback)
+	cleanupCallback = callback;
+end
+
+
 -------------------------------------------------------------------------------
 -- checkBreak()
 --
@@ -17,6 +30,14 @@ focusMessage = singleLine([[
 
 function checkBreak()
   if lsShiftHeld() and lsControlHeld() then
+    if(cleanupCallback) then
+      lsPrintln("calling cleanup call back");
+      pcall(cleanupCallback);
+      lsPrintln("cleanup call back returned");
+    else
+      lsPrintln("cleanupCallback == " .. type(cleanupCallback));
+    end
+    srKeyUp(-1);
     error(quit_message);
   end
   if allow_pause and lsAltHeld() and lsShiftHeld() then
