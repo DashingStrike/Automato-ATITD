@@ -1,5 +1,13 @@
 function checkBreak()
 	if (lsShiftHeld() and lsControlHeld()) then
+		if(cleanupCallback) then
+			lsPrintln("calling cleanup call back");
+			pcall(cleanupCallback);
+			lsPrintln("cleanup call back returned");
+		else
+			lsPrintln("cleanupCallback == " .. type(cleanupCallback));
+		end
+		srKeyUp(-1);
 		error "broke out with Shift+Ctrl";
 	end
 end

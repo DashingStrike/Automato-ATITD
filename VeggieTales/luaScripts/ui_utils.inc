@@ -1,4 +1,4 @@
-function checkBreak(disallow_pause, cleanupCallback)
+function checkBreak(disallow_pause)
 	if (lsShiftHeld() and lsControlHeld()) then
 		if(cleanupCallback) then
 			lsPrintln("calling cleanup call back");

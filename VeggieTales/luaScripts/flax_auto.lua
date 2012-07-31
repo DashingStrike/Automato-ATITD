@@ -31,6 +31,7 @@ askText = singleLine([[
 num_loops = 5;
 grid_w = 5;
 grid_h = 5;
+min_seeds = 0;
 is_plant = true;
 seeds_per_pass = 4;
 seeds_per_harvest = 1;
@@ -145,14 +146,14 @@ local ending = false;
 function checkForEnd()
   if ((lsAltHeld() and lsControlHeld()) and not ending) then
     ending = true;
-	setStatus("");
-	cleanup();
-	error "broke out with Alt+Ctrl";
+    setStatus("");
+    cleanup();
+    error "broke out with Alt+Ctrl";
   end
   if (lsShiftHeld() and lsControlHeld()) then
-	if lsMessageBox("Break", "Are you sure you want to exit?", MB_YES + MB_NO) == MB_YES then
-	  error "broke out with Shift+Ctrl";
-	end
+    if lsMessageBox("Break", "Are you sure you want to exit?", MB_YES + MB_NO) == MB_YES then
+      error "broke out with Shift+Ctrl";
+    end
   end
   if lsAltHeld() and lsShiftHeld() then
     -- Pause
@@ -162,7 +163,7 @@ function checkForEnd()
     local done = false;
     while not done do
       local unpaused = lsButtonText(lsScreenX - 110, lsScreenY - 60,
-				    z, 100, 0xFFFFFFff, "Unpause");
+                    z, 100, 0xFFFFFFff, "Unpause");
       statusScreen("Hold Alt+Shift to resume", 0xFFFFFFff, false);
       done = (unpaused or (lsAltHeld() and lsShiftHeld()));
     end
@@ -355,9 +356,70 @@ function promptFlaxNumbers()
     lsDoFrame();
     lsSleep(tick_delay);
   end
+
+  min_seeds = grid_w*grid_h+1;
 end
 
+------------------------------------------------------------------------------
+-- promptSeeds()
 -------------------------------------------------------------------------------
+
+function promptSeeds()
+  scale = 1.1;
+    
+  local z = 0;
+  local is_done = nil;
+  local value = nil;
+  -- Edit box and text display
+  while not is_done do
+    -- Make sure we don't lock up with no easy way to escape!
+    checkBreak();
+
+    local y = 5;
+
+    lsSetCamera(0,0,lsScreenX*scale,lsScreenY*scale);
+
+    lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "How many seeds are you");
+    y = y + 32;
+    lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "starting with (minimum " .. min_seeds .. ")?");
+    y = y + 32;
+    seeds_in_pocket = readSetting("seeds_in_pocket",seeds_in_pocket);
+    is_done, seeds_in_pocket = lsEditBox("seeds_in_pocket", 110, y, z, 50, 30, scale, scale,
+                                   0x000000ff, seeds_in_pocket);
+    seeds_in_pocket = tonumber(seeds_in_pocket);
+    if not seeds_in_pocket then
+      is_done = nil;
+      lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+      seeds_in_pocket = min_seeds;
+    elseif seeds_in_pocket < min_seeds then
+      is_done = nil;
+      lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE AT LEAST " .. min_seeds);
+      seeds_in_pocket = min_seeds;
+    end
+    writeSetting("seeds_in_pocket",seeds_in_pocket);
+    y = y + 32;
+	
+	y = y + 32;
+	lsPrintWrapped(5, y, z, lsScreenX - 10, scale, scale, 0xD0D0D0ff, 
+	  "This macro will grow seeds as needed.  Any extra seeds beyond the " ..
+	  min_seeds .. " minimum will be used before growing more seeds.");
+	y = y + 128;
+
+    if lsButtonText(10, (lsScreenY - 30) * scale, z, 100, 0xFFFFFFff, "OK") then
+      is_done = 1;
+    end
+
+    if lsButtonText((lsScreenX - 100) * scale, (lsScreenY - 30) * scale, z, 100, 0xFFFFFFff,
+                    "End script") then
+      error "Clicked End Script button";
+    end
+
+    lsDoFrame();
+    lsSleep(tick_delay);
+  end
+end
+
+------------------------------------------------------------------------------
 -- getPlantWindowPos()
 -------------------------------------------------------------------------------
 
@@ -416,19 +478,19 @@ function setStatus(message)
   local allow_break = true;
   lsPrintWrapped(10, 80, 0, lsScreenX - 20, 0.8, 0.8, color, message);
   lsPrintWrapped(10, lsScreenY-100, 0, lsScreenX - 20, 0.8, 0.8, 0xffd0d0ff,
-		 error_status);
+         error_status);
   if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100,
-		  0xFFFFFFff, "End script") then
+          0xFFFFFFff, "End script") then
     error(quit_message);
   end
   if allow_break then
     lsPrint(10, 10, 0, 0.7, 0.7, 0xB0B0B0ff,
-	    "Hold Ctrl+Alt to cleanup and end.");
+        "Hold Ctrl+Alt to cleanup and end.");
     lsPrint(10, 24, 0, 0.7, 0.7, 0xB0B0B0ff,
-	    "Hold Ctrl+Shift to end this script.");
+        "Hold Ctrl+Shift to end this script.");
     if allow_pause then
       lsPrint(10, 38, 0, 0.7, 0.7, 0xB0B0B0ff,
-	      "Hold Alt+Shift to pause this script.");
+          "Hold Alt+Shift to pause this script.");
     end
     checkForEnd();
   end
@@ -442,11 +504,16 @@ end
 
 function doit()
   promptFlaxNumbers();
+  promptSeeds();
   if water_needed then
-    promptOkay("Make sure you have " .. (grid_w*grid_h+1) .. " seeds and enough water in jugs to grow " .. 
-      (grid_w*grid_h) .. " flax beds and make sure the plant menu is pinned.");
+    if not promptOkay("Make sure you have enough water in jugs to grow " .. 
+      (grid_w*grid_h) .. " flax beds and make sure the plant menu is pinned.") then
+	  error("User pressed cancel.");
+	end
   else
-    promptOkay("Make sure you have " .. (grid_w*grid_h+1) .. " seeds on you and the plant menu pinned.");
+    if not promptOkay("Make sure the plant menu is pinned.") then
+	  error("User pressed cancel.");
+	end
   end
   askForWindow(askText);
   initGlobals();
@@ -456,47 +523,49 @@ function doit()
   end
   local tops = findAllImages(imgThisIs);
   if #tops > 0 then
-	error("Only the Plant menu should be pinned.");
+    error("Only the Plant menu should be pinned.");
   end
 
+  getPlantWindowPos();
   prepareOptions();
   prepareCamera();
   
   drawWater();
-  local min_seeds = grid_w*grid_h+1;
   local beds_per_loop = grid_w*grid_h;
-  seeds_in_pocket = min_seeds;
   for loop_count=1, num_loops do
-    is_plant = false;
-    while seeds_in_pocket > min_seeds + beds_per_loop or not is_plant do
-      error_status = "";
-      local finalPos = plantAndPin(loop_count);
-      dragWindows(loop_count);
-      harvestAll(loop_count);
-      closeAllWindows(0, 0, srGetWindowSize()[0] - lsGetWindowSize()[0], srGetWindowSize()[1]);
+    is_plant = (seeds_in_pocket >= min_seeds + beds_per_loop);
+	local planting = "false";
+	if is_plant then
+	  planting = "true";
+	end
+	lsPrintln("is_plant == (" .. seeds_in_pocket .. " >= " .. min_seeds .. " + " .. beds_per_loop .. ") == " .. planting);
+    error_status = "";
+    local finalPos = plantAndPin(loop_count);
+    dragWindows(loop_count);
+    harvestAll(loop_count);
+    closeAllFlaxWindows();
+    setStatus("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
+    if is_plant and (water_needed or rot_flax) then
+      lsPrintln("doit(): Walking to the water at (" .. water_location[0] .. ", " .. water_location[1] .. ")");
+      walk(water_location,false);
+      if water_needed then
+        drawWater();
+        lsSleep(150);
+        clickMax(); -- Sometimes drawWater() misses the max button
+      end
+      if rot_flax then
+        rotFlax();
+      end
       setStatus("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
-      if is_plant and (water_needed or rot_flax) then
-	    lsPrintln("doit(): Walking to the water at (" .. water_location[0] .. ", " .. water_location[1] .. ")");
-        walk(water_location,false);
-        if water_needed then
-          drawWater();
-		  lsSleep(150);
-		  clickMax(); -- Sometimes drawWater() misses the max button
-        end
-        if rot_flax then
-          rotFlax();
-        end
-        setStatus("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
-      end
-      if is_plant and store_flax then -- This should be done after rotting flax
-	    lsPrintln("doit(): Walking to the storage location at (" .. storage_location[0] .. ", " .. storage_location[1] .. ")");
-        walk(storage_location,true);
-        storeFlax();
-        setStatus("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
-      end
-      walk(startPos,false);
-      is_plant = true;
     end
+    if is_plant and store_flax then -- This should be done after rotting flax
+      lsPrintln("doit(): Walking to the storage location at (" .. storage_location[0] .. ", " .. storage_location[1] .. ")");
+      walk(storage_location,true);
+      storeFlax();
+      setStatus("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
+    end
+    walk(startPos,false);
+    is_plant = true;
   end
   lsPlaySound("Complete.wav");
 end
@@ -510,9 +579,9 @@ end
 function cleanup()
   local tops = findAllImages(imgThisIs);
   if #tops > 0 then
-	for i=1,#tops do
-	  ripOut(tops[i]);
-	end
+    for i=1,#tops do
+      ripOut(tops[i]);
+    end
   end
 end
 
@@ -538,8 +607,8 @@ function rotFlax()
   if pos then
     clickText(pos);
     if not clickMax() then
-	  fatalError("Unable to find the Max button.");
-	end
+      fatalError("Unable to find the Max button.");
+    end
   end
 end
 
@@ -563,41 +632,41 @@ function storeFlax()
   local maxDelta = math.max(xyWindowSize[0] / 2, xyWindowSize[1] / 2);
   local delta;
   for delta = 1, maxDelta, 5 do
-	local dx;
-	for dx = (delta * -1), delta, 3 do
-	  if checkStoragePixel(mid[0]+dx,mid[1]+delta) then
-	    stashFlax(mid[0]+dx,mid[1]+delta);
-		return true;
-	  end
-	  if checkStoragePixel(mid[0]+dx,mid[1]-delta) then
-	    stashFlax(mid[0]+dx,mid[1]-delta);
-		return true;
-	  end
+    local dx;
+    for dx = (delta * -1), delta, 3 do
+      if checkStoragePixel(mid[0]+dx,mid[1]+delta) then
+        stashFlax(mid[0]+dx,mid[1]+delta);
+        return true;
+      end
+      if checkStoragePixel(mid[0]+dx,mid[1]-delta) then
+        stashFlax(mid[0]+dx,mid[1]-delta);
+        return true;
+      end
     end
-	local dy;
-	for dy = (delta * -1), delta, 3 do
-	  if checkStoragePixel(mid[0]+delta,mid[1]+dy) then
-	    stashFlax(mid[0]+delta,mid[1]+dy);
-		return true;
-	  end
-	  if checkStoragePixel(mid[0]-delta,mid[1]+dy) then
-	    stashFlax(mid[0]-delta,mid[1]+dy);
-	    return true;
-	  end
-	end
+    local dy;
+    for dy = (delta * -1), delta, 3 do
+      if checkStoragePixel(mid[0]+delta,mid[1]+dy) then
+        stashFlax(mid[0]+delta,mid[1]+dy);
+        return true;
+      end
+      if checkStoragePixel(mid[0]-delta,mid[1]+dy) then
+        stashFlax(mid[0]-delta,mid[1]+dy);
+        return true;
+      end
+    end
   end
   return false;
 end
 
 function checkStoragePixel(x, y)
   if(pixelBlockCheck(x, y, tent_color, 6, 2, 2)) then
-	return true;
+    return true;
   end
   if(pixelBlockCheck(x, y, wharehouse_color, 6, 2, 2)) then
-	return true;
+    return true;
   end
   if(pixelBlockCheck(x, y, chest_color, 6, 2, 2)) then
-	return true;
+    return true;
   end
 end
 
@@ -607,58 +676,58 @@ function stashFlax(x, y)
   lsSleep(refresh_time);
   local pos = findText("Stash...");
   if not pos then
-	fatalError("Unable to find the Stash menu item.");
+    fatalError("Unable to find the Stash menu item.");
   end
   clickText(pos);
   lsSleep(refresh_time);
   srReadScreen();
   pos = findText("Rotten Flax");
   if pos then
-	clickText(pos);
+    clickText(pos);
     lsSleep(refresh_time*2);
-	srReadScreen();
-	if not clickMax() then
-	  fatalError("Unable to find the Max button.");
-	end
+    srReadScreen();
+    if not clickMax() then
+      fatalError("Unable to find the Max button.");
+    end
     lsSleep(refresh_time);
-	srReadScreen();
+    srReadScreen();
     safeClick(x,y);
     lsSleep(refresh_time);
-	srReadScreen();
-	pos = findText("Stash...");
-	if not pos then
-	  fatalError("Unable to find the Stash menu item.");
-	end
-	clickText(pos);
+    srReadScreen();
+    pos = findText("Stash...");
+    if not pos then
+      fatalError("Unable to find the Stash menu item.");
+    end
+    clickText(pos);
     lsSleep(refresh_time);
-	srReadScreen();
+    srReadScreen();
   end
   pos = findText("Flax (");
   if pos then
-	clickText(pos);
+    clickText(pos);
     lsSleep(refresh_time*2);
-	srReadScreen();
-	if not clickMax() then
-	  fatalError("Unable to find the Max button.");
-	end
+    srReadScreen();
+    if not clickMax() then
+      fatalError("Unable to find the Max button.");
+    end
     lsSleep(refresh_time);
-	srReadScreen();
+    srReadScreen();
     safeClick(x,y);
     lsSleep(refresh_time);
-	srReadScreen();
-	pos = findText("Stash...");
-	if not pos then
-	  fatalError("Unable to find the Stash menu item.");
-	end
-	clickText(pos);
+    srReadScreen();
+    pos = findText("Stash...");
+    if not pos then
+      fatalError("Unable to find the Stash menu item.");
+    end
+    clickText(pos);
     lsSleep(refresh_time);
-	srReadScreen();
+    srReadScreen();
   end
   pos = findText("Insect...");
   if pos then
-	clickText(pos);
+    clickText(pos);
     lsSleep(refresh_time*2);
-	srReadScreen();
+    srReadScreen();
     pos = findText("Stash All");
     if pos then  
       clickText(pos);
@@ -673,7 +742,7 @@ function stashFlax(x, y)
     safeClick(x-5,y);
   end
     lsSleep(refresh_time);
-	srReadScreen();
+    srReadScreen();
 end
 
 -------------------------------------------------------------------------------
@@ -761,7 +830,7 @@ function plantHere(xyPlantFlax, y_pos)
   lsPrintln('menu ' .. bed[0] .. ',' .. bed[1]);
   if not openAndPin(bed[0], bed[1], 3500) then
     error_status = "No window came up after planting.";
-	seeds_in_pocket = 0;
+    seeds_in_pocket = 0;
     return false;
   end
 
@@ -839,19 +908,14 @@ function harvestAll(loop_count)
     end
 
     if is_plant then
-      harvestLeft = #tops + math.floor((seeds_in_pocket - grid_w*grid_h+1)/(grid_w*grid_h))*(grid_w*grid_h);
-      subHarvestLeft = #tops;
+      harvestLeft = #tops;
     else
       harvestLeft = (#tops - seedIndex) + 1 +
-                    (#tops * (seeds_per_pass - seedWave)) +
-					(max * (seeds_per_harvest * seeds_per_pass - 1));
-      subHarvestLeft = (#tops - seedIndex) + 1 +
-                       (#tops * (seeds_per_pass - seedWave));
+                    (#tops * (seeds_per_pass - seedWave));
     end
 
     setStatus("(" .. loop_count .. "/" .. num_loops ..
-                 ") Harvests Left: " .. harvestLeft .. 
-				 " (" .. subHarvestLeft .. ")");
+                 ") Harvests Left: " .. harvestLeft);
     lsSleep(refresh_time);
     srReadScreen();
     if is_plant then
@@ -883,12 +947,12 @@ function harvestAll(loop_count)
       end
     else
       srReadScreen();
-	  local oks = srFindImage(imgOK,5000);
-	  while oks do
-	    safeClick(oks[0],oks[1]);
-		lsSleep(100);
-		oks = srFindImage(imgOK);
-	  end
+      local oks = srFindImage(imgOK,5000);
+      while oks do
+        safeClick(oks[0],oks[1]);
+        lsSleep(100);
+        oks = srFindImage(imgOK);
+      end
       local tops = findAllImages(imgThisIs);
       if #tops > 0 then
         if seedIndex > #tops then
@@ -900,34 +964,34 @@ function harvestAll(loop_count)
                        tops[#tops - seedIndex + 1][1],
                        160, 100);
         if seedPos and seedWave <= seeds_per_pass then
-		  local harvested = false;
-		  local lastClick = 0;
+          local harvested = false;
+          local lastClick = 0;
           while not harvested do
             if seedPos and lsGetTimer() > lastClick + 1500 then
               safeClick(seedPos[0] + 5, seedPos[1]);
-			  lastClick = lsGetTimer();
-			  lsSleep(100);
-			end
-  		    safeClick(tops[#tops - seedIndex + 1][0],
-			         tops[#tops - seedIndex + 1][1]);
-			lsSleep(100);
-			srReadScreen();
+              lastClick = lsGetTimer();
+              lsSleep(100);
+            end
+              safeClick(tops[#tops - seedIndex + 1][0],
+                     tops[#tops - seedIndex + 1][1]);
+            lsSleep(100);
+            srReadScreen();
             seedPos = srFindImageInRange(imgTheSeeds,
                      tops[#tops - seedIndex + 1][0],
                      tops[#tops - seedIndex + 1][1],
                      160, 100);
-		    if seedPos then
-			  harvested = true;
-			else
+            if seedPos then
+              harvested = true;
+            else
               seedPos = srFindImageInRange(imgSeeds,
                        tops[#tops - seedIndex + 1][0],
                        tops[#tops - seedIndex + 1][1],
                        160, 100);
-			end
-			checkForEnd();
-		  end
+            end
+            checkForEnd();
+          end
           seedIndex = seedIndex + 1;
-		  seeds_in_pocket = seeds_in_pocket + seeds_per_harvest;
+          seeds_in_pocket = seeds_in_pocket + seeds_per_harvest;
         end
       end
       if seedWave > seeds_per_pass then
@@ -955,8 +1019,7 @@ end
 -------------------------------------------------------------------------------
 
 function walkHome(loop_count, finalPos)
-  closeAllWindows(0, 0, srGetWindowSize()[0] - lsGetWindowSize()[0],
-          srGetWindowSize()[1]);
+  closeAllFlaxWindows();
   setStatus("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
   walkTo(finalPos);
 
@@ -996,26 +1059,26 @@ function ripOut(pos)
       lsSleep(refresh_time);
       safeClick(pos[0], pos[1], 1); -- unpin
       lsSleep(refresh_time);
-	else
-	  rip_out = srFindImage(imgTearDownThis);
-	  if rip_out then
+    else
+      rip_out = srFindImage(imgTearDownThis);
+      if rip_out then
         safeClick(rip_out[0] + 5, rip_out[1], 0);
         lsSleep(refresh_time);
-	    srReadScreen();
-		rip_out = nil;
-		while not rip_out do
-		  checkBreak();
-		  rip_out = srFindImage(imgTearDown);
-		  if rip_out then
-			safeClick(rip_out[0], rip_out[1]);
-		  end
-		  lsSleep(refresh_time);
-		  srReadScreen();
-		end
-	  end
-	  safeClick(pos[0],pos[1],true);
-	  lsSleep(refresh_time);
-	  srReadScreen();
+        srReadScreen();
+        rip_out = nil;
+        while not rip_out do
+          checkBreak();
+          rip_out = srFindImage(imgTearDown);
+          if rip_out then
+            safeClick(rip_out[0], rip_out[1]);
+          end
+          lsSleep(refresh_time);
+          srReadScreen();
+        end
+      end
+      safeClick(pos[0],pos[1],true);
+      lsSleep(refresh_time);
+      srReadScreen();
     end
   end
 end
@@ -1039,77 +1102,116 @@ function walk(dest,abortOnError)
   local failures = 0;
   srReadScreen();
   while coords[0] ~= dest[0] or coords[1] ~= dest[1] do
+    centerMouse();
+    local dx = 0;
+    local dy = 0;
+    if coords[0] < dest[0] then
+      dx = 1;
+    elseif coords[0] > dest[0] then
+      dx = -1;
+    end
+    if coords[1] < dest[1] then
+      dy = -1;
+    elseif coords[1] > dest[1] then
+      dy = 1;
+    end
+    stepTo(makePoint(dx, dy));
+    coords = findCoords();
+    checkForEnd();
+    if checkForMenu() then
+      if abortOnError then
+        return false;
+      end
+      failures = failures + 1;
+      if failures > 50 then
+        return false;
+      end
+      stepTo(makePoint(math.random(-1,1),math.random(-1,1)));
+    else
+      failures = 0;
+    end
+  end
+  return true;
+end
+
+function walkOld(dest,abortOnError)
+  centerMouse();
+  local coords = findCoords();
+  local startPos = coords;
+  local failures = 0;
+  srReadScreen();
+  while coords[0] ~= dest[0] or coords[1] ~= dest[1] do
     while coords[0] < dest[0] do
       centerMouse();
       stepTo(makePoint(1, 0));
       coords = findCoords();
       checkForEnd();
-	  if checkForMenu() then
-		if abortOnError then
-		  return false;
-		end
-		failures = failures + 1;
-		if failures > 50 then
-			return false;
-		end
+      if checkForMenu() then
+        if abortOnError then
+          return false;
+        end
+        failures = failures + 1;
+        if failures > 50 then
+            return false;
+        end
         stepTo(makePoint(math.random(-1,0),math.random(-1,1)));
-	  else
-	    failures = 0;
-	  end
+      else
+        failures = 0;
+      end
     end
     while coords[0] > dest[0] do
       centerMouse();
       stepTo(makePoint(-1, 0));
       coords = findCoords();
       checkForEnd();
-	  if checkForMenu() then
-		if abortOnError then
-		  return false;
-		end
-		failures = failures + 1;
-		if failures > 50 then
-			return false;
-		end
+      if checkForMenu() then
+        if abortOnError then
+          return false;
+        end
+        failures = failures + 1;
+        if failures > 50 then
+            return false;
+        end
         stepTo(makePoint(math.random(0,1),math.random(-1,1)));
-	  else
-	    failures = 0;
-	  end
+      else
+        failures = 0;
+      end
     end
     while coords[1] < dest[1] do
       centerMouse();
       stepTo(makePoint(0, -1));
       coords = findCoords();
       checkForEnd();
-	  if checkForMenu() then
-		if abortOnError then
-		  return false;
-		end
-		failures = failures + 1;
-		if failures > 50 then
-			return false;
-		end
+      if checkForMenu() then
+        if abortOnError then
+          return false;
+        end
+        failures = failures + 1;
+        if failures > 50 then
+            return false;
+        end
         stepTo(makePoint(math.random(-1,1),math.random(0,1)));
-	  else
-	    failures = 0;
-	  end
+      else
+        failures = 0;
+      end
     end
     while coords[1] > dest[1] do
       centerMouse();
       stepTo(makePoint(0, 1));
       coords = findCoords();
       checkForEnd();
-	  if checkForMenu() then
-		if abortOnError then
-		  return false;
-		end
-		failures = failures + 1;
-		if failures > 50 then
-			return false;
-		end
+      if checkForMenu() then
+        if abortOnError then
+          return false;
+        end
+        failures = failures + 1;
+        if failures > 50 then
+            return false;
+        end
         stepTo(makePoint(math.random(-1,1),math.random(-1,0)));
-	  else
-	    failures = 0;
-	  end
+      else
+        failures = 0;
+      end
     end
   end
   return true;
@@ -1134,21 +1236,21 @@ end
 -------------------------------------------------------------------------------
 
 function pixelBlockCheck(x, y, color, rgbTol, hueTol, size)
-	local startX = x - size;
-	local startY = y - size;
-	local endX = x + size;
-	local endY = y + size;
-	local i;
-	for i = startX, endX do
-		local j;
-		for j = startY, endY do
-			local currColor = srReadPixelFromBuffer(x, y);
-			if(not compareColorEx(color,currColor,rgbTol,hueTol)) then
-				return false;
-			end
-		end
-	end
-	return true;
+    local startX = x - size;
+    local startY = y - size;
+    local endX = x + size;
+    local endY = y + size;
+    local i;
+    for i = startX, endX do
+        local j;
+        for j = startY, endY do
+            local currColor = srReadPixelFromBuffer(x, y);
+            if(not compareColorEx(color,currColor,rgbTol,hueTol)) then
+                return false;
+            end
+        end
+    end
+    return true;
 end
 
 -------------------------------------------------------------------------------
@@ -1161,7 +1263,7 @@ function clickMax()
   local pos = waitForImage("crem-max.png", 5000, nil, nil, 1000);
   if pos then
     safeClick(pos[0]+5, pos[1]+5);
-	return true;
+    return true;
   end
   return false;
 end
@@ -1181,108 +1283,139 @@ function centerMouse()
 end
 
 function prepareCamera()
-	characterMenu();
-	local pos = findText("Options...");
-	if(pos) then
-		offsetClick(pos,8);
-		pos = findText("Camera");
-		if(pos) then
-			offsetClick(pos,8);
-			pos = findText("Cartographer's Cam");
-			if(pos) then
-				offsetClick(pos,8);
-				pos = srFindImage("ok-faint.png");
-				if(pos) then
-					offsetClick(pos);
-				else
-					error("Unable to find the Ok button.");
-				end
-			else
-				error("Unable to find the Cartographer's Cam item.");
-			end
-		else
-			error("Unable to find the Camera menu item.");
-		end
-	else
-		error("Unable to find the Options menu item.");
-	end
-	srReadScreen();
-	pos = findText("Year");
-	if(not pos) then
-		error("Unable to find the clock.");
-	end
-	offsetClick(pos);
-	srSetMousePos(100,-20);
-	sleepWithStatus(10000,"Zooming in");
-	statusScreen("");
+    characterMenu();
+    local pos = findText("Options...");
+    if(pos) then
+        offsetClick(pos,8);
+        pos = findText("Camera");
+        if(pos) then
+            offsetClick(pos,8);
+            pos = findText("Cartographer's Cam");
+            if(pos) then
+                offsetClick(pos,8);
+                pos = srFindImage("ok-faint.png");
+                if(pos) then
+                    offsetClick(pos);
+                else
+                    error("Unable to find the Ok button.");
+                end
+            else
+                error("Unable to find the Cartographer's Cam item.");
+            end
+        else
+            error("Unable to find the Camera menu item.");
+        end
+    else
+        error("Unable to find the Options menu item.");
+    end
+    srReadScreen();
+    pos = findText("Year");
+    if(not pos) then
+        error("Unable to find the clock.");
+    end
+    offsetClick(pos);
+    srSetMousePos(100,-20);
+    sleepWithStatus(10000,"Zooming in");
+    statusScreen("");
 end
 
 function prepareOptions()
-	characterMenu();
-	local pos = findText("Options...");
-	if(pos) then
-		offsetClick(pos,8);
-		pos = findText("One-Click");
-		if(pos) then
-			offsetClick(pos,8);
-			pos = srFindImage(imgPlantWhereChecked,5000);
-			if(not pos) then
-				pos = srFindImage(imgPlantWhereUnchecked,5000);
-				if(pos) then
-					offsetClick(pos,4);
-				end
-			end
-			pos = srFindImage(imgHotkeysOnFlax,5000);
-			if(pos) then
-				offsetClick(pos,4);
-			end
-			pos = srFindImage(imgOptionsX,5000);
-			if(pos) then
-				srClickMouse(pos[0]+24,pos[1]+9); -- close options window
-				lsSleep(150);
-				srReadScreen();
-			end
-		end
-	end
-	characterMenu();
-	local pos = findText("Options...");
-	if(pos) then
-		offsetClick(pos,8);
-		pos = findText("Interface Options");
-		if(pos) then
-			offsetClick(pos,8);
-			pos = srFindImage(imgRightClickPins,5000);
-			if(pos) then
-				offsetClick(pos,4);
-			end
-		end
-		pos = srFindImage(imgSmallX,5000);
-		if(pos) then
-			offsetClick(pos,4);
-		end
-	end
+    characterMenu();
+    local pos = findText("Options...");
+    if(pos) then
+        offsetClick(pos,8);
+        pos = findText("One-Click");
+        if(pos) then
+            offsetClick(pos,8);
+            pos = srFindImage(imgPlantWhereChecked,5000);
+            if(not pos) then
+                pos = srFindImage(imgPlantWhereUnchecked,5000);
+                if(pos) then
+                    offsetClick(pos,4);
+                end
+            end
+            pos = srFindImage(imgHotkeysOnFlax,5000);
+            if(pos) then
+                offsetClick(pos,4);
+            end
+            pos = srFindImage(imgOptionsX,5000);
+            if(pos) then
+                srClickMouse(pos[0]+24,pos[1]+9); -- close options window
+                lsSleep(150);
+                srReadScreen();
+            end
+        end
+    end
+    characterMenu();
+    local pos = findText("Options...");
+    if(pos) then
+        offsetClick(pos,8);
+        pos = findText("Interface Options");
+        if(pos) then
+            offsetClick(pos,8);
+            pos = srFindImage(imgRightClickPins,5000);
+            if(pos) then
+                offsetClick(pos,4);
+            end
+        end
+        pos = srFindImage(imgSmallX,5000);
+        if(pos) then
+            offsetClick(pos,4);
+        end
+    end
 end
 
 function offsetClick(pos,offset)
-	if(offset == nil) then
-		offset = 4;
-	end
-	srClickMouse(pos[0]+offset,pos[1]+offset);
-	lsSleep(150);
-	srReadScreen();
+    if(offset == nil) then
+        offset = 4;
+    end
+    srClickMouse(pos[0]+offset,pos[1]+offset);
+    lsSleep(150);
+    srReadScreen();
 end
 
 function characterMenu()
-	local xyWindowSize = srGetWindowSize();
-	local mid = {};
-	mid[0] = xyWindowSize[0] / 2;
-	mid[1] = xyWindowSize[1] / 2;
-	srSetMousePos(mid[0],mid[1]);
-	lsSleep(150);
-	local escape = "\27";
-	srKeyEvent(escape);
-	lsSleep(150);
-	srReadScreen();
+	centerMouse();
+    lsSleep(150);
+    local escape = "\27";
+    srKeyEvent(escape);
+    lsSleep(150);
+    srReadScreen();
+end
+
+-------------------------------------------------------------------------------
+-- closeAllFlaxWindows()
+--
+-- Close all open flax windows and many others, but not the plant window.
+--
+-------------------------------------------------------------------------------
+
+function closeAllFlaxWindows()
+  x = 0;
+  y = 0;
+  width = srGetWindowSize()[0];
+  height = srGetWindowSize()[1];
+
+  local closeImages = {"ThisIs.png", "utilityForCloseAllFlaxWindows.png", "Ok.png"};
+  local closeRight = {1, 1, nil};
+
+  local found = true;
+  while found do
+    found = false;
+    for i=1,#closeImages do
+      local image = closeImages[i];
+      local right = closeRight[i];
+      srReadScreen();
+      local images = findAllImagesInRange(image, x, y, width, height);
+      while #images >= 1 do
+	    done = true;
+	    safeClick(images[#images][0], images[#images][1], right);
+	    sleepWithStatus(200, "Closing Windows");
+	    srReadScreen();
+	    images = findAllImagesInRange(image, x, y, width, height);
+      end
+    end
+  end
 end
 
 

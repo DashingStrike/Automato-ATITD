@@ -9,13 +9,26 @@ focusMessage = singleLine([[
   Switch focus back to client window if necessary, then press shift
 ]]);
 
+cleanupCallback = nil;
+
+-------------------------------------------------------------------------------
+-- setCleanupCallback()
+--
+-- Specify the callback function to call when a macro stops
+-------------------------------------------------------------------------------
+
+function setCleanupCallback(callback)
+	cleanupCallback = callback;
+end
+
+
 -------------------------------------------------------------------------------
 -- checkBreak()
 --
 -- Stop the macro if the user is pressing both shift and control.
 -------------------------------------------------------------------------------
 
-function checkBreak(cleanupCallback)
+function checkBreak()
   if lsShiftHeld() and lsControlHeld() then
     if(cleanupCallback) then
       lsPrintln("calling cleanup call back");
