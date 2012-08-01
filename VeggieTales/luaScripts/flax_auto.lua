@@ -31,6 +31,16 @@ askText = singleLine([[
 num_loops = 5;
 grid_w = 5;
 grid_h = 5;
+grid_direction = 1;
+grid_directions = { "Northeast", "Northwest", "Southeast", "Southwest" };
+grid_deltas = 
+{
+  { {1, 0, -1, 0}, {0, -1, 0, 1} },
+  { {-1, 0, 1, 0}, {0, -1, 0, 1} },
+  { {1, 0, -1, 0}, {0, 1, 0, -1} },
+  { {-1, 0, 1, 0}, {0, 1, 0, -1} }
+};
+  
 min_seeds = 0;
 is_plant = true;
 seeds_per_pass = 4;
@@ -239,6 +249,12 @@ function promptFlaxNumbers()
     grid_h = grid_w;
     writeSetting("grid_w",grid_w);
     y = y + 32;
+	
+    lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Plant to the:");
+	grid_direction = readSetting("grid_direction",grid_direction);
+	grid_direction = lsDropdown("grid_direction", 145, y, 0, 145, grid_direction, grid_directions);
+	writeSetting("grid_direction",grid_direction);
+    y = y + 32;
 
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Seed harvests per bed:");
     seeds_per_pass = readSetting("seeds_per_pass",seeds_per_pass);
@@ -332,13 +348,6 @@ function promptFlaxNumbers()
       writeSetting("storage_locationY",storage_location[1]);
       y = y + 32 + 5;
     end
-
-    lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
-                   "This will plant and harvest a " .. grid_w .. "x" ..
-                   grid_w .. " grid of Flax " .. num_loops ..
-                   " times, requiring " .. (grid_w * grid_w) ..
-                   " seeds, doing " .. (grid_w*grid_w*num_loops) ..
-                   " flax harvests.");
 
     if lsButtonText(10, (lsScreenY - 30) * scale, z, 100, 0xFFFFFFff, "OK") then
       is_done = 1;
@@ -602,10 +611,13 @@ function rotFlax()
     fatalError("Unable to find the Skills menu item.");
   end
   clickText(pos);
+  lsSleep(refresh_time);
   srReadScreen();
   local pos = findText("Rot flax");
   if pos then
     clickText(pos);
+	lsSleep(refresh_time);
+	srReadScreen();
     if not clickMax() then
       fatalError("Unable to find the Max button.");
     end
@@ -758,8 +770,15 @@ function plantAndPin(loop_count)
   local dxi=1;
   local dt_max=grid_w;
   local dt=grid_w;
-  local dx={1, 0, -1, 0};
-  local dy={0, -1, 0, 1};
+--  local dx={1, 0, -1, 0};
+--  local dy={0, -1, 0, 1};
+  local i;
+  local dx = {};
+  local dy = {};
+  for i=1, 4 do
+	dx[i] = grid_deltas[grid_direction][1][i];
+    dy[i] = grid_deltas[grid_direction][2][i];
+  end
   local num_at_this_length = 3;
   local x_pos = 0;
   local y_pos = 0;
@@ -1260,7 +1279,7 @@ end
 -------------------------------------------------------------------------------
 
 function clickMax()
-  local pos = waitForImage("crem-max.png", 5000, nil, nil, 1000);
+  local pos = srFindImage("crem-max.png", 1000);
   if pos then
     safeClick(pos[0]+5, pos[1]+5);
     return true;
@@ -1283,6 +1302,7 @@ function centerMouse()
 end
 
 function prepareCamera()
+	statusScreen("Configuring camera");
     characterMenu();
     local pos = findText("Options...");
     if(pos) then
@@ -1320,6 +1340,8 @@ function prepareCamera()
 end
 
 function prepareOptions()
+	statusScreen("Checking and setting avatar options");
+  
     characterMenu();
     local pos = findText("Options...");
     if(pos) then
@@ -1363,6 +1385,7 @@ function prepareOptions()
             offsetClick(pos,4);
         end
     end
+	statusScreen("");
 end
 
 function offsetClick(pos,offset)
