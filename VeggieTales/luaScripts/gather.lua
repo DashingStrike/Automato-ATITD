@@ -786,7 +786,7 @@ function ensureClickWaypoint(route,waypoint)
 	if(waypoint > 1) then
 		lastWaypoint = waypoint - 1;
 	else
-		lastWaypoint = #r;
+		lastWaypoint = #route;
 	end
 	local dx = sign(route[waypoint][1] - route[lastWaypoint][1]);
 	local dy = sign(route[waypoint][2] - route[lastWaypoint][2]);
