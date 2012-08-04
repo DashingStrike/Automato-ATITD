@@ -643,26 +643,22 @@ function storeFlax()
   local storagePos = nil;
   local maxDelta = math.max(xyWindowSize[0] / 2, xyWindowSize[1] / 2);
   local delta;
-  for delta = 1, maxDelta, 5 do
+  for delta = 1, maxDelta, 2 do
     local dx;
-    for dx = (delta * -1), delta, 3 do
-      if checkStoragePixel(mid[0]+dx,mid[1]+delta) then
-        stashFlax(mid[0]+dx,mid[1]+delta);
+    for dx = (delta * -1), delta, 2 do
+      if checkStoragePixel(mid[0]+dx,mid[1]+delta) and stashFlax(mid[0]+dx,mid[1]+delta) then
         return true;
       end
-      if checkStoragePixel(mid[0]+dx,mid[1]-delta) then
-        stashFlax(mid[0]+dx,mid[1]-delta);
+      if checkStoragePixel(mid[0]+dx,mid[1]-delta) and stashFlax(mid[0]+dx,mid[1]-delta) then
         return true;
       end
     end
     local dy;
     for dy = (delta * -1), delta, 3 do
-      if checkStoragePixel(mid[0]+delta,mid[1]+dy) then
-        stashFlax(mid[0]+delta,mid[1]+dy);
+      if checkStoragePixel(mid[0]+delta,mid[1]+dy) and stashFlax(mid[0]+delta,mid[1]+dy) then
         return true;
       end
-      if checkStoragePixel(mid[0]-delta,mid[1]+dy) then
-        stashFlax(mid[0]-delta,mid[1]+dy);
+      if checkStoragePixel(mid[0]-delta,mid[1]+dy) and stashFlax(mid[0]-delta,mid[1]+dy) then
         return true;
       end
     end
@@ -671,13 +667,13 @@ function storeFlax()
 end
 
 function checkStoragePixel(x, y)
-  if(pixelBlockCheck(x, y, tent_color, 6, 2, 2)) then
+  if(pixelBlockCheck(x, y, tent_color, 10, 8, 2)) then
     return true;
   end
-  if(pixelBlockCheck(x, y, wharehouse_color, 6, 2, 2)) then
+  if(pixelBlockCheck(x, y, wharehouse_color, 10, 8, 2)) then
     return true;
   end
-  if(pixelBlockCheck(x, y, chest_color, 6, 2, 2)) then
+  if(pixelBlockCheck(x, y, chest_color, 10, 8, 2)) then
     return true;
   end
 end
@@ -688,7 +684,7 @@ function stashFlax(x, y)
   lsSleep(refresh_time);
   local pos = findText("Stash...");
   if not pos then
-    fatalError("Unable to find the Stash menu item.");
+    return false;
   end
   clickText(pos);
   lsSleep(refresh_time);
@@ -755,6 +751,7 @@ function stashFlax(x, y)
   end
     lsSleep(refresh_time);
     srReadScreen();
+	return true;
 end
 
 -------------------------------------------------------------------------------
