@@ -2,6 +2,12 @@ function findCoords()
   lsPrintln("findCoords");
   local result = nil;
   local anchor = findText("2,");
+  if(not anchor) then
+    anchor = findText("3, ");
+  end
+  if(not anchor) then
+    anchor = findText("Year");
+  end
   if anchor then
     lsPrintln("anchor");
     local window = getWindowBorders(anchor[0], anchor[1]);
@@ -85,4 +91,144 @@ function stepTo(dir)
   safeClick(gpsCenter[0] + dir[0] * gpsStep[0],
 	    gpsCenter[1] + dir[1] * gpsStep[1]);
   sleepWithStatus(500, "Walking...");
+end
+
+
+local ffc_coordsPos = nil;
+local ffc_dash = -1;
+local ffc_comma = -2;
+
+function fastFindCoords()
+	local pos;
+	if(not ffc_coordsPos) then
+		pos = findText("Year");
+		if(not pos) then
+			pos = findText("2, ");
+			if(not pos) then
+				pos = findText("3, ");
+				if(not pos) then
+					lsPrintln("fastFindCoords() : Can't find the clock");
+					return nil;
+				end
+			end
+		end
+		local window = getWindowBorders(pos[0], pos[1]);
+		window.top = window.top + 13;
+		window.y = window.y + 13;
+		window.height = window.height - 13;
+		window.bottom = window.y + window.height;
+		pos = srFindImageInRange("colon.png", window.x, window.y, window.width, window.height,5000);
+		if(not pos) then
+			lsPrintln("fastFindCoords() : Can't find the colon on the second line of the clock");
+			return nil;
+		end
+		window.width = window.width + window.x - pos[0] - 5;
+		window.left = pos[0] + 5;
+		window.x = pos[0] + 5;
+		window.right = window.x + window.width;
+		window.top = pos[1];
+		window.y = window.top;
+		window.height = window.bottom - window.top;
+		ffc_coordsPos = window;
+	end
+	if(not ffc_coordsPos) then
+		lsPrintln("fastFindCoords() : Can't find the coordinates");
+		return nil;
+	end
+	
+	local digits = ffc_readDigits(ffc_coordsPos);
+	if(digits) then
+		return ffc_parseDigits(digits);
+	end
+	return nil;
+end
+
+function ffc_parseDigits(digits)
+	local x;
+	local pos;
+	x, pos = ffc_parseOneCoord(digits);
+	local y;
+	y, pos = ffc_parseOneCoord(digits,pos);
+	if((not x) or (not y)) then
+		if(not x) then
+			lsPrintln("fastFindCoords() : x is nil");
+		end
+		if(not y) then
+			lsPrintln("fastFindCoords() : y is nil");
+		end
+		return nil;
+	end
+	return makePoint(x,y);
+end
+
+function ffc_parseOneCoord(digits,pos)
+	if(pos == nil) then
+		pos = 1;
+	end
+	if(pos > #digits) then
+		lsPrintln("ffc_parseOneCoord(): pos > #digits(" .. #digits .. ")");
+		return nil, nil;
+	end
+	local negative = false;
+	local val = 0;
+	local i;
+	for i=pos,#digits do
+		if(digits[i][2] == ffc_comma) then
+			if(negative) then
+				val = val * -1;
+			end
+			return val, i+1;
+		end
+		if(digits[i][2] == ffc_dash) then
+			negative = true;
+		else
+			val = val * 10 + digits[i][2];
+		end
+	end
+	if(negative) then
+		val = val * -1;
+	end
+	return val, #digits+1;
+end
+
+function ffc_readDigits(box)
+	local digits = {};
+	local i;
+	for i=0,9 do
+		local x = ffc_coordsPos.x;
+		local pos = true;
+		while((x < ffc_coordsPos.x + ffc_coordsPos.width - 6) and pos) do
+			pos = srFindImageInRange(i .. ".png",x,ffc_coordsPos.y,ffc_coordsPos.width,ffc_coordsPos.height,5000);
+			if(pos) then
+				digits[#digits+1] = {pos[0],i};
+				x = pos[0] + 7;
+			end
+		end
+	end
+	if(#digits < 2) then
+		lsPrintln("ffc_readDigits() : Unable to read any digits");
+		return nil;
+	end
+	local x = ffc_coordsPos.x;
+	local pos = true;
+	while(pos) do
+		pos = srFindImageInRange("dash.png",x,ffc_coordsPos.y,ffc_coordsPos.width,ffc_coordsPos.height,5000);
+		if(pos) then
+			digits[#digits+1] = {pos[0],ffc_dash};
+			x = x + 5;
+		end
+	end
+	pos = srFindImageInRange("comma.png",ffc_coordsPos.x,ffc_coordsPos.y,ffc_coordsPos.width,ffc_coordsPos.height,5000);
+	if(pos) then
+		digits[#digits+1] = {pos[0],ffc_comma};
+	end
+	table.sort(digits, ffc_compareDigits);
+	return digits;
+end
+
+function ffc_compareDigits(left,right)
+	if(left[1] < right[1]) then
+		return true;
+	end
+	return false;
 end
