@@ -603,12 +603,13 @@ end
 function rotFlax()
   centerMouse();
   local escape = "\27";
-  srKeyEvent(escape);
-  lsSleep(refresh_time);
-  srReadScreen();
-  local pos = findText("Skills...");
-  if not pos then
-    fatalError("Unable to find the Skills menu item.");
+  local pos = nil;
+  while(not pos) do
+	lsSleep(refresh_time);
+	srKeyEvent(escape);
+	lsSleep(refresh_time);
+	srReadScreen();
+	pos = findText("Skills...");
   end
   clickText(pos);
   lsSleep(refresh_time);
@@ -1325,12 +1326,14 @@ function prepareCamera()
     else
         error("Unable to find the Options menu item.");
     end
+	lsSleep(150);
     srReadScreen();
     pos = findText("Year");
-    if(not pos) then
-        error("Unable to find the clock.");
+    if(pos) then
+		offsetClick(pos);
+	else
+--        error("Unable to find the clock.");
     end
-    offsetClick(pos);
     srSetMousePos(100,-20);
     sleepWithStatus(10000,"Zooming in");
     statusScreen("");
