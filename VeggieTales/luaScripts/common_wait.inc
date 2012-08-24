@@ -548,3 +548,69 @@ function waitForRegionWithText(text, delay, timeout, isExact)
 	end
 	return r;
 end
+
+-------------------------------------------------------------------------------
+-- waitForKeypress(ctrl, alt, shift, timeout)
+--
+-- Waits until timeout or until the specified key(s) are down
+-- ctrl - if true will wait until the ctrl key is down
+-- alt - if true will wait until the alt key is down
+-- shift - if true will wait until the shift key is down
+-- timeout (optional) - how long we'll wait in ms before we quit anyway
+--
+-- returns true if the specified keys are down, returns false if the
+-- timeout is exceeded.
+-------------------------------------------------------------------------------
+
+function waitForKeypress(ctrl, alt, shift, timeout)
+	if((not ctrl) and (not alt) and (not shift)) then
+		return false;
+	end
+	if(timeout == nil) then
+		timeout = 0;
+	end
+	local start = lsGetTimer();
+	local done = false;
+	while(not done) do
+		checkBreak();
+		if(timeout > 0 and lsGetTimer() - timeout >= start) then
+			return nil;
+		end
+		done = true;
+		if(ctrl and not lsControlHeld()) then
+			done = false;
+		end
+		if(alt and not lsAltHeld()) then
+			done = false;
+		end
+		if(shift and not lsShiftHeld()) then
+			done = false;
+		end
+	end
+	return true;
+end
+
+-------------------------------------------------------------------------------
+-- waitForKeyrelease(timeout)
+--
+-- Waits until timeout or until the shift, ctrl, and alt keys are up
+-- timeout (optional) - how long we'll wait in ms before we quit anyway
+--
+-- returns true if the specified keys are up, returns false if the
+-- timeout is exceeded.
+-------------------------------------------------------------------------------
+
+function waitForKeyrelease(timeout)
+	if(timeout == nil) then
+		timeout = 0;
+	end
+	local start = lsGetTimer();
+	while(lsControlHeld() or lsAltHeld() or lsShiftHeld()) do
+		checkBreak();
+		if(timeout > 0 and lsGetTimer() - timeout >= start) then
+			return nil;
+		end
+	end
+	return true;
+end
+

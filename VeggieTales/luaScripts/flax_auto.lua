@@ -603,12 +603,13 @@ end
 function rotFlax()
   centerMouse();
   local escape = "\27";
-  srKeyEvent(escape);
-  lsSleep(refresh_time);
-  srReadScreen();
-  local pos = findText("Skills...");
-  if not pos then
-    fatalError("Unable to find the Skills menu item.");
+  local pos = nil;
+  while(not pos) do
+	lsSleep(refresh_time);
+	srKeyEvent(escape);
+	lsSleep(refresh_time);
+	srReadScreen();
+	pos = findText("Skills...");
   end
   clickText(pos);
   lsSleep(refresh_time);
@@ -643,26 +644,22 @@ function storeFlax()
   local storagePos = nil;
   local maxDelta = math.max(xyWindowSize[0] / 2, xyWindowSize[1] / 2);
   local delta;
-  for delta = 1, maxDelta, 5 do
+  for delta = 1, maxDelta, 2 do
     local dx;
-    for dx = (delta * -1), delta, 3 do
-      if checkStoragePixel(mid[0]+dx,mid[1]+delta) then
-        stashFlax(mid[0]+dx,mid[1]+delta);
+    for dx = (delta * -1), delta, 2 do
+      if checkStoragePixel(mid[0]+dx,mid[1]+delta) and stashFlax(mid[0]+dx,mid[1]+delta) then
         return true;
       end
-      if checkStoragePixel(mid[0]+dx,mid[1]-delta) then
-        stashFlax(mid[0]+dx,mid[1]-delta);
+      if checkStoragePixel(mid[0]+dx,mid[1]-delta) and stashFlax(mid[0]+dx,mid[1]-delta) then
         return true;
       end
     end
     local dy;
     for dy = (delta * -1), delta, 3 do
-      if checkStoragePixel(mid[0]+delta,mid[1]+dy) then
-        stashFlax(mid[0]+delta,mid[1]+dy);
+      if checkStoragePixel(mid[0]+delta,mid[1]+dy) and stashFlax(mid[0]+delta,mid[1]+dy) then
         return true;
       end
-      if checkStoragePixel(mid[0]-delta,mid[1]+dy) then
-        stashFlax(mid[0]-delta,mid[1]+dy);
+      if checkStoragePixel(mid[0]-delta,mid[1]+dy) and stashFlax(mid[0]-delta,mid[1]+dy) then
         return true;
       end
     end
@@ -671,13 +668,13 @@ function storeFlax()
 end
 
 function checkStoragePixel(x, y)
-  if(pixelBlockCheck(x, y, tent_color, 6, 2, 2)) then
+  if(pixelBlockCheck(x, y, tent_color, 10, 8, 2)) then
     return true;
   end
-  if(pixelBlockCheck(x, y, wharehouse_color, 6, 2, 2)) then
+  if(pixelBlockCheck(x, y, wharehouse_color, 10, 8, 2)) then
     return true;
   end
-  if(pixelBlockCheck(x, y, chest_color, 6, 2, 2)) then
+  if(pixelBlockCheck(x, y, chest_color, 10, 8, 2)) then
     return true;
   end
 end
@@ -688,7 +685,7 @@ function stashFlax(x, y)
   lsSleep(refresh_time);
   local pos = findText("Stash...");
   if not pos then
-    fatalError("Unable to find the Stash menu item.");
+    return false;
   end
   clickText(pos);
   lsSleep(refresh_time);
@@ -755,6 +752,7 @@ function stashFlax(x, y)
   end
     lsSleep(refresh_time);
     srReadScreen();
+	return true;
 end
 
 -------------------------------------------------------------------------------
@@ -1328,12 +1326,14 @@ function prepareCamera()
     else
         error("Unable to find the Options menu item.");
     end
+	lsSleep(150);
     srReadScreen();
     pos = findText("Year");
-    if(not pos) then
-        error("Unable to find the clock.");
+    if(pos) then
+		offsetClick(pos);
+	else
+--        error("Unable to find the clock.");
     end
-    offsetClick(pos);
     srSetMousePos(100,-20);
     sleepWithStatus(10000,"Zooming in");
     statusScreen("");
