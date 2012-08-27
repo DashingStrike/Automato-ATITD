@@ -322,11 +322,18 @@ function plantAndPin(loop_count)
       -- Move to next position
       if not ((x == grid_w) and (y == grid_h)) then
         lsPrintln('walking dx=' .. dx[dxi] .. ' dy=' .. dy[dxi]);
+	lsSleep(40);
         x_pos = x_pos + dx[dxi];
         y_pos = y_pos + dy[dxi];
+	local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
         safeClick(xyCenter[0] + walk_px_x*dx[dxi],
                   xyCenter[1] + walk_px_y*dy[dxi], 0);
-        local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
+	
+        spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
+	if not waitForChange(spot, 1500) then
+	  error_status = "Did not move on click.";
+	  break;
+	end
         lsSleep(walk_time);
         waitForStasis(spot, 1500);
         dt = dt - 1;
@@ -529,7 +536,7 @@ end
 -------------------------------------------------------------------------------
 
 function walkHome(loop_count, finalPos)
-  closeAllWindows(0, 0, srGetWindowSize()[0] - lsGetWindowSize()[0],
+  closeAllWindows(0, 0, srGetWindowSize()[0] - lsGetWindowSize()[0] - 100,
 		  srGetWindowSize()[1]);
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
 

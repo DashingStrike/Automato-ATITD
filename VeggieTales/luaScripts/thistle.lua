@@ -407,7 +407,7 @@ function forAllWindows(f, image_names, message)
 --      waitForChange(spot);
     end
 --    lsSleep(100);
-    waitForPixelList(window_lost[#window_locs], makePoint(-9, -8),
+    waitForPixelList(window_locs[#window_locs], makePoint(-9, -8),
 		     WINDOW_COLORS, 4, message .. " Refocusing...", 2000);
   end
 end

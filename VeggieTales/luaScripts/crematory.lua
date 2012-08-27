@@ -567,6 +567,7 @@ function loadSingle(pos, offset, type)
       safeClick(maxPos[0]+5, maxPos[1]+5);
     end
   end
+  sleepWithStatus(shortWait, "Waiting for load to complete");
 end
 
 -------------------------------------------------------------------------------
