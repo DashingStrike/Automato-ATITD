@@ -30,6 +30,18 @@ function findAllImages(image_name, range, tol)
 			      range.width, range.height, tol);
 end
 
+function findImage(image_name, range, tol)
+  if not range then
+    local size = srGetWindowSize();
+    range = makeBox(0, 0, size[0], size[1]);
+  end
+  if not tol then
+    tol = 5000;
+  end
+  return srFindImageInRange(image_name, range.x, range.y,
+			    range.width, range.height, tol);
+end
+
 -------------------------------------------------------------------------------
 -- findAllImagesInRange(image_name, startX, startY, width, height, tol)
 --

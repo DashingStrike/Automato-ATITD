@@ -51,6 +51,7 @@ function findStuff()
 
   if text ~= "" then
     findBlah = findText(text);
+    findCount = #(findAllText(text));
   else
     findBlah = nil;
   end
@@ -58,7 +59,7 @@ function findStuff()
   if findBlah and text ~= "" then
     foundX = findBlah[0];
     foundY = findBlah[1];
-    result = " FOUND!";
+    result = " FOUND (" .. findCount .. ")";
 
     if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff,
                     "Point") then

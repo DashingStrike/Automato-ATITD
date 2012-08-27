@@ -15,7 +15,7 @@ local props = {"Ar", "As", "Bi", "Sa", "So", "Sp", "Sw", "To"};
 function doit()
   cheapRecipes = loadNotes("luascripts/chem-cheap.txt");
   allRecipes = loadNotes("luascripts/chem-all.txt");
-  askForWindow("Magical Chemistry Vibes of Doom!!!!!!\n \n To view detailed instructions:\n \nClick Exit button, Open Folder button\nDouble click 'chem_extract_auto.txt' to view detailed instructions!\n \nClick Shift over ATITD window to continue.");
+  askForWindow("Setup for this macro is complicated. To view detailed instructions:\n \nClick Exit button, Open Folder button\nDouble click 'chem_extract_auto.txt'.\n \nClick Shift over ATITD window to continue.");
   while true do
     tryAllTypes();
     sleepWithStatus(2000, "Making more magic");
@@ -70,8 +70,11 @@ end
 
 function addRequirements(tags, lines, sign)
   for i=1,#lines do
+    lsPrintln("Line: " .. lines[i][2]);
     for j=1,#properties do
-      if string.match(lines[i][2], properties[j]) then
+      if string.match(lines[i][2], properties[j]) or
+	(properties[j] == "Toxic" and string.match(lines[i][2], "Txic"))
+      then
 	table.insert(tags, props[j] .. sign);
 	break;
       end
@@ -90,19 +93,21 @@ function makeRecipe(recipe, window)
 
   local t = nil;
   for i=1,#ingredients do
-    statusScreen("Adding Essence of " .. recipe[i]);
+    local status = "Recipe: " .. table.concat(recipe, ", ") .. "\n\n\n" ..
+      "Adding Essence of " .. recipe[i];
+--    statusScreen("Adding Essence of " .. recipe[i]);
     safeClick(ingredients[i][0]+10, ingredients[i][1]+5);
-    waitForText("many?", 5000, "", nil, NOPIN);
+    waitForText("many?", 5000, status, nil, NOPIN);
     srKeyEvent("7\n");
     local ingredientWindow = getWindowBorders(ingredients[i][0]+10,
 					      ingredients[i][1]+5);
     safeClick(ingredientWindow.x + 2, ingredientWindow.y + 2);
 
-    t = waitForText("Manufacture");
+    t = waitForText("Manufacture", nil, status);
     safeClick(t[0]+10, t[1]+5);
-    t = waitForText("Essential Mixture");
+    t = waitForText("Essential Mixture", nil, status);
     safeClick(t[0]+10, t[1]+5);
-    t = waitForText("Add Essence");
+    t = waitForText("Add Essence", nil, status);
     safeClick(t[0]+10, t[1]+5);
 
     local done = false;
@@ -116,30 +121,30 @@ function makeRecipe(recipe, window)
     end
   end
 
-  statusScreen("Mixing Compound");
-  t = waitForText("Manufacture");
+  local status = "Mixing Compound";
+  t = waitForText("Manufacture", nil, status);
   safeClick(t[0]+10, t[1]+5);
-  t = waitForText("Essential Mixture");
+  t = waitForText("Essential Mixture", nil, status);
   safeClick(t[0]+10, t[1]+5);
-  t = waitForText("Mix Comp");
+  t = waitForText("Mix Comp", nil, status);
   safeClick(t[0]+10, t[1]+5);
-  waitForText("do you wish to name it?");
+  waitForText("do you wish to name it?", nil, status);
   srKeyEvent("autocompound\n");
-  sleepWithStatus(300, "Updating");
+  sleepWithStatus(300, status);
   clickAllText("This is a Chemistry Lab");
-  sleepWithStatus(300, "Updating");
-  t = waitForText("Take...");
+  sleepWithStatus(300, status);
+  t = waitForText("Take...", nil, status);
   safeClick(t[0]+10, t[1]+5);
-  t = waitForText("Everything");
+  t = waitForText("Everything", nil, status);
   safeClick(t[0]+10, t[1]+5);
-  statusScreen("Creating extract");
-  t = waitForText("Essential Comp", nil, "Waiting for autocompound",
+  statusScreen("Creating extract", nil, status);
+  t = waitForText("Essential Comp", nil, status .. "\n\nWaiting for autocompound",
 		  makeBox(window.x + 10, window.y,
 			  window.width - 10, window.height));
   safeClick(t[0]+10, t[1]+5);
-  sleepWithStatus(200);
+  sleepWithStatus(200, status);
   clickAllImages("Okb.png");
-  sleepWithStatus(200);
+  sleepWithStatus(200, status);
   return true;
 end
 
