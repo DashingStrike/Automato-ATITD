@@ -17,6 +17,22 @@ function regionToBox(region)
 end
 
 -------------------------------------------------------------------------------
+-- boxToRegion(box)
+--
+-- Make a region out of a 'box'
+--
+-------------------------------------------------------------------------------
+
+function boxToRegion(box)
+  local region = {};
+  region[0] = box.x;
+  region[1] = box.y;
+  region[2] = box.width;
+  region[3] = box.height;
+  return region;
+end
+
+-------------------------------------------------------------------------------
 -- boundsToBox(bounds)
 --
 -- Make a box out of a [l, t, r, b] which is returned from srGetWindowBorders()
