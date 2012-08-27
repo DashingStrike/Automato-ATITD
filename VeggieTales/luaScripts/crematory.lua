@@ -458,6 +458,8 @@ function takeAll()
   local takeList = findAllImages("crem-take.png");
   for i=1,#takeList do
     safeClick(takeList[i][0] + 5, takeList[i][1] + 5);
+    sleepWithStatus(shortWait*2, "Waiting for Everything");
+    srReadScreen();
     local all = waitForImage("Everything.png", maxWait, "Grabbing Everything");
     if all then
       safeClick(all[0] + 5, all[1] + 5);
