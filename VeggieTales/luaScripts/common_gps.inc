@@ -101,14 +101,17 @@ local ffc_comma = -2;
 function fastFindCoords()
 	local pos;
 	if(not ffc_coordsPos) then
-		pos = findText("Year");
+		pos = srFindImage("Year.png",5000);
 		if(not pos) then
-			pos = findText("2, ");
+			pos = findText("Year");
 			if(not pos) then
-				pos = findText("3, ");
+				pos = findText("2, ");
 				if(not pos) then
-					lsPrintln("fastFindCoords() : Can't find the clock");
-					return nil;
+					pos = findText("3, ");
+					if(not pos) then
+						lsPrintln("fastFindCoords() : Can't find the clock");
+						return nil;
+					end
 				end
 			end
 		end
