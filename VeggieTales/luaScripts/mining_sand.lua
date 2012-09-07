@@ -8,6 +8,7 @@
 --
 
 assert(loadfile("luaScripts/common.inc"))();
+assert(loadfile("luaScripts/settings.inc"))();
 
 askText = singleLine([[
   Sand Mining v1.1 (by Cegaiel) --
@@ -293,7 +294,9 @@ function getPoints()
 	    "Set Node Locations (" .. #clickList .. "/7)");
     y = y + 75;
     lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
+	autoWorkMine = readSetting("autoWorkMine",autoWorkMine);
     autoWorkMine = lsCheckBox(15, y, z, 0xffffffff, " Auto 'Work Mine'", autoWorkMine);
+	writeSetting("autoWorkMine",autoWorkMine);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     y = y - 20
     lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Hover and " .. key .. " each node, in this order:");
@@ -438,7 +441,9 @@ function promptDelays()
             "Key or Mouse to Select Nodes:");
     y = y + 35;
     lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
+	dropdown_cur_value = readSetting("dropdown_cur_value",dropdown_cur_value);
     dropdown_cur_value = lsDropdown("ArrangerDropDown", 15, y, 0, 320, dropdown_cur_value, dropdown_values);
+	writeSetting("dropdown_cur_value",dropdown_cur_value);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     y = y + 35;
     lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
