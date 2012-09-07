@@ -348,3 +348,19 @@ function promptOkay(prompt_string, color)
 	
   return ret;
 end
+
+-------------------------------------------------------------------------------
+-- getElapsedTime(startTime)
+--
+-- Returns a formatted string containing the elapsed time
+--
+-- startTime -- The time the macro started as returned by lsGetTimer()
+-------------------------------------------------------------------------------
+
+function getElapsedTime(startTime)
+	local duration = math.floor((lsGetTimer() - startTime) / 1000);
+	local hours = math.floor(duration / 60 / 60);
+	local minutes = math.floor((duration - hours * 60 * 60) / 60);
+	local seconds = duration - hours * 60 * 60 - minutes * 60;
+	return string.format("%02d:%02d:%02d",hours,minutes,seconds);
+end
