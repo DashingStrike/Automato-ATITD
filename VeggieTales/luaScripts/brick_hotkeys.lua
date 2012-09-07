@@ -42,14 +42,14 @@ function doit()
 		srSetMousePos(nw[0],nw[1]);
 		if(promptOkay("Press ok if the mouse is at the northwestern corner of the northwestern brick rack.")) then
 			srSetMousePos(nw[0]+size[0],nw[1]+size[1]);
-			if(promptOkay("Press ok if the mouse is at the southeastern corner of the northwestern brick rack.")) then
-				se = promptForRack("southeastern");
-				srSetMousePos(se[0],se[1]);
-				if(promptOkay("Press ok if the mouse is at the northwestern corner of the southeastern brick rack.")) then
-					done = true;
-				end
-			end
+			done = promptOkay("Press ok if the mouse is at the southeastern corner of the northwestern brick rack.");
 		end
+	end
+	done = false;
+	while(not done) do
+		se = promptForRack("southeastern");
+		srSetMousePos(se[0],se[1]);
+		done = promptOkay("Press ok if the mouse is at the northwestern corner of the southeastern brick rack.");
 	end
 	local distanceApart = {};
 	distanceApart[0] = (se[0] - nw[0]) / (gridWidth-1);
@@ -175,14 +175,21 @@ end
 
 function setFocus()
 	srReadScreen();
-	local pos = findText("Year");
+	local pos = srFindImage("Year.png",5000);
 	if(not pos) then
-		pos = findText("2, ");
+		pos = findText("Year");
 		if(not pos) then
-			error("Could not find the clock");
+			pos = findText("2, ");
+			if(not pos) then
+				pos = findText("3, ");
+				if(not pos) then
+					lsPrintln("Can't find the clock");
+					return nil;
+				end
+			end
 		end
 	end
-	safeClick(pos[0]+3, pos[1]+3);
+	safeClick(pos[0]+10, pos[1]+3);
 end
 
 function brightestOf9(x, y, size)
