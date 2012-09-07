@@ -60,11 +60,65 @@ Beetlenut = 45;
 AshPalm = 46;
 Anaxi = 47;
 Water = 48;
+MenuClick = 49;
+
+WaypointOrder = {};
+WaypointOrder[#WaypointOrder+1] = Waypoint;
+WaypointOrder[#WaypointOrder+1] = MenuClick;
+WaypointOrder[#WaypointOrder+1] = Bonfire;
+WaypointOrder[#WaypointOrder+1] = Warehouse;
+WaypointOrder[#WaypointOrder+1] = Water;
+WaypointOrder[#WaypointOrder+1] = WindriverPalm;
+WaypointOrder[#WaypointOrder+1] = UmbrellaPalm;
+WaypointOrder[#WaypointOrder+1] = ToweringPalm;
+WaypointOrder[#WaypointOrder+1] = TinyOilPalm;
+WaypointOrder[#WaypointOrder+1] = Tapacae;
+WaypointOrder[#WaypointOrder+1] = StoutPalm;
+WaypointOrder[#WaypointOrder+1] = SpindleTree;
+WaypointOrder[#WaypointOrder+1] = SpikedFishTree;
+WaypointOrder[#WaypointOrder+1] = RoyalPalm;
+WaypointOrder[#WaypointOrder+1] = RedMaple;
+WaypointOrder[#WaypointOrder+1] = RazorPalm;
+WaypointOrder[#WaypointOrder+1] = Ranyahn;
+WaypointOrder[#WaypointOrder+1] = PhoenixPalm;
+WaypointOrder[#WaypointOrder+1] = Passam;
+WaypointOrder[#WaypointOrder+1] = Orrorin;
+WaypointOrder[#WaypointOrder+1] = Oleaceae;
+WaypointOrder[#WaypointOrder+1] = OilPalm;
+WaypointOrder[#WaypointOrder+1] = MonkeyPalm;
+WaypointOrder[#WaypointOrder+1] = MiniPalmetto;
+WaypointOrder[#WaypointOrder+1] = MiniatureFernPalm;
+WaypointOrder[#WaypointOrder+1] = LocustPalm;
+WaypointOrder[#WaypointOrder+1] = Kaeshra;
+WaypointOrder[#WaypointOrder+1] = Hokkaido;
+WaypointOrder[#WaypointOrder+1] = Hawthorn;
+WaypointOrder[#WaypointOrder+1] = GiantCricklewood;
+WaypointOrder[#WaypointOrder+1] = FoldedBirch;
+WaypointOrder[#WaypointOrder+1] = FernPalm;
+WaypointOrder[#WaypointOrder+1] = FeatherTree;
+WaypointOrder[#WaypointOrder+1] = Elephantia;
+WaypointOrder[#WaypointOrder+1] = DeltaPalm;
+WaypointOrder[#WaypointOrder+1] = Cricklewood;
+WaypointOrder[#WaypointOrder+1] = CoconutPalm;
+WaypointOrder[#WaypointOrder+1] = Cinnar;
+WaypointOrder[#WaypointOrder+1] = Chicory;
+WaypointOrder[#WaypointOrder+1] = ChakkanutTree;
+WaypointOrder[#WaypointOrder+1] = CeruleanBlue;
+WaypointOrder[#WaypointOrder+1] = ButterleafTree;
+WaypointOrder[#WaypointOrder+1] = BroadLeafPalm;
+WaypointOrder[#WaypointOrder+1] = BrambleHedge;
+WaypointOrder[#WaypointOrder+1] = BottleTree;
+WaypointOrder[#WaypointOrder+1] = Bloodbark;
+WaypointOrder[#WaypointOrder+1] = Beetlenut;
+WaypointOrder[#WaypointOrder+1] = AshPalm;
+WaypointOrder[#WaypointOrder+1] = Anaxi;
 
 WaypointTypes = {};
 WaypointTypes[Waypoint] = "Waypoint";
 WaypointTypes[Bonfire] = "Bonfire";
 WaypointTypes[Warehouse] = "Warehouse";
+WaypointTypes[MenuClick] = "Menu Click";
+WaypointTypes[Water] = "Water";
 WaypointTypes[ToweringPalm] = "Towering Palm";
 WaypointTypes[RoyalPalm] = "Royal Palm";
 WaypointTypes[StoutPalm] = "Stout Palm";
@@ -110,11 +164,11 @@ WaypointTypes[Hawthorn] = "Hawthorn";
 WaypointTypes[BrambleHedge] = "BrambleHedge";
 WaypointTypes[Cricklewood] = "Cricklewood";
 WaypointTypes[GiantCricklewood] = "Giant Cricklewood";
-WaypointTypes[Water] = "Water";
 
 WaypointColors = {};
 WaypointColors[Bonfire] = 437126143; -- 1329403647;
 WaypointColors[Warehouse] = 959060991;
+WaypointColors[MenuClick] = 0;
 WaypointColors[ToweringPalm] = 1585197055; -- -1749467393; -- 1313688319; -- 2124039935;
 WaypointColors[RoyalPalm] = 138019071;
 WaypointColors[StoutPalm] = -1919065601;
@@ -221,7 +275,7 @@ function queryRoute()
 			showEditRoute = route;
 		end
 		if lsButtonText(181, y, z, 80, 0xFFFFFFff, "Delete") then
-			if(promptOkay("Are you sure you want to delete route \"" .. routeNames[route]) .. "\"?") then
+			if(promptOkay("Are you sure you want to delete route \"" .. routeNames[route] .. "\"?")) then
 				if(deleteRoute(route)) then
 					route = route - 1;
 					if(route < 1) then
@@ -338,6 +392,12 @@ function editRoute(route)
 --	lsScreenX = 500;
 --	lsScreenY = 500;
 
+	local WaypointTypesOrdered = {};
+	local i;
+	for i = 1, #WaypointTypes do
+		WaypointTypesOrdered[i] = WaypointTypes[WaypointOrder[i]];
+	end
+
 	local thisRoute = {};
 	if(route <= #routeNames) then
 		thisRoute[0] = routes[route][0];
@@ -349,6 +409,14 @@ function editRoute(route)
 			thisRoute[1][i][2] = routes[route][1][i][2];
 			thisRoute[1][i][3] = routes[route][1][i][3];
 		end
+		thisRoute[2] = {};
+		if(#routes[route] < 2) then
+			thisRoute[2][1] = "";
+		else
+			for i = 1, #routes[route][2] do
+				thisRoute[2][i] = routes[route][2][i];
+			end
+		end
 	else
 		thisRoute[0] = "";
 		thisRoute[1] = {};
@@ -356,11 +424,27 @@ function editRoute(route)
 		thisRoute[1][1][1] = 0;
 		thisRoute[1][1][2] = 0;
 		thisRoute[1][1][3] = 1;
+		thisRoute[2] = {};
+		thisRoute[2][1] = "";
 	end
 	
 	updateUnique();
 	while not done do
 		checkBreak();
+		if(lsControlHeld()) then
+			while(lsControlHeld()) do
+				lsPrintWrapped(10, 10, z, lsScreenX, 1, 1, 0xFFFFFFff, "Release the Ctrl key");
+				lsDoFrame();
+				lsSleep(tick_delay);
+			end
+			local routePos = #thisRoute[1];
+			thisRoute = insertWaypointAfter(routePos,thisRoute);
+			routePos = routePos + 1;
+			updateUnique();
+			local pos = getCoords();
+			thisRoute[1][routePos][1] = pos[0];
+			thisRoute[1][routePos][2] = pos[1];
+		end
 		local gotoRoute = nil;
 		local y = 10;
 		lsSetCamera(0,0,lsScreenX*scale,lsScreenY*scale);
@@ -373,6 +457,7 @@ function editRoute(route)
 		lsScrollAreaBegin("routeScrollArea",
 			5, y, z, 405, 330);
 		y = y + 5;
+		local haveMenuClick = false;
 		local i;
 		local sy = 0;
 		for i = 1, #thisRoute[1] do
@@ -414,16 +499,52 @@ function editRoute(route)
 			end
 			x = x + coordw + 2;
 			if(#thisRoute[1] >= i) then
-				t = thisRoute[1][i][3];
+				t = findWaypointOrder(thisRoute[1][i][3]);
 			end
 			t = lsDropdown("waypointType_" .. i .. "_" .. unique, 
-				x, sy, z, waypointw, t, WaypointTypes);
+				x, sy, z, waypointw, t, WaypointTypesOrdered);
 			if(#thisRoute[1] >= i) then
-				thisRoute[1][i][3] = t;
+				thisRoute[1][i][3] = WaypointOrder[t];
+				if(thisRoute[1][i][3] == MenuClick) then
+					haveMenuClick = true;
+				end
 			end
 			x = x + waypointw*scale + 2;
 			sy = sy + 32;
 		end
+		if(haveMenuClick) then
+			sy = sy + 32;
+			lsPrint(5, sy, z, 1, 1, 0xFFFFFFff, "Menu text to find");
+			sy = sy + 32;
+			local deleteOne = nil;
+			local i;
+			for i = 1, #thisRoute[2] do
+				local x = 0;
+				local buttonw = 20;
+				if lsButtonText(x, sy, z, buttonw, 0xFFFFFFff, "+") then
+					thisRoute = insertMenuTextAfter(i,thisRoute);
+					updateUnique();
+				end
+				x = x + buttonw + 2;
+				if(i > 1) then
+					if lsButtonText(x, sy, z, buttonw, 0xFFFFFFff, "-") then
+						deleteOne = i;
+					end
+				end
+				x = x + buttonw + 2;
+				t = thisRoute[2][i];
+				nada, t = lsEditBox("menuText_" .. i .. "_" .. unique, 
+					x, sy, z, 300, 30, scale, scale, 0x000000ff, t);
+				thisRoute[2][i] = t;
+				sy = sy + 32;
+			end
+			if(deleteOne) then
+				thisRoute = deleteMenuText(deleteOne, thisRoute);
+				updateUnique();
+			end
+		end
+		sy = sy + 32;
+		lsPrintWrapped(10, sy, z, lsScreenX, 1, 1, 0xFFFFFFff, "Tap Ctrl to add a waypoint using your current location");
 		local height = #thisRoute[1] + #WaypointTypes;
 		lsScrollAreaEnd(25 * height);
 		y = y + 362;
@@ -620,12 +741,16 @@ function saveRoute(thisRoute,route)
 	routes[r] = {};
 	routes[r][0] = thisRoute[0];
 	routes[r][1] = {};
+	routes[r][2] = {};
 	local i;
 	for i = 1, #thisRoute[1] do
 		routes[r][1][i] = {};
 		routes[r][1][i][1] = thisRoute[1][i][1];
 		routes[r][1][i][2] = thisRoute[1][i][2];
 		routes[r][1][i][3] = thisRoute[1][i][3];
+	end
+	for i = 1, #thisRoute[2] do
+		routes[r][2][i] = thisRoute[2][i];
 	end
 	serialize(routes,routeFileName);
 	loadRoutes();
@@ -732,7 +857,12 @@ function followRoute(route)
 		if(not moveTo(r[curr][1],r[curr][2])) then
 			return;
 		end
-		if(r[curr][3] == Bonfire) then
+		if(r[curr][3] == MenuClick) then
+			if(#routes[route] > 2 or #routes[route][2] > 0) then
+				refreshMenus();
+				doMenuClick(routes[route][2][1]);
+			end
+		elseif(r[curr][3] == Bonfire) then
 			if(ensureClickWaypoint(r,curr)) then
 				stashWood();
 			end
@@ -952,7 +1082,7 @@ function clickWaypointPixel(x, y, typeOfWaypoint)
 			safeClick(x,y);
 			lsSleep(150);
 			srReadScreen();
-			local pos = findText("Stash...");
+			local pos = findText("full");
 			if(not pos) then
 				lsPrintln("Looking for " .. WaypointTypes[typeOfWaypoint] .. " but clicking didn't bring up a menu.");
 				checkForMenu();
@@ -1355,6 +1485,7 @@ end
 
 function stashAllButWood()
 	local needMax;
+	local count = 0;
 	local stashedSomething = true;
 	while(stashedSomething) do
 		stashedSomething = false;
@@ -1362,66 +1493,70 @@ function stashAllButWood()
 		lsSleep(150);
 		srReadScreen();
 		local pos = findText("Stash...");
-		if(not pos) then
-			fatalError("Unable to find the Stash menu item.");
-		end
-		safeClick(pos[0] + 10, pos[1] + 5);
-		lsSleep(150);
-		srReadScreen();
-		local pos = findText("Clay");
 		if(pos) then
-			stashItem(pos,true);
-			stashedSomething = true;
-		else
-			pos = findText("Flint");
+			safeClick(pos[0] + 10, pos[1] + 5);
+			lsSleep(150);
+			srReadScreen();
+			local pos = findText("Clay");
 			if(pos) then
 				stashItem(pos,true);
 				stashedSomething = true;
 			else
-				pos = findText("Slate");
+				pos = findText("Flint");
 				if(pos) then
 					stashItem(pos,true);
 					stashedSomething = true;
 				else
-					pos = findText("Grass");
+					pos = findText("Slate");
 					if(pos) then
 						stashItem(pos,true);
 						stashedSomething = true;
 					else
-						pos = findText("Tadpoles");
+						pos = findText("Grass (");
 						if(pos) then
 							stashItem(pos,true);
 							stashedSomething = true;
 						else
-							pos = findText("Insect...");
+							pos = findText("Tadpoles");
 							if(pos) then
-								safeClick(pos[0] + 10, pos[1] + 5);
-								lsSleep(150);
-								srReadScreen();
-								pos = findText("Stash All Insect");
+								stashItem(pos,true);
+								stashedSomething = true;
+							else
+								pos = findText("Insect...");
 								if(pos) then
-									stashItem(pos,false);
-									stashedSomething = true;
+									safeClick(pos[0] + 10, pos[1] + 5);
+									lsSleep(150);
+									srReadScreen();
+									pos = findText("Stash All Insect");
+									if(pos) then
+										stashItem(pos,false);
+										stashedSomething = true;
+									end
 								end
 							end
 						end
 					end
 				end
 			end
-		end
-		if(stashedSomething) then
-			clickWaypoint(Warehouse);
+			if(stashedSomething) then
+				clickWaypoint(Warehouse);
+			else
+				safeClick(10,200);
+			end
 		else
-			safeClick(10,200);
+			if(count < 1) then
+				fatalError("Unable to find the Stash menu item.");
+			end
 		end
+		count = count + 1;
 	end
 end
 
 function stashItem(pos,clickMaxButton)
-	safeClick(pos[0] + 10, pos[1] + 5);
-	lsSleep(150);
-	srReadScreen();
+	safeClick(pos[0] + 20, pos[1] + 5);
 	if(clickMaxButton) then
+		lsSleep(150);
+		srReadScreen();
 		clickMax();
 	end
 	lsSleep(150);
@@ -1543,6 +1678,87 @@ function checkForMenu()
   end
   return false;
 end
+
+function getCoords()
+	prepareForWalking();
+	srReadScreen();
+	local pos = fastFindCoords();
+	return pos;
+end
+
+function findWaypointOrder(wpType)
+	local i;
+	for i = 1, #WaypointTypes do
+		if(WaypointOrder[i] == wpType) then
+			return i;
+		end
+	end
+	return nil;
+end
+
+function refreshMenus()
+	local old_click_delay = click_delay;
+	click_delay = 20;
+	srReadScreen();
+	clickAllImages("UnPin.png", -20, 3);
+	lsSleep(tick_delay);
+	srReadScreen();
+	click_delay = old_click_delay;
+end
+
+function doMenuClick(text)
+	local old_click_delay = click_delay;
+	click_delay = 75;
+	srReadScreen();
+	clickAllText(text, 20, 3);
+	lsSleep(tick_delay);
+	srReadScreen();
+	click_delay = old_click_delay;
+end
+
+function insertMenuTextAfter(where,thisRoute)
+	local temp = {};
+	local i;
+	for i = 1, ((#thisRoute[2]) + 1) do
+		temp[i] = {};
+		if(i <= where) then
+			temp[i] = thisRoute[2][i];
+		elseif(i == where + 1) then
+			temp[i] = "";
+		else
+			temp[i] = thisRoute[2][i-1];
+		end
+	end
+	thisRoute[2] = {};
+	for i = 1, #temp do
+		thisRoute[2][i] = temp[i];
+	end
+	return thisRoute;
+end
+
+
+function deleteMenuText(where,thisRoute)
+	if(#thisRoute[2] == 1) then
+		thisRoute[2][1] = "";
+		return thisRoute;
+	end
+
+	local temp = {};
+	local i;
+	for i = 1, #thisRoute[2] do
+		if(i < where) then
+			temp[i] = thisRoute[2][i];
+		elseif(i > where) then
+			temp[i-1] = thisRoute[2][i];
+		end
+	end
+	thisRoute[2] = {};
+	for i = 1, #temp do
+		thisRoute[2][i] = temp[i];
+	end
+	return thisRoute;
+end
+
 
 
 

@@ -84,6 +84,7 @@ end
 
 -- Okay/Cancel prompt
 function promptOkay(prompt_string)
+	local color = 0xffffffff;
 	local z = 0;
 	local is_done = nil;
 	local ret = nil;

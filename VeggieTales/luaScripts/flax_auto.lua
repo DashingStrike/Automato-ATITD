@@ -100,9 +100,9 @@ FLAX = 0;
 ONIONS = 1;
 plantType = FLAX;
 
-wharehouse_color = -1769769985;
-chest_color = 2036219647;
-tent_color = 1399546879;
+--warehouse_color = -1769769985;
+--chest_color = 2036219647;
+--tent_color = 1399546879;
 
 -------------------------------------------------------------------------------
 -- initGlobals()
@@ -573,6 +573,7 @@ function doit()
       storeFlax();
       setStatus("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
     end
+    lsPrintln("doit(): Walking to the starting location at (" .. startPos[0] .. ", " .. startPos[1] .. ")");
     walk(startPos,false);
     is_plant = true;
   end
@@ -630,131 +631,19 @@ end
 --
 -- Stores flax in a storage container such as a wharehouse, chest, or tent.
 -- Requires you to be standing next to the storage container.
--- storeFlax() clicks the nearest pixel of the proper color.
--- Given the large coordinate size in Egypt, positioning is not very accurate.
--- You should only have one storage container near where you are standing.
+-- storeFlax() checks frist for a pinned menu otherwise it clicks the nearest 
+-- pixel of the proper color. Given the large coordinate size in Egypt, 
+-- positioning is not very accurate.  You should only have one storage 
+-- container near where you are standing.
 -------------------------------------------------------------------------------
 
 function storeFlax()
   setStatus("Storing flax");
-  local xyWindowSize = srGetWindowSize();
-  local mid = {};
-  mid[0] = xyWindowSize[0] / 2;
-  mid[1] = xyWindowSize[1] / 2;
-  local storagePos = nil;
-  local maxDelta = math.max(xyWindowSize[0] / 2, xyWindowSize[1] / 2);
-  local delta;
-  for delta = 1, maxDelta, 2 do
-    local dx;
-    for dx = (delta * -1), delta, 2 do
-      if checkStoragePixel(mid[0]+dx,mid[1]+delta) and stashFlax(mid[0]+dx,mid[1]+delta) then
-        return true;
-      end
-      if checkStoragePixel(mid[0]+dx,mid[1]-delta) and stashFlax(mid[0]+dx,mid[1]-delta) then
-        return true;
-      end
-    end
-    local dy;
-    for dy = (delta * -1), delta, 3 do
-      if checkStoragePixel(mid[0]+delta,mid[1]+dy) and stashFlax(mid[0]+delta,mid[1]+dy) then
-        return true;
-      end
-      if checkStoragePixel(mid[0]-delta,mid[1]+dy) and stashFlax(mid[0]-delta,mid[1]+dy) then
-        return true;
-      end
-    end
-  end
-  return false;
+  local types = { "Flax (", "Rotten Flax", "Insect..." };
+  stash(types);
+  setStatus("");
 end
-
-function checkStoragePixel(x, y)
-  if(pixelBlockCheck(x, y, tent_color, 10, 8, 2)) then
-    return true;
-  end
-  if(pixelBlockCheck(x, y, wharehouse_color, 10, 8, 2)) then
-    return true;
-  end
-  if(pixelBlockCheck(x, y, chest_color, 10, 8, 2)) then
-    return true;
-  end
-end
-
-function stashFlax(x, y)
-  centerMouse();
-  safeClick(x,y);
-  lsSleep(refresh_time);
-  local pos = findText("Stash...");
-  if not pos then
-    return false;
-  end
-  clickText(pos);
-  lsSleep(refresh_time);
-  srReadScreen();
-  pos = findText("Rotten Flax");
-  if pos then
-    clickText(pos);
-    lsSleep(refresh_time*2);
-    srReadScreen();
-    if not clickMax() then
-      fatalError("Unable to find the Max button.");
-    end
-    lsSleep(refresh_time);
-    srReadScreen();
-    safeClick(x,y);
-    lsSleep(refresh_time);
-    srReadScreen();
-    pos = findText("Stash...");
-    if not pos then
-      fatalError("Unable to find the Stash menu item.");
-    end
-    clickText(pos);
-    lsSleep(refresh_time);
-    srReadScreen();
-  end
-  pos = findText("Flax (");
-  if pos then
-    clickText(pos);
-    lsSleep(refresh_time*2);
-    srReadScreen();
-    if not clickMax() then
-      fatalError("Unable to find the Max button.");
-    end
-    lsSleep(refresh_time);
-    srReadScreen();
-    safeClick(x,y);
-    lsSleep(refresh_time);
-    srReadScreen();
-    pos = findText("Stash...");
-    if not pos then
-      fatalError("Unable to find the Stash menu item.");
-    end
-    clickText(pos);
-    lsSleep(refresh_time);
-    srReadScreen();
-  end
-  pos = findText("Insect...");
-  if pos then
-    clickText(pos);
-    lsSleep(refresh_time*2);
-    srReadScreen();
-    pos = findText("Stash All");
-    if pos then  
-      clickText(pos);
-      lsSleep(refresh_time);
-      srReadScreen();
-    else
-      safeClick(x-5,y);
-    end
-    lsSleep(refresh_time);
-    srReadScreen();
-  else
-    safeClick(x-5,y);
-  end
-    lsSleep(refresh_time);
-    srReadScreen();
-	return true;
-end
-
+  
 -------------------------------------------------------------------------------
 -- plantAndPin()
 --
@@ -1038,7 +927,7 @@ end
 function walkHome(loop_count, finalPos)
   closeAllFlaxWindows();
   setStatus("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
-  walkTo(finalPos);
+  walk(finalPos,false);
 
   -- Walk back
 --  for x=1, finalPos[0] do
@@ -1114,10 +1003,10 @@ end
 
 function walk(dest,abortOnError)
   centerMouse();
+  srReadScreen();
   local coords = findCoords();
   local startPos = coords;
   local failures = 0;
-  srReadScreen();
   while coords[0] ~= dest[0] or coords[1] ~= dest[1] do
     centerMouse();
     local dx = 0;
@@ -1132,10 +1021,15 @@ function walk(dest,abortOnError)
     elseif coords[1] > dest[1] then
       dy = 1;
     end
+    lsPrintln("Walking from (" .. coords[0] .. "," .. coords[1] .. ") to (" .. dest[0] .. "," ..dest[1] .. ") stepping to (" .. dx .. "," .. dy .. ")");
     stepTo(makePoint(dx, dy));
+	srReadScreen();
     coords = findCoords();
     checkForEnd();
     if checkForMenu() then
+	  if(coords[0] == dest[0] and coords[1] == dest[1]) then
+	    return true;
+	  end
       if abortOnError then
         return false;
       end
@@ -1143,7 +1037,9 @@ function walk(dest,abortOnError)
       if failures > 50 then
         return false;
       end
+	  lsPrintln("Hit a menu, moving randomly");
       stepTo(makePoint(math.random(-1,1),math.random(-1,1)));
+	  srReadScreen();
     else
       failures = 0;
     end
@@ -1236,7 +1132,7 @@ end
 
 function checkForMenu()
   srReadScreen();
-  pos = findText("Ownership...");
+  pos = srFindImage("unpinnedPin.png", 5000);
   if pos then
     safeClick(pos[0]-5,pos[1]);
     lsPrintln("checkForMenu(): Found a menu...returning true");
@@ -1419,7 +1315,7 @@ function closeAllFlaxWindows()
   width = srGetWindowSize()[0];
   height = srGetWindowSize()[1];
 
-  local closeImages = {"ThisIs.png", "utilityForCloseAllFlaxWindows.png", "Ok.png"};
+  local closeImages = {"ThisIs.png", "Ok.png"};
   local closeRight = {1, 1, nil};
 
   local found = true;
@@ -1439,6 +1335,7 @@ function closeAllFlaxWindows()
       end
     end
   end
+  safeClick(width/2-45,height/2-45);
 end
 
 
