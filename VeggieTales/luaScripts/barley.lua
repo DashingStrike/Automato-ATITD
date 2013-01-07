@@ -6,6 +6,7 @@ grid_w = 5;
 grid_h = 5;
 watered = {};
 loop_count = 0;
+skip_water = 0;
 
 loadfile("luaScripts/Flax_common.inc")();
 loadfile("luaScripts/screen_reader_common.inc")();
@@ -32,7 +33,7 @@ function promptBarleyNumbers(is_plant)
 		lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
 		is_done, num_loops = lsEditBox("passes",
 			100, y, z, 50, 30, scale, scale,
-			0x000000ff, 5);
+			0x000000ff, 1);
 		if not tonumber(num_loops) then
 			is_done = nil;
 			lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
@@ -50,6 +51,7 @@ function promptBarleyNumbers(is_plant)
 			grid_w = 1;
 			grid_h = 1;
 		end
+
 		grid_w = tonumber(grid_w);
 		grid_h = grid_w;
 		y = y + 32;
@@ -63,6 +65,8 @@ function promptBarleyNumbers(is_plant)
 		else
 			lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff, "This will plant a " .. grid_w .. "x" .. grid_w .. " grid of Flax " .. num_loops .. " times, requiring " .. (grid_w * grid_w) .. " seeds, yielding " .. (grid_w * grid_w * num_loops) .. " seeds.");
 		end
+		y = y + 50;
+		skip_water = lsCheckBox(10, y, z, 0xFFFFFFff, "Skip Rain Barrel", skip_water);
 
 		if is_done and (not num_loops or not grid_w) then
 			error 'Canceled';
@@ -99,12 +103,14 @@ function doit()
   xyPlantBarley[0] = xyPlantBarley[0] + 5;
   
   -- Find the Rain Barrel
-  local imgDrawWater = "draw_water.png";
-  local xyDrawWater = srFindImage(imgDrawWater);
-  if not xyDrawWater then
-    error 'Could not find rain barrel';
-  end 
-  xyDrawWater[0] = xyDrawWater[0] + 5;
+  if not skip_water then
+	local imgDrawWater = "draw_water.png";
+	local xyDrawWater = srFindImage(imgDrawWater);
+	if not xyDrawWater then
+		error 'Could not find rain barrel';
+	end 
+	xyDrawWater[0] = xyDrawWater[0] + 5;
+  end
 
  
 
@@ -320,7 +326,9 @@ function doit()
     --doStashWH(num_loops*grid_w*grid_w);
     --doRefillWater(4*numloops*grid_w*grid_w);
     doStashWH(grid_w*grid_w);
-    doRefillWater(4*grid_w*grid_w);
+	if not skip_water then
+		doRefillWater(4*grid_w*grid_w);
+	end
     debug('end of batch #' .. loop_count)
   end
 end

@@ -26,6 +26,7 @@ sheeting_button_names = {
 "Steel Sheeting",
 "Gold Foil",
 "Metal Blue Sheeting",
+"Treated Metal Sheeting",
 "Tin Sheeting",
 "Moon Steel Sheeting",
 "Thoths Metal Sheeting"
@@ -336,6 +337,33 @@ function CopperSheeting()
 				sleepWithStatus(1100, "Waiting for Project windows");
 				else
 				break;
+				end
+			end
+			waitGUI(i);
+		end
+	doneGUI(num_loops);
+end
+
+function TreatedSheeting()
+	num_loops = promptNumber("How many passes ?", 1);
+	typeOfMetal = promptText("Enter the metal name:");
+	batch = 1;
+	name = "Treated Metal Sheeting";
+	waitMinutes(2);
+		for i=1, num_loops do
+			while 1 do
+				refreshWindows();
+				clickAllImages("Forge/Forge_Sheeting.png");
+				lsSleep(400);
+				project_windows = clickAllText("Treated");
+				if project_windows == 0 then
+					sleepWithStatus(1100, "Waiting for Project windows");
+				else
+					lsSleep(400);
+					local numClicked = clickAllText(typeOfMetal);
+					if numClicked == 0 then
+						break;
+					end
 				end
 			end
 			waitGUI(i);
@@ -918,6 +946,10 @@ function Sheeting()
 					x = 30;
 					y = 60;
 					bsize = 150;
+        elseif sheeting_button_names[i] == "Treated Metal Sheeting" then
+					x = 30;
+					y = 285;
+					bsize = 150;
 				elseif sheeting_button_names[i] == "Octecs Alloy Sheeting" then
 					x = 30;
 					y = 85;
@@ -970,6 +1002,8 @@ function Sheeting()
 			GoldSheeting();
 		elseif image_name == "Copper Sheeting" then
 			CopperSheeting();
+    elseif image_name == "Treated Metal Sheeting" then
+			TreatedSheeting();
 		elseif image_name == "Octecs Alloy Sheeting" then
 			OctecsAlloySheeting();
 		elseif image_name == "Silver Sheeting" then
