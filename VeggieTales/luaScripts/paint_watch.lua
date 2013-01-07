@@ -28,6 +28,7 @@ catalyst1 = 12;
 
 loadfile("luaScripts/screen_reader_common.inc")();
 loadfile("luaScripts/ui_utils.inc")();
+loadfile("luascripts/common.inc")();
 
 button_names = {
 "CabbageJ","Carrot","Clay","DeadTongue","ToadSkin","EarthLight","RedSand",
@@ -36,6 +37,7 @@ button_names = {
 per_paint_delay_time = 1000;
 per_read_delay_time = 600;
 per_click_delay = 10;
+
 
 function doit()
 
@@ -80,6 +82,30 @@ function doit()
 lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
 		-- Where to start putting buttons/text on the screen.
 		y=0;
+		
+		if lsButtonText(lsScreenX - 30, lsScreenY - 80, 0, 100, 0xFFFFFFff, "Reset") then
+			for i= 1, 10 do
+				srClickMouseNoMove(paint_buttons[7][0]+2,paint_buttons[7][1]+2, right_click);
+				lsSleep(per_click_delay);
+			end
+			srReadScreen();
+			lsSleep(100);
+			clickAllText("Take the Paint");
+			lsSleep(100);
+			paint_sum = {0,0,0};
+			paint_count = 0;
+			bar_colour = {0,0,0};
+			expected_colour = {0,0,0};
+			diff_colour = {0,0,0};
+			new_px = 0xffffffFF;
+			px_R = nil;
+			px_G = nil;
+			px_B = nil;
+			px_A = nil;
+			m_x = 0;
+			m_y = 0;
+			update_now = 1;
+		end
 
 		-- Create each button and set the button push.
 		for i=1, #button_names do
@@ -90,7 +116,6 @@ lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
 			end
 			y = y + 26;
 		end
-
 		srReadScreen();
 
 
@@ -169,7 +194,7 @@ lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
 			" Reactions RGB: " .. math.floor(diff_colour[1]+0.5) .. "," .. math.floor(diff_colour[2]+0.5) .. "," .. math.floor(diff_colour[3]+0.5) );
 
 
-		if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Exit") then
+		if lsButtonText(lsScreenX - 30, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Exit") then
 			error "Canceled";
 		end
 

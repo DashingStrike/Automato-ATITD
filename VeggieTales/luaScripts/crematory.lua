@@ -559,16 +559,19 @@ end
 function loadSingle(pos, offset, type)
   sleepWithStatus(200, "Waiting to load");
   safeClick(pos[0]+5, pos[1]+5+16);
+  lsSleep(100);
   local limePos = waitForImage("crem-limestone.png", maxWait,
 			       "Loading " .. type .. " Into Crematory");
   if limePos then
     safeClick(limePos[0] + 5, limePos[1] + 5 + offset);
+    lsSleep(100);
     local maxPos = waitForImage("crem-max.png", maxWait,
 				"Adding Maximum Amount");
     if maxPos then
       safeClick(maxPos[0]+5, maxPos[1]+5);
     end
   end
+  lsSleep(100);
   sleepWithStatus(shortWait, "Waiting for load to complete");
 end
 
