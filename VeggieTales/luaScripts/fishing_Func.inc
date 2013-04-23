@@ -192,6 +192,7 @@ Lure_Types = {
 "Lure_Menu_Glazed.png",
 "Lure_Menu_Preserved.png",
 "Lure_Menu_Hardened.png",
+"Lure_Menu_Mummified.png",
 };
 
 
