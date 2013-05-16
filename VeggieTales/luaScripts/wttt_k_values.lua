@@ -207,11 +207,82 @@ function doit()
 		local startHumanTox = calcHumanTox();
 		local startDarkness = calcDarkness();
 		local startGlossiness = calcGlossiness();
+		
+		local suggestFlex = false;
+		local suggestCut = false;
+		local suggestFlam = false;
+		local suggestWater = false;
+		local suggestInsect = false;
+		local suggestHuman = false;
+		local suggestDark = false;
+		local suggestGloss = false;
+		
+		local suggest = "From this position, I suggest that you try to:\n ";
+		local suggestion = "" ;
+		
+		if (startFlexibility < 6) then
+			suggestion = suggestion .. "\nRaise Flexibility with Ash to 69 or with Saltpeter to 61" ;
+		else 
+			if (startFlexibility > 60) then
+				suggestion = suggestion .. "\nLower Flexibility with Lime (to -3) or Lead (to 5)" ;
+			end
+		end
+		if (startCuttability < 6) then
+			suggestion = suggestion .. "\nRaise Cuttability with Saltpeter to 69 or with Potash to 61" ;
+		else 
+			if (startCuttability > 60) then
+				suggestion = suggestion .. "\nLower Cuttability with Sulfur (to -3) or Lead (to 5)" ;
+			end
+		end
+		if (startFlammability < 6) then
+			suggestion = suggestion .. "\nRaise Flammability with Petroleum to 69 or with Sulfur to 61" ;
+		else 
+			if (startFlammability > 60) then
+				suggestion = suggestion .. "\nLower Flammability with Ash (to -3) or Lime (to 5)" ;
+			end
+		end
+		if (startWaterResist < 6) then
+			suggestion = suggestion .. "\nRaise Water Resist with Beeswax to 69 or with Petroleum to 61" ;
+		else 
+			if (startWaterResist > 60) then
+				suggestion = suggestion .. "\nLower Water Resist with Water (to -3) or Potash (to 5)" ;
+			end
+		end
+		if (startInsectTox < 6) then
+			suggestion = suggestion .. "\nRaise InsectTox with Lead to 69 or with Petroleum to 61" ;
+		else 
+			if (startInsectTox > 60) then
+				suggestion = suggestion .. "\nLower InsectTox with Water (to -3) or Lime (to 5)" ;
+			end
+		end
+		if (startHumanTox < 6) then
+			suggestion = suggestion .. "\nRaise HumanTox with Sulfur to 69 or with Lead to 61" ;
+		else 
+			if (startHumanTox > 60) then
+				suggestion = suggestion .. "\nLower HumanTox with Water (to -3) or Saltpeter (to 5)" ;
+			end
+		end
+		if (startDarkness < 6) then
+			suggestion = suggestion .. "\nRaise Darkness with Lead to 69 or with Petroleum to 61" ;
+		else 
+			if (startDarkness > 60) then
+				suggestion = suggestion .. "\nLower Darkness with Lime (to -3) or Potash (to 5)" ;
+			end
+		end
+		if (startGlossiness < 6) then
+			suggestion = suggestion .. "\nRaise Glossiness with Beeswax to 69 or with Oil to 61" ;
+		else 
+			if (startGlossiness > 60) then
+				suggestion = suggestion .. "\nLower Glossiness with Ash (to -3) or Potash (to 5)" ;
+			end
+		end
+
+		
 		done = false;
 		while not done
 		do
-			lsPrintWrapped(10, 45, 5, lsScreenX-15, 1, 1, 0xFFFFFFFF,
-				"Press start before treating the boards! (Read the Wood Treatment Guide on wiki, the part about the K-Values, if you don't know what to do)") ;
+			lsPrintWrapped(10, 15, 5, lsScreenX-15, 0.8, 0.8, 0xFFFFFFFF,
+				"Press start before treating the boards! (Read the Wood Treatment Guide on wiki, the part about the K-Values, if you don't know what to do)\n" .. suggest .. suggestion) ;
 			checkBreak();
 			lsDoFrame();
 			lsSleep(25);
