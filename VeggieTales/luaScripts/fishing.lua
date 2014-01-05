@@ -20,7 +20,9 @@
 
 
 -- "Main chat tab is not showing" and other errors can usually be overcome by adjusting the main chat window size and restarting, assuming main chat is showing.
--- And also verify the lines aren't wrapping.
+-- And also verify the lines aren't wrapping to the next line (if so, adjust chat screen to be wider until it is no longer wrapping down to next line).
+
+--Getting frequent "Already fishing" messages? Adjust the chat screen width slightly until it stops that!
 
 
 -- The very first thing this macro does is to Self Click, Special, What Time is it? option. This will then display the time in main chat window.
@@ -40,11 +42,11 @@
 
 
 
---CUSTOM VARIABLES -- EDIT HERE To Change Fishing Casts, Skips, Updates.
+--CUSTOM VARIABLES/SETTINGS -- EDIT HERE To Change Fishing Casts, Skips, Updates.
 
-TotalCasts=3; --Total Casts per lure, if a fish caught. If no fish then it skips.
+TotalCasts=3; --How many casts per lure
 SkipCommon = false; --Skips to next lure if fish caught is a common (Choose True or False).
-LureChangesToUpdateTimer = 7; --Total lures used before time is updated. Zero updates every new lure.
+LureChangesToUpdateTimer = 7; --Total lures used before time is updated (Self click, Special, What time is it?). Zero updates time time lure is changed (TotalCasts).
 
 --AlmostCaughtAttempts = 0; --Adds additional attempts to the current lure if Unusual, Strange fish are seen;
 -- Note: AlmostCaughtAttempts above was already commented out upon arriving to Talescripts.
@@ -58,12 +60,12 @@ LureChangesToUpdateTimer = 7; --Total lures used before time is updated. Zero up
 	--If LogFails = false and LogStrangeUnusual or LogOdd = true, then failed catches those would still be included in the log file. 
 
 
-LogFails = true;  	-- Do you want to add Failed Catches to log file? 'Failed to catch anything' or 'No fish bit'. Note the log will still add an entry if you lost lure.
-LogStrangeUnusual = true; 	-- Do you want to add Strange and Unusual fish to the log file? Note the log will still add an entry if you lost lure.
-LogOdd = true; 	-- Do you want to add Odd fish to the log file? Note the log will still add an entry if you lost lure.
+LogFails = True;  	-- Do you want to add Failed Catches to log file? 'Failed to catch anything' or 'No fish bit'. Note the log will still add an entry if you lost lure.
+LogStrangeUnusual = True; 	-- Do you want to add Strange and Unusual fish to the log file? Note the log will still add an entry if you lost lure.
+LogOdd = True; 	-- Do you want to add Odd fish to the log file? Note the log will still add an entry if you lost lure.
 
 
--- END CUSTOM VARIABLES
+-- END CUSTOM VARIABLES/SETTINGS
 
 
 
@@ -668,9 +670,25 @@ function doit()
 
 
 			elseif ChatType == "alreadyfishing" then
-				--castcount = castcount-1;
+				castcount = castcount - 1;
+				GrandTotalCasts = GrandTotalCasts - 1;	
 				lsSleep(15000); -- Long pause to wait for fishing queue to stop. Somehow it pushed the Fish button twice and now you will cast 2 times in a row. 
 					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You are already fishing!" .. "\n");
+
+
+			--Needs screenshot added and uncomment "strangelostlure" in fishing_func.inc, before the below elseif statement actually works; currently ignored
+			elseif ChatType == "strangelostlure" then
+				-- Strange Fish and lost lure
+				GrandTotalStrange = GrandTotalStrange + 1;
+				GrandTotalLostLures = GrandTotalLostLures + 1;
+				GrandTotalFailed = GrandTotalFailed + 1;
+					--Reset, skip to next lure
+					castcount=0;
+					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
+
+			--	if AlmostCaughtAttempts > 0 then
+			--		strangecounter = strangecounter +1;
+			--	end
 
 
 
@@ -686,15 +704,18 @@ function doit()
 			--		strangecounter = strangecounter +1;
 			--	end
 			
+
 	
-			elseif ChatType == "strangelostlure" then
-				-- Strange Fish and lost lure
-				GrandTotalStrange = GrandTotalStrange + 1;
+			elseif ChatType == "unusuallostlure" then
+				--Unusual Fish
+				GrandTotalUnusual = GrandTotalUnusual + 1;
 				GrandTotalLostLures = GrandTotalLostLures + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
-					--Reset, skip to next lure
-					castcount=0;
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
+					if LogStrangeUnusual == true then
+					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an UNUSUAL fish, but you were not quick enough. You also lost your lure." .. "\n");
+					end
+
+
 
 			--	if AlmostCaughtAttempts > 0 then
 			--		strangecounter = strangecounter +1;
@@ -716,26 +737,14 @@ function doit()
 
 
 
-
--- Can't uncomment below elseif statement until we get a screenshot of a message of you were not quick enough. You also lost your lure.
--- This would need to be added to Fishing_Func.inc , in the Chat_Types {array} along with adding Chatlog_AlmostUnusualLostlure.png). Add above "unusual" line in the array				
-
-
-			--elseif ChatType == "unusuallostlure" then
-				-- Unusual Fish
-				--GrandTotalUnusual = GrandTotalUnusual + 1;
-				--GrandTotalLostLures = GrandTotalLostLures + 1;
-				--GrandTotalFailed = GrandTotalFailed + 1;
-					--if LogStrangeUnusual == true then
-					--WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an UNUSUAL fish, but you were not quick enough." .. "\n");
-					--end
-
-
-
-			--	if AlmostCaughtAttempts > 0 then
-			--		strangecounter = strangecounter +1;
-			--	end
-
+			elseif ChatType == "oddlostlure" then
+				-- Odd Fish and lost lure
+				GrandTotalOdd = GrandTotalOdd + 1;
+				GrandTotalLostLures = GrandTotalLostLures + 1;
+				GrandTotalFailed = GrandTotalFailed + 1;
+					--Reset, skip to next lure
+					castcount=0;
+					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an ODD fish, but were too late recognizing the bite. You also lost your lure." .. "\n");
 
 
 
@@ -746,17 +755,6 @@ function doit()
 					if LogOdd == true then
 					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an ODD fish, but were too late recognizing the bite." .. "\n");
 					end
-
-
-			elseif ChatType == "oddlostlure" then
-				-- Odd Fish and lost lure
-				GrandTotalOdd = GrandTotalOdd + 1;
-				GrandTotalLostLures = GrandTotalLostLures + 1;
-				GrandTotalFailed = GrandTotalFailed + 1;
-					--Reset, skip to next lure
-					castcount=0;
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an ODD fish, but were too late recognizing the bite. You also lost your lure." .. "\n");
-
 
 
 

@@ -18,10 +18,10 @@ Lures = {
 "Lure_CamelWeevel.png",
 "Lure_ClaySlug.png",
 "Lure_Clearwing.png",
---Corn Maggot
+"Lure_CornMaggot.png",
 "Lure_CorkscrewAsp.png",
 "Lure_DesertMillipede.png",
---Dewfly
+"Lure_DewFly.png",
 "Lure_FeatherMidge.png",
 "Lure_Footworm.png",
 "Lure_FruitMaggot.png",
@@ -35,12 +35,13 @@ Lures = {
 "Lure_LeafSnapper.png",
 "Lure_MudAsp.png",
 "Lure_Needleworm.png",
---Nightwing
+"Lure_NightWing.png",
 "Lure_Nippleworm.png",
 "Lure_OrchidHopper.png",
 "Lure_OysterMite.png",
 "Lure_PickelSlug.png",
 "Lure_QueenMaggot.png",
+"Lure_RaspberryMoth.png",
 "Lure_RedCricket.png",
 "Lure_RingedWasp.png",
 "Lure_RoseMite.png",
@@ -70,7 +71,11 @@ Chat_Types = {
 "ChatLog_UsingALure.png","lure",
 "Chatlog_AlmostCaughtOddLostLure.png","oddlostlure",
 "Chatlog_AlmostCaughtOdd.png","odd",
+
+-- Needs screen shot/.png file added, then uncomment: "Chatlog_AlmostCaughtStrangeLostLure.png","strangelostlure",
 "Chatlog_AlmostCaughtStrange.png","strange",
+
+"Chatlog_AlmostCaughtUnusualLostLure.png","unusuallostlure",
 "Chatlog_AlmostCaughtUnusual.png","unusual",
 "Chatlog_NoBitLostLure.png","nobitlostlure",
 "Chatlog_NoCatchLostLure.png","nocatchlostlure",
@@ -84,6 +89,7 @@ Chat_Types = {
 };
 
 CL_Fish = {
+--Amur Pike missing
 "Chatlog_Fish_Abdju.png",
 "ChatLog_Fish_Ayu.png",
 "Chatlog_Fish_BayLobster.png",
@@ -91,13 +97,19 @@ CL_Fish = {
 "Chatlog_Fish_Camelfish.png",
 "Chatlog_Fish_Carp.png",
 "Chatlog_Fish_Catfish.png",
+--Cherry Bonefish missing screenshot
 "Chatlog_Fish_Chromis.png",
 "Chatlog_Fish_FlyingFish.png",
+"Chatlog_Fish_GiantCrayfish.png",
+--Great Knuckfish missing screenshot
 "Chatlog_Fish_HornedPigfish.png",
 "Chatlog_Fish_HylianLoach.png",
+"Chatlog_Fish_IvoryKnifeFish.png",
 "Chatlog_Fish_Kingfish.png",
 "Chatlog_Fish_LimaChub.png",
 "Chatlog_Fish_Malapterurus.png",
+"Chatlog_Fish_MedusaFish.png",
+"Chatlog_Fish_Moonfish.png",
 "ChatLog_Fish_NileMackerel.png",
 "ChatLog_Fish_OctecsLongfin.png",
 "Chatlog_Fish_Octopus.png",
@@ -109,14 +121,21 @@ CL_Fish = {
 "Chatlog_Fish_QueenLionFish.png",
 "Chatlog_Fish_RainbowCod.png",
 "Chatlog_Fish_ReticulatedToothFish.png",
+--Ribbonfish missing screenshot
+--River Crab missing screenshot
+--Serpentfish missing screenshot
 "Chatlog_Fish_SeaUrchin.png",
 "Chatlog_Fish_ShelomitsPuffer.png",
 "Chatlog_Fish_SingingLamprey.png",
+--Spiny Dogfish missing screenshot
+"Chatlog_Fish_SpoonFish.png",
 "Chatlog_Fish_SpottedSeaCucumber.png",
 "Chatlog_Fish_StripedBatfin.png",
+--Tigerfish missing screenshot
 "Chatlog_Fish_Tilapia.png",
 "Chatlog_Fish_Tilefish.png",
 "Chatlog_Fish_WhiteOniontail.png",
+--Yellowfin Snapper missing screenshot
 };
 
 --Size of fish
