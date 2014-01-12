@@ -101,7 +101,7 @@ CL_Fish = {
 "Chatlog_Fish_Chromis.png",
 "Chatlog_Fish_FlyingFish.png",
 "Chatlog_Fish_GiantCrayfish.png",
---Great Knuckfish missing screenshot
+--Great Knucklefish missing screenshot
 "Chatlog_Fish_HornedPigfish.png",
 "Chatlog_Fish_HylianLoach.png",
 "Chatlog_Fish_IvoryKnifeFish.png",
@@ -131,7 +131,7 @@ CL_Fish = {
 "Chatlog_Fish_SpoonFish.png",
 "Chatlog_Fish_SpottedSeaCucumber.png",
 "Chatlog_Fish_StripedBatfin.png",
---Tigerfish missing screenshot
+"Chatlog_Fish_TigerFish.png",
 "Chatlog_Fish_Tilapia.png",
 "Chatlog_Fish_Tilefish.png",
 "Chatlog_Fish_WhiteOniontail.png",

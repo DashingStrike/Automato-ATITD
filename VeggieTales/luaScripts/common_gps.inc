@@ -8,6 +8,9 @@ function findCoords()
   if(not anchor) then
     anchor = findText("Year");
   end
+  if(not anchor) then
+    anchor = findText("ear");
+  end
   if anchor then
     lsPrintln("anchor");
     local window = getWindowBorders(anchor[0], anchor[1]);
