@@ -74,7 +74,6 @@ Chat_Types = {
 
 -- Needs screen shot/.png file added, then uncomment: "Chatlog_AlmostCaughtStrangeLostLure.png","strangelostlure",
 "Chatlog_AlmostCaughtStrange.png","strange",
-
 "Chatlog_AlmostCaughtUnusualLostLure.png","unusuallostlure",
 "Chatlog_AlmostCaughtUnusual.png","unusual",
 "Chatlog_NoBitLostLure.png","nobitlostlure",
@@ -121,7 +120,7 @@ CL_Fish = {
 "Chatlog_Fish_QueenLionFish.png",
 "Chatlog_Fish_RainbowCod.png",
 "Chatlog_Fish_ReticulatedToothFish.png",
---Ribbonfish missing screenshot
+"Chatlog_Fish_RibbonFish.png",
 --River Crab missing screenshot
 --Serpentfish missing screenshot
 "Chatlog_Fish_SeaUrchin.png",
