@@ -1,14 +1,30 @@
-
+-- by Cegaiel - Easily dig up Limestone Blocks, automating the process of Tapping the Bore and Cracking the outline of multiple windows.
 --
 -- 
 --
 
 assert(loadfile("luaScripts/common.inc"))();
 
+askText = singleLine([[
+  Pyramid Bore Hole Assistant by Cegaiel --
+This macro assists in digging up limestone blocks. Pin up all 'Bore Hole' windows near you. The macro will always click 'Crack Outline' when it appears. Else it will keep clicking 'Tap Bore'. Windows will close automatically once the Crack Outline has been clicked. Make sure no Bore windows overlap each other (Optionally, you can use Windows Manager on next screen, to assist). Make sure your skills window is visible. Macro does monitor if you're tired (Red stats). Press Shift over ATITD windows to continue.]])
+
+wmText = "Tap control on Bore Holes to open and pin.";
+
+
+
 
 
 function doit()
-	askForWindow('This macro assists in building Pyramids. This attempts to Crack Outline first, then tries to Tap Bore Rods next. Watches stats timer during the process. Pin up as many menus (Bore Holes) as you like. Any window that is cracked, will be closed automatically. Macro processes menus from left to right, top to bottom. Press Shift over ATITD window to continue. This simple macro by Cegaiel.');
+  askForWindow(askText);
+  Main();
+end
+
+
+
+function Main()
+
+  windowManager("Windows Manager", wmText, false, true);
 
 
 	sleepWithStatus(500, "Searching for something to click...");
@@ -17,25 +33,25 @@ function doit()
 	while 1 do
 		checkBreak();
 		srReadScreen();
-		local crack = srFindImage("crack_outline.png");
-		local tap = srFindImage("tap_bore_rod.png");
-		local OK = srFindImage("ok.png");
-		local stats = srFindImage("AllStats-Black.png");
-		local unpin = srFindImage("unpin.png");
+		crack = srFindImage("crack_outline.png");
+		tap = srFindImage("tap_bore_rod.png");
+		OK = srFindImage("ok.png");
+		stats = srFindImage("AllStats-Black.png");
+		unpin = srFindImage("unpin.png");
 
 
 			if OK then
 			srClickMouseNoMove(OK[0]+5,OK[1],1);
-			sleepWithStatus(500, "Clicking OK button!");
+			sleepWithStatus(100, "Clicking OK button!");
 			end
 
 			if crack then
 			srClickMouseNoMove(crack[0]+5,crack[1],1);
-			sleepWithStatus(1000, "Cracking the Outline!");
+			sleepWithStatus(500, "Cracking the Outline!");
 
 
 			--Close the window that cracked
-			sleepWithStatus(500, "Closing Window!");
+			sleepWithStatus(100, "Closing Window!");
 			srClickMouseNoMove(unpin[0]+5,unpin[1],1);
 			end
 
@@ -47,13 +63,18 @@ function doit()
 			srClickMouseNoMove(tap[0]+5,tap[1],1);
 			sleepWithStatus(500, "Tapping the Bore Rod!");
 			else
-			--sleepWithStatus(500, "Hmmm, I'm lost!");
-			error("Nothing to click! Quitting...");
+
+
+			sleepWithStatus(1000, "Nothing to click!\nReseting macro...");
+			--error("Nothing to click! Quitting...");
+			Main();
+
+
 			end
 
 
 	else
-	sleepWithStatus(500, "You're tired!\n\nWaiting on timer...");
+	sleepWithStatus(500, "You're tired :(\n\nWaiting on Skills Timer (RED) ...");
 	end
 
 

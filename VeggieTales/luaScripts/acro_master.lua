@@ -160,7 +160,7 @@ function doMoves()
 	           break;
                end
 
-		  local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[i] .. "\n[" .. j .. "/" .. perMoves .. "] Repeating\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.";
+		  local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[i] .. "\n[" .. j .. "/" .. perMoves .. "] Repeating\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.\n\nClick Skip to advance to next move on list (ie partner follows the move).";
 
 		  local acroTimer = true;
 			while acroTimer do
