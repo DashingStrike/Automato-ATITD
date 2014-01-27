@@ -345,7 +345,7 @@ function findchat(line)
 while not Coords do
 	checkBreak();
 	srReadScreen();
-	sleepWithStatus(999, "Looking for Main chat screen...");
+	sleepWithStatus(500, "Looking for Main chat screen...");
 	imgs = findAllImages("Fishing/chatlog_reddots.png");
 	Coords = imgs[#imgs];
 
@@ -520,7 +520,7 @@ function gui_refresh()
 
 	lsPrintWrapped(10, winsize[1]-85, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Lures Switched: " .. GrandTotalLuresUsed-1);
 		if lastLostLure ~= "" then
-	lsPrintWrapped(10, winsize[1]-73, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Lures Lost: " .. GrandTotalLostLures .. "   -  Last Lost Lure: " .. lastLostLure .. " (" .. lastLostLureType .. ")");
+	lsPrintWrapped(10, winsize[1]-73, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Lures Lost: " .. GrandTotalLostLures .. "   -  Last: " .. lastLostLure .. " (" .. lastLostLureType .. ")");
 		else
 	lsPrintWrapped(10, winsize[1]-73, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Lures Lost: " .. GrandTotalLostLures);
 		end
