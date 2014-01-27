@@ -144,6 +144,15 @@ CL_Fish = {
 --Don't change order
 --Size of fish (db)
 CL_Number = {
+"ChatLog_1.png",
+"ChatLog_2.png",
+"ChatLog_3.png",
+"ChatLog_4.png",
+"ChatLog_5.png",
+"ChatLog_6.png",
+"ChatLog_7.png",
+"ChatLog_8.png",
+"ChatLog_9.png",
 "ChatLog_10.png",
 "ChatLog_11.png",
 "ChatLog_12.png",
@@ -183,23 +192,11 @@ CL_Number = {
 "ChatLog_46.png",
 "ChatLog_47.png",
 "ChatLog_48.png",
-"ChatLog_1.png",
-"ChatLog_2.png",
-"ChatLog_3.png",
-"ChatLog_4.png",
-"ChatLog_5.png",
-"ChatLog_6.png",
-"ChatLog_7.png",
-"ChatLog_8.png",
-"ChatLog_9.png",
 };
 
 --Don't change order.
 --What time?
 CL_Time = {
-"Chatlog_Time_12.png",
-"Chatlog_Time_11.png",
-"Chatlog_Time_10.png",
 "Chatlog_Time_1.png",
 "Chatlog_time_2.png",
 "Chatlog_Time_3.png",
@@ -209,6 +206,9 @@ CL_Time = {
 "Chatlog_Time_7.png",
 "Chatlog_Time_8.png",
 "Chatlog_Time_9.png",
+"Chatlog_Time_10.png",
+"Chatlog_Time_11.png",
+"Chatlog_Time_12.png",
 };
 
 
