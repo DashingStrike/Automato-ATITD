@@ -507,7 +507,7 @@ function gui_refresh()
 		table.remove(gui_log_fish,1);
 	end
 		for i = 1, #gui_log_fish,1 do
-			lsPrintWrapped(10, 50 + (12*i), 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, gui_log_fish[i]);
+			lsPrintWrapped(10, 50 + (14*i), 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, gui_log_fish[i]);
 			last10caught = last10caught .. gui_log_fish[i] .. "\n";
 		end
 
@@ -680,7 +680,7 @@ MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. P
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. CurrentTime .. "]  [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "No fish bit. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "No fish bit. You also lost your lure." .. "\n");
 
 			elseif ChatType == "nobit" then
 				--No fishbit
