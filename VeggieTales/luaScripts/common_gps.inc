@@ -1,16 +1,39 @@
 function findCoords()
   lsPrintln("findCoords");
   local result = nil;
-  local anchor = findText("2,");
-  if(not anchor) then
-    anchor = findText("3, ");
-  end
-  if(not anchor) then
-    anchor = findText("Year");
-  end
+  local anchor = findText("Year");
   if(not anchor) then
     anchor = findText("ear");
   end
+  if(not anchor) then
+    anchor = findText("ar 1");
+  end
+  if(not anchor) then
+    anchor = findText("ar 2");
+  end
+  if(not anchor) then
+    anchor = findText("ar 3");
+  end
+  if(not anchor) then
+    anchor = findText("ar 4");
+  end
+  if(not anchor) then
+    anchor = findText("ar 5");
+  end
+  if(not anchor) then
+    anchor = findText("ar 6");
+  end
+  if(not anchor) then
+    anchor = findText("ar 7");
+  end
+  if(not anchor) then
+    anchor = findText("ar 8");
+  end
+  if(not anchor) then
+    anchor = findText("ar 9");
+  end
+
+
   if anchor then
     lsPrintln("anchor");
     local window = getWindowBorders(anchor[0], anchor[1]);

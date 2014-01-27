@@ -6,8 +6,12 @@
 -- Lures: Lure Picture (Use Lure Menu)
 -- Chat_Types: Unique message picture to identify chat line
 --CL_Fish: Picture of Fish Name from Main Chat
---CL_Number: Picture of Size from Main Chat
+--CL_Number: Picture of Size from Main Chat (db caught)
 --CL_Time: Picture of Time from Main Chat using Special->What Time is it?
+
+-- TIP: Should there ever be new fish to add at a later time, you do not actually have to catch the fish (blue chat in main chat) for screenshot
+-- Instead post what you want to a Microphone board, the chat will show up as blue in main chat screen ;)
+-- Take a screenshot of that, instead of waiting to catch it manually.
 
 Lures = {
 "Lure_AshCentipede.png",
@@ -72,7 +76,7 @@ Chat_Types = {
 "Chatlog_AlmostCaughtOddLostLure.png","oddlostlure",
 "Chatlog_AlmostCaughtOdd.png","odd",
 
--- Needs screen shot/.png file added, then uncomment: "Chatlog_AlmostCaughtStrangeLostLure.png","strangelostlure",
+"Chatlog_AlmostCaughtStrangeLostLure.png","strangelostlure",
 "Chatlog_AlmostCaughtStrange.png","strange",
 "Chatlog_AlmostCaughtUnusualLostLure.png","unusuallostlure",
 "Chatlog_AlmostCaughtUnusual.png","unusual",
@@ -88,7 +92,7 @@ Chat_Types = {
 };
 
 CL_Fish = {
---Amur Pike missing
+"Chatlog_Fish_AmurPike.png",
 "Chatlog_Fish_Abdju.png",
 "ChatLog_Fish_Ayu.png",
 "Chatlog_Fish_BayLobster.png",
@@ -96,11 +100,11 @@ CL_Fish = {
 "Chatlog_Fish_Camelfish.png",
 "Chatlog_Fish_Carp.png",
 "Chatlog_Fish_Catfish.png",
---Cherry Bonefish missing screenshot
+"Chatlog_Fish_CherryBonefish.png",
 "Chatlog_Fish_Chromis.png",
 "Chatlog_Fish_FlyingFish.png",
 "Chatlog_Fish_GiantCrayfish.png",
---Great Knucklefish missing screenshot
+"Chatlog_Fish_GreatKnucklefish.png",
 "Chatlog_Fish_HornedPigfish.png",
 "Chatlog_Fish_HylianLoach.png",
 "Chatlog_Fish_IvoryKnifeFish.png",
@@ -121,12 +125,12 @@ CL_Fish = {
 "Chatlog_Fish_RainbowCod.png",
 "Chatlog_Fish_ReticulatedToothFish.png",
 "Chatlog_Fish_RibbonFish.png",
---River Crab missing screenshot
---Serpentfish missing screenshot
+"Chatlog_Fish_RiverCrab.png",
+"Chatlog_Fish_Serpentfish.png",
 "Chatlog_Fish_SeaUrchin.png",
 "Chatlog_Fish_ShelomitsPuffer.png",
 "Chatlog_Fish_SingingLamprey.png",
---Spiny Dogfish missing screenshot
+"Chatlog_Fish_SpinyDogfish.png",
 "Chatlog_Fish_SpoonFish.png",
 "Chatlog_Fish_SpottedSeaCucumber.png",
 "Chatlog_Fish_StripedBatfin.png",
@@ -134,20 +138,12 @@ CL_Fish = {
 "Chatlog_Fish_Tilapia.png",
 "Chatlog_Fish_Tilefish.png",
 "Chatlog_Fish_WhiteOniontail.png",
---Yellowfin Snapper missing screenshot
+"Chatlog_Fish_YellowfinSnapper.png",
 };
 
---Size of fish
+--Don't change order
+--Size of fish (db)
 CL_Number = {
-"ChatLog_1.png",
-"ChatLog_2.png",
-"ChatLog_3.png",
-"ChatLog_4.png",
-"ChatLog_5.png",
-"ChatLog_6.png",
-"ChatLog_7.png",
-"ChatLog_8.png",
-"ChatLog_9.png",
 "ChatLog_10.png",
 "ChatLog_11.png",
 "ChatLog_12.png",
@@ -185,12 +181,25 @@ CL_Number = {
 "ChatLog_44.png",
 "ChatLog_45.png",
 "ChatLog_46.png",
---47
+"ChatLog_47.png",
 "ChatLog_48.png",
+"ChatLog_1.png",
+"ChatLog_2.png",
+"ChatLog_3.png",
+"ChatLog_4.png",
+"ChatLog_5.png",
+"ChatLog_6.png",
+"ChatLog_7.png",
+"ChatLog_8.png",
+"ChatLog_9.png",
 };
 
+--Don't change order.
 --What time?
 CL_Time = {
+"Chatlog_Time_12.png",
+"Chatlog_Time_11.png",
+"Chatlog_Time_10.png",
 "Chatlog_Time_1.png",
 "Chatlog_time_2.png",
 "Chatlog_Time_3.png",
@@ -200,18 +209,17 @@ CL_Time = {
 "Chatlog_Time_7.png",
 "Chatlog_Time_8.png",
 "Chatlog_Time_9.png",
-"Chatlog_Time_10.png",
-"Chatlog_Time_11.png",
-"Chatlog_Time_12.png",
 };
 
+
+-- Don't change order, we want the best towards the top, worst at the bottom. We want to select the best lure first.
 Lure_Types = {
-"Lure_Menu_Fresh.png",
-"Lure_Menu_Glazed.png",
-"Lure_Menu_Preserved.png",
-"Lure_Menu_Hardened.png",
-"Lure_Menu_Mummified.png",
 "Lure_Menu_Petrified.png",
+"Lure_Menu_Mummified.png",
+"Lure_Menu_Hardened.png",
+"Lure_Menu_Preserved.png",
+"Lure_Menu_Glazed.png",
+"Lure_Menu_Fresh.png",
 };
 
 
