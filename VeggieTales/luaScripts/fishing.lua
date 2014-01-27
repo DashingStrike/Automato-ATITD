@@ -42,7 +42,7 @@
 
 
 
---CUSTOM VARIABLES/SETTINGS -- EDIT HERE To Change Fishing Casts, Skips, Updates.
+--CUSTOM VARIABLES/SETTINGS -- EDIT HERE To Change Fishing Casts, Skips, Updates.  ---------------------------------------------------------------------------------
 
 TotalCasts=3; --How many casts per lure
 SkipCommon = false; --Skips to next lure if fish caught is a common (Choose True or False).
@@ -65,13 +65,12 @@ LogStrangeUnusual = True; 	-- Do you want to add Strange and Unusual fish to the
 LogOdd = True; 	-- Do you want to add Odd fish to the log file? Note the log will still add an entry if you lost lure.
 
 
--- END CUSTOM VARIABLES/SETTINGS
+-- END CUSTOM VARIABLES/SETTINGS -----------------------------------------------------------------------------------------------------------------------------------
 
 
+assert(loadfile("luaScripts/common.inc"))();
+assert(loadfile("luaScripts/Fishing_Func.inc"))();
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
-loadfile("luaScripts/Fishing_Func.inc")();
 
 
 
@@ -81,9 +80,9 @@ function SetupLureGroup()
 	FirstLure="";
 	LastLure = "";
 
-
-
-	
+	lsDoFrame();
+	statusScreen("Fetching list of lures...");
+	checkBreak()	
 	srReadScreen();
 	FindPin = srFindImage("UnPin.png");
 	if FindPin then
@@ -175,8 +174,8 @@ function SetupLureGroup()
 	end
 	
 	return TLures;
-
 end
+
 
 function FindLureName(x,y,w,h)
 
@@ -189,9 +188,9 @@ function FindLureName(x,y,w,h)
 end
 
 function GetLure()
-
+	checkBreak();
 	srReadScreen();
-	
+
 	if CurrentLureIndex == LastLureIndex then
 		-- Use Down Menu
 		srClickMouseNoMove(DownArrowLocs[0]-5,DownArrowLocs[1]-5);
@@ -212,13 +211,20 @@ end
 
 function UseLure()
 	-- Uses lure according to CurrentLureIndex, which is used in PlayersLures which contains each lure the player has. 
-
+	lsDoFrame(); -- Blank the screen so next statusScreen messages isn't mixed/obscured with previous gui_refresh info on screen
+	lsSleep(10);
+		if LostLure == 0 then
+		statusScreen("Switching Lures...");
+		else
+		sleepWithStatus(999,"Lost Lure! Switching Lures...");
+		LostLure = 0;
+		end
 
 	if #TLures == 0 then
 	error 'Can\'t find any lures on the pinned window. Did you run out of lures?'
 	end
 
-
+	checkBreak();
 	srReadScreen();
 	lure = srFindImage("Fishing/" .. PlayersLures[CurrentLureIndex]);
 
@@ -230,9 +236,11 @@ function UseLure()
 		for i = 1, #Lure_Types, 1 do
 			test = srFindImage("Fishing/" .. Lure_Types[i]);
 			if test then
+			LureType = Lure_Types[i];
+			LureType = string.sub(Lure_Types[i],string.find(Lure_Types[i],"Menu_")+5,string.len(Lure_Types[i])-4);
 				--Click it!
 				srClickMouseNoMove(test[0]+3,test[1]+3);
-				gui_refresh();
+				--gui_refresh();
 				break;
 			end
 		end
@@ -256,6 +264,7 @@ end
 function ChatReadFish()
 	--Find the last line of chat
 	lsSleep(100);
+	checkBreak();
 	srReadScreen();
 	imgs = findAllImages("fishing/chatlog_reddots.png");
 	Coords = imgs[#imgs];
@@ -294,7 +303,7 @@ function ChatReadFish()
 		end
 	end
 	GrandTotaldb = GrandTotaldb + SNum;
-	return(Sfish .. " (" .. SNum .. "db)");
+	return("[" .. CurrentLure .. " (" .. LureType .. ")] "  .. Sfish .. " (" .. SNum .. "db)");
 	
 end
 
@@ -328,9 +337,19 @@ function findchat(line)
 	
 	--Find the last line of chat
 	lsSleep(100);
+	checkBreak();
 	srReadScreen();
 	imgs = findAllImages("Fishing/chatlog_reddots.png");
 	Coords = imgs[#imgs];
+
+while not Coords do
+	checkBreak();
+	srReadScreen();
+	sleepWithStatus(999, "Looking for Main chat screen...");
+	imgs = findAllImages("Fishing/chatlog_reddots.png");
+	Coords = imgs[#imgs];
+
+end
 
 		-- Look for the ** red dots in main chat to see if they exist.	
 		if #imgs == 0 then
@@ -340,8 +359,9 @@ function findchat(line)
 	
 	if line and line > 0 then
 		Coords = imgs[(#imgs) - line];
+
 			if not Coords then
-			error 'Main chat tab is not showing or the chat window needs to be adjusted!'
+			--error 'Main chat tab is not showing or the chat window needs to be adjusted!'
 			end
 
 	end
@@ -380,6 +400,11 @@ end
 
 
 function GetTime()
+
+	checkBreak();
+	lsDoFrame(); -- Blank the screen so next statusScreen messages isn't mixed/obscured with previous gui_refresh info on screen
+	lsSleep(10);
+	statusScreen("Fetching Time...");
 	--Reads time stamp using special->what time menu
 	winsize = srGetWindowSize();
 	
@@ -424,7 +449,7 @@ function GetTime()
 		error 'Main chat tab is not showing or the chat window needs to be adjusted!'
 		end
 
-	
+
 	for i = #CL_Time, 1, -1 do
 		Stime = srFindImageInRange("Fishing/" .. CL_Time[i],Coords[0],Coords[1],400,25);
 		if Stime then
@@ -444,14 +469,17 @@ function GetTime()
 
 		end
 	end
+	checkBreak();
 end
 
 function gui_refresh()
+	checkBreak();
 	lsDoFrame();
+	lsSleep(10);
 
 
 	if GrandTotalCaught < 10 then
-	last10 = GrandTotalCaught .. "/10";
+	last10 = GrandTotalCaught .. " of 10";
 	else
 	last10 = 10;
 	end
@@ -461,13 +489,16 @@ function gui_refresh()
 	--CurrentLureIndex  out of  PlayersLures
 	winsize = lsGetWindowSize();
 	
-	
-	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Lure Index: " .. CurrentLureIndex .. " out of " .. #PlayersLures .. "       " .. PlayersLures[CurrentLureIndex]);
+	CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
+
+	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Current Lure: " .. CurrentLureIndex .. " of " .. #PlayersLures .. "   " .. CurrentLure .. " (" .. LureType .. ")");
+
+	lsPrintWrapped(10, 15, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, TotalCasts+1 - castcount .. " casts remaining until next lure change.");
 
 
-	lsPrintWrapped(10, 20, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Time: " .. CurrentTime);
+	lsPrintWrapped(10, 30, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Current Hour: " .. CurrentTime);
 
-	lsPrintWrapped(10, 40, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Last [" .. last10 .. "] Fish Caught:");
+	lsPrintWrapped(10, 45, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Last " .. last10 .. " Fish Caught:");
 
 	--Reset this string before showing last 10 fish below. Else the entries will multiply with entries from previous loops/call to this function
 	last10caught = "";
@@ -487,19 +518,23 @@ function gui_refresh()
 
 	lsPrintWrapped(10, winsize[1]-97, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "-----------------------------");
 
-	lsPrintWrapped(10, winsize[1]-85, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Lures Clicked: " .. GrandTotalLuresUsed);
+	lsPrintWrapped(10, winsize[1]-85, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Lures Switched: " .. GrandTotalLuresUsed-1);
+		if lastLostLure ~= "" then
+	lsPrintWrapped(10, winsize[1]-73, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Lures Lost: " .. GrandTotalLostLures .. "   -  Last Lost Lure: " .. lastLostLure .. " (" .. lastLostLureType .. ")");
+		else
 	lsPrintWrapped(10, winsize[1]-73, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Lures Lost: " .. GrandTotalLostLures);
+		end
 
 	lsPrintWrapped(10, winsize[1]-61, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "-----------------------------");
 
-	lsPrintWrapped(10, winsize[1]-49, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Total Casts: " .. GrandTotalCasts);
+	lsPrintWrapped(10, winsize[1]-49, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Casts: " .. GrandTotalCasts);
 	lsPrintWrapped(10, winsize[1]-37, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Failed Catches: " .. GrandTotalFailed);
 	lsPrintWrapped(10, winsize[1]-25, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Fish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)");
 
 
 	-- Write stats to log file. Everytime the GUI screen is updated, so is the log file.
 
-	WriteFishStats("Last Session Hour: " .. CurrentTime .. "\n\nOdd Fish Seen: " .. GrandTotalOdd .. "\nUnusual Fish Seen: " .. GrandTotalUnusual .. "\nStrange Fish Seen: " .. GrandTotalStrange .. "\n---------------------\nLures Clicked: " .. GrandTotalLuresUsed .. "\nLures Lost: " .. GrandTotalLostLures .. " \n---------------------\nTotal Casts: " .. GrandTotalCasts .. "\nFailed Catches: " .. GrandTotalFailed .. "\nFish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)\n---------------------\n\nLast 10 Fish Caught:\n\n".. last10caught);
+	WriteFishStats("Last Session Hour: " .. CurrentTime .. "\n\nOdd Fish Seen: " .. GrandTotalOdd .. "\nUnusual Fish Seen: " .. GrandTotalUnusual .. "\nStrange Fish Seen: " .. GrandTotalStrange .. "\n---------------------\nLures Clicked: " .. GrandTotalLuresUsed .. "\nLures Lost: " .. GrandTotalLostLures .. " \n---------------------\nCasts: " .. GrandTotalCasts .. "\nFailed Catches: " .. GrandTotalFailed .. "\nFish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)\n---------------------\n\nLast 10 Fish Caught:\n\n".. last10caught);
 
 
 
@@ -511,11 +546,15 @@ end
 
 
 function doit()
-	askForWindow("MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. Pin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. There are options you can set in the script such as how many casts per lure, what gets written to the log file and more! History will be recorded in FishLog.txt and stats in FishStats.txt. Most errors can be fixed by slightly adjusting/moving your chat screen! Press Shift to continue.");
 
-	--Gui_Main();
+askText = singleLine([[
+MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. Pin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. There are options you can set in the script such as how many casts per lure, what gets written to the log file and more! History will be recorded in FishLog.txt and stats in FishStats.txt. Most issues can be fixed by slightly adjusting/moving your chat screen! Press Shift over ATITD window to continue.
+]])
+
+  askForWindow(askText);
 
 
+----------------------------------------
 --Variables Used By Program -- Don't Edit Unless you know what you're doing!
 	CurrentLure = ""; --Don't Edit
 	gui_log_fish = {}; --Don't Edit, holds log display
@@ -526,15 +565,10 @@ function doit()
 	DownArrowLocs=nil;
 	PlayersLures={}; --Don't Edit, Holds Current Player Lures
 	CurrentTime=""; --Don't Edit, Holds Time Check Value
+
+	--strangecounter = 0;
 	TotalLuresUsed = 0;
 	castcount = 0;
-	--strangecounter = 0;
-
-
---These variables were later added for displaying additional info on the screen.
--- Used for the extra reporting/statistics, on screen.
--- Dont Edit Unless you know what you're doing!
-
 	GrandTotalCaught = 0;
 	GrandTotalCasts = 0;
 	GrandTotaldb = 0;
@@ -544,15 +578,18 @@ function doit()
 	GrandTotalLuresUsed = 0;
 	GrandTotalLostLures = 0;
 	GrandTotalFailed = 0;
+	lastLostLure = "";	
+	LostLure = 0;
+	LureType = "";
+	lastLostLureType = "";
+----------------------------------------
 
-	
-	PlayersLures = SetupLureGroup();
-	CurrentTime = GetTime();
-	lsSleep(1500);
+	PlayersLures = SetupLureGroup();  -- Fetch the list of lures from pinned lures window
+	CurrentTime = GetTime();  -- Fetch the time (Self Click, Special, What Time is it?
 
 
 	--Write an entry into log file to show this is a new session
-	WriteFishLog("[New Session]\n");
+	WriteFishLog("\n[Fishing Macro started...]\n");
 
 	
 	while 1 do
@@ -584,20 +621,19 @@ function doit()
 			--Update the time if ready, always update before new lure to keep chat/log proper
 			if TotalLuresUsed == LureChangesToUpdateTimer then
 				--Update Time
-
 				CurrentTime = GetTime();
 				TotalLuresUsed = 0;
 			end
 			
 			--Since no casts been made at all, use a lure
+			--lsSleep(2000);
 			UseLure();
-			lsSleep(2000);
 			TotalLuresUsed = TotalLuresUsed + 1;
 			GrandTotalLuresUsed = GrandTotalLuresUsed + 1;
 			
 			--update log
 			gui_refresh();
-			
+
 		elseif castcount  > TotalCasts then
 		--	if strangecounter > 0 and strangecounter < AlmostCaughtAttempts then
 				--we don't reset yet!
@@ -608,15 +644,15 @@ function doit()
 		--	end
 		else
 			--Cast
-			srClickMouseNoMove(cast[0]+3,cast[1]+3);
-			lsSleep(1000);
 			checkBreak();
+			srClickMouseNoMove(cast[0]+3,cast[1]+3);
+			lsSleep(500);
 
 
 
 			while findchat(castcount - 1) == "lure" do
-				lsSleep(1000);
 				checkBreak();
+				lsSleep(500);
 			end
 
 
@@ -639,16 +675,18 @@ function doit()
 				--No fish bit. You also lost your lure.
 				GrandTotalLostLures = GrandTotalLostLures + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
+				lastLostLure = CurrentLure;
+				lastLostLureType = LureType;
+				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "No fish bit. You also lost your lure." .. "\n");
-
+					WriteFishLog("[" .. CurrentTime .. "]  [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "No fish bit. You also lost your lure." .. "\n");
 
 			elseif ChatType == "nobit" then
 				--No fishbit
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogFails == true then
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "No fish bit." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "No fish bit." .. "\n");
 					end
 
 
@@ -656,16 +694,19 @@ function doit()
 				--You didn't catch anything. You also lost your lure.
 				GrandTotalLostLures = GrandTotalLostLures + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
+				lastLostLure = CurrentLure;
+				lastLostLureType = LureType;
+				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You didn\'t catch anything. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You didn\'t catch anything. You also lost your lure." .. "\n");
 
 
 			elseif ChatType == "nocatch" then
 				--You didn't catch anything.
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogFails == true then
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You didn\'t catch anything." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You didn\'t catch anything." .. "\n");
 					end
 
 
@@ -673,18 +714,20 @@ function doit()
 				castcount = castcount - 1;
 				GrandTotalCasts = GrandTotalCasts - 1;	
 				lsSleep(15000); -- Long pause to wait for fishing queue to stop. Somehow it pushed the Fish button twice and now you will cast 2 times in a row. 
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You are already fishing!" .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You are already fishing!" .. "\n");
 
 
-			--Needs screenshot added and uncomment "strangelostlure" in fishing_func.inc, before the below elseif statement actually works; currently ignored
 			elseif ChatType == "strangelostlure" then
 				-- Strange Fish and lost lure
 				GrandTotalStrange = GrandTotalStrange + 1;
 				GrandTotalLostLures = GrandTotalLostLures + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
+				lastLostLure = CurrentLure;
+				lastLostLureType = LureType;
+				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
 
 			--	if AlmostCaughtAttempts > 0 then
 			--		strangecounter = strangecounter +1;
@@ -697,7 +740,7 @@ function doit()
 				GrandTotalStrange = GrandTotalStrange + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogStrangeUnusual == true then
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught a STRANGE fish, but your rod was just too clumbsy." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You almost caught a STRANGE fish, but your rod was just too clumbsy." .. "\n");
 					end
 
 			--	if AlmostCaughtAttempts > 0 then
@@ -711,8 +754,14 @@ function doit()
 				GrandTotalUnusual = GrandTotalUnusual + 1;
 				GrandTotalLostLures = GrandTotalLostLures + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
+				lastLostLure = CurrentLure;
+				lastLostLureType = LureType;
+				LostLure = 1;
+					--Reset, skip to next lure
+					castcount=0;
+
 					if LogStrangeUnusual == true then
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an UNUSUAL fish, but you were not quick enough. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You almost caught an UNUSUAL fish, but you were not quick enough. You also lost your lure." .. "\n");
 					end
 
 
@@ -728,7 +777,7 @@ function doit()
 				GrandTotalUnusual = GrandTotalUnusual + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogStrangeUnusual == true then
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an UNUSUAL fish, but you were not quick enough." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You almost caught an UNUSUAL fish, but you were not quick enough." .. "\n");
 					end
 
 			--	if AlmostCaughtAttempts > 0 then
@@ -742,9 +791,12 @@ function doit()
 				GrandTotalOdd = GrandTotalOdd + 1;
 				GrandTotalLostLures = GrandTotalLostLures + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
+				lastLostLure = CurrentLure;
+				lastLostLureType = LureType;
+				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an ODD fish, but were too late recognizing the bite. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You almost caught an ODD fish, but were too late recognizing the bite. You also lost your lure." .. "\n");
 
 
 
@@ -753,7 +805,7 @@ function doit()
 				GrandTotalOdd = GrandTotalOdd + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogOdd == true then
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "You almost caught an ODD fish, but were too late recognizing the bite." .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You almost caught an ODD fish, but were too late recognizing the bite." .. "\n");
 					end
 
 
@@ -771,14 +823,17 @@ function doit()
 
 				if ChatType == "caughtlostlure" then
 					GrandTotalLostLures = GrandTotalLostLures + 1;
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "Though you lost your lure, you did catch a " .. Fish .. "\n");
+					lastLostLure = CurrentLure;
+					lastLostLureType = LureType;
+					LostLure = 1;
+					WriteFishLog("[" .. CurrentTime .. "] " .. Fish .. " was caught. You also lost a lure.\n");
 					-- This Needs Check for new lure. This will cause a error if not.
 					--Reset, skip to next lure
 					castcount=0;
 
 							
 				else
-					WriteFishLog("[" .. CurrentTime .. "]\t[" .. CurrentLure .. "]\t" .. "Caught a " .. Fish .. "\n");
+					WriteFishLog("[" .. CurrentTime .. "] " .. Fish .. " was caught.\n");
 
 				end
 				
