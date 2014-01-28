@@ -268,7 +268,8 @@ function ChatReadFish()
 	srReadScreen();
 	imgs = findAllImages("fishing/chatlog_reddots.png");
 	Coords = imgs[#imgs];
-	
+
+
 		-- Look for the ** red dots in main chat to see if they exist.	
 		if #imgs == 0 then
 		error 'Main chat tab is not showing or the chat window needs to be adjusted!'
@@ -342,27 +343,28 @@ function findchat(line)
 	imgs = findAllImages("Fishing/chatlog_reddots.png");
 	Coords = imgs[#imgs];
 
+-- This makes it possible to auto pause while main chat tab is not visible (ie chat in other tabs or switch to other programs)
 while not Coords do
 	checkBreak();
 	srReadScreen();
-	sleepWithStatus(500, "Looking for Main chat screen...");
+	sleepWithStatus(100, "Looking for Main chat screen...");
 	imgs = findAllImages("Fishing/chatlog_reddots.png");
 	Coords = imgs[#imgs];
 
 end
 
 		-- Look for the ** red dots in main chat to see if they exist.	
-		if #imgs == 0 then
-		error 'Main chat tab is not showing or the chat window needs to be adjusted!'
-		end
+		--if #imgs == 0 then
+		--error 'Main chat tab is not showing or the chat window needs to be adjusted!'
+		--end
 
 	
 	if line and line > 0 then
 		Coords = imgs[(#imgs) - line];
 
-			if not Coords then
+			--if not Coords then
 			--error 'Main chat tab is not showing or the chat window needs to be adjusted!'
-			end
+			--end
 
 	end
 	
@@ -439,10 +441,12 @@ function GetTime()
 
 
 
-	
+	checkBreak();	
 	srReadScreen();
 	imgs = findAllImages("Fishing/chatlog_reddots.png");
 	Coords = imgs[#imgs];
+
+
 
 		-- Look for the ** red dots in main chat to see if they exist.	
 		if #imgs == 0 then
@@ -495,8 +499,12 @@ function gui_refresh()
 
 	lsPrintWrapped(10, 15, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, TotalCasts+1 - castcount .. " casts remaining until next lure change.");
 
-
+	if startPos then
+	lsPrintWrapped(10, 30, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Current Hour: " .. CurrentTime .. " / Location: " .. startPos[0] .. ", " .. startPos[1]);
+	else
 	lsPrintWrapped(10, 30, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Current Hour: " .. CurrentTime);
+	end
+
 
 	lsPrintWrapped(10, 45, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "Last " .. last10 .. " Fish Caught:");
 
@@ -534,7 +542,12 @@ function gui_refresh()
 
 	-- Write stats to log file. Everytime the GUI screen is updated, so is the log file.
 
+	if startPos then
+	WriteFishStats("Last Session Hour: " .. CurrentTime .. "\nLast Location: " .. startPos[0] .. ", " .. startPos[1] .. "\n\nOdd Fish Seen: " .. GrandTotalOdd .. "\nUnusual Fish Seen: " .. GrandTotalUnusual .. "\nStrange Fish Seen: " .. GrandTotalStrange .. "\n---------------------\nLures Clicked: " .. GrandTotalLuresUsed .. "\nLures Lost: " .. GrandTotalLostLures .. " \n---------------------\nCasts: " .. GrandTotalCasts .. "\nFailed Catches: " .. GrandTotalFailed .. "\nFish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)\n---------------------\n\nLast 10 Fish Caught:\n\n".. last10caught);
+	else
 	WriteFishStats("Last Session Hour: " .. CurrentTime .. "\n\nOdd Fish Seen: " .. GrandTotalOdd .. "\nUnusual Fish Seen: " .. GrandTotalUnusual .. "\nStrange Fish Seen: " .. GrandTotalStrange .. "\n---------------------\nLures Clicked: " .. GrandTotalLuresUsed .. "\nLures Lost: " .. GrandTotalLostLures .. " \n---------------------\nCasts: " .. GrandTotalCasts .. "\nFailed Catches: " .. GrandTotalFailed .. "\nFish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)\n---------------------\n\nLast 10 Fish Caught:\n\n".. last10caught);
+	end
+
 
 
 
@@ -552,6 +565,10 @@ MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. P
 ]])
 
   askForWindow(askText);
+
+
+
+
 
 
 ----------------------------------------
@@ -588,22 +605,38 @@ MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. P
 	CurrentTime = GetTime();  -- Fetch the time (Self Click, Special, What Time is it?
 
 
-	--Write an entry into log file to show this is a new session
-	WriteFishLog("\n[Fishing Macro started...]\n");
 
+
+	--Write an entry into log file to show this is a new session
+	       startPos = findCoords();
+
+		if startPos then
+		WriteFishLog("\n[Fishing Macro started; Location: " .. startPos[0] .. ",".. startPos[1] ..  "]\n");
+		else
+		WriteFishLog("\n[Fishing Macro started...]\n");
+		end
 	
 	while 1 do
 		
 		checkBreak();
 		srReadScreen();
-		
-		
+				
 		--cast = srFindImage("Fishing/Button_Fish.png");
 		cast = srFindImage("fishicon.png");
-		if not cast then
-			error("cannot find fishing button");
+
+
+		while not cast do
+		checkBreak();
+		srReadScreen();
+		sleepWithStatus(100, "Looking for Fishing icon...");
+		cast = srFindImage("fishicon.png");
 		end
+
+		--if not cast then
+			--error("cannot find fishing button");
+		--end
 		
+
 		if castcount == 0 then
 			--Update counters
 			castcount = 1;
