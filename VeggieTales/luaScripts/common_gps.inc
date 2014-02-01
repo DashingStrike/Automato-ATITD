@@ -3,9 +3,6 @@ function findCoords()
   local result = nil;
   local anchor = findText("Year");
   if(not anchor) then
-    anchor = findText("ear");
-  end
-  if(not anchor) then
     anchor = findText("ar 1");
   end
   if(not anchor) then
