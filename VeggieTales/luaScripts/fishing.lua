@@ -57,7 +57,7 @@ SkipCommon = false; --Skips to next lure if fish caught is a common (Choose True
 -- Choose true or false.
 	-- Note 'LogStrangeUnusual' and 'LogOdd' (below) overrides LogFails setting. ie if LogStrange true, then it would still log even if LogFails = False
 	--If LogFails = false and LogStrangeUnusual or LogOdd = true, then failed catches those would still be included in the log file. 
-LogFails = true;  	-- Do you want to add Failed Catches to log file? 'Failed to catch anything' or 'No fish bit'. Note the log will still add an entry if you lost lure.
+LogFails = false;  	-- Do you want to add Failed Catches to log file? 'Failed to catch anything' or 'No fish bit'. Note the log will still add an entry if you lost lure.
 LogStrangeUnusual = true; 	-- Do you want to add Strange and Unusual fish to the log file? Note the log will still add an entry if you lost lure.
 LogOdd = true; 	-- Do you want to add Odd fish to the log file? Note the log will still add an entry if you lost lure.
 
@@ -72,12 +72,12 @@ function setOptions()
 	local y = 10;
     lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);  -- Shrink the text boxes and text down
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Casts per Lure?");
-      is_done, TotalCasts = lsEditBox("totalcasts", 200, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 3);
+      is_done, TotalCasts = lsEditBox("totalcasts", 200, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 4);
       TotalCasts = tonumber(TotalCasts);
       if not TotalCasts then
         is_done = false;
         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-        TotalCasts = 3;
+        TotalCasts = 4;
       end
 	y = y + 40;
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Casts to Refresh Time?");
@@ -93,15 +93,24 @@ function setOptions()
 
       lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
 	y = y + 30;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Casts per Lure? # Casts before switching lures.");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Casts per Lure?  # Casts before switching lures.");
 	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Casts to Refresh Time? # Casts to Refresh Clock.");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Casts to Refresh Time?  # Casts to Refresh Clock.");
 
       lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);  -- Shrink the check boxes and text down
 	y = y + 100
 	SkipCommon = lsCheckBox(10, y, 10, 0xFFFFFFff, " Skip Common Fish", SkipCommon);
 
+	y = y + 25
+	lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.7, 0.7, 0xffff80ff, "If Common Fish Caught, immediately switch to next lure:");
+	y = y + 18
+	lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.7, 0.7, 0xffffffff, "(Abdju, Chromis, Catfish, Carp, Perch, Phagrus, Tilapia)");
+
 	y = y + 50
+	lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.8, 0.8, 0x80ff80ff, "Log entries to FishLog.txt in VeggieTales folder.");
+
+
+	y = y + 25
 	LogFails = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Failed Catches", LogFails);
 
 	y = y + 25
@@ -549,15 +558,15 @@ function gui_refresh()
 	CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
 
 	if startPos then
-	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xffc0c0ff, "Current Hour: " .. CurrentTime .. " / Location: " .. startPos[0] .. ", " .. startPos[1]);
+	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xffc0c0ff, "Current Hour: " .. CurrentTime .. " | Location: " .. startPos[0] .. ", " .. startPos[1]);
 	else
 	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xffc0c0ff, "Current Hour: " .. CurrentTime);
 	end
 
-	lsPrintWrapped(10, 11, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffc0ff, "Current Lure: " .. CurrentLureIndex .. " of " .. #PlayersLures .. "   " .. CurrentLure .. " (" .. LureType .. ")");
+	lsPrintWrapped(10, 13, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffc0ff, "Current Lure: " .. CurrentLureIndex .. " of " .. #PlayersLures .. "   " .. CurrentLure .. " (" .. LureType .. ")");
 	lsPrintWrapped(10, 27, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffffff, TotalCasts+1 - castcount .. " casts remaining until next Lure change.");
 	lsPrintWrapped(10, 38, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffffff, CastsToTimerUpdate - CastsTillTimerUpdate .. " casts remaining until next Time update.");
-	lsPrintWrapped(10, 55, 0, lsScreenX - 20, 0.5, 0.5, 0xc0c0ffff, "Last " .. last10 .. " Fish Caught:\n");
+	lsPrintWrapped(10, 55, 0, lsScreenX - 20, 0.5, 0.5, 0xffffc0ff, "Last " .. last10 .. " Fish Caught:\n");
 
 	--Reset this string before showing last 10 fish below. Else the entries will multiply with entries from previous loops/call to this function
 	last10caught = "";
@@ -566,14 +575,14 @@ function gui_refresh()
 		table.remove(gui_log_fish,1);
 	end
 		for i = 1, #gui_log_fish,1 do
-			lsPrintWrapped(10, 55 + (14*i), 0, lsScreenX - 18, 0.5, 0.5, 0xffffc0ff, gui_log_fish[i]);
+			lsPrintWrapped(10, 56 + (14*i), 0, lsScreenX - 18, 0.5, 0.5, 0xffffdfff, gui_log_fish[i]);
 			last10caught = last10caught .. gui_log_fish[i] .. "\n";
 		end
 
 
-	lsPrintWrapped(10, winsize[1]-133, 0, lsScreenX - 20, 0.5, 0.5, 0xffc0c0ff, "Odd Fish Seen: " .. GrandTotalOdd);
-	lsPrintWrapped(10, winsize[1]-121, 0, lsScreenX - 20, 0.5, 0.5, 0xffc0c0ff, "Unusual Fish Seen: " .. GrandTotalUnusual);
-	lsPrintWrapped(10, winsize[1]-109, 0, lsScreenX - 20, 0.5, 0.5, 0xffc0c0ff, "Strange Fish Seen: " .. GrandTotalStrange);
+	lsPrintWrapped(10, winsize[1]-133, 0, lsScreenX - 20, 0.5, 0.5, 0xffffffff, "Odd Fish Seen: " .. GrandTotalOdd);
+	lsPrintWrapped(10, winsize[1]-121, 0, lsScreenX - 20, 0.5, 0.5, 0xffffffff, "Unusual Fish Seen: " .. GrandTotalUnusual);
+	lsPrintWrapped(10, winsize[1]-109, 0, lsScreenX - 20, 0.5, 0.5, 0xffffffff, "Strange Fish Seen: " .. GrandTotalStrange);
 	lsPrintWrapped(10, winsize[1]-97, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "-----------------------------");
 	lsPrintWrapped(10, winsize[1]-85, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffc0ff, "Lures Switched: " .. GrandTotalLuresUsed-1);
 		if lastLostLure ~= "" then
@@ -746,7 +755,15 @@ MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. P
 			--Cast
 			checkBreak();
 			srClickMouseNoMove(cast[0]+3,cast[1]+3);
-			lsSleep(15000);
+			--lsSleep(15000);  -- It takes 15s from the time the fishing icon is clicked, before we see a result in main chat tab!
+				castTimer = 0;
+				while not castTimer == 150 do
+				--This replaces lsSleep(15000), this lets us break easily while waiting the 15s (150 * 100 sleep = 15000 (15s))
+				--With lsSleep(15000) we can not break until the entire 15s has elapsed :(
+				checkBreak();
+				castTimer = castTimer + 1;
+				lsSleep(100);
+				end
 
 
 			while findchat(castcount - 1) == "lure" do
