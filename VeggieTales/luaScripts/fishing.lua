@@ -112,8 +112,16 @@ function setOptions()
 	y = y + 25
 	LogOdd = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Odd Fish", LogOdd);
       lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
-	    if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Start") then
+
+		if setResume then
+		buttonName = "Set/Resume";
+		else
+		buttonName = "Start";
+		end
+
+	    if lsButtonText(10, lsScreenY - 30, 0, 130, 0xFFFFFFff, buttonName) then
         is_done = 1;
+	  setResume = false;
 	    end
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
                     "End script") then
@@ -125,6 +133,17 @@ function setOptions()
   return count;
 end
 
+
+function checkBreakSpecial()
+    while setPause do
+	checkBreak();
+      statusScreen("Fishing macro paused...\nClick Unpause to resume!", 0xffffffff, false);
+		if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Unpause") or (lsAltHeld() and lsShiftHeld()) then
+		setPause = false;
+		gui_refresh();
+		end
+    end
+end
 
 
 function SetupLureGroup()
@@ -144,7 +163,7 @@ function SetupLureGroup()
 	--Click the pinup to refresh the lures window
 
 	srClickMouseNoMove(FindPin[0]+5,FindPin[1]+30);
-	lsSleep(500);
+	lsSleep(100);
 
 	srReadScreen();
 
@@ -547,6 +566,8 @@ end
 
 function gui_refresh()
 	checkBreak();
+	checkBreakSpecial();
+
 
 	if GrandTotalCaught < 10 then
 	last10 = GrandTotalCaught .. "/10";
@@ -613,16 +634,38 @@ function gui_refresh()
 	lsPrintWrapped(10, winsize[1]-37, 0, lsScreenX - 20, 0.5, 0.5, 0xff8080ff, "Failed Catches: " .. GrandTotalFailed);
 	lsPrintWrapped(10, winsize[1]-25, 0, lsScreenX - 20, 0.5, 0.5, 0xffffc0ff, "Fish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)");
 
-      lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);  -- Shrink the text boxes and text down
+      lsSetCamera(0,0,lsScreenX*1.6,lsScreenY*1.6);
 
-	if LockLure then
-	LockLure = lsCheckBox(240, winsize[1]+72, 10,  0xffff40ff, " Lock Lure", LockLure);
-	else
-	LockLure = lsCheckBox(240, winsize[1]+72, 10,  0xFFFFFFff, " Lock Lure", LockLure);
+    if lsButtonText(lsScreenX + 60, lsScreenY - 10, 0, 110, 0xFFFFFFff,
+                    "Options") then
+	setResume = true;
+	setOptions();
+    end
+
+	if not setPause then
+    if lsButtonText(lsScreenX + 60, lsScreenY + 20, 0, 110, 0xFFFFFFff,
+                    "Pause") then
+	setPause = true;
+    end
 	end
 
-	lsPrintWrapped(240, winsize[1]+101, 0, lsScreenX - 20, 0.75, 0.75, 0xffffffff, "Don't change lures,");
-	lsPrintWrapped(240, winsize[1]+118, 0, lsScreenX - 20, 0.7, 0.7, 0xffffffff, "until unchecked again");
+    if lsButtonText(lsScreenX + 60, lsScreenY + 50, 0, 110, 0xFFFFFFff,
+                    "End Script") then
+      error(quitMessage);
+    end
+
+      lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);  -- Shrink the text boxes and text down
+
+	if LockLure then
+	LockLure = lsCheckBox(320, winsize[1]+110, 0,  0xffff40ff, " Lock Lure", LockLure);
+	else
+	LockLure = lsCheckBox(320, winsize[1]+110, 0,  0xFFFFFFff, " Lock Lure", LockLure);
+	end
+
+      lsSetCamera(0,0,lsScreenX*1.55,lsScreenY*1.55);  -- Shrink the text boxes and text down
+
+	lsPrintWrapped(315, winsize[1]+150, 0, lsScreenX - 20, 0.75, 0.75, 0xffffffff, "Don't change lures,");
+	lsPrintWrapped(305, winsize[1]+170, 0, lsScreenX - 20, 0.7, 0.7, 0xffffffff, "until unchecked again.");
       lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
 
 
@@ -648,10 +691,13 @@ end
 function doit()
 
 askText = singleLine([[
+Fishing v1.31 (by Tutmault revised by Cegaiel)         
 MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. Pin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. History will be recorded in FishLog.txt and stats in FishStats.txt. Most issues can be fixed by slightly adjusting/moving your chat screen! Press Shift over ATITD window to continue.
 ]])
 
-  askForWindow(askText);
+askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/4/2014\n\nMAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap to next line.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. History will be recorded in FishLog.txt and stats in FishStats.txt. Most issues can be fixed by slightly adjusting/moving your chat screen! Press Shift over ATITD window to continue."
+
+  askForWindow(askText2);
   setOptions();
 
 
@@ -687,6 +733,7 @@ MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. P
 	lastLostLureType = "";
 	CastsTillTimerUpdate = 0;
 	lockLure = false;
+	setPause = false;
 ----------------------------------------
 
 	PlayersLures = SetupLureGroup();  -- Fetch the list of lures from pinned lures window
@@ -705,6 +752,13 @@ MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. P
 		end
 	
 	while 1 do
+
+		-- Loop, do nothing while Paused
+		while setPause do
+		checkBreak();
+		lsSleep(100);
+		end	
+
 		
 		checkBreak();
 		srReadScreen();
@@ -982,15 +1036,11 @@ MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. P
 					end
 				end
 			
-			checkBreak();
 			gui_refresh();
 			end
 			
-
-		checkBreak();
 		gui_refresh();
 		end
-	checkBreak();
 	gui_refresh();
 	end
 end
