@@ -654,19 +654,54 @@ function gui_refresh()
       error(quitMessage);
     end
 
-      lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);  -- Shrink the text boxes and text down
-
-	if LockLure then
-	LockLure = lsCheckBox(320, winsize[1]+110, 0,  0xffff40ff, " Lock Lure", LockLure);
+	if castcount <= 0 then
+	skipLureText = "Switching!";
+	skipLureTextColor = 0xffff40ff;
 	else
-	LockLure = lsCheckBox(320, winsize[1]+110, 0,  0xFFFFFFff, " Lock Lure", LockLure);
+	skipLureText = "Next Lure";
+	skipLureTextColor = 0xFFFFFFff;
 	end
 
-      lsSetCamera(0,0,lsScreenX*1.55,lsScreenY*1.55);  -- Shrink the text boxes and text down
+    if lsButtonText(lsScreenX + 60, lsScreenY + 150, 0, 110, skipLureTextColor,
+                    skipLureText	) then
+	castcount =  -1;
+    end
 
-	lsPrintWrapped(315, winsize[1]+150, 0, lsScreenX - 20, 0.75, 0.75, 0xffffffff, "Don't change lures,");
-	lsPrintWrapped(305, winsize[1]+170, 0, lsScreenX - 20, 0.7, 0.7, 0xffffffff, "until unchecked again.");
-      lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
+
+	if LockLure then
+	LockLureColor =  0xffff40ff;
+	else
+	LockLureColor = 0xFFFFFFff;
+	end
+
+      --lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);  -- Shrink the text boxes and text down
+
+	if LockLure then
+	LockLureText =  "Locked!";
+	else
+	LockLureText = "Lock Lure";
+	end
+
+
+    if lsButtonText(lsScreenX + 60, lsScreenY + 180, 0, 110, LockLureColor,
+                    LockLureText ) then
+	if LockLure then
+	LockLure =  false;
+	else
+	LockLure = true;
+	end
+
+    end
+	--if LockLure then
+	--LockLure = lsCheckBox(320, winsize[1]+130, 0,  0xffff40ff, " Lock Lure", LockLure);
+	--else
+	--LockLure = lsCheckBox(320, winsize[1]+130, 0,  0xFFFFFFff, " Lock Lure", LockLure);
+	--end
+
+      --lsSetCamera(0,0,lsScreenX*1.55,lsScreenY*1.55);  -- Shrink the text boxes and text down
+
+	--lsPrintWrapped(315, winsize[1]+170, 0, lsScreenX - 20, 0.75, 0.75, 0xffffffff, "Don't change lures,");
+      --lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
 
 
 
