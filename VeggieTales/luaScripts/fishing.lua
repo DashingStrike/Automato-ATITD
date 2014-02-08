@@ -114,7 +114,7 @@ function setOptions()
       lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
 
 		if setResume then
-		buttonName = "Set/Resume";
+		buttonName = "Set";
 		else
 		buttonName = "Start";
 		end
@@ -583,7 +583,7 @@ function gui_refresh()
 	CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
 
 	if startPos then
-	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xc0c0ffff, "Current Hour: " .. CurrentTime .. " | Location: " .. startPos[0] .. ", " .. startPos[1]);
+	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xc0c0ffff, "Current Hour: " .. CurrentTime .. "  |  Location: " .. startPos[0] .. ", " .. startPos[1]);
 	else
 	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xc0c0ffff, "Current Hour: " .. CurrentTime);
 	end
@@ -654,17 +654,17 @@ function gui_refresh()
       error(quitMessage);
     end
 
-	if castcount <= 0 then
-	skipLureText = "Switching!";
+	if skipLure then
+	skipLureText = "Skipping...";
 	skipLureTextColor = 0xffff40ff;
 	else
-	skipLureText = "Next Lure";
+	skipLureText = "Skip Lure";
 	skipLureTextColor = 0xFFFFFFff;
 	end
 
     if lsButtonText(lsScreenX + 60, lsScreenY + 150, 0, 110, skipLureTextColor,
                     skipLureText	) then
-	castcount =  -1;
+	skipLure = true;
     end
 
 
@@ -730,7 +730,7 @@ Fishing v1.31 (by Tutmault revised by Cegaiel)
 MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. Pin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. History will be recorded in FishLog.txt and stats in FishStats.txt. Most issues can be fixed by slightly adjusting/moving your chat screen! Press Shift over ATITD window to continue.
 ]])
 
-askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/4/2014\n\nMAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap to next line.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. History will be recorded in FishLog.txt and stats in FishStats.txt. Most issues can be fixed by slightly adjusting/moving your chat screen! Press Shift over ATITD window to continue."
+askText2 = "Fishing v1.31\n-- by Tutmault (Revised by Kasumi Ghia) - Revised by Cegaiel\n\nMAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap to next line.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. History will be recorded in FishLog.txt and stats in FishStats.txt. Most issues can be fixed by slightly adjusting/moving your chat screen! Press Shift over ATITD window to continue."
 
   askForWindow(askText2);
   setOptions();
@@ -769,6 +769,7 @@ askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/
 	CastsTillTimerUpdate = 0;
 	lockLure = false;
 	setPause = false;
+	skipLure = false;
 ----------------------------------------
 
 	PlayersLures = SetupLureGroup();  -- Fetch the list of lures from pinned lures window
@@ -824,7 +825,7 @@ askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/
 
 
 
-		elseif castcount == 0 or OK then  
+		elseif castcount == 0 or OK or skipLure then  
 			--Update counters
 			castcount = 1;
 			CurrentLureIndex = CurrentLureIndex +1;
@@ -851,6 +852,7 @@ askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/
 
 			--Switch Lures
 			UseLure();
+			skipLure = false;
 			GrandTotalLuresUsed = GrandTotalLuresUsed + 1;
 			
 			--update log
@@ -873,8 +875,7 @@ askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/
 			checkBreak();
 			srClickMouseNoMove(cast[0]+3,cast[1]+3);
 
-
-			while findchat(castcount - 1) == "lure"  or findchat(castcount - 1) == "alreadyfishing" do
+			while findchat(castcount - 1) == "lure" do
 				checkBreak();
 				lsSleep(100);
 			end
@@ -886,17 +887,20 @@ askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/
 
 
 
-
-
 			--Read Chat
 			ChatType = findchat();
 
 			lsSleep(200);
-
 			CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
 
 
-			if ChatType == "nobitlostlure" then
+			if ChatType == "alreadyfishing" then
+				castcount = castcount - 1;
+				GrandTotalCasts = GrandTotalCasts - 1;	
+				CastsTillTimerUpdate = CastsTillTimerUpdate - 1;
+
+
+			elseif ChatType == "nobitlostlure" then
 				--No fish bit. You also lost your lure.
 				GrandTotalLostLures = GrandTotalLostLures + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
@@ -933,11 +937,6 @@ askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/
 					if LogFails == true then
 					WriteFishLog("[" .. CurrentTime .. "] [" .. CurrentLure .. " (" .. LureType .. ")]\t" .. "You didn\'t catch anything." .. "\n");
 					end
-
-
-			elseif ChatType == "alreadyfishing" then
-				castcount = castcount - 1;
-				GrandTotalCasts = GrandTotalCasts - 1;	
 
 
 			elseif ChatType == "strangelostlure" then
@@ -1061,7 +1060,7 @@ askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/
 				
 				--gui_refresh();
 				
-				if SkipCommon == true then
+				if SkipCommon == true and LockLure == false then
 					--FishType = string.sub(Fish,string.find(Fish,",") + 1);
 					FishType = Sfish;
 					if FishType == "Abdju" or FishType == "Chromis" or FishType == "Catfish" or FishType == "Carp" or FishType == "Perch" or FishType == "Phagrus" or FishType == "Tilapia" then
@@ -1070,7 +1069,6 @@ askText2 = "Fishing v1.31\n-- by Tutmault revised by Cegaiel\n-- Last Update: 2/
 
 					end
 				end
-			
 			gui_refresh();
 			end
 			
