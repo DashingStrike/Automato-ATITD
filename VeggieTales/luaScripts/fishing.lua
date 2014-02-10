@@ -433,13 +433,13 @@ function findchat(line)
 		Coords = imgs[(#imgs) - line];
 
 		-- Wait for Main chat screen and alert user if its not showing
-		while not Coords or #imgs == 0 do
-			checkBreak();
-			srReadScreen();
-			imgs = findAllImages("Fishing/chatlog_reddots.png");
-			Coords = imgs[#imgs];
-			sleepWithStatus(100, "Looking for Main chat screen...");
-		end
+		--while not Coords or #imgs == 0 do
+			--checkBreak();
+			--srReadScreen();
+			--imgs = findAllImages("Fishing/chatlog_reddots.png");
+			--Coords = imgs[#imgs];
+			--sleepWithStatus(100, "Looking for Main chat screen...");
+		--end
 
 			--if not Coords then
 			--error 'Main chat tab is not showing or the chat window needs to be adjusted!'
@@ -493,7 +493,7 @@ function GetTime()
 
 	-- Move mouse to center of screen before Sending the Esc key, to get the Self Click menu. We dont want it self clicking near the edge of screen causing an error.
 	srSetMousePos(winsize[0]/2,winsize[1]/2);
-	lsSleep(100);  -- This delay is critical for any srSetMousePos. Without it, the mouse will not have time to actually move!
+	lsSleep(500);  -- This delay is critical for any srSetMousePos. Without it, the mouse will not have time to actually move!
 
 	srKeyEvent(string.char(27));  -- Send Esc Key
 	lsSleep(500);
@@ -655,10 +655,10 @@ function gui_refresh()
     end
 
 	if skipLure then
-	skipLureText = "Skipping...";
+	skipLureText = "Wait!";
 	skipLureTextColor = 0xffff40ff;
 	else
-	skipLureText = "Skip Lure";
+	skipLureText = "Next Lure";
 	skipLureTextColor = 0xFFFFFFff;
 	end
 
@@ -670,15 +670,9 @@ function gui_refresh()
 
 	if LockLure then
 	LockLureColor =  0xffff40ff;
-	else
-	LockLureColor = 0xFFFFFFff;
-	end
-
-      --lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);  -- Shrink the text boxes and text down
-
-	if LockLure then
 	LockLureText =  "Locked!";
 	else
+	LockLureColor = 0xFFFFFFff;
 	LockLureText = "Lock Lure";
 	end
 
@@ -692,17 +686,6 @@ function gui_refresh()
 	end
 
     end
-	--if LockLure then
-	--LockLure = lsCheckBox(320, winsize[1]+130, 0,  0xffff40ff, " Lock Lure", LockLure);
-	--else
-	--LockLure = lsCheckBox(320, winsize[1]+130, 0,  0xFFFFFFff, " Lock Lure", LockLure);
-	--end
-
-      --lsSetCamera(0,0,lsScreenX*1.55,lsScreenY*1.55);  -- Shrink the text boxes and text down
-
-	--lsPrintWrapped(315, winsize[1]+170, 0, lsScreenX - 20, 0.75, 0.75, 0xffffffff, "Don't change lures,");
-      --lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
-
 
 
 
@@ -846,6 +829,10 @@ askText2 = "Fishing v1.31\n-- by Tutmault (Revised by Kasumi Ghia) - Revised by 
 				--Refresh the Lure window, and reindex it, in case some were lost.
 				PlayersLures = SetupLureGroup();
 				CurrentLureIndex = 1;
+
+
+
+
 			end
 
 
@@ -875,9 +862,13 @@ askText2 = "Fishing v1.31\n-- by Tutmault (Revised by Kasumi Ghia) - Revised by 
 			checkBreak();
 			srClickMouseNoMove(cast[0]+3,cast[1]+3);
 
-			while findchat(castcount - 1) == "lure" do
+			castWait = 0;
+			--while findchat(castcount - 1) == "lure" do
+			 while castWait < 150 do
 				checkBreak();
 				lsSleep(100);
+				castWait = castWait + 1;
+				gui_refresh(); --Allows the use of the LockLure or skipLure buttons to update if pressed
 			end
 
 
@@ -889,6 +880,7 @@ askText2 = "Fishing v1.31\n-- by Tutmault (Revised by Kasumi Ghia) - Revised by 
 
 			--Read Chat
 			ChatType = findchat();
+LastChatType = ChatType;
 
 			lsSleep(200);
 			CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
