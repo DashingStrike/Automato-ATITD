@@ -1,4 +1,4 @@
--- acrobat_master.lua v1.0 by Cegaiel
+-- Acrobat Master v1.1 by Cegaiel
 --
 -- Immediately upon Starting:
 -- Searches your acro menu for all of your acro buttons. It will not include acro move names on the list, that is not inside of a button.
@@ -8,14 +8,12 @@
 -- While acroing:
 -- Click Next button while acroing to skip the current move and go to next one. Idea if your partner is following this move or enough facets have been taught.
 -- Click Menu button to stop acroing and go back to your list.
+-- Go back to Menu, click Refresh when you have a new partner, to refresh the buttons
 --
--- Note: If you learn a new move while acroing, you will need to Quit macro and restart, so it can find your new move button and include in the list.
--- Be aware that the acro timer finishes very quickly, while your acro animations, do not. If will queue up your animations.
-
 
 assert(loadfile("luaScripts/common.inc"))();
 
-askText = "Acrobat Master v1.0 by Cegaiel\n \nOpen acro window before continuing!\n \nYou can test without a partner by Self Click, Tests of Acrobat, Show Moves. You may move the acro window while its running. If you are acroing many people, you do not need to quit/restart macro between each person. Click Menu, when you are done acroing the current avatar, open new acro window (ask to acro). Make sure you drag the acro window so all the moves are showing. Your available moves will stay in memory. Press Shift over ATITD window to continue.";
+askText = "Acrobat Master v1.1 by Cegaiel\n \nOpen acro window before continuing!\n \nYou can test without a partner by Self Click, Tests of Acrobat, Show Moves. You may move the acro window while its running. If you are acroing many people, you do not need to quit/restart macro between each person. Click Menu, when you are done acroing the current avatar, open new acro window (ask to acro). Make sure you drag the acro window so all the moves are showing. Your available moves will stay in memory. Press Shift over ATITD window to continue.";
 
 
 moveImages = {
@@ -124,18 +122,20 @@ end
 
 
 function findMoves()
+  lsDoFrame();
   foundMovesName = {};
   foundMovesImage = {};
   foundMovesShortName = {};
     for i=1,#moveNames do
+	checkBreak();
       srReadScreen();
       local found = srFindImage("acro/" .. moveImages[i]);
 	  if found then
 	    foundMovesName[#foundMovesName + 1] = moveNames[i];
 	    foundMovesImage[#foundMovesImage + 1] = moveImages[i];
 	    foundMovesShortName[#foundMovesShortName + 1] = moveShortNames[i];
-      statusScreen("Searching acro buttons...\n \n" .. moveNames[i]);
-      lsSleep(100);
+      statusScreen("Scanning acro buttons...\n \nFound: " .. moveNames[i]);
+      lsSleep(25);
 	  end
     end
 
@@ -153,17 +153,23 @@ function doMoves()
 
 	for i=1,checkedBoxes do
 	    currentMove = currentMove + 1;
+	    currentClick = 0;
+   	    checkBreak();
 
 		for j=1,perMoves do
+		  checkBreak();
+
 	         if skip then
 	           skip = false;
 	           break;
                end
 
-		  local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[i] .. "\n[" .. j .. "/" .. perMoves .. "] Repeating\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.\n\nClick Skip to advance to next move on list (ie partner follows the move).";
+
+		  local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[i] .. "\n[" .. currentClick .. "/" .. perMoves .. "] Clicked\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.\n\nClick Skip to advance to next move on list (ie partner follows the move).";
 
 		  local acroTimer = true;
 			while acroTimer do
+
 			    if lsButtonText(10, lsScreenY - 30, z, 75, 0xffff80ff, "Menu") then
 				--lsDoFrame();
 				sleepWithStatus(1000, "Returning to Menu")
@@ -176,9 +182,14 @@ function doMoves()
 			  checkBreak();
 			  srReadScreen();
 			  acro = findAllImages("Acro.png");
-
 			    if #acro == 2 then
+				  if skip then
+				  statusScreen("Skipping to Next Move" .. GUI);
+					lsSleep(1500);
+					break;
+				  else
 				  statusScreen("Waiting on Acro timer" .. GUI);
+				  end
 			    else
 				  acroTimer = false;
 		     		  clickMove = srFindImage("acro/" .. checkedMovesImage[i]);
@@ -186,15 +197,19 @@ function doMoves()
 		    			if clickMove then
 					  srClickMouseNoMove(clickMove[0], clickMove[1]-1);
 					  --srSetMousePos(clickMove[0], clickMove[1]-1);
-					  status = "Clicking Move";
+					  status = checkedMovesName[i] .. " clicked";
+					  currentClick = currentClick + 1;
 					else
 					  status = "BUTTON NOT FOUND!\nSkipping: " .. checkedMovesName[i];
 					  skip = true;
-		    			end
-			    	  statusScreen(status .. GUI);
-				  lsSleep(1500);
-			   end --if #acro == 2
 
+		    			end
+
+	    	       local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[i] .. "\n[" .. currentClick .. "/" .. perMoves .. "] Clicked\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.\n\nClick Skip to advance to next move on list (ie partner follows the move).";
+
+ 	    	       statusScreen(status .. GUI);
+			lsSleep(1500);	
+			    end --if skip, acro=2
 		       end --while acroTimer
 		  end --for j
         end --for i
@@ -240,6 +255,7 @@ end
 
 
 function displayMoves()
+  lsDoFrame();
   local foo;
   local is_done = nil;
   local finishTime = lsGetTimer();
@@ -282,10 +298,7 @@ function displayMoves()
         lsPrint(55, y, z, 0.9, 0.9, 0xf0f0f0ff, "Times to repeat each move: " .. #foundMovesName .. " found");
 	end
 
-
     lsPrint(100, y+20, z, 0.8, 0.8, 0xf0f0f0ff, "Last Acro Session: " .. lastSession);
-
-
     y = y + 50;
     lsPrint(15, y, 0, 0.9, 0.9, 0x40ff40ff, "Check moves you want to perform:");
     y = y + 30;
@@ -299,29 +312,36 @@ function displayMoves()
           y = y + 20;
 	end
 
-    lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+    lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
 
-      if lsButtonText(lsScreenX - 110, lsScreenY - 120, z, 100, 0xFFFFFFff,
+      if lsButtonText(lsScreenX - 50, lsScreenY - 80, z, 100, 0xFFFFFFff,
                     "Start") and is_done then
 	    processCheckedBoxes();
       end
 
-      if lsButtonText(lsScreenX - 110, lsScreenY - 90, z, 100, 0xFFFFFFff,
-                    "Check") then
+
+      if lsButtonText(lsScreenX - 50, lsScreenY - 50, z, 100, 0xFFFFFFff,
+                    "Refresh") and is_done then
+	    findMoves();
+	    checkAllBoxes();
+      end
+
+      if lsButtonText(lsScreenX - 50, lsScreenY - 20, z, 100, 0xFFFFFFff,
+                    "Check") and is_done then
       checkAllBoxes();
       end
 
-      if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff,
-                    "Uncheck") then
+      if lsButtonText(lsScreenX - 50, lsScreenY + 10, z, 100, 0xFFFFFFff,
+                    "Uncheck") and is_done then
       uncheckAllBoxes();
       end
 
-      if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
+      if lsButtonText(lsScreenX - 50, lsScreenY + 40, z, 100, 0xFFFFFFff,
                     "End Script") then
         error "Clicked End script button";
       end
 
     lsDoFrame();
-    lsSleep(100);
+    lsSleep(50);
   end
 end
