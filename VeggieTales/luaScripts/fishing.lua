@@ -704,21 +704,10 @@ end
 
 
 
-
-
 function doit()
 
-askText = singleLine([[
-Fishing v1.31 (by Tutmault revised by Cegaiel)         
-MAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap. Pin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. History will be recorded in FishLog.txt and stats in FishStats.txt. Most issues can be fixed by slightly adjusting/moving your chat screen! Press Shift over ATITD window to continue.
-]])
-
-askText2 = "Fishing v1.31\n-- by Tutmault (Revised by Kasumi Ghia) - Revised by Cegaiel\n\nMAIN chat tab MUST be showing and wide enough so that each lines doesn't wrap to next line.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist. More detailed instructions are included inside the script as comments at top. History will be recorded in FishLog.txt and stats in FishStats.txt. Most issues can be fixed by slightly adjusting/moving your chat screen! Press Shift over ATITD window to continue."
-
-  askForWindow(askText2);
+  askForWindow("Fishing v1.31 (by Tutmault, revised by KasumiGhia, revised by Cegaiel)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! More detailed instructions are included inside the script as comments at top. History will be recorded in FishLog.txt and stats in FishStats.txt. Most issues can be fixed by slightly adjusting/moving your chat screen! Interface Options/Menu: \"Display available fishing lures in submenus\" MUST BE CHECKED!\n\nPress Shift over ATITD to continue.");
   setOptions();
-
-
 
 
 
