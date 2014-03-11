@@ -2,24 +2,25 @@
 -- 
 --
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+assert(loadfile("luaScripts/common.inc"))();
+
 
 xyWindowSize = srGetWindowSize();
 imgPump1 = "Pump1.png";
 imgEndRed = "Endurance-Red.png";
-delay_time = 500;
+delay_time = 1000;
 
 function doit()
-	askForWindow("Make sure the Skills window is visible.");
+	askForWindow("Make sure the Skills window is visible. Macro needs to see the word \"Endurance\" in the Skills window. Press Shift over ATITD window to continue.");
 	local end_red;
 	while 1 do
-		lsSleep(delay_time);
 		if end_red then
-			statusScreen("Waiting to pump... (Endurace is RED)");
+			sleepWithStatus(100,"Endurance is RED...");
 		else
-			statusScreen("Pumping... (make sure Skills window is visible)");
+			statusScreen("Pumping the Tower!\nMake sure Skills window is visible...");
+			lsSleep(delay_time);
 		end
+		checkBreak();
 		srReadScreen();
 		end_red = srFindImage(imgEndRed, 5000);
 		if not end_red then
@@ -27,7 +28,7 @@ function doit()
 			if dig then
 				srClickMouseNoMove(dig[0]+5, dig[1], 0);
 			else
-				error "Could not find Pump button";
+				error "Could not find Pump button!";
 			end
 		end
 	end

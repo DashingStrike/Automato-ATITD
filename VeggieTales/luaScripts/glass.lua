@@ -220,7 +220,7 @@ function doit()
 
 	-- testReorder();
 	
-	askForWindow("Pin your benches, put the cursor over the ATITD window, press Shift.  Then add charcoal until the benches are hot enough, melt your materials, an as it cools back down into useable temperature ranges, the macro will take over.  Please pause the macro when you need to use your mouse.");
+	askForWindow("Pin your benches, put the cursor over the ATITD window, press Shift.  Then add charcoal until the benches are hot enough, melt your materials, an as it cools back down into useable temperature ranges, the macro will take over.  Please pause the macro when you need to use your mouse. Self Click, Options, Interface Options, Notifications: \"Use the chat area instead of popups\" MUST be CHECKED!");
 	
 	srReadScreen();
 	
