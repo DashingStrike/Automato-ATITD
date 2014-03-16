@@ -19,12 +19,8 @@
 --The fishstats.txt file gets overwritten everytime your gui program window updates, so it doesn't 'grow' over time.
 
 
--- "Main chat tab is not showing" and other errors can usually be overcome by adjusting the main chat window size and restarting, assuming main chat is showing.
+-- Almost all issues can be corrected by slightly adjusting the main chat window size and restarting.
 -- And also verify the lines aren't wrapping to the next line (if so, adjust chat screen to be wider until it is no longer wrapping down to next line).
-
--- The very first thing this macro does is to Self Click, Special, What Time is it? option. This will then display the time in main chat window.
--- The macro then parses time displayed, in main chat tab, so it can use it while the macro runs (Log files and on screen display).
--- Thats what the mysterious Self Click is doing, its not a bug, it is suppose to do that and thats why, to fetch the time.
 
 
 	-- Note: These are currently refered to as Common Fish in the below 'SkipCommon' type of fishes (True or False), checkbox.
@@ -124,6 +120,7 @@ end
 function checkBreakSpecial()
     while setPause do
 	checkBreak();
+	lsSleep(100);
       statusScreen("Fishing macro paused...\nClick Unpause to resume!", 0xffffffff, false);
 		if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Unpause") or (lsAltHeld() and lsShiftHeld()) then
 		setPause = false;
@@ -145,19 +142,13 @@ function SetupLureGroup()
 	srReadScreen();
 	FindPin = srFindImage("UnPin.png");
 	if FindPin then
-	
-
-	--Click the pinup to refresh the lures window
-
-	srClickMouseNoMove(FindPin[0]+5,FindPin[1]+30);
-	lsSleep(100);
-
+	--Click the pinup to refresh the lures window (in case a lure was lost earlier, it would still be showing on menu
+	srClickMouseNoMove(FindPin[0]+20,FindPin[1]+20);
 	srReadScreen();
 
 
 		DownPin = srFindImageInRange("Fishing/Menu_DownArrow.png",FindPin[0]-10,FindPin[1],50,500);
 		if DownPin then
-			--Just Incase
 			UpArrow = srFindImageInRange("Fishing/Menu_UpArrow.png",FindPin[0]-10,FindPin[1],50,50);
 			if UpArrow then
 				srClickMouseNoMove(UpArrow[0]+5,UpArrow[1]+5);
@@ -180,7 +171,7 @@ function SetupLureGroup()
 		error("Didn\'t find Lures pinned window - Self Click->Skills, Fishing -> Use Lure, PIN THIS WINDOW!");
 	end
 	
-	
+
 	if  LastLure ~= nil then
 		--We have last lure, and arrows showing
 		ChangeLureMenu = LastLure;
@@ -354,7 +345,8 @@ function ChatReadFish()
 				
 	if  string.len(Sfish) < 1 then
 	-- This fish name and fishname.png file likely needs to be added to Fishing_Func.inc, under the CL_Fish array and the .png added to /Images/Fishing folder
-	error("Unknown Fish! PLEASE, Take screenshot (Alt+C) of main chat tab, share with Talescripts team!");
+	--error("Unknown Fish! PLEASE, Take screenshot (Alt+C) of main chat tab, share with Talescripts team!");
+	Sfish = "Error/Unknown"
 	end
 				
 	--Find Size
@@ -461,95 +453,6 @@ function findchat(line)
 		error(ChatType);
 
 	end
-	
-		
-	
-end
-
-
-
-function GetTime()
-
-	checkBreak();
-	lsDoFrame(); -- Blank the screen so next statusScreen messages isn't mixed/obscured with previous gui_refresh info on screen
-	lsSleep(10);
-	statusScreen("Fetching Time...");
-	--Reads time stamp using special->what time menu
-	winsize = srGetWindowSize();
-	
-	--Open Menu, Press the Esc key to open the Self Click menu
-
-	-- Move mouse to center of screen before Sending the Esc key, to get the Self Click menu. We dont want it self clicking near the edge of screen causing an error.
-	srSetMousePos(winsize[0]/2,winsize[1]/2);
-	lsSleep(500);  -- This delay is critical for any srSetMousePos. Without it, the mouse will not have time to actually move!
-
-	srKeyEvent(string.char(27));  -- Send Esc Key
-	lsSleep(500);
-	
-	--Find Special Menu
-	srReadScreen();
-	menu = srFindImage("Fishing/Menu_Special.png");
-	
-	if menu then
-		--Click it!
-		srClickMouseNoMove(menu[0]+3,menu[1]+3);
-		
-		lsSleep(500);
-		srReadScreen();
-
-		-- Look for the What Time Is It? option in menu
-		menu = srFindImage("Fishing/Menu_WhatTime.png");
-		if menu then
-			--Click it!
-			srClickMouseNoMove(menu[0]+3,menu[1]+3);
-			lsSleep(500);
-		end
-	end
-
-
-
-	checkBreak();	
-	srReadScreen();
-	imgs = findAllImages("Fishing/chatlog_reddots.png");
-	Coords = imgs[#imgs];
-
-
-		-- Wait for Main chat screen and alert user if its not showing
-		while not Coords or #imgs == 0 do
-			checkBreak();
-			srReadScreen();
-			imgs = findAllImages("Fishing/chatlog_reddots.png");
-			Coords = imgs[#imgs];
-			sleepWithStatus(100, "Looking for Main chat screen...");
-		end
-
-
-		-- Look for the ** red dots in main chat to see if they exist.	
-		--if #imgs == 0 then
-		--error 'Main chat tab is not showing or the chat window needs to be adjusted!'
-		--end
-
-
-	for i = #CL_Time, 1, -1 do
-		Stime = srFindImageInRange("Fishing/" .. CL_Time[i],Coords[0],Coords[1],400,25);
-		if Stime then
-			Hour = string.sub(CL_Time[i],string.find(CL_Time[i],"ime_")+4,string.len(CL_Time[i])-4);
-			
-			AM = srFindImageInRange("Fishing/Chatlog_Time_AM.png",Coords[0],Coords[1],400,25);
-			if AM then
-				CurrentTime=(Hour .. "AM");
-				return (Hour .. "AM");
-			else
-				PM = srFindImageInRange("Fishing/chatlog_time_PM.png",Coords[0],Coords[1],400,25);
-				if PM then
-					CurrentTime=(Hour .. "PM");
-					return (Hour .. "PM");
-				end
-			end
-
-		end
-	end
-	checkBreak();
 end
 
 
@@ -585,31 +488,23 @@ function findClockInfo()
 
 
   if anchor then
-    lsPrintln("anchor");
+    lsPrintln("Found Clock");
     window = getWindowBorders(anchor[0], anchor[1]);
     lines = findAllText(nil, window, NOPIN);
     for i=1,#lines do
-      lsPrintln("LINE " .. i .. " : " .. table.concat(lines[i], ","));
+      --lsPrintln("LINE " .. i .. " : " .. table.concat(lines[i], ","));
 
 	theDateTime = table.concat(lines[1], ",") -- Line 1 on the clock
 	theDateTime = string.sub(theDateTime,string.find(theDateTime,",") + 1);
 	regionCoords = table.concat(lines[2], ",") -- Line 2 on the clock
 	regionCoords = string.sub(regionCoords,string.find(regionCoords,",") + 1);
+	Coordinates = string.sub(regionCoords,string.find(regionCoords,":") + 2);
+	stripYear = string.sub(theDateTime,string.find(theDateTime,",") + 2);
+	Time = string.sub(stripYear,string.find(stripYear,",") + 2);
+	stripYear = "," .. stripYear
+	Date = string.sub(stripYear,string.find(stripYear,",") + 1, string.len(stripYear) - string.len(Time) - 2);
+      --lsPrintln(theDateTime .. "\nCoords: " .. Coordinates .. " (" .. string.len(Coordinates) .. ")\nTime: " .. Time .. " (" .. string.len(Time) .. ")\nDate: " .. Date .. " (" .. string.len(Date) .. ")");
 
-	Coordinates = string.sub(regionCoords,string.find(regionCoords,":") + 2	);
-	Time = string.sub(theDateTime,string.find(theDateTime,":") - 2);
-	Hour = string.sub(theDateTime,string.find(theDateTime,":") - 2, string.len(theDateTime) - 5);
-	AMPM = string.sub(theDateTime,string.find(theDateTime,":") + 3);
-
-	PreDate = string.sub(theDateTime,string.find(theDateTime,",") + 2);
-	PreDate = "," .. PreDate
-
-	if string.len(Hour) == 2 then
-	Date = string.sub(PreDate,string.find(PreDate,",") + 1, string.len(PreDate) - 8);
-	else
-	Date = string.sub(PreDate,string.find(PreDate,",") + 1, string.len(PreDate) - 9);
-	end
-      --sleepWithStatus(999, theDateTime .. "\n" .. regionCoords .. "\nCoords: " .. Coordinates .. "\nTime: " .. Time .. "\nHour: " .. Hour .. "\nAMPM: " .. AMPM .. "\nDate: " .. Date);
     end
   end
 end
@@ -632,8 +527,7 @@ function gui_refresh()
 	
 	CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
 
---	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xc0c0ffff, "Current Hour: " .. CurrentTime .. "  |  Location: " .. Coordinates);
-	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xc0c0ffff, Date .. " " .. Time .. " | " .. Coordinates);
+	lsPrintWrapped(10, 0, 0, lsScreenX - 20, 0.5, 0.5, 0xc0c0ffff, Date .. " | " .. Time .. " | " .. Coordinates);
 
 	nextLureChange = TotalCasts + 1 - castcount
 
@@ -759,7 +653,6 @@ function doit()
 	LastLureMenu="";
 	DownArrowLocs=nil;
 	PlayersLures={}; --Don't Edit, Holds Current Player Lures
-	CurrentTime=""; --Don't Edit, Holds Time Check Value
 
 	--strangecounter = 0;
 	castcount = 0;
@@ -782,13 +675,14 @@ function doit()
 ----------------------------------------
 
 	PlayersLures = SetupLureGroup();  -- Fetch the list of lures from pinned lures window
-	--CurrentTime = GetTime();  -- Fetch the time (Self Click, Special, What Time is it?
-	findClockInfo();
-	if not Hour then
-	error("Can not read clock. Make sure /clockloc window exists. Try adjusting the position slightly...");
-	else
-	CurrentTime = Hour .. AMPM
-	end
+
+	findClockInfo(); 
+		while not Time do
+		  checkBreak();
+		  findClockInfo();
+		  sleepWithStatus(100, "Can not find Clock!\n\nMove your clock slightly.\n\nMacro will resume once found...");
+		end
+
 
 	while 1 do
 
@@ -840,10 +734,6 @@ function doit()
 				--Refresh the Lure window, and reindex it, in case some were lost.
 				PlayersLures = SetupLureGroup();
 				CurrentLureIndex = 1;
-
-
-
-
 			end
 
 
@@ -874,10 +764,20 @@ function doit()
 
 			checkBreak();
 			srClickMouseNoMove(cast[0]+3,cast[1]+3);
-			findClockInfo();
+			findClockInfo(); 
+				while not Time do
+				  checkBreak();
+				  findClockInfo();
+				  sleepWithStatus(100, "Can not find Clock!\n\nMove your clock slightly.\n\nMacro will resume once found...");
+				end
 
 			castWait = 0;
+
 			--while findchat(castcount - 1) == "lure" do
+			-- The above (old method) caused unreliable operation. Fishing already messages, sometimes fishing too fast and other issues. 
+			-- The below is my work around causing a 15 second delay. I did not use lsSleep(1500) so that macro can be broken easily during the 15 seconds pause after casting.
+			-- By using a 15s delay, instead of watching the chat screen message to change, this solved that.  People speaking in main chat beside you could also break it.
+
 			 while castWait < 150 do
 				checkBreak();
 				lsSleep(100);
@@ -913,13 +813,13 @@ LastChatType = ChatType;
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "No fish bit. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "No fish bit. You also lost your lure." .. "\n");
 
 			elseif ChatType == "nobit" then
 				--No fishbit
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogFails == true then
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "No fish bit." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "No fish bit." .. "\n");
 					end
 
 
@@ -932,14 +832,14 @@ LastChatType = ChatType;
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You didn\'t catch anything. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You didn\'t catch anything. You also lost your lure." .. "\n");
 
 
 			elseif ChatType == "nocatch" then
 				--You didn't catch anything.
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogFails == true then
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You didn\'t catch anything." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You didn\'t catch anything." .. "\n");
 					end
 
 
@@ -953,7 +853,7 @@ LastChatType = ChatType;
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
 
 			--	if AlmostCaughtAttempts > 0 then
 			--		strangecounter = strangecounter +1;
@@ -966,7 +866,7 @@ LastChatType = ChatType;
 				GrandTotalStrange = GrandTotalStrange + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogStrangeUnusual == true then
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught a STRANGE fish, but your rod was just too clumbsy." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught a STRANGE fish, but your rod was just too clumbsy." .. "\n");
 					end
 
 			--	if AlmostCaughtAttempts > 0 then
@@ -987,7 +887,7 @@ LastChatType = ChatType;
 					castcount=0;
 
 					if LogStrangeUnusual == true then
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an UNUSUAL fish, but you were not quick enough. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an UNUSUAL fish, but you were not quick enough. You also lost your lure." .. "\n");
 					end
 
 
@@ -1003,7 +903,7 @@ LastChatType = ChatType;
 				GrandTotalUnusual = GrandTotalUnusual + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogStrangeUnusual == true then
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an UNUSUAL fish, but you were not quick enough." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an UNUSUAL fish, but you were not quick enough." .. "\n");
 					end
 
 			--	if AlmostCaughtAttempts > 0 then
@@ -1022,7 +922,7 @@ LastChatType = ChatType;
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an ODD fish, but were too late recognizing the bite. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an ODD fish, but were too late recognizing the bite. You also lost your lure." .. "\n");
 
 
 
@@ -1031,7 +931,7 @@ LastChatType = ChatType;
 				GrandTotalOdd = GrandTotalOdd + 1;
 				GrandTotalFailed = GrandTotalFailed + 1;
 					if LogOdd == true then
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an ODD fish, but were too late recognizing the bite." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an ODD fish, but were too late recognizing the bite." .. "\n");
 					end
 
 
@@ -1052,13 +952,13 @@ LastChatType = ChatType;
 					lastLostLure = CurrentLure;
 					lastLostLureType = LureType;
 					LostLure = 1;
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] " .. Fish .. " was caught. You also lost a lure.\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] " .. Fish .. " was caught. You also lost a lure.\n");
 					--Reset, skip to next lure
 					castcount=0;
 
 							
 				else
-					WriteFishLog("[" .. Date .. "," .. Time .. "] [" .. Coordinates .. "] " .. Fish .. " was caught.\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] " .. Fish .. " was caught.\n");
 
 				end
 				
@@ -1082,3 +982,4 @@ LastChatType = ChatType;
 	end
 end
 	
+
