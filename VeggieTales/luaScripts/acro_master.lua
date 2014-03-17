@@ -199,6 +199,7 @@ function doMoves()
 					  --srSetMousePos(clickMove[0], clickMove[1]-1);
 					  status = checkedMovesName[i] .. " clicked";
 					  currentClick = currentClick + 1;
+					  lsSleep(200);
 					else
 					  status = "BUTTON NOT FOUND!\nSkipping: " .. checkedMovesName[i];
 					  skip = true;
