@@ -7,7 +7,8 @@ assert(loadfile("luaScripts/common.inc"))();
 
 askText = singleLine([[
   Stat Clicker v1.1 (Revised by Tallow) --
-  Move mouse to a spot you want clicked and press shift.
+  This macro will watch your skills window and only click when you are not tired.
+  Move mouse to a spot you want clicked and press shift to repeat clicks when not tired.
 ]]);
 
 smallWarning = singleLine([[
