@@ -1590,6 +1590,7 @@ function prepareForWalking()
 		local camera = findText("Camera");
 		if(camera) then
 			clickText(camera);
+			lsSleep(150);
 			srReadScreen();
 			local cartCam = findText("Cartographer's Cam");
 			if(cartCam) then

@@ -7,8 +7,7 @@
 -- Repeat same pattern for Method 2, until no more windows are found, then exit.
 
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+assert(loadfile("luaScripts/common.inc"))();
 
 
 right_click = true;  -- Set this boolean to 'true' to do right clicks. If this was blank or false, then it would do left clicks.
@@ -26,6 +25,8 @@ function doit()
 
 	-- Pause, say something to user, wait for Shift key to continue. Give opportunity to put ATITD in focus, if needed.
 	askForWindow("This will right click all windows, attempting to close any pinned windows. This will also close/click any PopUp windows with 'OK' buttons. This will find any windows or popups that are hidden behind other windows, too. Press Shift key continue.");  
+	
+	statusScreen("Closing windows and popups...");
 
 	--Keep looking for and closing windows with Image1 until no more found, then move to Method 2.
 
@@ -51,6 +52,7 @@ lsSleep(200);
 	closeMethod3();
 	end
 
+error 'Closed all windows and popups.';
 
 
 end

@@ -680,7 +680,7 @@ function doit()
 		while not Time do
 		  checkBreak();
 		  findClockInfo();
-		  sleepWithStatus(100, "Can not find Clock!\n\nMove your clock slightly.\n\nMacro will resume once found...");
+		  sleepWithStatus(250, "Can not find Clock!\n\nMove your clock slightly.\n\nMacro will resume once found...\n\nIf you do not see a clock, type /clockloc in chat bar.");
 		end
 
 
@@ -764,13 +764,6 @@ function doit()
 
 			checkBreak();
 			srClickMouseNoMove(cast[0]+3,cast[1]+3);
-			findClockInfo(); 
-				while not Time do
-				  checkBreak();
-				  findClockInfo();
-				  sleepWithStatus(100, "Can not find Clock!\n\nMove your clock slightly.\n\nMacro will resume once found...");
-				end
-
 			castWait = 0;
 
 			--while findchat(castcount - 1) == "lure" do
@@ -789,7 +782,7 @@ function doit()
 			castcount = castcount + 1;
 			GrandTotalCasts = GrandTotalCasts + 1;	
 
-
+			findClockInfo(); 
 
 			--Read Chat
 			ChatType = findchat();
