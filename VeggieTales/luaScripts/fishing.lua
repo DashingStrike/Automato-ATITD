@@ -575,48 +575,53 @@ function gui_refresh()
 
       lsSetCamera(0,0,lsScreenX*1.6,lsScreenY*1.6);
 
-    if lsButtonText(lsScreenX + 60, lsScreenY - 10, 0, 110, 0xFFFFFFff,
+    if lsButtonText(lsScreenX + 40, lsScreenY - 10, 0, 130, 0xFFFFFFff,
                     "Options") then
 	setResume = true;
 	setOptions();
     end
 
 	if not setPause then
-    if lsButtonText(lsScreenX + 60, lsScreenY + 20, 0, 110, 0xFFFFFFff,
+    if lsButtonText(lsScreenX + 40, lsScreenY + 20, 0, 130, 0xFFFFFFff,
                     "Pause") then
 	setPause = true;
     end
 	end
 
-    if lsButtonText(lsScreenX + 60, lsScreenY + 50, 0, 110, 0xFFFFFFff,
+    if lsButtonText(lsScreenX + 40, lsScreenY + 50, 0, 130, 0xFFFFFFff,
                     "End Script") then
       error(quitMessage);
     end
 
 	if skipLure then
-	skipLureText = "Wait!";
+	skipLureText = "Skipping...";
 	skipLureTextColor = 0xffff40ff;
 	else
-	skipLureText = "Next Lure";
+	skipLureText = "Skip Lure";
 	skipLureTextColor = 0xFFFFFFff;
 	end
 
-    if lsButtonText(lsScreenX + 60, lsScreenY + 150, 0, 110, skipLureTextColor,
+    if lsButtonText(lsScreenX + 40, lsScreenY + 150, 0, 130, skipLureTextColor,
                     skipLureText	) then
+		if skipLure == false then
 	skipLure = true;
+		else
+	skipLure = false;
+		end
+
     end
 
 
 	if LockLure then
 	LockLureColor =  0xffff40ff;
-	LockLureText =  "Locked!";
+	LockLureText =  "Lure Locked!";
 	else
 	LockLureColor = 0xFFFFFFff;
 	LockLureText = "Lock Lure";
 	end
 
 
-    if lsButtonText(lsScreenX + 60, lsScreenY + 180, 0, 110, LockLureColor,
+    if lsButtonText(lsScreenX + 40, lsScreenY + 180, 0, 130, LockLureColor,
                     LockLureText ) then
 	if LockLure then
 	LockLure =  false;
@@ -741,6 +746,7 @@ function doit()
 			--Switch Lures
 			UseLure();
 			skipLure = false;
+			LockLure = false;
 			GrandTotalLuresUsed = GrandTotalLuresUsed + 1;
 			
 			--update log
