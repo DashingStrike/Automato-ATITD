@@ -45,6 +45,7 @@ function doit()
 
 	for i=w, 1, -1 do
 		for j=1, h do
+			checkBreak();
 			srClickMouse(ul_x + (i-1) * pxw / (w-1) - j*2,
 				ul_y + (j-1) * pxh / (h-1),
 				1);

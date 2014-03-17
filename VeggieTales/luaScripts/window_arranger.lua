@@ -2,8 +2,7 @@
 --
 --
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+assert(loadfile("luaScripts/common.inc"))();
 
 local window_w = 410;
 local window_h = 312;
@@ -14,14 +13,14 @@ local scale = 0.6;
 local z = 0.0; -- Only matters if there is overlapping elements on screen
 
 
-x0 = 10;
+x0 = 12;
 y0 = 50;
 y0_2 = 14;
 y0_2_threshold = window_w * 2; -- if x > this, use y0_2 instead, set large to ignore
 
 
 
-dropdown_values = {"Brick Rack", "Carpentry Shop", "Kettle", "Kiln", "Paper Press", "Pottery Wheel", "Rock Saw", "Thistle Custom", "Thistle New"};
+dropdown_values = {"Brick Rack", "Carpentry Shop", "Kettle", "Kiln", "Paper Press", "Pottery Wheel", "Rock Saw", "Thistle Custom (Grid)", "Thistle New (Cascade)"};
 
 
 
@@ -36,7 +35,7 @@ function GetLayout()
 	dx = 170;
 	dy = 115;
 	little_dx = 0;
-	num_high = 7;
+	num_high = 6;
 
 
 	elseif (dropdown_cur_value == 2) then
@@ -72,14 +71,14 @@ function GetLayout()
 	dx = 388;
 	dy = 100;
 	little_dx = 0;
-	num_high = 8;
+	num_high = 7;
 
 
 	elseif (dropdown_cur_value == 6) then
 	windowname = "Pottery Wheel";
 	-- pottery wheels
 	dx = 190;
-	dy = 150;
+	dy = 100;
 	little_dx = 0;
 	num_high = 7;
 
@@ -90,19 +89,20 @@ function GetLayout()
 	dx = 137;
 	dy = 125;
 	little_dx = 0;
-	num_high = 8;
+	num_high = 6;
 	window_w = 340;
 
 
+	-- Thistle Custom
 	elseif (dropdown_cur_value == 8) then
 	windowname = "Thistle Garden";
 	-- thistle_custom
-	dx = 420; -- when wrapping
-	dy = 190;
+	dx = 200; -- when wrapping
+	dy = 322;
 	little_dx = 0; -- for every window
-	num_high = 4;
+	num_high = 2;
 
-
+	-- Thisle New
 	elseif (dropdown_cur_value == 9) then
 	windowname = "Thistle Garden";
 	-- thistle_new
@@ -171,7 +171,7 @@ function drag(x0, y0, x1, y1)
 	srMouseDown(x0, y0, 0);
 	-- lsSleep(15);
 	srSetMousePos(x1, y1);
-	-- lsSleep(50);
+	-- lsSleep(150);
 	waitForChange();
 	srMouseUp(x0, y0, 0);
 	-- lsSleep(50);
@@ -215,6 +215,7 @@ end
 
 function doit()
 
+
 while not lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "Next") do
 
 
@@ -232,13 +233,9 @@ end
 
 GetLayout();
 
+	askForWindow("Pin any number of \'" .. windowname .. "\' windows. They will be arranged according to settings in window_arranger.lua. In order to maximize amount of windows, some might overlap others. This is OK. Just as long as it can read what it needs to click, then all is well. Press Shift over ATITD window to continue.");
 
-	askForWindow("Pin any number of \'" .. windowname .. "\' windows. They will be arranged according to settings in window_arranger.lua. Press Shift to continue.");
-
-	
-
-
-
+	statusScreen("Arranging windows...");
 	xyScreenSize = srGetWindowSize();
 	
 	-- refocusThistles();
