@@ -137,7 +137,7 @@ function SetupLureGroup()
 	LastLure = "";
 
 	lsDoFrame();
-	statusScreen("Fetching list of lures...");
+	statusScreen("Indexing Lures window...");
 	checkBreak()	
 	srReadScreen();
 	FindPin = srFindImage("UnPin.png");
@@ -575,58 +575,85 @@ function gui_refresh()
 
       lsSetCamera(0,0,lsScreenX*1.6,lsScreenY*1.6);
 
-    if lsButtonText(lsScreenX + 40, lsScreenY - 10, 0, 130, 0xFFFFFFff,
+    if lsButtonText(lsScreenX + 30, lsScreenY - 10, 0, 140, 0xFFFFFFff,
                     "Options") then
 	setResume = true;
 	setOptions();
     end
 
 	if not setPause then
-    if lsButtonText(lsScreenX + 40, lsScreenY + 20, 0, 130, 0xFFFFFFff,
+    if lsButtonText(lsScreenX + 30, lsScreenY + 20, 0, 140, 0xFFFFFFff,
                     "Pause") then
 	setPause = true;
     end
 	end
 
-    if lsButtonText(lsScreenX + 40, lsScreenY + 50, 0, 130, 0xFFFFFFff,
+    if lsButtonText(lsScreenX + 30, lsScreenY + 50, 0, 140, 0xFFFFFFff,
                     "End Script") then
       error(quitMessage);
     end
 
-	if skipLure then
-	skipLureText = "Skipping...";
-	skipLureTextColor = 0xffff40ff;
+
+	if previousLure then
+	previousLureText = "Queued...";
+	previousLureTextColor = 0xffff40ff;
 	else
-	skipLureText = "Skip Lure";
-	skipLureTextColor = 0xFFFFFFff;
+	previousLureText = "Previous Lure";
+	previousLureTextColor = 0xFFFFFFff;
 	end
 
-    if lsButtonText(lsScreenX + 40, lsScreenY + 150, 0, 130, skipLureTextColor,
-                    skipLureText	) then
-		if skipLure == false then
-	skipLure = true;
+    if lsButtonText(lsScreenX + 30, lsScreenY + 120, 0, 140, previousLureTextColor,
+                    previousLureText	) then
+		if previousLure or LockLure then
+	previousLure = false;
 		else
+	previousLure = true;
 	skipLure = false;
 		end
 
     end
 
 
+	if skipLure then
+	skipLureText = "Queued...";
+	skipLureTextColor = 0xffff40ff;
+	else
+	skipLureText = "Next Lure";
+	skipLureTextColor = 0xFFFFFFff;
+	end
+
+    if lsButtonText(lsScreenX + 30, lsScreenY + 150, 0, 140, skipLureTextColor,
+                    skipLureText	) then
+		if skipLure or LockLure then
+	skipLure = false;
+		else
+	skipLure = true;
+	previousLure = false;
+		end
+
+    end
+
+
+
+
 	if LockLure then
 	LockLureColor =  0xffff40ff;
-	LockLureText =  "Lure Locked!";
+	LockLureText =  "Unlock Lure!";
 	else
 	LockLureColor = 0xFFFFFFff;
 	LockLureText = "Lock Lure";
 	end
 
 
-    if lsButtonText(lsScreenX + 40, lsScreenY + 180, 0, 130, LockLureColor,
+    if lsButtonText(lsScreenX + 30, lsScreenY + 180, 0, 140, LockLureColor,
                     LockLureText ) then
+
 	if LockLure then
 	LockLure =  false;
 	else
 	LockLure = true;
+	previousLure = false;
+	skipLure = false;
 	end
 
     end
@@ -677,6 +704,7 @@ function doit()
 	lockLure = false;
 	setPause = false;
 	skipLure = false;
+	previousLure = false;
 ----------------------------------------
 
 	PlayersLures = SetupLureGroup();  -- Fetch the list of lures from pinned lures window
@@ -718,11 +746,17 @@ function doit()
 		
 
 
-			if castcount == 0 or OK or skipLure then  
+			if castcount == 0 or OK or skipLure or previousLure then  
 			--Update counters
 			castcount = 1;
-			CurrentLureIndex = CurrentLureIndex +1;
-
+				if previousLure then
+				CurrentLureIndex = CurrentLureIndex -1;
+					if CurrentLureIndex < 1 then
+					CurrentLureIndex = #PlayersLures;
+					end
+				else
+				CurrentLureIndex = CurrentLureIndex +1;
+				end
 
 
 				if OK then
@@ -746,6 +780,7 @@ function doit()
 			--Switch Lures
 			UseLure();
 			skipLure = false;
+			previousLure = false;
 			LockLure = false;
 			GrandTotalLuresUsed = GrandTotalLuresUsed + 1;
 			
@@ -781,7 +816,7 @@ function doit()
 				checkBreak();
 				lsSleep(100);
 				castWait = castWait + 1;
-				gui_refresh(); --Allows the use of the LockLure or skipLure buttons to update if pressed
+				gui_refresh(); --Allows the use of the LockLure or skipLure buttons to update display if pressed
 			end
 
 
@@ -792,7 +827,7 @@ function doit()
 
 			--Read Chat
 			ChatType = findchat();
-LastChatType = ChatType;
+			LastChatType = ChatType;
 
 			lsSleep(200);
 			CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
