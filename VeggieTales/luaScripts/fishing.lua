@@ -137,7 +137,7 @@ function SetupLureGroup()
 	LastLure = "";
 
 	lsDoFrame();
-	statusScreen("Indexing Lures window...");
+	statusScreen("Indexing Lures...");
 	checkBreak()	
 	srReadScreen();
 	FindPin = srFindImage("UnPin.png");
@@ -325,7 +325,7 @@ function ChatReadFish()
 			srReadScreen();
 			imgs = findAllImages("Fishing/chatlog_reddots.png");
 			Coords = imgs[#imgs];
-			sleepWithStatus(100, "Looking for Main chat screen...");
+			sleepWithStatus(100, "Looking for Main chat screen...\nClick Main Chat tab to continue!");
 		end
 
 	
@@ -403,7 +403,7 @@ function findchat(line)
 			srReadScreen();
 			imgs = findAllImages("Fishing/chatlog_reddots.png");
 			Coords = imgs[#imgs];
-			sleepWithStatus(100, "Looking for Main chat screen...");
+			sleepWithStatus(100, "Looking for Main chat screen...\nClick Main Chat tab to continue!");
 		end
 
 	gui_refresh();
@@ -418,7 +418,7 @@ function findchat(line)
 			--srReadScreen();
 			--imgs = findAllImages("Fishing/chatlog_reddots.png");
 			--Coords = imgs[#imgs];
-			--sleepWithStatus(100, "Looking for Main chat screen...");
+			--sleepWithStatus(100, "Looking for Main chat screen...\nClick Main Chat tab to continue!");
 		--end
 
 			--if not Coords then
@@ -543,6 +543,9 @@ function gui_refresh()
 
 	lsPrintWrapped(10, 13, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffc0ff, "Current Lure: " .. CurrentLureIndex .. " of " .. #PlayersLures .. "   " .. CurrentLure .. " (" .. LureType .. ")");
 	lsPrintWrapped(10, 27, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffffff, nextLureChangeMessage .. " casts remaining until next Lure change.");
+
+	lsPrintWrapped(10, 41, 0, lsScreenX - 20, 0.5, 0.5, 0xfcad86ff, "Cast Timer: " .. castWait/10);
+
 	lsPrintWrapped(10, 55, 0, lsScreenX - 20, 0.5, 0.5, 0xffffc0ff, "Last " .. last10 .. " Fish Caught:\n");
 
 	--Reset this string before showing last 10 fish below. Else the entries will multiply with entries from previous loops/call to this function
@@ -577,6 +580,8 @@ function gui_refresh()
 
     if lsButtonText(lsScreenX + 30, lsScreenY - 10, 0, 140, 0xFFFFFFff,
                     "Options") then
+
+
 	setResume = true;
 	setOptions();
     end
@@ -604,17 +609,18 @@ function gui_refresh()
 
     if lsButtonText(lsScreenX + 30, lsScreenY + 120, 0, 140, previousLureTextColor,
                     previousLureText	) then
-		if previousLure or LockLure then
+		if previousLure then
 	previousLure = false;
 		else
 	previousLure = true;
 	skipLure = false;
+	LockLure = false;
 		end
 
     end
 
 
-	if skipLure then
+	if skipLure or ((TotalCasts + 1 - castcount) == 1 and not LockLure) then
 	skipLureText = "Queued...";
 	skipLureTextColor = 0xffff40ff;
 	else
@@ -624,11 +630,12 @@ function gui_refresh()
 
     if lsButtonText(lsScreenX + 30, lsScreenY + 150, 0, 140, skipLureTextColor,
                     skipLureText	) then
-		if skipLure or LockLure then
+		if skipLure then
 	skipLure = false;
 		else
 	skipLure = true;
 	previousLure = false;
+	LockLure = false;
 		end
 
     end
@@ -648,13 +655,13 @@ function gui_refresh()
     if lsButtonText(lsScreenX + 30, lsScreenY + 180, 0, 140, LockLureColor,
                     LockLureText ) then
 
-	if LockLure then
+		if LockLure then
 	LockLure =  false;
-	else
+		else
 	LockLure = true;
 	previousLure = false;
 	skipLure = false;
-	end
+		end
 
     end
 
@@ -669,7 +676,7 @@ end
 
 function doit()
 
-  askForWindow("Fishing v1.4 (by Tutmault, revised by KasumiGhia, revised by Cegaiel)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nInterface Options/Menu: \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be resolved by slightly adjusting main chat window!");
+  askForWindow("Fishing v1.42 (by Tutmault, revised by KasumiGhia, revised by Cegaiel)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nInterface Options/Menu: \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be resolved by slightly adjusting main chat window!");
 
   setOptions();
 
@@ -705,6 +712,7 @@ function doit()
 	setPause = false;
 	skipLure = false;
 	previousLure = false;
+	castWait = 150;
 ----------------------------------------
 
 	PlayersLures = SetupLureGroup();  -- Fetch the list of lures from pinned lures window
@@ -805,17 +813,17 @@ function doit()
 
 			checkBreak();
 			srClickMouseNoMove(cast[0]+3,cast[1]+3);
-			castWait = 0;
+			castWait = 150;
 
 			--while findchat(castcount - 1) == "lure" do
 			-- The above (old method) caused unreliable operation. Fishing already messages, sometimes fishing too fast and other issues. 
 			-- The below is my work around causing a 15 second delay. I did not use lsSleep(1500) so that macro can be broken easily during the 15 seconds pause after casting.
-			-- By using a 15s delay, instead of watching the chat screen message to change, this solved that.  People speaking in main chat beside you could also break it.
-
-			 while castWait < 150 do
+			-- By using a 15s delay (castWait = 150 above in script, instead of watching the chat screen message to change, this solved that.  People speaking in main chat beside you could also break it.
+			
+			 while castWait > 0 do
 				checkBreak();
 				lsSleep(100);
-				castWait = castWait + 1;
+				castWait = castWait - 1;
 				gui_refresh(); --Allows the use of the LockLure or skipLure buttons to update display if pressed
 			end
 
@@ -1016,4 +1024,6 @@ function doit()
 	end
 end
 	
+
+
 
