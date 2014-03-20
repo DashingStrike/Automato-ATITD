@@ -16,6 +16,7 @@ askForWindow("Parses the game clock and extracts the info.\nInfo updates in real
 		  sleepWithStatus(750, "Can not find Clock!\n\nMake sure your clock and all 4 clock borders are visible.\n\nStart moving your clock around until macro resumes...");
 		end
       statusScreen(regionCoords .. "\nCoords: " .. Coordinates .. "\nTime: " .. Time .. "\nDate: " .. Date);
+      lsSleep(150);
 	end
 end
 
