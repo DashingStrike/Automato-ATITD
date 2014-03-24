@@ -28,7 +28,7 @@ function findStuff()
   checkBreak();
   lsDoFrame();
 
-  if lsButtonText(10, lsScreenY - 30, z, 100,
+  if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100,
 		  0xFFFFFFff, "Rotate") then
     windowIndex = windowIndex + 1;
   end

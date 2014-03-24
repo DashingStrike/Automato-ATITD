@@ -1201,12 +1201,15 @@ function prepareCamera()
     local pos = findText("Options...");
     if(pos) then
         offsetClick(pos,8);
+	  lsSleep(100);
         pos = findText("Camera");
         if(pos) then
             offsetClick(pos,8);
+	      lsSleep(100);
             pos = findText("Cartographer's Cam");
             if(pos) then
                 offsetClick(pos,8);
+		   lsSleep(100);
                 pos = srFindImage("ok-faint.png");
                 if(pos) then
                     offsetClick(pos);
@@ -1242,9 +1245,11 @@ function prepareOptions()
     local pos = findText("Options...");
     if(pos) then
         offsetClick(pos,8);
+	  lsSleep(100);
         pos = findText("One-Click");
         if(pos) then
             offsetClick(pos,8);
+	      lsSleep(100);
             pos = srFindImage(imgPlantWhereChecked,5000);
             if(not pos) then
                 pos = srFindImage(imgPlantWhereUnchecked,5000);
@@ -1255,11 +1260,12 @@ function prepareOptions()
             pos = srFindImage(imgHotkeysOnFlax,5000);
             if(pos) then
                 offsetClick(pos,4);
+	  	   lsSleep(100);
             end
             pos = srFindImage(imgOptionsX,5000);
             if(pos) then
                 srClickMouse(pos[0]+24,pos[1]+9); -- close options window
-                lsSleep(150);
+                lsSleep(500);
                 srReadScreen();
             end
         end
