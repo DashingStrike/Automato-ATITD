@@ -56,7 +56,7 @@ SkipCommon = false; --Skips to next lure if fish caught is a common (Choose True
 LogFails = false;  	-- Do you want to add Failed Catches to log file? 'Failed to catch anything' or 'No fish bit'. Note the log will still add an entry if you lost lure.
 LogStrangeUnusual = false; 	-- Do you want to add Strange and Unusual fish to the log file? Note the log will still add an entry if you lost lure.
 LogOdd = false; 	-- Do you want to add Odd fish to the log file? Note the log will still add an entry if you lost lure.
-
+muteSoundEffects = false;
 
 function setOptions()
   local is_done = false;
@@ -98,20 +98,24 @@ function setOptions()
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "  Increase if 'Already Fishing' messages occur.");
 
       lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);  -- Shrink the check boxes and text down
-	y = y + 100
+	y = y + 85;
+
+	muteSoundEffects = lsCheckBox(10, y, 10, 0xFFFFFFff, " Mute Sound Effects", muteSoundEffects);
+
+	y = y + 25;
 	SkipCommon = lsCheckBox(10, y, 10, 0xFFFFFFff, " Skip Common Fish", SkipCommon);
-	y = y + 25
+	y = y + 25;
 	lsPrintWrapped(10, y, 0, lsScreenX + 82, 0.7, 0.7, 0xffff80ff, "If Common Fish Caught, immediately switch to next lure:");
 	y = y + 18
 	lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.7, 0.7, 0xffffffff, "(Abdju, Chromis, Catfish, Carp, Perch, Phagrus, Tilapia)");
-	y = y + 50
+	y = y + 30;
 	lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.8, 0.8, 0x80ff80ff, "Log entries to FishLog.txt in VeggieTales folder.");
-	y = y + 25
+	y = y + 25;
 	LogFails = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Failed Catches", LogFails);
-	y = y + 25
-	LogStrangeUnusual = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Strange & Unusual Fish", LogStrangeUnusual);
-	y = y + 25
-	LogOdd = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Odd Fish", LogOdd);
+	y = y + 25;
+	LogStrangeUnusual = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Strange & Unusual Fish Seen ...", LogStrangeUnusual);
+	y = y + 25;
+	LogOdd = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Odd Fish Seen ...", LogOdd);
       lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
 
 		if setResume then
@@ -266,10 +270,10 @@ function UseLure()
 	lsDoFrame(); -- Blank the screen so next statusScreen messages isn't mixed/obscured with previous gui_refresh info on screen
 	lsSleep(10);
 		if LostLure == 0 then
-		statusScreen("Switching Lures ... (" .. QCurrentLure .. ")");
+		statusScreen("Switching Lures | " .. QCurrentLure);
 		else
-		sleepWithStatus(999,"Lost Lure! Switching Lures ...");
-		table.insert(lostlure_log, "[" .. lastLostLure .. " (" .. lastLostLureType .. ")]");
+		sleepWithStatus(999,"Lost Lure! | " .. lastLostLure .. "\nSwitching Lures | " .. QCurrentLure);
+		table.insert(lostlure_log, Time .. " | " .. lastLostLure .. " (" .. lastLostLureType .. ")");
 		LostLure = 0;
 		end
 
@@ -293,6 +297,7 @@ function UseLure()
 	srReadScreen();
 	lure = srFindImage("Fishing/" .. PlayersLures[QCurrentLureIndex]);
 	if lure then
+		lsPlaySound("fishingreel.wav");
 		srClickMouseNoMove(lure[0]+3,lure[1]+3);
 		lsSleep(200);
 		srReadScreen();
@@ -309,6 +314,8 @@ function UseLure()
 				break;
 			end
 		end
+
+
 	end
 end
 
@@ -320,6 +327,9 @@ function ChatReadFish()
 	imgs = findAllImages("fishing/chatlog_reddots.png");
 	Coords = imgs[#imgs];
 
+	if not Coords or #imgs == 0 then
+	lsPlaySound("timer.wav");
+	end
 
 		-- Wait for Main chat screen and alert user if its not showing
 		while not Coords or #imgs == 0 do
@@ -399,6 +409,9 @@ function findchat(line)
 	imgs = findAllImages("Fishing/chatlog_reddots.png");
 	Coords = imgs[#imgs];
 
+	if not Coords or #imgs == 0 then
+	lsPlaySound("timer.wav");
+	end
 		-- Wait for Main chat screen and alert user if its not showing
 		while not Coords or #imgs == 0 do
 			checkBreak();
@@ -575,10 +588,10 @@ function gui_refresh()
 	end
 
 	lsPrintWrapped(10, 26, 0, lsScreenX - 20, 0.5, 0.5, nextLureChangeMessageColor, nextLureChangeMessage);
-	lsPrintWrapped(10, 40, 0, lsScreenX - 20, 0.5, 0.5, 0xfcad86ff, "Cast Timer: " .. castWait/1000);
+	lsPrintWrapped(10, 41, 0, lsScreenX - 20, 0.5, 0.5, 0xfcad86ff, "Cast Timer: " .. castWait/1000);
       lsSetCamera(0,0,lsScreenX*1.6,lsScreenY*1.6);
 
-    if lsButtonText(160, 60, 0, 20, 0xffffffff,
+    if lsButtonText(160, 62, 0, 20, 0xffffffff,
                     "-"	) then
 	QCurrentLureIndex = QCurrentLureIndex - 1;
 		if QCurrentLureIndex < 1 then
@@ -588,7 +601,7 @@ function gui_refresh()
 
     end
 
-    if lsButtonText(187, 60, 0, 20, 0xffffffff,
+    if lsButtonText(187, 62, 0, 20, 0xffffffff,
                     "+"	) then
 	QCurrentLureIndex = QCurrentLureIndex + 1
 		if QCurrentLureIndex > #PlayersLures then
@@ -606,7 +619,7 @@ function gui_refresh()
 	lsPrintWrapped(209, 41, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffffff, QCurrentLure);
 	end
 
-	lsPrintWrapped(10, 57, 0, lsScreenX - 20, 0.5, 0.5, 0xffffc0ff, "Last " .. last10 .. " Fish Caught:\n");
+	lsPrintWrapped(10, 58, 0, lsScreenX - 20, 0.5, 0.5, 0xffffc0ff, "Last " .. last10 .. " Fish Caught:\n");
 	--Reset this string before showing last10 or allcaught fish below. Else the entries will multiply exponetially with entries from previous loops/call to this function
 	last10caught = "";
 	allcaught = "";
@@ -621,11 +634,11 @@ function gui_refresh()
 		end
 
 		for i = 1, #gui_log_fish2,1 do
-			allcaught = allcaught .. Time .. " " .. gui_log_fish2[i] .. "\n";
+			allcaught = allcaught .. gui_log_fish2[i] .. "\n";
 		end
 
 		for i = 1, #lostlure_log,1 do
-			lostlures = lostlures .. Time .. " " .. lostlure_log[i] .. "\n";
+			lostlures = lostlures .. lostlure_log[i] .. "\n";
 		end
 
 
@@ -641,7 +654,7 @@ function gui_refresh()
 		end
 
 	lsPrintWrapped(10, winsize[1]-61, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff, "-----------------------------");
-	lsPrintWrapped(10, winsize[1]-49, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffffff, "Casts: " .. GrandTotalCasts);
+	lsPrintWrapped(10, winsize[1]-49, 0, lsScreenX - 20, 0.5, 0.5, 0xc0ffffff, "Completed Casts: " .. GrandTotalCasts);
 	lsPrintWrapped(10, winsize[1]-37, 0, lsScreenX - 20, 0.5, 0.5, 0xff8080ff, "Failed Catches: " .. GrandTotalFailed);
 	lsPrintWrapped(10, winsize[1]-25, 0, lsScreenX - 20, 0.5, 0.5, 0xffffc0ff, "Fish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)");
 
@@ -724,7 +737,7 @@ function gui_refresh()
 	allcaught = "*** No fish caught! ***";
 	end
 
-	WriteFishStats("Note this report is overwritten every time the macro runs. The stats are for last fishing session only!\nYou can safely delete this file, but it will be created the next time macro runs!\n\n\nStart Time: " .. DateBegin .. " " .. TimeBegin .. "\nEnd Time: " .. Date .. " " .. Time .. "\nLast Location: " .. Coordinates .. "\n\n\nOdd Fish Seen: " .. GrandTotalOdd .. "\nUnusual Fish Seen: " .. GrandTotalUnusual .. "\nStrange Fish Seen: " .. GrandTotalStrange .. "\n---------------------\nLures Clicked: " .. GrandTotalLuresUsed .. "\nLures Lost: " .. GrandTotalLostLures .. " \n---------------------\nCasts: " .. GrandTotalCasts .. "\nFailed Catches: " .. GrandTotalFailed .. "\nFish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)\n---------------------\n\n\nAll fish caught this Session:\n".. allcaught .. "\n\nAll lures lost this Session:\n" .. lostlures);
+	WriteFishStats("Note this report is overwritten every time the macro runs. The stats are for last fishing session only!\nYou can safely delete this file, but it will be created the next time macro runs!\n\n\nStart Time: " .. DateBegin .. " @ " .. TimeBegin .. "\nEnd Time: " .. Date .. " @ " .. Time .. "\nLast Coordinates: " .. Coordinates .. "\n----------------------------------\nOdd Fish Seen: " .. GrandTotalOdd .. "\nUnusual Fish Seen: " .. GrandTotalUnusual .. "\nStrange Fish Seen: " .. GrandTotalStrange .. "\n----------------------------------\nLures Clicked: " .. GrandTotalLuresUsed .. "\nLures Lost: " .. GrandTotalLostLures .. " \n----------------------------------\nCasts: " .. GrandTotalCasts .. "\nFailed Catches: " .. GrandTotalFailed .. "\nFish Caught: " .. GrandTotalCaught .. " (" .. GrandTotaldb .. "db)\n----------------------------------\n\nAll lures lost this Session:\n\n" .. lostlures .. "\n\n\nAll fish caught this Session:\n\n".. allcaught);
 
 	lsDoFrame();
 	lsSleep(10);
@@ -734,7 +747,7 @@ end
 
 function doit()
 
-  askForWindow("Fishing v1.52 (by Tutmault, revised by KasumiGhia, revised by Cegaiel)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window!");
+  askForWindow("Fishing v1.53 (by Tutmault, revised by KasumiGhia, revised by Cegaiel)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window!");
 
 ----------------------------------------
 --Variables Used By Program -- Don't Edit Unless you know what you're doing!
@@ -794,9 +807,11 @@ function doit()
 		srReadScreen();
 		--cast = srFindImage("Fishing/Button_Fish.png");
 		cast = srFindImage("fishicon.png");
-
-
 		OK = srFindImage("OK.png");
+
+		if not cast then
+		lsPlaySound("timer.wav");
+		end
 
 		while not cast do
 		checkBreak();
@@ -823,7 +838,7 @@ function doit()
 
 
 			--Switch Lures
-			  if #PlayersLures > 1 or firstrun == 1 then --No need to switch Lures if we only have one, but we need to do it the very first time in case we have another lure equipped!
+			  if #PlayersLures > 1 or (firstrun == 1 and #PlayersLures > 0) then --No need to switch Lures if we only have one, but we need to do it the very first time in case we have another lure equipped!
 			UseLure();
 			GrandTotalLuresUsed = GrandTotalLuresUsed + 1;
 			  end
@@ -910,6 +925,7 @@ function doit()
 			if ChatType == "alreadyfishing" then
 				castcount = castcount - 1;
 				GrandTotalCasts = GrandTotalCasts - 1;	
+				lsPlaySound("cymbals.wav");
 
 
 			elseif ChatType == "nobitlostlure" then
@@ -921,7 +937,8 @@ function doit()
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "No fish bit. You also lost your lure." .. "\n");
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "No fish bit. You also lost your lure." .. "\n");				lsPlaySound("cymbals.wav");
+
 
 			elseif ChatType == "nobit" then
 				--No fishbit
@@ -941,6 +958,7 @@ function doit()
 					--Reset, skip to next lure
 					castcount=0;
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You didn\'t catch anything. You also lost your lure." .. "\n");
+				lsPlaySound("cymbals.wav");
 
 
 			elseif ChatType == "nocatch" then
@@ -963,6 +981,7 @@ function doit()
 					--Reset, skip to next lure
 					castcount=0;
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
+				lsPlaySound("cymbals.wav");
 
 			--	if AlmostCaughtAttempts > 0 then
 			--		strangecounter = strangecounter +1;
@@ -994,6 +1013,7 @@ function doit()
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
+				lsPlaySound("cymbals.wav");
 
 					if LogStrangeUnusual == true then
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an UNUSUAL fish, but you were not quick enough. You also lost your lure." .. "\n");
@@ -1052,9 +1072,12 @@ function doit()
 
 			elseif ChatType == "caught" or ChatType == "caughtlostlure" then
 				Fish = ChatReadFish();
-
-				table.insert(gui_log_fish,Fish);
-				table.insert(gui_log_fish2,Fish);
+				--Last 10 fish caught that displays on GUI
+				addlog = Time .. " | " .. Sfish .. " (" .. SNum .. "db) | " .. CurrentLure
+				table.insert(gui_log_fish, addlog);
+				-- All fish caught that displays in fishstats.txt
+				table.insert(gui_log_fish2, addlog);
+				lsPlaySound("trolley.wav");
 
 
 				if ChatType == "caughtlostlure" then
@@ -1065,6 +1088,7 @@ function doit()
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] " .. Fish .. " was caught. You also lost a lure.\n");
 					--Reset, skip to next lure
 					castcount=0;
+				lsPlaySound("cymbals.wav");
 
 							
 				else
