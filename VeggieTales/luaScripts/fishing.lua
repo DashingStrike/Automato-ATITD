@@ -297,7 +297,9 @@ function UseLure()
 	srReadScreen();
 	lure = srFindImage("Fishing/" .. PlayersLures[QCurrentLureIndex]);
 	if lure then
+		if not muteSoundEffects then
 		lsPlaySound("fishingreel.wav");
+		end
 		srClickMouseNoMove(lure[0]+3,lure[1]+3);
 		lsSleep(200);
 		srReadScreen();
@@ -328,7 +330,9 @@ function ChatReadFish()
 	Coords = imgs[#imgs];
 
 	if not Coords or #imgs == 0 then
-	lsPlaySound("timer.wav");
+		if not muteSoundEffects then
+		lsPlaySound("timer.wav");
+		end
 	end
 
 		-- Wait for Main chat screen and alert user if its not showing
@@ -410,7 +414,9 @@ function findchat(line)
 	Coords = imgs[#imgs];
 
 	if not Coords or #imgs == 0 then
-	lsPlaySound("timer.wav");
+		if not muteSoundEffects then
+		lsPlaySound("timer.wav");
+		end
 	end
 		-- Wait for Main chat screen and alert user if its not showing
 		while not Coords or #imgs == 0 do
@@ -810,7 +816,9 @@ function doit()
 		OK = srFindImage("OK.png");
 
 		if not cast then
-		lsPlaySound("timer.wav");
+			if not muteSoundEffects then
+			lsPlaySound("timer.wav");
+			end
 		end
 
 		while not cast do
@@ -925,8 +933,9 @@ function doit()
 			if ChatType == "alreadyfishing" then
 				castcount = castcount - 1;
 				GrandTotalCasts = GrandTotalCasts - 1;	
-				lsPlaySound("cymbals.wav");
-
+					if not muteSoundEffects then
+					lsPlaySound("cymbals.wav");
+					end
 
 			elseif ChatType == "nobitlostlure" then
 				--No fish bit. You also lost your lure.
@@ -937,8 +946,11 @@ function doit()
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "No fish bit. You also lost your lure." .. "\n");				lsPlaySound("cymbals.wav");
-
+					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "No fish bit. You also lost your lure." .. 
+"\n");				
+					if not muteSoundEffects then
+					lsPlaySound("cymbals.wav");
+					end
 
 			elseif ChatType == "nobit" then
 				--No fishbit
@@ -958,8 +970,9 @@ function doit()
 					--Reset, skip to next lure
 					castcount=0;
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You didn\'t catch anything. You also lost your lure." .. "\n");
-				lsPlaySound("cymbals.wav");
-
+					if not muteSoundEffects then
+					lsPlaySound("cymbals.wav");
+					end
 
 			elseif ChatType == "nocatch" then
 				--You didn't catch anything.
@@ -981,7 +994,9 @@ function doit()
 					--Reset, skip to next lure
 					castcount=0;
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
-				lsPlaySound("cymbals.wav");
+						if not muteSoundEffects then
+						lsPlaySound("cymbals.wav");
+						end
 
 			--	if AlmostCaughtAttempts > 0 then
 			--		strangecounter = strangecounter +1;
@@ -1013,7 +1028,9 @@ function doit()
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-				lsPlaySound("cymbals.wav");
+					if not muteSoundEffects then
+					lsPlaySound("cymbals.wav");
+					end
 
 					if LogStrangeUnusual == true then
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an UNUSUAL fish, but you were not quick enough. You also lost your lure." .. "\n");
@@ -1077,8 +1094,9 @@ function doit()
 				table.insert(gui_log_fish, addlog);
 				-- All fish caught that displays in fishstats.txt
 				table.insert(gui_log_fish2, addlog);
-				lsPlaySound("trolley.wav");
-
+					if not muteSoundEffects then
+					lsPlaySound("trolley.wav");
+					end
 
 				if ChatType == "caughtlostlure" then
 					GrandTotalLostLures = GrandTotalLostLures + 1;
@@ -1088,8 +1106,9 @@ function doit()
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] " .. Fish .. " was caught. You also lost a lure.\n");
 					--Reset, skip to next lure
 					castcount=0;
-				lsPlaySound("cymbals.wav");
-
+					if not muteSoundEffects then
+					lsPlaySound("cymbals.wav");
+					end
 							
 				else
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] " .. Fish .. " was caught.\n");
