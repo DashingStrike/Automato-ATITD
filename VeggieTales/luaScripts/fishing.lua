@@ -830,7 +830,7 @@ function doit()
 		sleepWithStatus(100, "Looking for Fishing icon ...");
 		end
 
-
+ 
 			if castcount == 0 or OK or skipLure then
 			--Update counters
 			castcount = 1;
@@ -844,11 +844,24 @@ function doit()
 				lastLostLure = CurrentLure;
 				lastLostLureType = LureType;
 				LostLure = 1;
+
+				--Refresh lure window to verify we did'nt run out of lures...
+					srReadScreen();
+					FindPin = srFindImage("UnPin.png");
+					if FindPin then
+					--Click the pinup to refresh the lures window (in case a lure was lost earlier, it would still be showing on menu).
+					srClickMouseNoMove(FindPin[0]+20,FindPin[1]+20);
+					lsSleep(100);
+					PlayersLures = SetupLureGroup();
+						if #PlayersLures == 0 then
+						  error 'Can\'t find any lures on the pinned window.';
+						end
+					end
 				end
 
 
 			--Switch Lures
-			  if #PlayersLures > 1 or (firstrun == 1 and #PlayersLures > 0) then --No need to switch Lures if we only have one, but we need to do it the very first time in case we have another lure equipped!
+			if #PlayersLures > 1 or (firstrun == 1 and #PlayersLures > 0) then --No need to switch Lures if we only have one, but we need to do it the very first time in case we have another lure equipped!
 			UseLure();
 			GrandTotalLuresUsed = GrandTotalLuresUsed + 1;
 			  end
