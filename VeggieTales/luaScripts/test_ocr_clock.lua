@@ -6,22 +6,22 @@ function doit()
 askForWindow("Parses the game clock and extracts the info.\nInfo updates in realtime while running!\nPress Shift over ATITD to continue.");
 
 	while 1 do
-	Time = nil;
 	checkBreak();
-	srReadScreen();
 	findClockInfo();
 		while not Time do
 		  checkBreak();
 		  findClockInfo();
-		  sleepWithStatus(750, "Can not find Clock!\n\nMake sure your clock and all 4 clock borders are visible.\n\nStart moving your clock around until macro resumes...");
+		  sleepWithStatus(1000, "Can not find Clock!\n\nMake sure your clock and all 4 clock borders are visible.\n\nStart moving your clock around until macro resumes...");
 		end
       statusScreen(regionCoords .. "\nCoords: " .. Coordinates .. "\nTime: " .. Time .. "\nDate: " .. Date);
-      lsSleep(150);
+      lsSleep(500);
 	end
 end
 
 
 function findClockInfo()
+Time = nil;
+	srReadScreen();
   anchor = findText("Year");
   if(not anchor) then
     anchor = findText("ar 1");
