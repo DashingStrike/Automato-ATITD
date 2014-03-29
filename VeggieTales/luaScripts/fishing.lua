@@ -59,9 +59,11 @@ LogOdd = false; 	-- Do you want to add Odd fish to the log file? Note the log wi
 muteSoundEffects = false;
 
 function setOptions()
+
   local is_done = false;
   local count = 1;
   while not is_done do
+  lsDoFrame();
 	checkBreak();
 	local y = 10;
 
@@ -132,8 +134,11 @@ function setOptions()
                     "End script") then
       error(quitMessage);
     end
-  lsDoFrame();
-  lsSleep(150);
+  --lsDoFrame();
+	if castWait > 0 then
+	castWait = castWait - 100;
+	end
+  lsSleep(100);
   end
   return count;
 end
@@ -141,9 +146,12 @@ end
 
 function checkBreakSpecial()
     while setPause do
+		if castWait > 0 then
+		castWait = castWait - 100 -- Finish the cast timer off, even while we are paused...
+		end
 	checkBreak();
-	lsSleep(150);
-      statusScreen("Fishing macro paused ...\nClick Unpause to resume!", 0xffffffff, false);
+	lsSleep(100);
+      statusScreen("Fishing macro is Paused!\n\nClick Unpause to resume ...\n\nCast Timer finishing up ... " .. castWait/1000, 0xffffffff, false);
 		if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Unpause") or (lsAltHeld() and lsShiftHeld()) then
 		setPause = false;
 		gui_refresh();
@@ -156,6 +164,10 @@ function SetupLureGroup()
 	TLures = {};
 	FirstLure="";
 	LastLure = "";
+
+		if not muteSoundEffects then
+		lsPlaySound("moneycounter.wav");
+		end
 
 	lsDoFrame();
 	statusScreen("Indexing Lures ...");
@@ -262,24 +274,38 @@ end
 
 function UseLure()
 
-	CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
-	QCurrentLure = string.sub(PlayersLures[QCurrentLureIndex],string.find(PlayersLures[QCurrentLureIndex],"_")+1,string.len(PlayersLures[QCurrentLureIndex])-4);
-
 	checkBreak();
+	if #TLures == 0 then
+		if not muteSoundEffects then
+		lsPlaySound("fail.wav");
+		end
+	error 'Can\'t find any lures on the pinned window. Did you run out of lures?'
+	end
+
+	CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
+	if #TLures == 1 then
+	QCurrentLure = CurrentLure;
+	QCurrentLureIndex = CurrentLureIndex;
+	else
+	QCurrentLure = string.sub(PlayersLures[QCurrentLureIndex],string.find(PlayersLures[QCurrentLureIndex],"_")+1,string.len(PlayersLures[QCurrentLureIndex])-4);
+	end
+
 	-- Uses lure according to CurrentLureIndex, which is used in PlayersLures which contains each lure the player has. 
 	lsDoFrame(); -- Blank the screen so next statusScreen messages isn't mixed/obscured with previous gui_refresh info on screen
 	lsSleep(10);
 		if LostLure == 0 then
 		statusScreen("Switching Lures | " .. QCurrentLure);
+		lsSleep(750);
 		else
-		sleepWithStatus(999,"Lost Lure! | " .. lastLostLure .. "\nSwitching Lures | " .. QCurrentLure);
+			if not muteSoundEffects then
+			lsPlaySound("boing.wav");
+			end
+		statusScreen("Lost Lure! | " .. lastLostLure .. "\nSwitching Lures | " .. QCurrentLure);
 		table.insert(lostlure_log, Time .. " | " .. lastLostLure .. " (" .. lastLostLureType .. ")");
 		LostLure = 0;
+		lsSleep(1000);
 		end
 
-	if #TLures == 0 then
-	error 'Can\'t find any lures on the pinned window. Did you run out of lures?'
-	end
 
 
 	srReadScreen();
@@ -297,9 +323,6 @@ function UseLure()
 	srReadScreen();
 	lure = srFindImage("Fishing/" .. PlayersLures[QCurrentLureIndex]);
 	if lure then
-		if not muteSoundEffects then
-		lsPlaySound("high_rise.wav");
-		end
 		srClickMouseNoMove(lure[0]+3,lure[1]+3);
 		lsSleep(200);
 		srReadScreen();
@@ -310,9 +333,11 @@ function UseLure()
 			if test then
 			LureType = Lure_Types[i];
 			LureType = string.sub(Lure_Types[i],string.find(Lure_Types[i],"Menu_")+5,string.len(Lure_Types[i])-4);
+				if not muteSoundEffects then
+				lsPlaySound("high_rise.wav");
+				end
 				--Click it!
 				srClickMouseNoMove(test[0]+3,test[1]+3);
-				--gui_refresh();
 				break;
 			end
 		end
@@ -478,6 +503,7 @@ end
 
 
 function findClockInfo()
+	srReadScreen();
   anchor = findText("Year");
   if(not anchor) then
     anchor = findText("ar 1");
@@ -555,6 +581,9 @@ function gui_refresh()
 	winsize = lsGetWindowSize();
 
 		if #PlayersLures == 0 then
+			if not muteSoundEffects then
+			lsPlaySound("fail.wav");
+			end
 		error 'Can\'t find any lures on the pinned window. Did you run out of lures?';
 		elseif #PlayersLures == 1 then
 		CurrentLureIndex = 1;
@@ -575,15 +604,15 @@ function gui_refresh()
 	nextLureChange = TotalCasts + 1 - castcount
 	nextLureChangeMessageColor = 0xc0ffffff;
 
-	if nextLureChange <= 0 and LockLure then
+	if nextLureChange-1 <= 0 and LockLure then
 	nextLureChangeMessageColor = 0xffff40ff;
-	nextLureChangeMessage = "LOCKED! 0 casts remaining until Next Lure change!";
+	nextLureChangeMessage = "LOCKED! 0 casts remaining ...";
 	elseif nextLureChange <= 0 and not LockLure then
 	nextLureChangeMessageColor = 0xffff40ff;
 	nextLureChangeMessage = "0 casts remaining until Next Lure change!";
 	elseif LockLure then
 	nextLureChangeMessageColor = 0xffff40ff;
-	nextLureChangeMessage = "LOCKED! Lures will NOT change!";
+	nextLureChangeMessage = "LOCKED! " .. nextLureChange-1 .. " casts remaining ...";
 	else
 	nextLureChangeMessage = nextLureChange-1 .. " casts remaining until Next Lure change!";
 	end
@@ -670,8 +699,7 @@ function gui_refresh()
 
     if lsButtonText(lsScreenX + 40, lsScreenY - 10, 0, 130, 0xFFFFFFff,
                     "Options") then
-
-
+	lsDoFrame();
 	setResume = true;
 	setOptions();
     end
@@ -795,12 +823,13 @@ function doit()
 
       setOptions();
 	PlayersLures = SetupLureGroup();  -- Fetch the list of lures from pinned lures window
+	lsSleep(1000); -- Just a delay to let the sound effect finishing playing, not needed...
 
 	findClockInfo(); 
 		while not Time do
 		  checkBreak();
 		  findClockInfo();
-		  sleepWithStatus(250, "Can not find Clock!\n\nMove your clock slightly.\n\nMacro will resume once found ...\n\nIf you do not see a clock, type /clockloc in chat bar.");
+		  sleepWithStatus(1000, "Can not find Clock!\n\nMove your clock slightly.\n\nMacro will resume once found ...\n\nIf you do not see a clock, type /clockloc in chat bar.");
 		end
 
 	while 1 do
@@ -836,42 +865,28 @@ function doit()
 			castcount = 1;
 
 				if OK then
-				-- We treat this as a lost lure if the OK box appears. This happens when you press fishing icon, but you equipped lure was lost (no lure equipped).
+				-- We treat this as a lost lure if the OK box appears. This happens when you press fishing icon, but no lure equipped (lost).
 				-- This is just in case, the macro failed to read "Lost Lure" message in main chat. Otherwise, when a lure was detected in main chat, it would have changed lures.
 				srClickMouseNoMove(OK[0]+5,OK[1]+3);  -- Close the popup OK button
 				GrandTotalLostLures = GrandTotalLostLures + 1;
-				--GrandTotalFailed = GrandTotalFailed + 1;
 				lastLostLure = CurrentLure;
 				lastLostLureType = LureType;
 				LostLure = 1;
-
-				--Refresh lure window to verify we did'nt run out of lures...
-					srReadScreen();
-					FindPin = srFindImage("UnPin.png");
-					if FindPin then
-					--Click the pinup to refresh the lures window (in case a lure was lost earlier, it would still be showing on menu).
-					srClickMouseNoMove(FindPin[0]+20,FindPin[1]+20);
-					lsSleep(100);
-					PlayersLures = SetupLureGroup();
-						if #PlayersLures == 0 then
-						  error 'Can\'t find any lures on the pinned window.';
-						end
-					end
 				end
 
 
 			--Switch Lures
-			if #PlayersLures > 1 or (firstrun == 1 and #PlayersLures > 0) then --No need to switch Lures if we only have one, but we need to do it the very first time in case we have another lure equipped!
+			  if #PlayersLures > 1 or firstrun == 1 or OK then
 			UseLure();
 			GrandTotalLuresUsed = GrandTotalLuresUsed + 1;
 			  end
 
 			skipLure = false;
-			if #PlayersLures > 1 then
+			  if #PlayersLures > 1 then
 			LockLure = false;
-			else
+			  else
 			LockLure = true;
-			end
+			  end
 
 			lsSleep(500);		
 			srReadScreen();
@@ -881,6 +896,7 @@ function doit()
 					srKeyEvent(string.char(27));  -- Send Esc Key to close the window
 					sleepWithStatus(500,"No " .. QCurrentLure .. " lures found!\nRefreshing lure list ...")
 					PlayersLures = SetupLureGroup();
+					lsSleep(1000); -- Just a delay to let the sound effect finishing playing, not needed...
 						if QCurrentLureIndex  > #PlayersLures or QCurrentLureIndex == 1 then
 							QCurrentLureIndex = 2;
 							CurrentLureIndex = 1;
@@ -899,7 +915,6 @@ function doit()
 
 			if QCurrentLureIndex  > #PlayersLures then
 				--Last Lure, Prepare to go to first lure in list ...
-				--PlayersLures = SetupLureGroup();
 				QCurrentLureIndex = 1;
 				CurrentLureIndex = #PlayersLures;
 			end
@@ -924,18 +939,28 @@ function doit()
 			checkBreak();
 			srClickMouseNoMove(cast[0]+3,cast[1]+3);
 			castWait = castWaitTimer;
+			lsSleep(100);
 
-			--while findchat(castcount - 1) == "lure" do
 
-					if not muteSoundEffects then
-					lsPlaySound("fishingreel.wav");
-					end
+			--Check for OK popup box
+			srReadScreen();
+			OK = srFindImage("OK.png");
+
+				---if not muteSoundEffects and not OK then
+				--lsPlaySound("fishingreel.wav");
+				--end
 			
-			 while castWait > 0 do
+			 while castWait > 0 and not OK do
 				checkBreak();
 				lsSleep(100);
 				castWait = castWait - 100;
 				gui_refresh();
+					--Cheesy attempt to delay reel sound by 3s; an attempt to align sound with the actual animation.
+					--Plus delay helps from drowning fish caught sound that might still be going on when clicking fishing/cast button ...		
+					if not muteSoundEffects and castWait/1000 == 12.5 then 
+					lsPlaySound("fishingreel.wav");
+					end
+
 			end
 
 			castcount = castcount + 1;
@@ -949,12 +974,9 @@ function doit()
 			lsSleep(200);
 			CurrentLure = string.sub(PlayersLures[CurrentLureIndex],string.find(PlayersLures[CurrentLureIndex],"_")+1,string.len(PlayersLures[CurrentLureIndex])-4);
 
-			if ChatType == "alreadyfishing" then
+			if ChatType == "alreadyfishing" or OK then
 				castcount = castcount - 1;
 				GrandTotalCasts = GrandTotalCasts - 1;	
-					if not muteSoundEffects then
-					lsPlaySound("glass_shatter.wav");
-					end
 
 			elseif ChatType == "nobitlostlure" then
 				--No fish bit. You also lost your lure.
@@ -967,9 +989,6 @@ function doit()
 					castcount=0;
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "No fish bit. You also lost your lure." .. 
 "\n");				
-					if not muteSoundEffects then
-					lsPlaySound("glass_shatter.wav");
-					end
 
 			elseif ChatType == "nobit" then
 				--No fishbit
@@ -989,9 +1008,6 @@ function doit()
 					--Reset, skip to next lure
 					castcount=0;
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You didn\'t catch anything. You also lost your lure." .. "\n");
-					if not muteSoundEffects then
-					lsPlaySound("glass_shatter.wav");
-					end
 
 			elseif ChatType == "nocatch" then
 				--You didn't catch anything.
@@ -1013,9 +1029,7 @@ function doit()
 					--Reset, skip to next lure
 					castcount=0;
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught a STRANGE fish, but your rod was just too clumbsy. You also lost your lure." .. "\n");
-						if not muteSoundEffects then
-						lsPlaySound("glass_shatter.wav");
-						end
+
 
 			--	if AlmostCaughtAttempts > 0 then
 			--		strangecounter = strangecounter +1;
@@ -1047,9 +1061,6 @@ function doit()
 				LostLure = 1;
 					--Reset, skip to next lure
 					castcount=0;
-					if not muteSoundEffects then
-					lsPlaySound("glass_shatter.wav");
-					end
 
 					if LogStrangeUnusual == true then
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. "You almost caught an UNUSUAL fish, but you were not quick enough. You also lost your lure." .. "\n");
@@ -1114,7 +1125,12 @@ function doit()
 				-- All fish caught that displays in fishstats.txt
 				table.insert(gui_log_fish2, addlog);
 					if not muteSoundEffects then
-					lsPlaySound("cheer.wav");
+						FishType = Sfish;
+						if FishType == "Abdju" or FishType == "Chromis" or FishType == "Catfish" or FishType == "Carp" or FishType == "Perch" or FishType == "Phagrus" or FishType == "Tilapia" then
+						lsPlaySound("cheer.wav");
+						else
+						lsPlaySound("applause.wav"); 
+						end
 					end
 
 				if ChatType == "caughtlostlure" then
@@ -1125,9 +1141,6 @@ function doit()
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] " .. Fish .. " was caught. You also lost a lure.\n");
 					--Reset, skip to next lure
 					castcount=0;
-					if not muteSoundEffects then
-					lsPlaySound("glass_shatter.wav");
-					end
 							
 				else
 					WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] " .. Fish .. " was caught.\n");
