@@ -13,6 +13,10 @@
 -- Instead post what you want to a Microphone board, the chat will show up as blue in main chat screen ;)
 -- Take a screenshot of that, instead of waiting to catch it manually.
 
+-- It is important that you note this... The order that the array appears, is the order it searches for a match.
+-- The first entry will always match before the last entry in the array. So the order listed can be its own "if .. then .." statement.
+
+
 Lures = {
 "Lure_AshCentipede.png",
 "Lure_BatMite.png",
@@ -215,12 +219,13 @@ CL_Time = {
 
 -- Don't change order, we want the best towards the top, worst at the bottom. We want to select the best lure first.
 Lure_Types = {
-"Lure_Menu_Petrified.png",
-"Lure_Menu_Mummified.png",
-"Lure_Menu_Hardened.png",
-"Lure_Menu_Preserved.png",
-"Lure_Menu_Glazed.png",
 "Lure_Menu_Fresh.png",
+"Lure_Menu_Glazed.png",
+"Lure_Menu_Preserved.png",
+"Lure_Menu_Hardened.png",
+"Lure_Menu_Mummified.png",
+"Lure_Menu_Petrified.png",
+"Lure_Menu_Glassified.png",
 };
 
 
