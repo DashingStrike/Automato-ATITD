@@ -69,9 +69,9 @@ function GetLayout()
 	windowname = "Paper Press";
 	-- paper presses
 	dx = 388;
-	dy = 100;
+	dy = 124;
 	little_dx = 0;
-	num_high = 7;
+	num_high = 6;
 
 
 	elseif (dropdown_cur_value == 6) then
