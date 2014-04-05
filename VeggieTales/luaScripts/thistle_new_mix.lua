@@ -331,7 +331,7 @@ function doit()
 
 
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Pin any number of thistle gardens, edit thistle_new_mix with recipe. This macro can run any combination of non upgraded and upgraded thistle gardens.");
+	askForWindow("Pin any number of thistle gardens, edit thistle_new_mix with recipe. Note the windows must be pinned CASCADED. Use window_manager.lua or window_arranger.lua to arrange the windows correctly. thistle_new_mix can handle up to about 32 gardens by using the cascade method. Use thistle_custom.lua if you are only running a few gardens. This macro is the same as thistle_new EXCEPT that it can run a mixture of upgraded and non-upgraded gardens (extra line of text).");
 	
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';

@@ -13,51 +13,51 @@ loadfile("luaScripts/ui_utils.inc")();
 
 per_click_delay = 0;
 
-local expected_gardens = 33;
+local expected_gardens = 20;
 local last_sun = 99;
 
 instructions = {
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,1,0,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,2,0,
-0,0,0,0,0,
-0,0,2,0,0,
-0,0,0,0,0,
-0,0,0,3,0,
-0,0,0,0,0,
-0,0,1,0,0,
-0,0,1,0,0,
-0,0,1,0,0,
-0,0,0,0,0,
-0,0,0,3,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,2,0,0,
-0,0,1,0,0,
-0,0,0,0,0,
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,1,0,0,
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,3,3,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,1,0,0,
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,0,0,
+0,0,0,1,33,
+0,0,0,0,33,
+0,0,1,0,33,
+0,0,0,0,33,
+0,0,0,0,33,
+0,0,0,0,33,
+0,0,0,1,33,
+0,0,0,1,33,
+0,0,1,0,33,
+0,0,0,0,33,
+0,0,0,1,33,
+0,0,0,2,33,
+0,0,2,0,33,
+0,0,0,0,99,
+0,0,1,1,33,
+0,0,0,0,33,
+0,0,0,1,33,
+0,0,1,0,33,
+0,0,0,0,33,
+0,0,0,1,99,
+0,0,0,0,33,
+0,0,0,3,33,
+0,0,0,1,33,
+0,0,0,0,33,
+0,0,0,1,33,
+0,0,4,0,33,
+0,0,0,1,33,
+0,0,1,0,33,
+0,0,0,0,33,
+0,0,0,0,33,
+0,0,0,0,33,
+0,0,0,0,99,
+0,0,0,0,99,
+0,0,1,1,33,
+0,0,0,1,99,
+0,0,1,0,99,
+0,0,0,3,99,
+0,0,1,0,99,
+0,0,0,0,99,
+0,0,1,0,99,
+0,0,0,0,99,
 };
 
 
@@ -289,7 +289,7 @@ end
 
 function doit()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe.");
+	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe. Note the windows must be pinned CASCADED. Use window_manager.lua or window_arranger.lua to arrange the windows correctly. thistle_new can handle up to about 32 gardens by using the cascade method (shuffles windows back and forth). Use thistle_custom.lua if you are only running a few gardens.");
 	
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';

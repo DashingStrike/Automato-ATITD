@@ -69,7 +69,7 @@ end
 
 function doit()
 	num_loops = promptNumber("How many passes ?", 100);
-	askForWindow("Open and pin your paper presses. If you have many use window_opener and window_arranger to open and arrange the menus.");
+	askForWindow("Open and pin your paper presses. The machines need to be completely empty (including presses can not have linen already lined). If you have many use window_opener and window_arranger to open and arrange the menus.");
 
 	srReadScreen();	
 
