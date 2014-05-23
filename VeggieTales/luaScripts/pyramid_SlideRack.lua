@@ -1,4 +1,4 @@
--- by Cegaiel - Easily dig up Limestone Blocks, automating the process of Tapping the Bore and Cracking the outline of multiple windows.
+-- by Cegaiel - Easily dig up Limestone Blocks, automating the process of Digging around the block and sliding a rolling rack on multiple windows.
 --
 -- 
 --
@@ -6,10 +6,10 @@
 assert(loadfile("luaScripts/common.inc"))();
 
 askText = singleLine([[
-  Pyramid - Bore Hole Assistant by Cegaiel --
-This macro assists in digging up limestone blocks. Pin up all 'Bore Hole' windows near you. The macro will always click 'Crack Outline' when it appears. Else it will keep clicking 'Tap Bore'. Windows will close automatically once the 'Crack Outline' has been clicked. Make sure no Bore windows overlap each other (Optionally, you can use Windows Manager on next screen, to assist). Make sure your skills window is visible. Macro DOES monitor if you're tired (Red stats). Press Shift over ATITD windows to continue.]])
+  Pyramid - Slide Rolling Rack Assistant by Cegaiel --
+This macro assists in digging around the limestone blocks. Pin up all 'Tooth Limestone Block Excavation' windows near you. The macro will always click 'Slide a rolling rack under the block' when it appears. Else it will keep clicking 'Dig around this block'. Windows will close automatically once the 'Slide a rolling rack' has been clicked. Make sure no windows overlap each other (Optionally, you can use Windows Manager on next screen, to assist). Make sure your skills window is visible. Macro DOES monitor if you're tired (Red stats). Press Shift over ATITD windows to continue.]])
 
-wmText = "Tap Ctrl on Bore Holes to open and pin.";
+wmText = "Tap Ctrl on Limestone Blocks to open/pin.";
 
 
 
@@ -33,8 +33,8 @@ function Main()
 	while 1 do
 		checkBreak();
 		srReadScreen();
-		crack = srFindImage("crack_outline.png");
-		tap = srFindImage("tap_bore_rod.png");
+		crack = srFindImage("slideRollingRack.png");
+		tap = srFindImage("DigAround.png");
 		OK = srFindImage("ok.png");
 		stats = srFindImage("AllStats-Black.png");
 		unpin = srFindImage("unpin.png");
@@ -47,7 +47,7 @@ function Main()
 
 			if crack then
 			srClickMouseNoMove(crack[0]+5,crack[1],1);
-			sleepWithStatus(500, "Cracking the Outline!");
+			sleepWithStatus(500, "Sliding roller under block!");
 
 
 			--Close the window that cracked
@@ -61,7 +61,7 @@ function Main()
 
 			if tap then
 			srClickMouseNoMove(tap[0]+5,tap[1],1);
-			sleepWithStatus(500, "Tapping the Bore Rod!");
+			sleepWithStatus(500, "Digging around the block!");
 			else
 
 
