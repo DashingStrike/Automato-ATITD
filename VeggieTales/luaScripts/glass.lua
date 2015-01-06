@@ -9,8 +9,9 @@ tol = 6500;
 -- It will make the first in the list if available, otherwise the next, etc
 -- This will let you make, e.g. Rods on your Soda Glass and Sheet Glass on your normal, by putting
 --   sheet glass before rods (on soda it'll fail to find sheet)
-item_priority = {"GlassMakeJar.png", "GlassMakeRod.png", "GlassMakePipe.png", "GlassMakeSheet.png", "GlassMakeWine.png", "GlassMakeBlade.png", "GlassMakeFineRod.png", "GlassMakeFinePipe.png"};
-
+item_priority = {"GlassMakeTorch.png","GlassMakeJar.png", "GlassMakeRod.png",
+                 "GlassMakePipe.png", "GlassMakeSheet.png", "GlassMakeWine.png",
+                 "GlassMakeBlade.png", "GlassMakeFineRod.png", "GlassMakeFinePipe.png"};
 -- max temperature in which we will contine heating it, wait until it gets below this before adding
 max_add_temp = 2300;
 -- minimum temperature in which we will start a new project, otherwise will reheat
