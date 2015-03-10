@@ -7,8 +7,8 @@
 -- Additional credits to Tallow for his assistance with stream lining code (embedded arrays and more efficient looping in function clickSequence() - v1.1) 
 --
 
-assert(loadfile("luaScripts/common.inc"))();
-assert(loadfile("luaScripts/settings.inc"))();
+dofile("common.inc");
+dofile("settings.inc");
 
 askText = singleLine([[
   Sand Mining v1.1 (by Cegaiel) --

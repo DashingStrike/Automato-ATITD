@@ -1,8 +1,8 @@
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 function doit()
-  local tree = loadNotes("luascripts/chem-cheap.txt");
+  local tree = loadNotes("scripts/chem-cheap.txt");
   browseMenu(tree);
 end
 

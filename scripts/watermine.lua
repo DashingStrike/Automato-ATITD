@@ -2,8 +2,8 @@
 -- 
 --
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 wind_time = 7920000;  	-- 2 hours teppy time
 check_time = 10000;   	-- 10 seconds

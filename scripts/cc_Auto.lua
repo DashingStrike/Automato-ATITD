@@ -3,7 +3,7 @@
 -- Automatically runs many charcoal hearths or ovens simultaneously.
 --
 
-assert(loadfile("luaScripts/cc_Assist.lua"))();
+dofile("cc_Assist.lua");
 
 askText = singleLine([[
   CC Auto v1.0 (by Tallow, based on Tak's cc program) --

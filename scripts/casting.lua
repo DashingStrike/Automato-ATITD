@@ -2,8 +2,8 @@
 -- You must manually add charcoal and fire up each casting box before pinning them up.
 -- Does not take items from casting box.
 
-assert(loadfile("luaScripts/common.inc"))();
-assert(loadfile("luaScripts/casting.inc"))();
+dofile("common.inc");
+dofile("casting.inc");
 
 askText = singleLine([[
   Casting Box v1.2 (by Bardoth Revised by Cegaiel) --

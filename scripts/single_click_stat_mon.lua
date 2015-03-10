@@ -3,7 +3,7 @@
 -- Repeatedly click a single location whenever stats are black.
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Stat Clicker v1.1 (Revised by Tallow) --

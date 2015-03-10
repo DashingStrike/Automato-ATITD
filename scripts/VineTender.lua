@@ -3,7 +3,7 @@
 -- Automatically tends vines based on the tends you specify.
 --
 
-loadfile("luaScripts/common.inc")( );
+dofile("common.inc");
 
 askText = "Vine Tender v1.2 (by Teti, revised by Tallow)\n \nAutomatically tends vineyards based on vine type.\n \nMake sure you are standing to where vineyard windows open away from VT screen. This version uses OCR and reads text, that will fail if the window (or borders) is even slightly blocked from view.";
 

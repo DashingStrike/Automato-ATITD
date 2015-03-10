@@ -3,8 +3,8 @@
 -- Run this
 -- Profit!
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 --local expected_windows = 40; -- Just to double check you don't have any extra windows open that it'll try to click on
 

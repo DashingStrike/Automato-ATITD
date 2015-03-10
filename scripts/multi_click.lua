@@ -2,8 +2,8 @@
 -- 
 --
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 per_click_delay = 10;
 
@@ -19,6 +19,7 @@ button_names = {
 
 up = nil;
 right_click = nil;
+second_prompt = nil;
 
 function doit()
 	askForWindow("Pin any number of windows, after selecting the window, you will be given a prompt of what kind of button to click on.");
@@ -29,11 +30,24 @@ function doit()
 		while not is_done do
 			local y = 10;
 			for i=1, #button_names do
+				if lsButtonImg(10+4, y+4, 1, 1, 0xFFFFFFff, button_names[i]) then
+					image_name = button_names[i];
+					is_done = 1;
+				end
 				if lsButtonText(10, y, 0, 250, 0xFFFFFFff, button_names[i]) then
 					image_name = button_names[i];
 					is_done = 1;
 				end
 				y = y + 26;
+			end
+			if second_prompt then
+				if lsButtonText(5, lsScreenY - 86, z, 150, 0xFFFFFFff, "Quick: NO") then
+					second_prompt = nil;
+				end
+			else
+				if lsButtonText(5, lsScreenY - 86, z, 150, 0xFFFFFFff, "Quick: YES") then
+					second_prompt = 1;
+				end
 			end
 			if right_click then
 				if lsButtonText(5, lsScreenY - 58, z, 150, 0xFFFFFFff, "Click: RIGHT") then
@@ -80,7 +94,9 @@ function doit()
 		end
 		
 
-	askForWindow("Press Shift to continue. If you get any \'not found\' errors, then click ATITD window and put it in focus first.");
+		if second_prompt then
+			askForWindow("Press Shift to continue. If you get any \'not found\' errors, then click ATITD window and put it in focus first.");
+		end
 
 		-- Find buttons and click them!
 		srReadScreen();

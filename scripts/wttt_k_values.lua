@@ -31,7 +31,7 @@ blueColors = { 	0X010130FF, 0x0706FDFF, 0x0707FEFF,
 
 treatedWater = {} ;
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Treated Boards v1.0 by Dunagain --

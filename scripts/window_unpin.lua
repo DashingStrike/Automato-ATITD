@@ -7,7 +7,7 @@
 -- Repeat same pattern for Method 2, until no more windows are found, then exit.
 
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 
 right_click = true;  -- Set this boolean to 'true' to do right clicks. If this was blank or false, then it would do left clicks.

@@ -1,4 +1,4 @@
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Menu Helper v1.0 by Tallow -- Brings up building menu(s) and finds/clicks user inputed text on each menu. 

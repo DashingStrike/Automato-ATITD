@@ -7,14 +7,14 @@
 -- May Work (depends on your computer): 6x6, 7x7
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   flax_stable v1.1 (by Jimbly, tweaked by Cegaiel and KasumiGhia,
   revised by Tallow) --
   Plant flax and harvest either flax or seeds. --
   Make sure the plant flax window is pinned and on the RIGHT side of
-  the screen. Your VeggieTales window should also be on the RIGHT side
+  the screen. Your Automato window should also be on the RIGHT side
   of the screen. You must be in F8F8 cam zoomed in.  You may need to
   F12 at low resolutions or hide your chat window (if it starts
   planting and fails to move downward, it probably clicked on your

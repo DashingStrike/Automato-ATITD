@@ -2,8 +2,8 @@
 -- You must manually add charcoal and fire up each forge before pinning them up.
 -- Does not take items from forge.
 
-assert(loadfile("luaScripts/common.inc"))();
-assert(loadfile("luaScripts/Forge.inc"))();
+dofile("common.inc");
+dofile("Forge.inc");
 
 askText = singleLine([[
   Forges v1.2 (by Bardoth Revised by Cegaiel) --

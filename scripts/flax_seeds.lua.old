@@ -12,9 +12,9 @@ harvest_seeds_time = 1300;
 rip_out_time = 100;
 rip_out_when_done = 1;
 
-loadfile("luaScripts/flax_common.inc")();
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("flax_common.inc");
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 -- Harvest seeds
 function doit()

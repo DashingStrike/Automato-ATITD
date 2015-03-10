@@ -3,9 +3,9 @@
 --
 --
 
-assert(loadfile("luaScripts/common.inc"))();
-assert(loadfile("luaScripts/stats.inc"))();
-assert(loadfile("luaScripts/ui_utils.inc"))();
+dofile("common.inc");
+dofile("stats.inc");
+dofile("ui_utils.inc");
 
 askText = singleLine([[
 Hackling Rake v1.0 (by tripps) --

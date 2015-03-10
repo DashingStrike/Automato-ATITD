@@ -2,7 +2,7 @@
 -- Include Library
 -- Contains Lures, Fish, and other images related to chat/fishing.
 --
--- Update these if adding new pictures to "veggietales/fishing/"
+-- Update these if adding new pictures to "Automato/games/ATITD/images/fishing/"
 -- Lures: Lure Picture (Use Lure Menu)
 -- Chat_Types: Unique message picture to identify chat line
 --CL_Fish: Picture of Fish Name from Main Chat
@@ -122,6 +122,7 @@ CL_Fish = {
 "Chatlog_Fish_Octopus.png",
 "Chatlog_Fish_OrangeSpongefish.png",
 "Chatlog_Fish_Otterfish.png",
+"Chatlog_Fish_Oxyrynchus.png",
 "Chatlog_Fish_PancakeLoach.png",
 "Chatlog_Fish_Perch.png",
 "Chatlog_Fish_Phagrus.png",

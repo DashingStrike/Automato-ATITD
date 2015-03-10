@@ -1,14 +1,14 @@
 
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
-loadfile("luaScripts/common.inc")();
-loadfile("luaScripts/serialize.inc")();
-loadfile("luaScripts/settings.inc")();
-loadfile("luaScripts/constants.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
+dofile("common.inc");
+dofile("serialize.inc");
+dofile("settings.inc");
+dofile("constants.inc");
 
 routeFileName = "gatherRoutes.txt";
-defaultRoutesFileName = "luaScripts\\defaultRoutes.inc";
+defaultRoutesFileName = "defaultRoutes.inc";
 routes = {};
 routeNames = {};
 

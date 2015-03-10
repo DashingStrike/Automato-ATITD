@@ -2,7 +2,7 @@
 --
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 local window_w = 410;
 local window_h = 312;

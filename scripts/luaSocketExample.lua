@@ -1,8 +1,8 @@
 
--- Requires VeggieTales version 1.78!
+-- Requires Automato version 1.78!
 
--- This script shows very simple and basic web access using the new LuaSocket version 3.0-rc1 module compiled into VeggieTales for us by Jimbly.
--- It also shows how you can add additional modules and use them in VeggieTales.  You will need to open the console to see any output at all.
+-- This script shows very simple and basic web access using the new LuaSocket version 3.0-rc1 module compiled into Automato for us by Jimbly.
+-- It also shows how you can add additional modules and use them in Automato.  You will need to open the console to see any output at all.
 -- There is a lot more you can do with LuaSockets than just a simple http request. Visit http://w3.impa.br/~diego/software/luasocket/ to learn
 -- more about this very handy module.
 
@@ -10,7 +10,7 @@ local http = require("socket.http"); -- load http functions.
 
 -- If you...
 -- goto http://dkolf.de/src/dkjson-lua.fsl/home/ and get the dkjson.lua script
--- and put it in the new VeggieTales\luaLibs\ folder that contains the new socket.lua file.
+-- and put it in the new Automato\luaLibs\ folder that contains the new socket.lua file.
 -- ... and uncomment the next line...  
 -- local json = require("dkjson"); -- If you put the dkjson.lua script in the right location, you'll now have access to this module.
 -- ... you can then uncomment the commented lines in doit() to see json decoding (one of the easier methods of encoding, transfering, and decoding data).

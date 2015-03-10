@@ -6,7 +6,7 @@
 -- Just make sure no windows overlap (The word 'This is'should be visibile in every window).
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
  Wheat Tenderer v1.1 (by Cegaiel) -- Pin 'Plant Wheat' window up for easy access later. Manually plant and pin up any number of wheat beds.

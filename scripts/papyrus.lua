@@ -1,5 +1,5 @@
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 local plant_papy = 1;
 local distance_scale = 0.11; -- only scans pixels within a distance of this percentage from the center of the screen

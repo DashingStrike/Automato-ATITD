@@ -2,7 +2,7 @@
 --
 -- Automatically run thistle gardens according to a recipe. Making
 -- thistles with a macro is extremely complicated. Read
--- ThistleReference.txt located in your VeggieTales folder.
+-- ThistleReference.txt located in your Automato folder.
 --
 -- To run:
 --  Copy a recipe from the output of the Thistle Mode and replace the
@@ -13,7 +13,7 @@ instructions = {
 -- You can now paste the recipe when starting up.
 };
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 tick_delay = 1;
 
@@ -21,7 +21,7 @@ askText = singleLine([[
   Thistle v1.1 (Revised by Tallow) --
   Automatically run thistle gardens according to a recipe. Making
   thistles with a macro is extremely complicated. Read
-  ThistleReference.txt located in your VeggieTales folder.
+  ThistleReference.txt located in your Automato folder.
   Make sure the VT window is in the TOP-RIGHT corner of the screen.
 ]]);
 

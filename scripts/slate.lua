@@ -1,6 +1,6 @@
 -- run and gather slate  v1.0 by Dunagain
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 
 numSlates = 0

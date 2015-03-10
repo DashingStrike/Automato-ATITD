@@ -1,4 +1,4 @@
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 
 function doit()

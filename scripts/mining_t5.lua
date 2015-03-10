@@ -1,7 +1,7 @@
 -- TODO: Change color of stones who have been assigned the current trait
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 function closestMine(pos)
 	local ret = 1;

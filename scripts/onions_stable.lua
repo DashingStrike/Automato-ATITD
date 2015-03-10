@@ -1,11 +1,11 @@
-assert(loadfile("luaScripts/Flax_stable.lua"))();
+dofile("Flax_stable.lua");
 
 askText = singleLine([[
   onions_stable v1.0 (by Tallow and Cegaiel) --
   Plant onions and harvest them. --
   Make sure the plant onions window and barrel/aqueduct is pinned and
   on the RIGHT side of the screen. Select the skills tab. Your
-  VeggieTales window should also be on the RIGHT side of the
+  Automato window should also be on the RIGHT side of the
   screen. You must be in F8F8 cam zoomed in.  You may need to F12 at
   low resolutions or hide your chat window (if it starts planting and
   fails to move downward, it probably clicked on your chat

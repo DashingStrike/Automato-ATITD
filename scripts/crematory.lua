@@ -4,7 +4,7 @@
 -- configuration on its own and loads/unloads materials.
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Crematory v1.2 (by Tallow) --

@@ -2,8 +2,8 @@
 -- Simply looks for "dig deeper" and a red "endurance" timer
 --
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 xyWindowSize = srGetWindowSize();
 imgWind1 = "BarrelGrinderWind1.png";

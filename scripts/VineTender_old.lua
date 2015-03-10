@@ -3,7 +3,7 @@
 -- Automatically tends vines based on the tends you specify.
 --
 
-loadfile("luaScripts/common.inc")( );
+dofile("common.inc");
 
 askText = singleLine([[
   Vine Tender v1.1 (by Teti, revised by Tallow) --

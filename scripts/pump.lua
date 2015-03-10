@@ -2,7 +2,7 @@
 -- 
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 delay = 100;
 pumpcount = 0;

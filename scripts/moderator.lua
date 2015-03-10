@@ -1,7 +1,7 @@
 -- Moderator monitor
 -- Alerts a moderator when a post is pending approval
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 
 askText = singleLine([[

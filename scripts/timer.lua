@@ -5,8 +5,8 @@
 -- 
 --
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 delay_time = 60*2.2*1000;
 

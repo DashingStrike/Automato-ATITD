@@ -4,9 +4,9 @@
 grid_w = 5;
 grid_h = 5;
 
-loadfile("luaScripts/flax_common.inc")();
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("flax_common.inc");
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 -- Just testing spiral algorithm, ignore this...
 function spiraltest()

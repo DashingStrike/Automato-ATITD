@@ -9,17 +9,17 @@
 -- May Work (depends on your computer): 6x6, 7x7
 --
 
-assert(loadfile("luaScripts/ui_utils.inc"))();
-assert(loadfile("luaScripts/common.inc"))();
-assert(loadfile("luaScripts/settings.inc"))();
-assert(loadfile("luaScripts/constants.inc"))();
-assert(loadfile("luaScripts/screen_reader_common.inc"))();
+dofile("ui_utils.inc");
+dofile("common.inc");
+dofile("settings.inc");
+dofile("constants.inc");
+dofile("screen_reader_common.inc");
 
 askText = singleLine([[
   flax_auto v1.0 (by Jimbly, tweaked by Cegaiel and KasumiGhia,
   revised by Tallow, revised by Tripps) --
   Make sure the plant flax window is pinned and on the RIGHT side of
-  the screen. Your VeggieTales window should also be on the RIGHT side
+  the screen. Your Automato window should also be on the RIGHT side
   of the screen. You may need to F12 at low resolutions or hide your 
   chat window (if it starts planting and fails to move, it probably 
   clicked on your chat window). Will plant grid NE of current 

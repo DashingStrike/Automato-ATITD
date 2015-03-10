@@ -4,7 +4,7 @@
 -- ad-hoc macros.
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Simon v1.1 (by Tallow) --

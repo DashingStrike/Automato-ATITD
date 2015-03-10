@@ -5,9 +5,9 @@
 -- It always walks in the direction mentioned first on the button.
 -- Walking pattern may drift due to lag. Manual correction may be needed from time to time.
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
-loadfile("luaScripts/flax_common.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
+dofile("flax_common.inc");
 
 move_delay = 500;
 per_click_delay = 10;

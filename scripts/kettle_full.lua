@@ -3,7 +3,7 @@
 -- Automatically runs many kettles, stoking as necessary.
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Kettles v1.1 (by Bardoth, revised by Tallow) --

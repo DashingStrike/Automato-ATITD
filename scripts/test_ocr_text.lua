@@ -1,4 +1,4 @@
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 function doit()
   askForWindow("Test to find text in regions (windows) such as Clock Window, Friends window and building windows. Press Shift over ATITD window.");

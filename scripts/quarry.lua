@@ -7,8 +7,8 @@ do_click_refresh = 1;
 do_click_refresh_when_end_red = 1;
 prompt_before_working = nil;
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 xyWindowSize = srGetWindowSize();
 delay_time = 100;

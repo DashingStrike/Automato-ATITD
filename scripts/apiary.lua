@@ -5,7 +5,7 @@
 -- Make sure chat is minimized!
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Apiary Checker v1.0 by Cegaiel --

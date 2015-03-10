@@ -3,7 +3,7 @@
 -- Automatically maintain the temperature on an alembic at a given point.
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 --pot = makePoint(255, 239);
 flow = makePoint(21, 326+9);

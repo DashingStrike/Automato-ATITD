@@ -8,9 +8,9 @@ watered = {};
 loop_count = 0;
 skip_water = 0;
 
-loadfile("luaScripts/Flax_common.inc")();
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("Flax_common.inc");
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 
 function promptBarleyNumbers(is_plant)

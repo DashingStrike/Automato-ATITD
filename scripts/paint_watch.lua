@@ -26,9 +26,9 @@ paint_colourG = { 64,  113, 97,  64,  96,  240, 16,  81,  16,  48, 194  };
 paint_colourB = { 145, 33,  33,  64,  48,  224, 24,  97,  32,  33, 194  };
 catalyst1 = 12;
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
-loadfile("luascripts/common.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
+dofile("common.inc");
 
 button_names = {
 "CabbageJ","Carrot","Clay","DeadTongue","ToadSkin","EarthLight","RedSand",

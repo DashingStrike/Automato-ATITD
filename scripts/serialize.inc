@@ -10,7 +10,7 @@ function serializeExample(filename)
 end
 
 function serialize(o, filename)
-	local outputFile = io.open(filename,"w");
+	local outputFile = io.open("scripts/" .. filename,"w");
 	outputFile:write("return\n");
 	serializeInternal(o,outputFile);
 	outputFile:close();

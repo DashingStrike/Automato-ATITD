@@ -3,7 +3,7 @@
 --
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
 Hackling Rake v1.0 (by Bardoth - Revised by Cegaiel) --

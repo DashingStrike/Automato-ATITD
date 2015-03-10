@@ -1,7 +1,7 @@
 
 
-assert(loadfile("luaScripts/common.inc"))();
-assert(loadfile("luaScripts/screen_reader_common.inc"))();
+dofile("common.inc");
+dofile("screen_reader_common.inc");
 
 
 

@@ -67,9 +67,9 @@ LogOdd = true; 	-- Do you want to add Odd fish to the log file? Note the log wil
 
 
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
-loadfile("luaScripts/Fishing_Func.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
+dofile("Fishing_Func.inc");
 
 
 

@@ -4,7 +4,7 @@
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Ore Mining v1.4 (by Cegaiel) --

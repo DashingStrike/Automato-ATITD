@@ -11,7 +11,7 @@
 -- Go back to Menu, click Refresh when you have a new partner, to refresh the buttons
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = "Acrobat Master v1.1 by Cegaiel\n \nOpen acro window before continuing!\n \nYou can test without a partner by Self Click, Tests of Acrobat, Show Moves. You may move the acro window while its running. If you are acroing many people, you do not need to quit/restart macro between each person. Click Menu, when you are done acroing the current avatar, open new acro window (ask to acro). Make sure you drag the acro window so all the moves are showing. Your available moves will stay in memory. Press Shift over ATITD window to continue.";
 

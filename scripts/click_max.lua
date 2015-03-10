@@ -2,7 +2,7 @@
 -- 
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 function doit()
 	askForWindow('Searches for and clicks Max button until stopped.\n \nGreat for filling grass hammocks, loading distaffs, dropping many itmes, etc quickly.\n \nNot so good for dividing straw amongst many camel pens.\n \nPress Shift over ATITD window to continue.');

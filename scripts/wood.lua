@@ -2,8 +2,8 @@
 -- 
 --
 
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 per_tree_delay_time = 5000;
 total_delay_time = 80000;

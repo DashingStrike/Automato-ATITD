@@ -1,4 +1,4 @@
-assert(loadfile("luaScripts/chem_notepad.lua"))();
+dofile("chem_notepad.lua");
 
 cheapRecipes = nil;
 allRecipes = nil;
@@ -13,8 +13,8 @@ local properties = {"Aromatic", "Astringent", "Bitter", "Salty",
 local props = {"Ar", "As", "Bi", "Sa", "So", "Sp", "Sw", "To"};
 
 function doit()
-  cheapRecipes = loadNotes("luascripts/chem-cheap.txt");
-  allRecipes = loadNotes("luascripts/chem-all.txt");
+  cheapRecipes = loadNotes("scripts/chem-cheap.txt");
+  allRecipes = loadNotes("scripts/chem-all.txt");
   askForWindow("Setup for this macro is complicated. To view detailed instructions:\n \nClick Exit button, Open Folder button\nDouble click 'chem_extract_auto.txt'.\n \nClick Shift over ATITD window to continue.");
   while true do
     tryAllTypes();

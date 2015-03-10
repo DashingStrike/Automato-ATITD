@@ -37,8 +37,8 @@
 
 
 
-assert(loadfile("luaScripts/common.inc"))();
-assert(loadfile("luaScripts/Fishing_Func.inc"))();
+dofile("common.inc");
+dofile("Fishing_Func.inc");
 
 
 
@@ -111,7 +111,7 @@ function setOptions()
 	y = y + 18
 	lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.7, 0.7, 0xffffffff, "(Abdju, Chromis, Catfish, Carp, Perch, Phagrus, Tilapia)");
 	y = y + 30;
-	lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.8, 0.8, 0x80ff80ff, "Log entries to FishLog.txt in VeggieTales folder.");
+	lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.8, 0.8, 0x80ff80ff, "Log entries to FishLog.txt in Automato/games/ATITD folder.");
 	y = y + 25;
 	LogFails = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Failed Catches", LogFails);
 	y = y + 25;

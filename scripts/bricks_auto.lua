@@ -1,10 +1,10 @@
 
 
-assert(loadfile("luaScripts/ui_utils.inc"))();
-assert(loadfile("luaScripts/settings.inc"))();
-assert(loadfile("luaScripts/constants.inc"))();
-assert(loadfile("luaScripts/screen_reader_common.inc"))();
-assert(loadfile("luaScripts/common.inc"))();
+dofile("ui_utils.inc");
+dofile("settings.inc");
+dofile("constants.inc");
+dofile("screen_reader_common.inc");
+dofile("common.inc");
 
 imgThisIs = "ThisIs.png";
 imgTake = "Take.png";

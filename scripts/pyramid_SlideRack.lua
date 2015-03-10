@@ -3,7 +3,7 @@
 -- 
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Pyramid - Slide Rolling Rack Assistant by Cegaiel --

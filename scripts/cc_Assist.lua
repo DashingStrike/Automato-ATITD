@@ -4,7 +4,7 @@
 -- ovens simultaneously.
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   CC Assist v1.2 (by Makazi, revised by Tallow) --

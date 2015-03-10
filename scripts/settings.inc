@@ -1,5 +1,5 @@
 
-loadfile("luaScripts/serialize.inc")();
+dofile("serialize.inc");
 
 settingsFileName = "";
 settingsInitialized = false;

@@ -7,9 +7,9 @@ imgWaterThese = "WaterThese.png";
 imgHarvestThese = "HarvestThese.png";
 imgWaterJugs = "IconWaterJugs.png";
 
-loadfile("luaScripts/flax_common.inc")();
-loadfile("luaScripts/screen_reader_common.inc")();
-loadfile("luaScripts/ui_utils.inc")();
+dofile("flax_common.inc");
+dofile("screen_reader_common.inc");
+dofile("ui_utils.inc");
 
 walk_px_x = 112;
 walk_px_y = 112;

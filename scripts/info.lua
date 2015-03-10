@@ -1,4 +1,4 @@
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 function doit()
   askForWindow("Shows currently hovered mouse position and RGB color values. Press shift over ATITD window to continue.");

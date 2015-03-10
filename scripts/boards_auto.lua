@@ -3,7 +3,7 @@
 -- Run a set of sawmills to generate boards.
 --
 
-assert(loadfile("luaScripts/common.inc"))();
+dofile("common.inc");
 
 askText = singleLine([[
   Board Maker v1.2 (Revised by Tallow, revised by tripps) --

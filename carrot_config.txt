@@ -1,0 +1,26 @@
+// Sizes for detecting what size plant is what
+// May need to be tweaked if resolution/aspect ratio does not match what it was tested on,
+//  though some computers also seem to have differnt lighting values which mess this up too
+sizes_2 135
+sizes_3 300 // needed to go down to 240 for a while, but then went up?
+sizes_4 480 // as low as 380 is needed sometimes
+
+// Time in milliseconds to wait after clicking a button/etc before scraping the screen again
+screen_refresh_time 100
+
+// Time in milliseconds to let a field lie fallow after harvesting something (to compensate for lag in plant disappearing)
+plant_delay 2000
+
+// A value of 0 here is the default and what was tested in SA at 1620,1871
+// If the thumbnail image is red all over the grass, then try a value of 1 here to use a different
+// grass detection method.
+grass_type 0
+
+// A value of 1 here will use the water icon instead of needing an aqueduct window
+// Please do not do this on the Original Shard until after Jimbly has passed
+// the Test of Life, thanks!
+no_aqueduct 1
+
+// A value of 0 here will change the logic on where it thinks it is, which may
+// cause less drifting, but more plant clumping failures... maybe.
+apply_pos_est 1
