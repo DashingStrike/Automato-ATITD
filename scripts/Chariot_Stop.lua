@@ -1,15 +1,12 @@
---Chariot Stop v1.0 by Safa
+--Chariot Stop v1.1 by Safa
 --Thanks to Dreger for getCurrentRegion() function.
---This macro will travel to desired destination using shortest path when possible. TT can be used from macro interface. 
---Do NOT walk while macro is running. Do NOT pin chariot windows. Do NOT obstruct view of the free travel timer. 
---You can chat or minimize VT if you wish. Please re-open Chariot window after travel.
-
+--This macro will travel to desired destination using shortest path when possible. It has to read your location from clock up top. (Use /clockloc command to open it if missing.) Do NOT walk while macro is running. Do NOT pin chariot windows. You can chat or minimize VT if you wish. Please re-open Chariot window after travel.
 dofile("screen_reader_common.inc");
 dofile("ui_utils.inc");
 dofile("common.inc");
 
 --Introduction
-askForWindow("Chariot_Stop v1.0 (by Safa) This macro will travel to desired destination using shortest path when possible. TT can be used from macro interface. Do NOT walk while macro is running. Do NOT pin chariot windows. Do NOT obstruct view of the free travel timer. You can chat or minimize VT if you wish. Please re-open Chariot window after travel.") ;
+askForWindow("Chariot_Stop v1.1 (by Safa) This macro will travel to desired destination using shortest path when possible. It has to read your location from clock up top. (Use /clockloc command to open it if missing.) Do NOT walk while macro is running. Do NOT pin chariot windows. You can chat or minimize VT if you wish. Please re-open Chariot window after travel.") ;
 
 --debugging
 function spacer()
@@ -242,6 +239,10 @@ whereami = getCurrentRegion();
 adjacent = {};
 firstTimeRunning = "Yes";
 
+if not whereami then
+	error "Couldn't region region. Please zoom in until night sky isn't visible."
+end
+
 --Get adjacent regions.
 function getAdjacent()
 	if whereami == "Cat's Claw Ridge" then
@@ -469,7 +470,7 @@ if stackChanged == "No" then
 		end
 
 		whereami = stack[#stack];	
-		lsPrintln("Stack is ".. stack[1] .." ,".. stack[2] .." ,".. stack[3] .." ,".. stack[4] .." ,".. stack[5] .." ,".. stack[6] .." ,".. stack[7] .." ,");
+
 	end
 	lsPrintln("endloop");
 end
