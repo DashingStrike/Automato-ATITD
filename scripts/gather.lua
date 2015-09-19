@@ -849,7 +849,7 @@ function followRoute(route)
 		updateStatus();
 		srReadScreen();
 		local pos;
-		pos = fastFindCoords();
+		pos = findCoords();
 		if (pos) then
 			lastPos = pos;
 		end
@@ -967,7 +967,7 @@ function ensureClickWaypoint(route,waypoint)
 		if(clickWaypoint(route[waypoint][3])) then
 			return true;
 		end
-		pos = fastFindCoords();
+		pos = findCoords();
 		if(pos) then
 			if(direction == 1) then					
 				moveTo(route[waypoint][1]-1,route[waypoint][2]-1,false,false);
@@ -1208,7 +1208,7 @@ function moveTo(x, y, showStatus, promptIfNotMoving)
 		end
 		checkForMenu();
 		local pos;
-		pos = fastFindCoords();
+		pos = findCoords();
 		if (pos) then
 			if(#pos < 1) then
 				fatalError("#pos < 2 in moveTo() ... (" .. #pos .. ")");
@@ -1683,7 +1683,7 @@ end
 function getCoords()
 	prepareForWalking();
 	srReadScreen();
-	local pos = fastFindCoords();
+	local pos = findCoords();
 	return pos;
 end
 
