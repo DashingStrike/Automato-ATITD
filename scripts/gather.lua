@@ -484,7 +484,7 @@ function editRoute(route)
 				t = thisRoute[1][i][1];
 			end
 			nada, t = lsEditBox("waypointX_" .. i .. "_" .. unique, 
-				x, sy, z, coordw, 30, scale, scale, 0x000000ff, t);
+				x, sy, z+1, coordw, 30, scale, scale, 0x000000ff, t);
 			if(#thisRoute[1] >= i) then
 				thisRoute[1][i][1] = t;
 			end
@@ -493,7 +493,7 @@ function editRoute(route)
 				t = thisRoute[1][i][2];
 			end
 			nada, t = lsEditBox("waypointY_" .. i .. "_" .. unique, 
-				x, sy, z, coordw, 30, scale, scale, 0x000000ff, t);
+				x, sy, z+1, coordw, 30, scale, scale, 0x000000ff, t);
 			if(#thisRoute[1] >= i) then
 				thisRoute[1][i][2] = t;
 			end
@@ -534,7 +534,7 @@ function editRoute(route)
 				x = x + buttonw + 2;
 				t = thisRoute[2][i];
 				nada, t = lsEditBox("menuText_" .. i .. "_" .. unique, 
-					x, sy, z, 300, 30, scale, scale, 0x000000ff, t);
+					x, sy, z+1, 300, 30, scale, scale, 0x000000ff, t);
 				thisRoute[2][i] = t;
 				sy = sy + 32;
 			end
@@ -849,7 +849,7 @@ function followRoute(route)
 		updateStatus();
 		srReadScreen();
 		local pos;
-		pos = fastFindCoords();
+		pos = findCoords();
 		if (pos) then
 			lastPos = pos;
 		end
@@ -967,7 +967,7 @@ function ensureClickWaypoint(route,waypoint)
 		if(clickWaypoint(route[waypoint][3])) then
 			return true;
 		end
-		pos = fastFindCoords();
+		pos = findCoords();
 		if(pos) then
 			if(direction == 1) then					
 				moveTo(route[waypoint][1]-1,route[waypoint][2]-1,false,false);
@@ -1208,7 +1208,7 @@ function moveTo(x, y, showStatus, promptIfNotMoving)
 		end
 		checkForMenu();
 		local pos;
-		pos = fastFindCoords();
+		pos = findCoords();
 		if (pos) then
 			if(#pos < 1) then
 				fatalError("#pos < 2 in moveTo() ... (" .. #pos .. ")");
@@ -1683,7 +1683,7 @@ end
 function getCoords()
 	prepareForWalking();
 	srReadScreen();
-	local pos = fastFindCoords();
+	local pos = findCoords();
 	return pos;
 end
 
