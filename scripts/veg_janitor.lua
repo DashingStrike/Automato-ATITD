@@ -375,7 +375,7 @@ function makeSearchBox(direction)
     local xyWindowSize = srGetWindowSize()
     local search_size = math.floor(xyWindowSize[0] * SEARCH_BOX_SCALE)
     local mid = getScreenMiddle()
-    local offset_mid = mid - {search_size / 3, search_size / 3 }
+    local offset_mid = mid - {math.floor(search_size / 3), math.floor(search_size / 3) }
 
     local top_left = offset_mid + direction*40 - Vector:new{20,20 }
 
