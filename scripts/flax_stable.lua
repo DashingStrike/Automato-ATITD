@@ -11,7 +11,7 @@ dofile("common.inc");
 
 askText = singleLine([[
   flax_stable v1.1 (by Jimbly, tweaked by Cegaiel and KasumiGhia,
-  revised by Tallow) --
+  revised by Tallow. Updated for T7 by Skyfeather) --
   Plant flax and harvest either flax or seeds. --
   Make sure the plant flax window is pinned and on the RIGHT side of
   the screen. Your Automato window should also be on the RIGHT side
@@ -29,20 +29,25 @@ grid_w = 5;
 grid_h = 5;
 is_plant = true;
 seeds_per_pass = 5;
+seeds_per_iter = 0;
 
-imgFlax1 = "Flax:";
-imgHarvest = "HarvestThisFlax.png";
-imgWeedAndWater = "WeedAndWater.png";
-imgWeed = "WeedThisFlaxBed.png";
-imgSeeds = "HarvestSeeds.png";
+seedType = "Old";
+harvest = "Harvest this";
+weedAndWater = "Weed and Water";
+weedThis = "Weed this";
+harvestSeeds = "Harvest seeds";
+thisIs = "This is";
+utility = "Utility";
+txtRipOut = "Rip out";
+useable = "Useable";
+
 imgUseable = "UseableBy.png";
 imgThisIs = "ThisIs.png";
 imgUtility = "Utility.png";
-imgRipOut = "RipOut.png";
-imgUnpin = "UnPin.png";
+imgSeeds = "HarvestSeeds.png";
 
 -- Tweakable delay values
-refresh_time = 300; -- Time to wait for windows to update
+refresh_time = 60; -- Time to wait for windows to update
 walk_time = 300;
 
 -- Don't touch. These are set according to Jimbly's black magic.
@@ -53,12 +58,15 @@ xyCenter = {};
 xyFlaxMenu = {};
 
 -- The flax bed window
-window_w = 174;
-window_h = 100;
+window_w = 168;
+window_h = 126;
 
 FLAX = 0;
 ONIONS = 1;
 plantType = FLAX;
+CLICK_MIN_WEED = 15*1000;
+CLICK_MIN_SEED = 27*1000;
+numSeedsHarvested = 0;
 
 -------------------------------------------------------------------------------
 -- initGlobals()
@@ -112,10 +120,10 @@ function checkWindowSize(x, y)
   if not window_check_done_once then
     srReadScreen();
     window_check_done_once = true;
-    local pos = srFindImageInRange(imgUseable, x-5, y-50, 150, 100)
+     local pos = srFindImageInRange(imgUseable, x-5, y-50, 150, 100)
     if pos then
       window_w = 166;
-      window_h = 116;
+      window_h = 136;
     end
   end
 end
@@ -144,8 +152,13 @@ function promptFlaxNumbers()
     -- lsEditBox returns two different things (a state and a value)
     local y = 40;
 
+    lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Flax Name:");
+    is_done, seedType = lsEditBox("flaxname", 120, y, z, 100, 30, scale, scale,
+                                   0x000000ff, seedType);
+    y = y + 32
+
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
-    is_done, num_loops = lsEditBox("passes", 110, y, z, 50, 30, scale, scale,
+    is_done, num_loops = lsEditBox("passes", 120, y, z, 50, 30, scale, scale,
                                    0x000000ff, num_loops);
     if not tonumber(num_loops) then
       is_done = nil;
@@ -155,7 +168,7 @@ function promptFlaxNumbers()
     y = y + 32;
 
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Grid size:");
-    is_done, grid_w = lsEditBox("grid", 110, y, z, 50, 30, scale, scale,
+    is_done, grid_w = lsEditBox("grid", 120, y, z, 50, 30, scale, scale,
                                 0x000000ff, grid_w);
     if not tonumber(grid_w) then
       is_done = nil;
@@ -169,9 +182,12 @@ function promptFlaxNumbers()
 
     if not is_plant then
       lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Seeds per:");
-      is_done, seeds_per_pass = lsEditBox("seedsper", 110, y, z, 50, 30,
+      is_done, seeds_per_pass = lsEditBox("seedsper", 120, y, z, 50, 30,
                                           scale, scale, 0x000000ff, 4);
       seeds_per_pass = tonumber(seeds_per_pass);
+      if seeds_per_pass then
+        seeds_per_iter = seeds_per_pass * grid_w * grid_h;
+      end
       if not seeds_per_pass then
         is_done = nil;
         lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
@@ -190,7 +206,7 @@ function promptFlaxNumbers()
     if is_plant then
       lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
                      "This will plant and harvest a " .. grid_w .. "x" ..
-                     grid_w .. " grid of Flax " .. num_loops ..
+                     grid_w .. " grid of " .. seedType .. " Flax " .. num_loops ..
                      " times, requiring " .. (grid_w * grid_w * num_loops) ..
                      " seeds, doing " .. (grid_w*grid_w*num_loops) ..
                      " flax harvests.");
@@ -198,7 +214,7 @@ function promptFlaxNumbers()
       local seedTotal = grid_w * grid_h * num_loops * seeds_per_pass
       lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
                      "This will plant a " .. grid_w .. "x" .. grid_w ..
-                     " grid of Flax and harvest it " .. seeds_per_pass ..
+                     " grid of " .. seedType .. " Flax and harvest it " .. seeds_per_pass ..
                      " times, requiring " .. (grid_w * grid_w) ..
                      " seeds, and repeat this " .. num_loops ..
                      " times, yielding " .. seedTotal .. " seed harvests.");
@@ -223,13 +239,13 @@ end
 -------------------------------------------------------------------------------
 
 lastPlantPos = null;
-seedImage = imgFlax1;
 
 function getPlantWindowPos()
   srReadScreen();
-  local plantPos = findText(seedImage);
+  local plantPos = findText(seedType);
   if plantPos then
-    plantPos[0] = plantPos[0] + 10;
+    plantPos[0] = plantPos[0] + 20;
+    plantPos[1] = plantPos[1] + 10;
   else
     plantPos = lastPlantPos;
     if plantPos then
@@ -272,6 +288,7 @@ function doit()
   initGlobals();
   srReadScreen();
   local startPos = findCoords();
+  lsPrintln("Start pos:" .. startPos[0] .. ", " .. startPos[1]);
   if not startPos then
     error("ATITD clock not found.\Verify entire clock and borders are visible. Try moving clock slightly.");
   end
@@ -280,10 +297,11 @@ function doit()
 
   for loop_count=1, num_loops do
     error_status = "";
+    numSeedsHarvested = 0;
+    clicks = {};
     local finalPos = plantAndPin(loop_count);
     dragWindows(loop_count);
     harvestAll(loop_count);
---    walkHome(loop_count, finalPos);
     walkHome(loop_count, startPos);
     drawWater();
   end
@@ -410,7 +428,6 @@ function clickPlant(xyPlantFlax)
   local result = xyFlaxMenu;
   local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
   safeClick(xyPlantFlax[0], xyPlantFlax[1], 0);
-  lsSleep(click_delay);
 
   local plantSuccess = waitForChange(spot, 1500);
   if not plantSuccess then
@@ -429,7 +446,7 @@ end
 function dragWindows(loop_count)
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ")  " ..
                "Dragging Windows into Grid");
-  arrangeStashed();
+  arrangeStashed(nil, true, nil, window_h);
 end
 
 -------------------------------------------------------------------------------
@@ -448,17 +465,15 @@ function harvestAll(loop_count)
     -- Monitor for Weed This/etc
     lsSleep(refresh_time);
     srReadScreen();
-    local tops = findAllImages(imgThisIs);
+    local tops = findAllText(thisIs);
     for i=1,#tops do
       safeClick(tops[i][0], tops[i][1]);
-      lsSleep(click_delay);
     end
 
     if is_plant then
       harvestLeft = #tops;
     else
-      harvestLeft = (#tops - seedIndex) + 1 +
-                    (#tops * (seeds_per_pass - seedWave));
+      harvestLeft = seeds_per_iter - numSeedsHarvested;
     end
 
     statusScreen("(" .. loop_count .. "/" .. num_loops ..
@@ -467,65 +482,69 @@ function harvestAll(loop_count)
     lsSleep(refresh_time);
     srReadScreen();
     if is_plant then
-      local weeds = findAllImages(imgWeed);
-      for i=1,#weeds do
-        safeClick(weeds[i][0], weeds[i][1]);
-      end
-
-      local waters = findAllImages(imgWeedAndWater);
-      for i=1,#waters do
-        safeClick(waters[i][0], waters[i][1]);
-      end
-
-      local harvests = findAllImages(imgHarvest);
-      for i=1,#harvests do
-        safeClick(harvests[i][0], harvests[i][1]);
-        lsSleep(refresh_time);
-        safeClick(harvests[i][0], harvests[i][1] - 15, 1);
-      end
-
-      local seeds = findAllImages(imgSeeds);
-      for i=1,#seeds do
-        local seedTop = srFindImageInRange(imgThisIs,
-                                        seeds[i][0] - 10, seeds[i][1]-window_h,
-                                        window_w, window_h, 5000);
-        if seedTop then
-          ripOut(seedTop);
+      lsPrintln("Checking Weeds");
+      lsPrintln("numTops: " .. #tops);
+      local weeds = findAllText(weedThis);
+      for i=#weeds, 1, -1 do
+        lastClick = lastClickTime(weeds[i][0], weeds[i][1]);
+        if lastClick == nil or lsGetTimer() - lastClick >= CLICK_MIN_WEED then
+          clickText(weeds[i]);
+          trackClick(weeds[i][0], weeds[i][1]);
         end
+      end
+
+      local waters = findAllText(weedAndWater);
+      for i=#waters, 1, -1 do
+        lastClick = lastClickTime(waters[i][0], waters[i][1]);
+        if lastClick == nil or lsGetTimer() - lastClick >= CLICK_MIN_WEED then
+          clickText(waters[i]);
+          trackClick(waters[i][0], waters[i][1]);
+        end
+      end
+
+      local harvests = findAllText(harvest);
+      for i=#harvests, 1, -1 do
+        lastClick = lastClickTime(harvests[i][0], harvests[i][1]);
+        if lastClick == nil or lsGetTimer() - lastClick >= CLICK_MIN_WEED then
+          clickText(harvests[i]);
+          trackClick(harvests[i][0], harvests[i][1]);
+        end
+      end
+      
+      -- check for beds needing ripping out
+      hsr = findRegionWithText(harvestSeeds);
+      if hsr then
+        lsPrintln("hsr found?");
+        clickText(findText(utility, nil, nil, hsr));
+        ripLoc = waitForText(txtRipOut);
+        clickText(ripLoc);
       end
     else
-      srReadScreen();
-      local tops = findAllImages(imgThisIs);
-      if #tops > 0 then
-        if seedIndex > #tops then
-          seedIndex = 1;
-          seedWave = seedWave + 1;
-        end
-        local seedPos = srFindImageInRange(imgSeeds,
-					   tops[#tops - seedIndex + 1][0],
-					   tops[#tops - seedIndex + 1][1],
-					   160, 100);
-        if seedPos and seedWave <= seeds_per_pass then
-          safeClick(seedPos[0] + 5, seedPos[1]);
-          lsSleep(harvest_seeds_time);
-          seedIndex = seedIndex + 1;
-        end
-      end
-      if seedWave > seeds_per_pass then
-        local seeds = findAllImages(imgThisIs);
-        for i=1,#seeds do
-          ripOut(seeds[i]);
+      seedsList = findAllText(harvestSeeds);
+      for i=#seedsList, 1, -1 do
+        lastClick = lastClickTime(seedsList[i][0], seedsList[i][1]);
+        if lastClick == nil or lsGetTimer() - lastClick >= CLICK_MIN_SEED then
+          clickText(seedsList[i]);
+          trackClick(seedsList[i][0], seedsList[i][1]);
+          numSeedsHarvested = numSeedsHarvested + 1;
         end
       end
     end
+    
+    if numSeedsHarvested >= seeds_per_iter and not is_plant  then
+      did_harvest = true;
+    end
 
     if #tops <= 0 then
+      lsPrintln("finished harvest");
       did_harvest = true;
     end
     checkBreak();
   end
+  lsPrintln("ripping out all seeds");
+  ripOutAllSeeds();
   -- Wait for last flax bed to disappear
-  sleepWithStatus(2500, "(" .. loop_count .. "/" .. num_loops ..
+  sleepWithStatus(1500, "(" .. loop_count .. "/" .. num_loops ..
 		  ") ... Waiting for flax beds to disappear");
 end
 
@@ -536,8 +555,9 @@ end
 -------------------------------------------------------------------------------
 
 function walkHome(loop_count, finalPos)
-  closeAllWindows(0, 0, srGetWindowSize()[0] - lsGetWindowSize()[0] - 100,
-		  srGetWindowSize()[1]);
+  -- Close all empty windows
+  closeEmptyAndErrorWindows();
+  -- remove any screens with the too far away text
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
 
   walkTo(finalPos);
@@ -558,26 +578,47 @@ function walkHome(loop_count, finalPos)
 end
 
 -------------------------------------------------------------------------------
--- ripOut(pos)
+-- ripOutAllSeeds
 --
 -- Use the Utility menu to rip out a flax bed that has gone to seed.
 -- pos should be the screen position of the 'This Is' text on the window.
 -------------------------------------------------------------------------------
 
-function ripOut(pos)
+function ripOutAllSeeds()
   statusScreen("Ripping Out");
-  lsSleep(refresh_time);
   srReadScreen();
-  local util_menu = srFindImageInRange(imgUtility, pos[0] - 10, pos[1] - 50,
-                                       180, 200, 5000);
-  if util_menu then
-    safeClick(util_menu[0] + 5, util_menu[1], 0);
-    local rip_out = waitForImage(imgRipOut, 1000);
-    if rip_out then
-      safeClick(rip_out[0] + 5, rip_out[1], 0);
-      lsSleep(refresh_time);
-      safeClick(pos[0], pos[1], 1); -- unpin
-      lsSleep(refresh_time);
-    end
+  flaxRegions = findAllText("This is ", nil, REGION)
+  for i = 1, #flaxRegions do
+    local utloc = waitForText(utility, nil, nil, flaxRegions[i]);
+    lsPrintln("Clicking Utility.. button at: " .. utloc[0] .. ", " .. utloc[1]);
+    clickText(utloc);
+    lsPrintln("Clicking rip out");
+    clickText(waitForText(txtRipOut));
+    lsSleep(refresh_time);
+    lsPrintln("Unpinning region");
+    unpinWindow(flaxRegions[i]);
+    lsSleep(refresh_time);
+    checkBreak();
   end
+end
+
+clicks = {};
+function trackClick(x, y)
+  local curTime = lsGetTimer();
+  lsPrintln("Tracking click " .. x .. ", " .. y .. " at time " .. curTime);
+  if clicks[x] == nil then
+    clicks[x] = {};
+  end
+  clicks[x][y] = curTime;
+end
+
+function lastClickTime(x, y)
+  if clicks[x] ~= nil then
+    if clicks[x][y] ~= nil then
+      lsPrintln("Click " .. x .. ", " .. y .. " found at time " .. clicks[x][y]);
+    end
+    return clicks[x][y];
+  end
+  lsPrintln("Click " .. x .. ", " .. y .. " not found. ");
+  return nil;
 end
