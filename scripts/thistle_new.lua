@@ -13,51 +13,51 @@ dofile("ui_utils.inc");
 
 per_click_delay = 0;
 
-local expected_gardens = 20;
-local last_sun = 99;
+local expected_gardens = 2;
+local last_sun = 0;
 
 instructions = {
-0,0,0,1,33,
-0,0,0,0,33,
-0,0,1,0,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,1,33,
-0,0,0,1,33,
-0,0,1,0,33,
-0,0,0,0,33,
-0,0,0,1,33,
-0,0,0,2,33,
-0,0,2,0,33,
-0,0,0,0,99,
-0,0,1,1,33,
-0,0,0,0,33,
-0,0,0,1,33,
-0,0,1,0,33,
-0,0,0,0,33,
-0,0,0,1,99,
-0,0,0,0,33,
-0,0,0,3,33,
-0,0,0,1,33,
-0,0,0,0,33,
-0,0,0,1,33,
-0,0,4,0,33,
-0,0,0,1,33,
-0,0,1,0,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,0,33,
-0,0,0,0,99,
-0,0,0,0,99,
-0,0,1,1,33,
-0,0,0,1,99,
-0,0,1,0,99,
-0,0,0,3,99,
-0,0,1,0,99,
-0,0,0,0,99,
-0,0,1,0,99,
-0,0,0,0,99,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,0,0,
+0,0,0,0,0,
+0,0,0,0,0,
+0,0,0,0,0,
+1,0,0,0,0,
+2,0,1,2,0,
+1,0,0,0,0,
+1,0,0,2,0,
+0,0,1,1,0,
+0,0,4,0,0,
+2,0,0,0,0,
+0,0,1,1,0,
+1,0,0,1,0,
+2,0,1,0,0,
+0,0,0,1,0,
+0,0,1,0,0,
+1,0,0,0,0,
+0,0,0,1,0,
+2,0,1,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+2,0,2,1,0,
+0,0,0,0,0,
+0,0,0,0,0,
+2,0,2,1,0,
+1,0,0,0,0,
+0,0,0,2,0,
+1,0,1,0,0,
+0,0,1,0,0,
+0,0,0,1,0,
+0,0,1,0,0,
+0,0,0,1,0,
+1,0,1,0,0,
+1,0,0,1,0,
+0,0,0,0,0,
+1,0,1,2,0,
+0,0,0,0,0,
+0,0,0,0,0,
 };
 
 
@@ -150,7 +150,8 @@ function clickAllComplex(image_names, message)
 	-- refocus
 	for i=2, #window_locs do
 		setWaitSpot(window_locs[i][0], window_locs[i][1]);
-		srClickMouseNoMove(window_locs[i][0], window_locs[i][1] + 310);
+		--lsPrintln(window_locs[i][0] .. "," .. window_locs[i][1] + 308);
+		srClickMouseNoMove(window_locs[i][0], window_locs[i][1] + 308);
 		waitForChange();
 	end
 	lsSleep(100);
@@ -275,13 +276,12 @@ function refillWater()
 
 
 		srReadScreen();
-		FindMaxButton = srFindImage("Maxbutton.png");
+		FindMaxButton = srFindImage("Maxbutton.png", 5000);
 
 		if FindMaxButton then
 		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
 		lsSleep(500);
 		end
-
 	end
 end
 
@@ -333,6 +333,7 @@ function doit()
 		-- lsSleep(2000);
 		--waitForMonChange("Getting initial image...");
 		for i=0, 39 do
+			refillWater();
 			local to_click = {};
 			if (i == 0) then
 				to_click[1] = "ThistlePlantACrop.png";
