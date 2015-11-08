@@ -127,7 +127,7 @@ function process_vise(window_pos)
 	--   
 	local FuelStatus = 0;
 	local cooldown = 0;
-	local pos = srFindImageInRange("Vise_bars.png", window_pos[0], window_pos[1], window_w, window_h);
+	local pos = srFindImageInRange("Vise_bars.png", window_pos[0]-5, window_pos[1], window_w, window_h);
 	if not pos then
 		error 'Cound not find Vise bars';
 	end;
