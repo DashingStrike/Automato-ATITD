@@ -1460,7 +1460,7 @@ function clickMax()
 	srReadScreen();
 	local maxButton = srFindImage("maxButton.png",5000);
 	if(not maxButton) then
-		maxButton = srFindImage("maxButton2.png, 5000");
+		maxButton = srFindImage("maxButton2.png", 5000);
 	end
 	if(maxButton) then
 		srClickMouseNoMove(maxButton[0]+5,maxButton[1],0);
