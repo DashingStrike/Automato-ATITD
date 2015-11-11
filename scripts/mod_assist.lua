@@ -1,4 +1,4 @@
--- epbs.lua by Safa
+-- mod_assist.lua by Safa
 --
 -- Do various modding tasks using Automato UI or Keyboard Shortcuts. Get notified when new posts are present.
 -- Uses pbslog.txt to save modding history.
@@ -6,7 +6,7 @@
 dofile("common.inc");
 
 askText = singleLine([[
-  epbs by Safa. Do various modding tasks using Automato UI or Keyboard Shortcuts. 
+  mod_assist by Safa. Do various modding tasks using Automato UI or Keyboard Shortcuts. 
   Get notified when new posts are present. This macro WON'T autopost any messages. 
   Every post must be approved by the operator! Click the gear icon for more settings. 
   Hit SHIFT to begin.
