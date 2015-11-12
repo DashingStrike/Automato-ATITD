@@ -1,6 +1,3 @@
-
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
 dofile("common.inc");
 
 
@@ -387,7 +384,7 @@ end
 
 numFinished = 0;
 
-function labTick(region, state)
+function labTick(essWin, state)
 	state.count = state.count + 1;
 	state.status = "Chem Lab: " .. state.count;
 	state.active = false;
@@ -401,27 +398,26 @@ function labTick(region, state)
 	--and here is where we add in the essence
 	local outer;
 	while outer == nil do
-		srClickMouseNoMove(region[0] + 12, region[1] + 5);
+		safeClick(essWin.x + 10, essWin.y + 5);
 		srReadScreen();
-		outer = findTextInRegion(region, "Manufacture");
+		outer = findText("Manufacture", essWin);
 		lsSleep(per_read_delay);
 		checkBreak();
 	end
-	srClickMouseNoMove(outer[0] + 12, outer[1] + 5);
+	clickText(outer);
 --	lsSleep(per_click_delay);
 	
-	local t = waitForTextOld("Essential Distill");
-	srClickMouseNoMove(t[0] + 12, t[1] + 5);
+	local t = waitForText("Essential Distill");
+	clickText(t);
 --	lsSleep(per_click_delay);
-	t = waitForTextOld("Place Essential Mat");
-	srClickMouseNoMove(t[0] + 12, t[1] + 5);
+	t = waitForText("Place Essential Mat");
+	clickText(t);
 --	lsSleep(per_click_delay);
 	
 	--search for something to add
-	local rc = waitForRegionWithText("Choose a material");
-	rc[0] = rc[0] + 5;
-	rc[2] = rc[2] - 5;
-	local parse = parseRegion(rc);
+	local rw = waitForText("Choose a material", nil, nil, nil, REGION);
+	-- TODO: modify the window width to parse the middle of the pane
+	local parse = findAllText(nil, rw);
 	local foundEss = false;
 	if parse then
 		for i = 1, #parse do
@@ -431,7 +427,7 @@ function labTick(region, state)
 					if essences[k][2] ~= -1 and parse[i][2] == essences[k][1] and foundEss == false then
 						state.essenceIndex = k;
 						foundEss = true;
-						srClickMouseNoMove(parse[i][0] + 8, parse[i][1] + 5);
+						clickText(parse[i]);
 						state.temp = essences[k][2];
 					end
 				end
@@ -463,30 +459,25 @@ function labTick(region, state)
 	
 	for i = 1, #spiritsNeeded do
 		--Add the alcohol
-		t = waitForTextInRegion(region, "Manufacture");
-		srClickMouseNoMove(t[0] + 10, t[1] + 5);
+		clickText(waitForText("Manufacture", nil, nil, essWin));
 		lsSleep(per_click_delay);
-		t = waitForTextOld("Alcohol Lamp.");
-		srClickMouseNoMove(t[0] + 10, t[1] + 5);
+		clickText(waitForText("Alcohol Lamp."));
 		lsSleep(per_click_delay);
-		t = waitForTextOld("Fill Alcohol Lamp");
-		srClickMouseNoMove(t[0] + 10, t[1] + 5);
+		clickText(waitForText("Fill Alcohol Lamp"));
 		lsSleep(per_click_delay);
 		
 		--click on the spirit itself
-		t = waitForTextOld(spiritsNeeded[i][1]);
-		srClickMouseNoMove(t[0] + 12, t[1] + 5);
+		clickText(waitForText(spiritsNeeded[i][1]));
 		lsSleep(per_click_delay);
-		waitForTextOld("How much");
+		waitForText("How much");
 		srKeyEvent(spiritsNeeded[i][2] .. "\n");
 		lsSleep(per_click_delay + per_read_delay)
 	end
 	
-	t = waitForTextInRegion(region, "Manufacture");
-	srClickMouseNoMove(t[0] + 7, t[1] + 7);
+	clickText(waitForText("Manufacture", nil, nil, essWin));
 	lsSleep(per_click_delay + per_read_delay);
-	t = waitForTextOld("Essential Distill");
-	srClickMouseNoMove(t[0] + 10, t[1] + 5);
+	t = waitForText("Essential Distill"));
+	clickText(t);
 	lsSleep(per_click_delay);
 	
 	local image;
@@ -495,18 +486,17 @@ function labTick(region, state)
 		srReadScreen();
 		image = srFindImage("StartDistillMini.png");
 		if image then
-			srClickMouseNoMove(image[0] + 2, image[1] + 2);
+			safeClick(image[0] + 2, image[1] + 2);
 			lsSleep(per_click_delay);
 			break;
 		else
 			statusScreen("Could not find start Essential, updating menu");
 			--otherwise, search for place, and and update the menu
-			srClickMouseNoMove(t[0] + 10, t[1] + 5);
+			clickText(t);
 			lsSleep(200);
 		end
 	end
-
-	srClickMouseNoMove(region[0] + 10, region[1] + 10);
+	safeClick(essWin.x + 10, essWin.y + 10);
 	lsSleep(per_click_delay);
 	return;
 end
@@ -520,7 +510,7 @@ function doit()
 	askForWindow("Pin all Chemistry Laboratories");
 	
 	srReadScreen();
-	labWindows = findAllRegionsWithText("This is a Chemistry Laboratory");
+	labWindows = findAllText("This is a Chemistry Laboratory", nil, REGION);
 	
 	if labWindows == nil then
 		error 'Did not find any open windows';
@@ -541,7 +531,7 @@ function doit()
 	while 1 do
 		-- Tick
 		srReadScreen();
-		labWindows2 = findAllRegionsWithText("This is a Chemistry Laboratory");
+		labWindows2 = findAllText("This is a Chemistry Laboratory", nil, REGION);
 		
 		local should_continue = nil;
 		
@@ -566,9 +556,6 @@ function doit()
 		
 		--check to see if we're finished.
 		if numFinished == #labWindows then
-			for i = 1, #essences do
-				lsWriteToLog("TempTests.txt", "essences[" .. i .. "] = {\"" .. essences[i][1] .. "\", " .. essences[i][2] .. "};\n");
-			end
 			error "Completed.";
 		end
 
