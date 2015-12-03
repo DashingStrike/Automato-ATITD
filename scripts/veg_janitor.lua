@@ -345,7 +345,7 @@ function Plant:water(args)
 
     click(this_loc)
     for _=1, args.num_waterings do
-		lsSleep(click_delay)
+        lsSleep(click_delay)
         click(this_loc+{0,25})
         click(this_loc)
         checkBreak()
@@ -532,11 +532,11 @@ X_PADDING = 5
 function getUserParams()
     local is_done = false
     local got_user_params = false
-	local use_custom = readSetting("use_custom",false)
+    local use_custom = readSetting("use_custom",false)
     local config = {alternate_drag=readSetting("alternate_drag")}
-	config.seed_name = readSetting("seed_name","")
-	config.num_waterings = readSetting("num_waterings",1)
-	config.num_stages = readSetting("num_stages",1)
+    config.seed_name = readSetting("seed_name","")
+    config.num_waterings = readSetting("num_waterings",1)
+    config.num_stages = readSetting("num_stages",1)
     local seed_index = readSetting("seed_index",1)
     local display_seed_names = {}
     for i=1,5 do
@@ -547,20 +547,20 @@ function getUserParams()
 
         if not got_user_params then
             local max_plants       = MAX_PLANTS
-			use_custom = lsCheckBox(X_PADDING, current_y, 10, WHITE, "Use custom seed?", use_custom)
-			current_y = 45
+            use_custom = lsCheckBox(X_PADDING, current_y, 10, WHITE, "Use custom seed?", use_custom)
+            current_y = 45
             if use_custom then
-				config.seed_name = drawEditBox("seed_name", "Custom seed name? ", config.seed_name, false)
-				config.num_waterings = drawNumberEditBox("num_waterings", "How many waterings per stage? ", config.num_waterings)
-				config.num_stages = drawNumberEditBox("num_stages", "How many watering stages? ", config.num_stages)
-			else
-				seed_index             = lsDropdown("seed_name", X_PADDING, current_y, 10, lsScreenX - 10, seed_index, display_seed_names)
-				current_y = 85
-			end
+                config.seed_name     = drawEditBox("seed_name", "Custom seed name? ", config.seed_name, false)
+                config.num_waterings = drawNumberEditBox("num_waterings", "How many waterings per stage? ", config.num_waterings)
+                config.num_stages    = drawNumberEditBox("num_stages", "How many watering stages? ", config.num_stages)
+            else
+                seed_index         = lsDropdown("seed_name", X_PADDING, current_y, 10, lsScreenX - 10, seed_index, display_seed_names)
+                current_y = 85
+            end
             config.num_plants      = drawNumberEditBox("num_plants", "How many to plant per run? Max " .. max_plants, 12)
             config.num_runs        = drawNumberEditBox("num_runs", "How many runs? ", 20)
             config.click_delay     = drawNumberEditBox("click_delay", "What should the click delay be? ", 50)
-            config.alternate_drag = lsCheckBox(X_PADDING, current_y, 10, WHITE, "Alternate (slow) dragging?", config.alternate_drag)
+            config.alternate_drag  = lsCheckBox(X_PADDING, current_y, 10, WHITE, "Alternate (slow) dragging?", config.alternate_drag)
             got_user_params = true
             for k,v in pairs(config) do
                 got_user_params = got_user_params and v
@@ -582,15 +582,15 @@ function getUserParams()
 
     writeSetting("seed_index",seed_index)
     writeSetting("alternate_drag",config.alternate_drag)
-	writeSetting("use_custom",use_custom)
-	writeSetting("seed_name",config.seed_name)
-	writeSetting("num_waterings",config.num_waterings)
-	writeSetting("num_stages",config.num_stages)
+    writeSetting("use_custom",use_custom)
+    writeSetting("seed_name",config.seed_name)
+    writeSetting("num_waterings",config.num_waterings)
+    writeSetting("num_stages",config.num_stages)
     config.num_plants = limitMaxPlants(config.num_plants)
-	if not use_custom then
-		config.seed_name = SEED_NAMES[seed_index]
-		config.num_waterings = config.seed_name == LEEKS and 3 or 2
-	end
+    if not use_custom then
+        config.seed_name = SEED_NAMES[seed_index]
+        config.num_waterings = config.seed_name == LEEKS and 3 or 2
+    end
     click_delay = config.click_delay
     return config
 end
