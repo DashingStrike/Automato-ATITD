@@ -47,7 +47,7 @@ STAGE_WAITS = { FIRST_STAGE_WAIT, SECOND_STAGE_WAIT, THIRD_STAGE_WAIT, HARVEST_S
 -- How long to wait for the characters animations to stop at the end of each planting run. If this is too low
 -- then instead of clicking a newly placed plant the macro will hit your character. So if you see at the start of a new
 -- cycle the character menu being opened by the macro increase this value.
-END_OF_RUN_WAIT = 0
+END_OF_RUN_WAIT = 3000
 
 -- Controls the size of each search box. The larger this is the slower the search phase which can break everything.
 SEARCH_BOX_SCALE = 1/10
@@ -181,8 +181,7 @@ function gatherVeggies(config)
 
         local stop = lsGetTimer() + END_OF_RUN_WAIT
         local total = math.floor((3600 / ((stop - start)/1000)) * config.num_plants * 9) -- default 3, currently 9 veggie yield with pyramids bonus
-        lsPrintln("Running at " .. total .. " veg per hour. ")
-        lsSleep(END_OF_RUN_WAIT)
+        sleepWithStatus(END_OF_RUN_WAIT, "Running at " .. total .. " veg per hour. ")
     end
 end
 
@@ -590,6 +589,7 @@ function getUserParams()
     if not use_custom then
         config.seed_name = SEED_NAMES[seed_index]
         config.num_waterings = config.seed_name == LEEKS and 3 or 2
+        config.num_stages = 3
     end
     click_delay = config.click_delay
     return config
