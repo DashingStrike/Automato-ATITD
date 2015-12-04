@@ -47,7 +47,7 @@ STAGE_WAITS = { FIRST_STAGE_WAIT, SECOND_STAGE_WAIT, THIRD_STAGE_WAIT, HARVEST_S
 -- How long to wait for the characters animations to stop at the end of each planting run. If this is too low
 -- then instead of clicking a newly placed plant the macro will hit your character. So if you see at the start of a new
 -- cycle the character menu being opened by the macro increase this value.
-END_OF_RUN_WAIT = 0
+END_OF_RUN_WAIT = 3000
 
 -- Controls the size of each search box. The larger this is the slower the search phase which can break everything.
 SEARCH_BOX_SCALE = 1/10
@@ -90,7 +90,7 @@ function doit()
 end
 
 function askForWindowAndSetupGlobals(config)
-    local min_jugs = config.num_waterings * config.num_plants * 3
+    local min_jugs = config.num_waterings * config.num_plants * config.num_stages
     local min_seeds = config.num_plants + 8
     local one = 'You will need ' .. min_jugs .. ' jugs of water and at minimum ' .. min_seeds .. ' seeds \n'
     local two = '\n Press Shift over ATITD window to continue.'
@@ -163,10 +163,10 @@ function gatherVeggies(config)
         local start = lsGetTimer()
 
         checkBreak()
-        lsSleep(3000)
+        --lsSleep(3000)
 
         plants:iterate(Plant.plant, config)
-        for round=1,4 do
+        for round=1,config.num_stages+1 do
             plants:iterate(Plant.water, {stage_wait=STAGE_WAITS[round], num_waterings=config.num_waterings})
             checkBreak()
         end
@@ -180,9 +180,8 @@ function gatherVeggies(config)
 
 
         local stop = lsGetTimer() + END_OF_RUN_WAIT
-        local total = math.floor((3600 / ((stop - start)/1000)) * config.num_plants * 3)
-        lsPrintln("Running at " .. total .. " veg per hour. ")
-        lsSleep(END_OF_RUN_WAIT)
+        local total = math.floor((3600 / ((stop - start)/1000)) * config.num_plants * 9) -- default 3, currently 9 veggie yield with pyramids bonus
+        sleepWithStatus(END_OF_RUN_WAIT, "Running at " .. total .. " veg per hour. ")
     end
 end
 
@@ -345,6 +344,7 @@ function Plant:water(args)
 
     click(this_loc)
     for _=1, args.num_waterings do
+        lsSleep(click_delay)
         click(this_loc+{0,25})
         click(this_loc)
         checkBreak()
@@ -415,7 +415,7 @@ function clickPlantButton(seed_name)
         else
             error("Text " .. seed_name .. " Not found.")
         end
-        sleepWithStatus(tick_delay, "Retrying build menu open...")
+        sleepWithStatus(tick_delay, "Planting...") --Retrying build menu open
     end
 end
 
@@ -531,7 +531,11 @@ X_PADDING = 5
 function getUserParams()
     local is_done = false
     local got_user_params = false
+    local use_custom = readSetting("use_custom",false)
     local config = {alternate_drag=readSetting("alternate_drag")}
+    config.seed_name = readSetting("seed_name","")
+    config.num_waterings = readSetting("num_waterings",1)
+    config.num_stages = readSetting("num_stages",1)
     local seed_index = readSetting("seed_index",1)
     local display_seed_names = {}
     for i=1,5 do
@@ -542,12 +546,20 @@ function getUserParams()
 
         if not got_user_params then
             local max_plants       = MAX_PLANTS
-            seed_index             = lsDropdown("seed_name", X_PADDING, current_y, 10, lsScreenX - 10, seed_index, display_seed_names)
-            current_y = 50
-            config.num_plants      = drawNumberEditBox("num_plants", "How many to plant per run? Max " .. max_plants, 13)
+            use_custom = lsCheckBox(X_PADDING, current_y, 10, WHITE, "Use custom seed?", use_custom)
+            current_y = 45
+            if use_custom then
+                config.seed_name     = drawEditBox("seed_name", "Custom seed name? ", config.seed_name, false)
+                config.num_waterings = drawNumberEditBox("num_waterings", "How many waterings per stage? ", config.num_waterings)
+                config.num_stages    = drawNumberEditBox("num_stages", "How many watering stages? ", config.num_stages)
+            else
+                seed_index         = lsDropdown("seed_name", X_PADDING, current_y, 10, lsScreenX - 10, seed_index, display_seed_names)
+                current_y = 85
+            end
+            config.num_plants      = drawNumberEditBox("num_plants", "How many to plant per run? Max " .. max_plants, 12)
             config.num_runs        = drawNumberEditBox("num_runs", "How many runs? ", 20)
             config.click_delay     = drawNumberEditBox("click_delay", "What should the click delay be? ", 50)
-            config.alternate_drag = lsCheckBox(X_PADDING, current_y, 10, WHITE, "Alternate (slow) dragging?", config.alternate_drag)
+            config.alternate_drag  = lsCheckBox(X_PADDING, current_y, 10, WHITE, "Alternate (slow) dragging?", config.alternate_drag)
             got_user_params = true
             for k,v in pairs(config) do
                 got_user_params = got_user_params and v
@@ -569,9 +581,16 @@ function getUserParams()
 
     writeSetting("seed_index",seed_index)
     writeSetting("alternate_drag",config.alternate_drag)
+    writeSetting("use_custom",use_custom)
+    writeSetting("seed_name",config.seed_name)
+    writeSetting("num_waterings",config.num_waterings)
+    writeSetting("num_stages",config.num_stages)
     config.num_plants = limitMaxPlants(config.num_plants)
-    config.seed_name = SEED_NAMES[seed_index]
-    config.num_waterings = config.seed_name == LEEKS and 3 or 2
+    if not use_custom then
+        config.seed_name = SEED_NAMES[seed_index]
+        config.num_waterings = config.seed_name == LEEKS and 3 or 2
+        config.num_stages = 3
+    end
     click_delay = config.click_delay
     return config
 end
