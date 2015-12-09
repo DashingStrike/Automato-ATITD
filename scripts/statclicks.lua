@@ -51,7 +51,7 @@ statTimer = {};
 askText = singleLine([[
    Statclicks v 1.0 by Skyfeather.
 
-   Repeatedly performs stat-dependent tasks. Can perform several tasks at once as long as they use different attributes. Will also pluck gems from a watermine and rewind the watermine if available.
+   Repeatedly performs stat-dependent tasks. Can perform several tasks at once as long as they use different attributes. Will also eat food from a kitchen grilled veggies once food is up if a kitchen is pinned. Lastly will pluck gems from a watermine and rewind the watermine if available.
 
    Ensure that windows of tasks you are performing are pinned and press shift.
 ]]);
