@@ -512,12 +512,12 @@ function harvestAll(loop_count)
       end
       
       -- check for beds needing ripping out
-      hsr = findRegionWithText(harvestSeeds);
+      local hsr = findText(harvestSeeds, nil, REGION);
       if hsr then
-        lsPrintln("hsr found?");
-        clickText(findText(utility, nil, nil, hsr));
-        ripLoc = waitForText(txtRipOut);
-        clickText(ripLoc);
+        clickText(findText(utility, hsr));
+        ripLoc = waitForText(txtRipOut, 1000);
+        if ripLoc then
+          clickText(ripLoc);
       end
     else
       seedsList = findAllText(harvestSeeds);
