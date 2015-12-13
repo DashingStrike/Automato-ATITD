@@ -471,4 +471,3 @@ Stock "10 A~B~C~F+N-P+T~"
 Stock "5 A~B~C~F+N-P~T-"
 Stock "5 A~B~C~F~N-P+T~"
 Stock "5 A~B~C~F~N-P~T-"
-
