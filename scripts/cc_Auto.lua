@@ -71,10 +71,11 @@ function ccRun(pass, passCount)
     sleepWithStatus(2000, "(" .. pass .. " / " .. passCount .. ")\n" ..
 		    "Waiting for next tick");
     done = true;
+  	srReadScreen();
     for i=1,#ovens do
       if not findButton(ovens[i], BEGIN) then
-	vents[i] = processOven(ovens[i], vents[i]);
-	done = false;
+				vents[i] = processOven(ovens[i], vents[i]);
+				done = false;
       end
     end
   end
