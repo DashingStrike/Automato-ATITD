@@ -105,7 +105,7 @@ function weave(clothType)
  --    lsPrintln("Couldn't find loom");
       return;
    end
-   studReg = findText("This is a Student's Loom", nil, REGION);
+   studReg = findText("This is [a-z]+ Student's Loom", nil, REGION|REGEX);
 
    if clothType == "Linen" then
       weaveText = findText("Weave Thread into Linen Cloth", loomReg);
@@ -150,11 +150,11 @@ function weave(clothType)
 end
 
 function combFlax()
-   flaxReg = findText("This is a Hackling Rake", nil, REGION);
+   flaxReg = findText("This is [a-z]+ Hackling Rake", nil, REGION|REGEX);
    if flaxReg == nil then
       return;
    end
-   flaxText = findText("This is a Hackling Rake", flaxReg);
+   flaxText = findText("This is [a-z]+ Hackling Rake", flaxReg, REGEX);
    clickText(flaxText);
    lsSleep(per_tick);
    srReadScreen();
@@ -216,7 +216,7 @@ function stirCement()
    if t then
       clickText(t);
    else
-      clickText(findText("This is a Clinker Vat"));
+      clickText(findText("This is [a-z]+ Clinker Vat", nil, REGEX));
       if stirMaster then
          clickText(waitForText("Take..."));
          clickText(waitForText("Everything"));
@@ -242,7 +242,7 @@ function stirCement()
 end
 
 local function tapRods()
-   local window = findText("This is a Bore Hole", nil, REGION);
+   local window = findText("This is [a-z]+ Bore Hole", nil, REGION|REGEX);
    if window == nil then
       return;
    end
@@ -266,7 +266,7 @@ local function tapRods()
 end
 
 local function excavateBlocks()
-   local window = findAllText("This is a Pyramid Block(Roll", nil, REGION);
+   local window = findAllText("This is [a-z]+ Pyramid Block(Roll", nil, REGION|REGEX);
    if window then
       for i=1, #window do
          unpinWindow(window[i]);
@@ -274,7 +274,7 @@ local function excavateBlocks()
       lsSleep(50);
       srReadScreen();
    end
-   window = findText("This is a Tooth Limestone Bl", nil, REGION);
+   window = findText("This is [a-z]+ Tooth Limestone Bl", nil, REGION|REGEX);
    if window == nil then
       return;
    end
@@ -285,7 +285,7 @@ local function excavateBlocks()
    t = waitForText("Slide a rolling rack", 300);
    if t then
       clickText(t);
-      t = waitForText("This is a Pyramid Block(Roll", 300, nil, nil, REGION);
+      t = waitForText("This is [a-z]+ Pyramid Block(Roll", 300, nil, nil, REGION|REGEX);
       if t then
          unpinWindow(t);
       end
@@ -384,8 +384,8 @@ function doWaterMine()
     end
     waterMineLastRan = lsGetTimer();
     srReadScreen();
-    local thisIs = findText("This is a Water Mine");
-    local w = findText("This is a Water Mine", nil, REGION);
+    local thisIs = findText("This is [a-z]+ Water Mine", nil, REGEX);
+    local w = findText("This is [a-z]+ Water Mine", nil, REGION|REGEX);
     local curTime = getTime();
     local curCoords = findCoords();
     if thisIs == nil or w == nil then

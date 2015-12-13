@@ -40,7 +40,7 @@ end
 function checkAnvil()
 	mouseHome();
 	srReadScreen();
-	local pos = findText("This is a Anvil");
+	local pos = findText("This is [a-z]+ Anvil", nil, REGEX);
 	if(not pos) then
 		fatalError("Unable to find the anvil menu, in checkAnvil().");
 	end
@@ -77,7 +77,7 @@ function findAnvil()
 	findResinWedgeRightTop();
 	
 	srReadScreen();
-	local pos = findText("This is a Anvil");
+	local pos = findText("This is [a-z]+ Anvil", nil, REGEX);
 	if(not pos) then
 		fatalError("Unable to find the anvil menu, in findAnvil().");
 	end
@@ -103,7 +103,7 @@ function findAnvil()
 	clickText(pos);
 	
 	srReadScreen();
-	local pos = findText("This is a Anvil");
+	local pos = findText("This is [a-z]+ Anvil", nil, REGEX);
 	if(not pos) then
 		fatalError("Unable to find the anvil menu, in findAnvil().");
 	end
@@ -202,7 +202,7 @@ function loadAnvil()
 	lsSleep(250);
 
 	srReadScreen();
-	local pos = findText("This is a Anvil");
+	local pos = findText("This is [a-z]+ Anvil", nil, REGEX);
 	if(not pos) then
 		fatalError("Unable to find the anvil menu, in loadAnvil().");
 	end
@@ -413,7 +413,7 @@ function takeBlade()
 	end
 
 	srReadScreen();
-	local pos = findText("This is a Anvil");
+	local pos = findText("This is [a-z]+ Anvil", nil, REGEX);
 	if(not pos) then
 		fatalError("Unable to find the anvil menu, in findAnvil().");
 	end
