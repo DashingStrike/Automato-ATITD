@@ -119,7 +119,7 @@ function weave(clothType)
       if studReg then
          lsSleep(500);
          srReadScreen();
-         closeEmptyWindows();
+         closeEmptyAndErrorWindows();
       end
       -- reload the loom
       loadText = findText("Load the Loom with " .. srcType, loomReg);
@@ -129,7 +129,7 @@ function weave(clothType)
          if t ~= nil then
             srCharEvent("MAX\n");
          end
-         closeEmptyWindows(); --This should just be a func to close the error region, but lazy.
+         closeEmptyAndErrorWindows(); --This should just be a func to close the error region, but lazy.
       end
    end
 
@@ -143,7 +143,7 @@ function weave(clothType)
          clickText(t);
          lsSleep(per_tick);
          srReadScreen();
-         closeEmptyWindows(); --This should just be a func to close the error region, but lazy.
+         closeEmptyAndErrorWindows(); --This should just be a func to close the error region, but lazy.
          lsSleep(per_tick);
       end
    end
@@ -357,7 +357,7 @@ function doTasks()
       lsDoFrame();
    else
       srReadScreen();
-      closeEmptyWindows();
+      closeEmptyAndErrorWindows();
       lsSleep(per_tick);
    end
 end
