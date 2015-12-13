@@ -23,7 +23,7 @@ buttons = {
     buttonPos = makePoint(10, 110),
     buttonSize = 270,
     image = "mm_Begin.png",
-    offset = makePoint(20, 10)
+    offset = makePoint(25, 10)
   },
   {
     name = "Wood",
