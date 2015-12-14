@@ -335,7 +335,9 @@ function getPoints()
 
   if #clickList == 0 then
     if lsButtonText(10, lsScreenY - 30, z, 110, 0xffff80ff, "Work Mine") then
+	local pos = getMousePos();	
       workMine();
+	srSetMousePos(pos[0], pos[1]);
     end
   end
 
@@ -382,9 +384,9 @@ function TakeGemWindowRefresh()
  findAllGems = findText("All Gems");
 	if findAllGems then 
 	 safeClick(findAllGems[0],findAllGems[1]);
-	 lsSleep(1000);
 	end
 --Now check to see if there is a Huge Gem and give a special alert.
+	 lsSleep(1000);
  findHugeGems = findText("Huge");
  if findHugeGems then
   lsPlaySound("applause.wav");
@@ -412,6 +414,7 @@ end
 
 function clickSequence()
   sleepWithStatus(150, "Starting...");
+  lsSleep(1000);
   local worked = 1;
   local sets = allSets[dropdown_pattern_cur_value];
   for i = 1, #sets do
@@ -471,7 +474,7 @@ function promptDelays()
     y = y + 35;
     lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
     is_done, clickDelay = lsEditBox("delay", 165, y, 0, 50, 30, 1.0, 1.0,
-                                     0x000000ff, 750);
+                                     0x000000ff, 250);
      clickDelay = tonumber(clickDelay);
        if not clickDelay then
          is_done = false;
@@ -481,7 +484,7 @@ function promptDelays()
      y = y + 50;
       lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
       is_done, popDelay = lsEditBox("delay2", 165, y, 0, 50, 30, 1.0, 1.0,
-                                      0x000000ff, 1500);
+                                      0x000000ff, 2500);
       popDelay = tonumber(popDelay);
       if not popDelay then
         is_done = false;
@@ -491,7 +494,7 @@ function promptDelays()
 	y = y + 60;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Delay between selecting each node.");
 	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Decrease value to run faster (try increments of 25)");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Decrease value to run faster (try increments of 50	)");
 	y = y + 22;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay: Finalize, wait to see if popup appears.");
 	y = y + 16;
@@ -499,7 +502,7 @@ function promptDelays()
 	y = y + 16;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "ie Clicking next nodes before previous ones break.");
 	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay 1000 or 1500 might work better.");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay 1000-3000 might work better.");
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
         is_done = 1;
