@@ -1,19 +1,19 @@
--- mining_sand.lua v1.1 -- by Cegaiel
+-- mining_sand.lua v1.2 -- by Cegaiel
 --
 -- Works the sand mine, but requires a little thought and input from you ;)
 -- You must click on all Quintuple colors FIRST, all Quadruple colors NEXT, all Triple colors NEXT, all Paired colors NEXT, then ALL Single colored stones LAST.
 --
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
--- Additional credits to Tallow for his assistance with stream lining code (embedded arrays and more efficient looping in function clickSequence() - v1.1) 
+-- Additional credits to Tallow for his assistance with stream lining code (embedded arrays and more efficient looping in function clickSequence() - v1.2) 
 --
 
 dofile("common.inc");
 dofile("settings.inc");
 
-askText = singleLine([[
-  Sand Mining v1.1 (by Cegaiel) --
-  Make sure chat is MINIMIZED! Press Shift over ATITD window.
-]]);
+
+askText = "Sand Mining v1.2 (by Cegaiel) --\n\nMake sure chat is MINIMIZED!\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
+
+
 
 autoWorkMine = false;
 dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
@@ -375,6 +375,26 @@ function workMine()
 	findClosePopUp();
 end
 
+
+function TakeGemWindowRefresh()
+ ---- New Feature, Refresh Gem Take menu
+ -- First check to see if All Gems (From mine's Take menu) is pinned up, if so refresh it.
+ findAllGems = findText("All Gems");
+	if findAllGems then 
+	 safeClick(findAllGems[0],findAllGems[1]);
+	 lsSleep(100);
+	end
+--Now check to see if there is a Huge Gem and give a special alert.
+ findHugeGems = findText("Huge");
+ if findHugeGems then
+  lsPlaySound("applause.wav");
+ sleepWithStatus(15000, "Congrats! You found a huge gem... You should take it now! If you have a Huge Gem in inventory, then hide your inventory to stop this alert/applause.");
+ end
+
+end
+
+
+
 function findClosePopUp()
   lsSleep(popDelay);
     while 1 do
@@ -428,7 +448,10 @@ function clickSequence()
 	if autoWorkMine then
 	workMine();
 	end
+
+  TakeGemWindowRefresh();
   reset();
+
 end
 
 function promptDelays()
