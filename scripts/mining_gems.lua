@@ -471,7 +471,7 @@ function promptDelays()
     y = y + 35;
     lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
     is_done, clickDelay = lsEditBox("delay", 165, y, 0, 50, 30, 1.0, 1.0,
-                                     0x000000ff, 200);
+                                     0x000000ff, 750);
      clickDelay = tonumber(clickDelay);
        if not clickDelay then
          is_done = false;
@@ -481,7 +481,7 @@ function promptDelays()
      y = y + 50;
       lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
       is_done, popDelay = lsEditBox("delay2", 165, y, 0, 50, 30, 1.0, 1.0,
-                                      0x000000ff, 500);
+                                      0x000000ff, 1500);
       popDelay = tonumber(popDelay);
       if not popDelay then
         is_done = false;
