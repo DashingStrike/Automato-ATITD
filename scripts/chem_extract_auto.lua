@@ -131,7 +131,7 @@ function makeRecipe(recipe, window)
   waitForText("do you wish to name it?", nil, status);
   srKeyEvent("autocompound\n");
   sleepWithStatus(300, status);
-  clickAllText("This is a Chemistry Lab");
+  clickAllText("This is [a-z]+ Chemistry Lab", nil, REGEX);
   sleepWithStatus(300, status);
   t = waitForText("Take...", nil, status);
   safeClick(t[0]+10, t[1]+5);

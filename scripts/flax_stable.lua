@@ -15,7 +15,7 @@ askText = singleLine([[
   Plant flax and harvest either flax or seeds. --
   Make sure the plant flax window is pinned and on the RIGHT side of
   the screen. Your Automato window should also be on the RIGHT side
-  of the screen. You must be in F8F8 cam zoomed in.  You may need to
+  of the screen. You may need to
   F12 at low resolutions or hide your chat window (if it starts
   planting and fails to move downward, it probably clicked on your
   chat window). Will plant grid NE of current location.  'Plant all
@@ -59,7 +59,7 @@ xyFlaxMenu = {};
 
 -- The flax bed window
 window_w = 168;
-window_h = 126;
+window_h = 150;
 
 FLAX = 0;
 ONIONS = 1;
@@ -121,10 +121,6 @@ function checkWindowSize(x, y)
     srReadScreen();
     window_check_done_once = true;
      local pos = srFindImageInRange(imgUseable, x-5, y-50, 150, 100)
-    if pos then
-      window_w = 166;
-      window_h = 136;
-    end
   end
 end
 
@@ -293,6 +289,7 @@ function doit()
     error("ATITD clock not found.\Verify entire clock and borders are visible. Try moving clock slightly.");
   end
 
+  setCameraView(CARTOGRAPHER2CAM);
   drawWater();
 
   for loop_count=1, num_loops do
@@ -518,6 +515,7 @@ function harvestAll(loop_count)
         ripLoc = waitForText(txtRipOut, 1000);
         if ripLoc then
           clickText(ripLoc);
+        end
       end
     else
       seedsList = findAllText(harvestSeeds);

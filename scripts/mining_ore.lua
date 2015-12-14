@@ -154,6 +154,9 @@ function getPoints()
   elseif (dropdown_ore_cur_value == 13) then
   ore = "Tungsten";
   stonecount = 12;
+  elseif (dropdown_ore_cur_value == 14) then
+  ore = "Zinc";
+  stonecount = 10;
   end
 
   local nodeleft = stonecount;

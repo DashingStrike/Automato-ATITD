@@ -1,19 +1,19 @@
--- mining_sand.lua v1.1 -- by Cegaiel
+-- mining_sand.lua v1.2 -- by Cegaiel
 --
 -- Works the sand mine, but requires a little thought and input from you ;)
 -- You must click on all Quintuple colors FIRST, all Quadruple colors NEXT, all Triple colors NEXT, all Paired colors NEXT, then ALL Single colored stones LAST.
 --
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
--- Additional credits to Tallow for his assistance with stream lining code (embedded arrays and more efficient looping in function clickSequence() - v1.1) 
+-- Additional credits to Tallow for his assistance with stream lining code (embedded arrays and more efficient looping in function clickSequence() - v1.2) 
 --
 
 dofile("common.inc");
 dofile("settings.inc");
 
-askText = singleLine([[
-  Sand Mining v1.1 (by Cegaiel) --
-  Make sure chat is MINIMIZED! Press Shift over ATITD window.
-]]);
+
+askText = "Sand Mining v1.2 (by Cegaiel) --\n\nMake sure chat is MINIMIZED!\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
+
+
 
 autoWorkMine = false;
 dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
@@ -335,7 +335,9 @@ function getPoints()
 
   if #clickList == 0 then
     if lsButtonText(10, lsScreenY - 30, z, 110, 0xffff80ff, "Work Mine") then
+	local pos = getMousePos();	
       workMine();
+	srSetMousePos(pos[0], pos[1]);
     end
   end
 
@@ -375,6 +377,26 @@ function workMine()
 	findClosePopUp();
 end
 
+
+function TakeGemWindowRefresh()
+ ---- New Feature, Refresh Gem Take menu
+ -- First check to see if All Gems (From mine's Take menu) is pinned up, if so refresh it.
+ findAllGems = findText("All Gems");
+	if findAllGems then 
+	 safeClick(findAllGems[0],findAllGems[1]);
+	end
+--Now check to see if there is a Huge Gem and give a special alert.
+	 lsSleep(1000);
+ findHugeGems = findText("Huge");
+ if findHugeGems then
+  lsPlaySound("applause.wav");
+ sleepWithStatus(15000, "Congrats! You found a huge gem... You should take it now! If you have a Huge Gem in inventory, then hide your inventory to stop this alert/applause.");
+ end
+
+end
+
+
+
 function findClosePopUp()
   lsSleep(popDelay);
     while 1 do
@@ -392,6 +414,7 @@ end
 
 function clickSequence()
   sleepWithStatus(150, "Starting...");
+  lsSleep(1000);
   local worked = 1;
   local sets = allSets[dropdown_pattern_cur_value];
   for i = 1, #sets do
@@ -428,7 +451,10 @@ function clickSequence()
 	if autoWorkMine then
 	workMine();
 	end
+
+  TakeGemWindowRefresh();
   reset();
+
 end
 
 function promptDelays()
@@ -448,7 +474,7 @@ function promptDelays()
     y = y + 35;
     lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
     is_done, clickDelay = lsEditBox("delay", 165, y, 0, 50, 30, 1.0, 1.0,
-                                     0x000000ff, 200);
+                                     0x000000ff, 250);
      clickDelay = tonumber(clickDelay);
        if not clickDelay then
          is_done = false;
@@ -458,7 +484,7 @@ function promptDelays()
      y = y + 50;
       lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
       is_done, popDelay = lsEditBox("delay2", 165, y, 0, 50, 30, 1.0, 1.0,
-                                      0x000000ff, 500);
+                                      0x000000ff, 2500);
       popDelay = tonumber(popDelay);
       if not popDelay then
         is_done = false;
@@ -468,7 +494,7 @@ function promptDelays()
 	y = y + 60;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Delay between selecting each node.");
 	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Decrease value to run faster (try increments of 25)");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Decrease value to run faster (try increments of 50	)");
 	y = y + 22;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay: Finalize, wait to see if popup appears.");
 	y = y + 16;
@@ -476,7 +502,7 @@ function promptDelays()
 	y = y + 16;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "ie Clicking next nodes before previous ones break.");
 	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay 1000 or 1500 might work better.");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Popup Delay 1000-3000 might work better.");
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
         is_done = 1;

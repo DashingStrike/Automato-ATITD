@@ -510,7 +510,7 @@ function doit()
 	askForWindow("Pin all Chemistry Laboratories");
 	
 	srReadScreen();
-	labWindows = findAllText("This is a Chemistry Laboratory", nil, REGION);
+	labWindows = findAllText("This is [a-z]+ Chemistry Laboratory", nil, REGION+REGEX);
 	
 	if labWindows == nil then
 		error 'Did not find any open windows';
@@ -531,7 +531,7 @@ function doit()
 	while 1 do
 		-- Tick
 		srReadScreen();
-		labWindows2 = findAllText("This is a Chemistry Laboratory", nil, REGION);
+		labWindows2 = findAllText("This is [a-z]+ Chemistry Laboratory", nil, REGION+REGEX);
 		
 		local should_continue = nil;
 		
