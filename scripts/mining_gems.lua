@@ -382,7 +382,7 @@ function TakeGemWindowRefresh()
  findAllGems = findText("All Gems");
 	if findAllGems then 
 	 safeClick(findAllGems[0],findAllGems[1]);
-	 lsSleep(100);
+	 lsSleep(1000);
 	end
 --Now check to see if there is a Huge Gem and give a special alert.
  findHugeGems = findText("Huge");
