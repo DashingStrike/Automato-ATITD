@@ -24,13 +24,13 @@ longWait = 500;
 shortWait = 30;
 
 colOffsets = {
-  {35-40-3, 204-182},
-  {71-40-3, 204-182},
-  {107-40-3, 204-182},
-  {143-40-3, 204-182},
-  {179-40-3, 204-182},
-  {215-40-3, 204-182},
-  {251-40-3, 204-182}
+  {15, 22}, --{35-40-3, 204-182}
+  {51, 22}, --{71-40-3, 204-182}
+  {87, 22}, --{107-40-3, 204-182}
+  {123, 22},--{143-40-3, 204-182}
+  {159, 22},--{179-40-3, 204-182}
+  {195, 22},--{215-40-3, 204-182}
+  {231, 22} --{251-40-3, 204-182}
 };
 
 colWidth = 36-35+6;
@@ -38,11 +38,11 @@ colHeight = 323-204;
 colMiddle = 57;
 
 buttonOffsets = {
-  {49-40, 333-182},
-  {89-40, 333-182},
-  {129-40, 333-182},
-  {169-40, 333-182},
-  {209-40, 333-182}
+  {32, 151}, --{49-40, 333-182}
+  {72, 151}, --{89-40, 333-182}
+  {112, 151},--{129-40, 333-182}
+  {152, 151},--{169-40, 333-182}
+  {192, 151} --{209-40, 333-182}
 };
 
 buttonWidth = 78-49;
@@ -139,8 +139,8 @@ function resetWindow(current)
   end
   if ((vLime[0] ~= current.origin[1]) or
       (vLime[1] ~= current.origin[2])) then
-     error("Window moved from (" .. current.origin[1] .. ", " ..
-       current.origin[2] .. ") to (" .. vLime[0] .. ", " .. vLime[1] .. ")");
+     current.origin[1] = vLime[0];
+     current.origin[2] = vLime[1];
   end
   local vFire = srFindImageInRange("crem-fire.png", current.origin[1] - 31,
                                    current.origin[2] - 175, 238, 175,
@@ -191,6 +191,9 @@ function start()
   end
   sleepWithStatus(longWait, updateMessage("Finding my Chi"));
   srReadScreen();
+    for i=1,#windows do
+     	windows[i].origin[2] = windows[i].origin[2] - 7;
+    end
   for i=1,#windows do
     windows[i].lastPos = findPoints(windows[i]);
     if not windows[i].lastPos then
