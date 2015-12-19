@@ -133,7 +133,7 @@ end
 function resetWindow(current)
   local vLime = srFindImageInRange("crem-lime.png", current.origin[1] - 20,
                                    current.origin[2] - 20, 100, 100,
-				   tolerance);
+                                   tolerance);
   if (not vLime) then
      error "Could not find origin again.";
   end
@@ -192,7 +192,7 @@ function start()
   sleepWithStatus(longWait, updateMessage("Finding my Chi"));
   srReadScreen();
     for i=1,#windows do
-     	windows[i].origin[2] = windows[i].origin[2] - 7;
+         windows[i].origin[2] = windows[i].origin[2] - 7;
     end
   for i=1,#windows do
     windows[i].lastPos = findPoints(windows[i]);
@@ -332,9 +332,9 @@ function probeNext(current, points)
     if current.probe <= 5 then
       local newProbe = not current.buttonState[current.probe];
       local clickX = current.origin[1] + buttonOffsets[current.probe][1] +
-	buttonClick;
+    buttonClick;
       local clickY = current.origin[2] + buttonOffsets[current.probe][2] +
-	buttonClick;
+    buttonClick;
 
       current.buttonState[current.probe] = newProbe;
       safeClick(clickX, clickY);
@@ -400,7 +400,7 @@ function toggleButtons(current, points, buttonState)
     if (goalState and not buttonState[i]) or
        (not goalState and buttonState[i]) then
       safeClick(current.origin[1] + buttonOffsets[i][1] + buttonClick,
-		current.origin[2] + buttonOffsets[i][2] + buttonClick);
+        current.origin[2] + buttonOffsets[i][2] + buttonClick);
       lsSleep(shortWait);
       buttonState[i] = goalState;
     end
@@ -564,12 +564,12 @@ function loadSingle(pos, offset, type)
   safeClick(pos[0]+5, pos[1]+5+16);
   lsSleep(100);
   local limePos = waitForImage("crem-limestone.png", maxWait,
-			       "Loading " .. type .. " Into Crematory");
+                    "Loading " .. type .. " Into Crematory");
   if limePos then
     safeClick(limePos[0] + 5, limePos[1] + 5 + offset);
     lsSleep(100);
     local maxPos = waitForImage("crem-max.png", maxWait,
-				"Adding Maximum Amount");
+                    "Adding Maximum Amount", nil, 3000);
     if maxPos then
       safeClick(maxPos[0]+5, maxPos[1]+5);
     end
@@ -589,21 +589,21 @@ function updateMessage(message)
     for i=1,#windows do
       local status = "Buttons: ";
       for j=1,5 do
-	if windows[i].dirs[j] == OPP then
-	  status = status .. getDir("+", windows[i].ups[j]) ..
-	    getDir("-", windows[i].downs[j]);
-	elseif windows[i].dirs[j] == SAME_UP then
-	  status = status .. getDir("+", windows[i].ups[j]) ..
-	    getDir("+", windows[i].downs[j]);
-	else
-	  status = status .. getDir("-", windows[i].ups[j]) ..
-	    getDir("-", windows[i].downs[j]);
-	end
-	if j ~= 5 then
-	  status = status .. ", ";
-	else
-	  status = status .. "\n";
-	end
+    if windows[i].dirs[j] == OPP then
+      status = status .. getDir("+", windows[i].ups[j]) ..
+        getDir("-", windows[i].downs[j]);
+    elseif windows[i].dirs[j] == SAME_UP then
+      status = status .. getDir("+", windows[i].ups[j]) ..
+        getDir("+", windows[i].downs[j]);
+    else
+      status = status .. getDir("-", windows[i].ups[j]) ..
+        getDir("-", windows[i].downs[j]);
+    end
+    if j ~= 5 then
+      status = status .. ", ";
+    else
+      status = status .. "\n";
+    end
       end
       result = result .. "\n" .. status;
     end
