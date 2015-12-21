@@ -325,13 +325,33 @@ function refillWater()
 	end
 end
 
+function refillWaterBarrel()
+	lsSleep(100);
+	srReadScreen();
+	FindWater = findText("Draw Water");
+
+	if FindWater then
+	statusScreen("Refilling water...");
+	srClickMouseNoMove(FindWater[0]+30,FindWater[1]+5, right_click);
+	lsSleep(500);
+
+
+		srReadScreen();
+		FindMaxButton = srFindImage("Maxbutton.png", 5000);
+
+		if FindMaxButton then
+		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
+		lsSleep(500);
+		end
+	end
+end
 
 
 function doit()
 
 
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Pin any number of thistle gardens, edit thistle_new_mix with recipe. Note the windows must be pinned CASCADED. Use window_manager.lua or window_arranger.lua to arrange the windows correctly. thistle_new_mix can handle up to about 32 gardens by using the cascade method. Use thistle_custom.lua if you are only running a few gardens. This macro is the same as thistle_new EXCEPT that it can run a mixture of upgraded and non-upgraded gardens (extra line of text).");
+	askForWindow("Pin any number of thistle gardens, edit thistle_new_mix with recipe. Note the windows must be pinned CASCADED. Use window_manager.lua or window_arranger.lua to arrange the windows correctly. thistle_new_mix can handle up to about 32 gardens by using the cascade method. Use thistle_custom.lua if you are only running a few gardens. This macro is the same as thistle_new EXCEPT that it can run a mixture of upgraded and non-upgraded gardens (extra line of text). Macro will always look for water icon to refill jugs. You can optionally pin the Water Barrel menu to refill jugs.");
 	
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';
@@ -355,6 +375,7 @@ function doit()
 	
 
 	refillWater();
+	refillWaterBarrel();
 
 	-- test();
 	
@@ -409,6 +430,7 @@ function doit()
 		lsSleep(500);
 		
 		refillWater();
+		refillWaterBarrel();
 		
 		if finish_up then
 			break;

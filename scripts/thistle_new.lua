@@ -10,6 +10,10 @@
 
 dofile("screen_reader_common.inc");
 dofile("ui_utils.inc");
+dofile("common.inc");
+
+
+
 
 per_click_delay = 0;
 
@@ -285,22 +289,44 @@ function refillWater()
 	end
 end
 
+function refillWaterBarrel()
+	lsSleep(100);
+	srReadScreen();
+	FindWater = findText("Draw Water");
+
+	if FindWater then
+	statusScreen("Refilling water...");
+	srClickMouseNoMove(FindWater[0]+30,FindWater[1]+5, right_click);
+	lsSleep(500);
+
+
+		srReadScreen();
+		FindMaxButton = srFindImage("Maxbutton.png", 5000);
+
+		if FindMaxButton then
+		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
+		lsSleep(500);
+		end
+	end
+end
+
 
 
 function doit()
 	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe. Note the windows must be pinned CASCADED. Use window_manager.lua or window_arranger.lua to arrange the windows correctly. thistle_new can handle up to about 32 gardens by using the cascade method (shuffles windows back and forth). Use thistle_custom.lua if you are only running a few gardens.");
+	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe. Note the windows must be pinned  CASCADED. Use window_manager.lua or window_arranger.lua to arrange the windows correctly. thistle_new can handle up to about  32 gardens by using the cascade method (shuffles windows back and forth). Use thistle_custom.lua if you are only running a  few gardens. Macro will always look for water icon to refill jugs. You can optionally pin the Water Barrel menu to refill jugs.");
 	
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';
 	end
 
 	refillWater();
+	refillWaterBarrel();
 
 	srReadScreen();	
 	window_locs = findAllImages("ThisIs.png");
 	if not (#window_locs == expected_gardens) then
-		error ("Did not find expected number of thistle gardens (found " .. #window_locs .. " expected " .. expected_gardens .. ")");
+		error ("Did not find expected number of thistle gardens (found " .. #window_locs .. " expected " ..  expected_gardens .. ")");
 	end
 	
 --	wl2 = {};
@@ -334,6 +360,8 @@ function doit()
 		--waitForMonChange("Getting initial image...");
 		for i=0, 39 do
 			refillWater();
+			refillWaterBarrel();
+
 			local to_click = {};
 			if (i == 0) then
 				to_click[1] = "ThistlePlantACrop.png";
@@ -364,6 +392,7 @@ function doit()
 		lsSleep(500);
 		
 		refillWater();
+		refillWaterBarrel();
 		
 		if finish_up then
 			break;

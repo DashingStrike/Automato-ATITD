@@ -287,6 +287,27 @@ function refillWater()
 	lsSleep(4000);
 end
 
+function refillWaterBarrel()
+	lsSleep(100);
+	srReadScreen();
+	FindWater = findText("Draw Water");
+
+	if FindWater then
+	statusScreen("Refilling water...");
+	srClickMouseNoMove(FindWater[0]+30,FindWater[1]+5, right_click);
+	lsSleep(500);
+
+
+		srReadScreen();
+		FindMaxButton = srFindImage("Maxbutton.png", 5000);
+
+		if FindMaxButton then
+		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
+		lsSleep(500);
+		end
+	end
+end
+
 function doit()
 	num_loops = promptNumber("How many passes ?", 1);
 	askForWindow("Pin any number of thistle gardnes, edit thistle_custom with recipe.");
@@ -371,6 +392,7 @@ function doit()
 		end
 		
 		refillWater(); -- Hack - won't work unless things are arranged precisely, and does no checking
+		refillWaterBarrel();
 		
 		if finish_up then
 			break;

@@ -23,6 +23,8 @@ askText = singleLine([[
   thistles with a macro is extremely complicated. Read
   ThistleReference.txt located in your Automato folder.
   Make sure the VT window is in the TOP-RIGHT corner of the screen.
+  Macro will always look for water icon to refill jugs.
+  You can optionally pin the Water Barrel menu to refill jugs.
 ]]);
 
 wmText = "Tap Control on Thistle Gardens to open and pin.";
@@ -229,6 +231,8 @@ function runThistles()
     lsSleep(500);
     
     refillWater();
+    refillWaterBarrel();
+
     if finish_up then
       break;
     end			
@@ -274,6 +278,26 @@ function refillWater()
   end
 end
 
+function refillWaterBarrel()
+	lsSleep(100);
+	srReadScreen();
+	FindWater = findText("Draw Water");
+
+	if FindWater then
+	statusScreen("Refilling water...");
+	srClickMouseNoMove(FindWater[0]+30,FindWater[1]+5, right_click);
+	lsSleep(500);
+
+
+		srReadScreen();
+		FindMaxButton = srFindImage("Maxbutton.png", 5000);
+
+		if FindMaxButton then
+		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
+		lsSleep(500);
+		end
+	end
+end
 
 -------------------------------------------------------------------------------
 -- waitForMonChange()
