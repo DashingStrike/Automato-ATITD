@@ -85,7 +85,8 @@ essences[79] = {"SaltsOfSilver",20};
 essences[80] = {"SaltsOfStrontium",68};
 essences[81] = {"SaltsOfTin",81};
 essences[82] = {"SaltsOfTitanium",22};
-essences[83] = {"SaltsOfTungsten",40};
+essences[83] = {"SaltsOfTungsten",89};
+essences[84] = {"SaltsOfZinc",23};
 
 
 tick_time = 100;
@@ -287,7 +288,7 @@ function labTick(essWin, state)
 	--and here is where we add in the essence
 	local outer;
 	while outer == nil do
-		safeClick(essWin.x + 10, essWin.y + 5);
+		safeClick(essWin.x + 10, essWin.y + essWin.height / 2);
 		srReadScreen();
 		outer = findText("Manufacture...", essWin);
 		lsSleep(per_read_delay);
@@ -368,7 +369,7 @@ function labTick(essWin, state)
 	
 	clickText(waitForText("Manufacture...", nil, nil, essWin));
 	lsSleep(per_click_delay + per_read_delay);
-	t = waitForText("Essential Distill"));
+	t = waitForText("Essential Distill");
 	clickText(t);
 	lsSleep(per_click_delay);
 	
@@ -388,7 +389,7 @@ function labTick(essWin, state)
 			lsSleep(200);
 		end
 	end
-	safeClick(essWin.x + 10, essWin.y + 10);
+		safeClick(essWin.x + 10, essWin.y + essWin.height / 2);
 	lsSleep(per_click_delay);
 	return;
 end
