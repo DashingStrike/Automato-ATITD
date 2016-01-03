@@ -589,10 +589,10 @@ function labTick(essWin, state)
 	
 	--search for something to add
 	local rw = waitForText("Choose a material", nil, nil, nil, REGION);
-	rw.x = rw.x+9;
-	rw.y = rw.y+73;
-	rw.width = 222
-	rw.height = 182
+	rw.x = rw.x+8;
+	rw.y = rw.y+69;
+	rw.width = 243;
+	rw.height = 182;
 	local parse = findAllText(nil, rw);
 	local foundEss = false;
 	if parse then
