@@ -97,7 +97,7 @@ function makeRecipe(recipe, window)
       "Adding Essence of " .. recipe[i];
 --    statusScreen("Adding Essence of " .. recipe[i]);
     safeClick(ingredients[i][0]+10, ingredients[i][1]+5);
-    waitForText("many?", 5000, status, nil, NOPIN);
+    waitForText("many?", 5000, status, nil, nil, NOPIN);
     srKeyEvent("7\n");
     local ingredientWindow = getWindowBorders(ingredients[i][0]+10,
 					      ingredients[i][1]+5);

@@ -55,7 +55,7 @@ Time = nil;
   if anchor then
     lsPrintln("Found Anchor");
     window = getWindowBorders(anchor[0], anchor[1]);
-    lines = findAllText(nil, window, NOPIN);
+    lines = findAllText(nil, window, nil, NOPIN);
     for i=1,#lines do
       lsPrintln("LINE " .. i .. " : " .. table.concat(lines[i], ","));
 	theDateTime = table.concat(lines[1], ",") -- Line 1 on the clock

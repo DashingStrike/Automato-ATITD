@@ -72,7 +72,7 @@ function getCurrentRegion()
 
 	if anchor then
 		window = getWindowBorders(anchor[0], anchor[1]);
-		lines = findAllText(nil, window, NOPIN);
+		lines = findAllText(nil, window, nil, NOPIN);
 		regionCoords = table.concat(lines[2], ",");
 		regionAndCoords = string.sub(regionCoords,string.find(regionCoords,",") + 1);
 		region = string.sub(regionAndCoords, 0,  string.find(regionAndCoords,":") - 1);
