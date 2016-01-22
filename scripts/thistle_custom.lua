@@ -8,8 +8,7 @@
 --    99 if daylight and open lid, 33 if daylight and closed lid)
 --
 
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
+dofile("common.inc");
 
 per_click_delay = 0;
 
