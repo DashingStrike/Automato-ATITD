@@ -1,0 +1,892 @@
+return
+{
+	["BlueTarafern"] = 
+	{
+	}
+	,
+	["GingerRoot"] = 
+	{
+	}
+	,
+	["SandyDustweed"] = 
+	{
+	}
+	,
+	["Pippali"] = 
+	{
+	}
+	,
+	["ResinKaeshra"] = 
+	{
+		["temp"] = 67,
+	}
+	,
+	["SagarGhota"] = 
+	{
+	}
+	,
+	["SaltsOfTin"] = 
+	{
+		["temp"] = 82,
+	}
+	,
+	["ResinArconis"] = 
+	{
+		["temp"] = 76,
+	}
+	,
+	["PurpleTintiri"] = 
+	{
+	}
+	,
+	["Bucklerleaf"] = 
+	{
+		["temp"] = 70,
+	}
+	,
+	["ResinLocustPalm"] = 
+	{
+		["temp"] = 61,
+	}
+	,
+	["CamelPheromoneFemale"] = 
+	{
+	}
+	,
+	["Covage"] = 
+	{
+	}
+	,
+	["Glechoma"] = 
+	{
+		["temp"] = 57,
+	}
+	,
+	["BeetleLeaf"] = 
+	{
+	}
+	,
+	["Chaffa"] = 
+	{
+	}
+	,
+	["FoolsAgar"] = 
+	{
+		["temp"] = 40,
+	}
+	,
+	["SaltsOfGold"] = 
+	{
+		["temp"] = 85,
+	}
+	,
+	["ResinOleaceae"] = 
+	{
+		["temp"] = 87,
+	}
+	,
+	["ResinPassam"] = 
+	{
+		["temp"] = 39,
+	}
+	,
+	["PowderedCitrine"] = 
+	{
+	}
+	,
+	["ResinOilPalm"] = 
+	{
+		["temp"] = 9,
+	}
+	,
+	["OpalHarebell"] = 
+	{
+	}
+	,
+	["Discorea"] = 
+	{
+		["temp"] = 52,
+	}
+	,
+	["Spinach"] = 
+	{
+	}
+	,
+	["Yigory"] = 
+	{
+		["temp"] = 70,
+	}
+	,
+	["Mariae"] = 
+	{
+		["temp"] = 89,
+	}
+	,
+	["SteelBladegrass"] = 
+	{
+	}
+	,
+	["ResinTinyOilPalm"] = 
+	{
+		["temp"] = 36,
+	}
+	,
+	["BluebottleClover"] = 
+	{
+		["temp"] = 71,
+	}
+	,
+	["SilvertongueDamia"] = 
+	{
+		["temp"] = 69,
+	}
+	,
+	["SaltsOfAntimony"] = 
+	{
+		["temp"] = 7,
+	}
+	,
+	["Hyssop"] = 
+	{
+		["temp"] = 25,
+	}
+	,
+	["WildOnion"] = 
+	{
+	}
+	,
+	["ResinAnaxi"] = 
+	{
+		["temp"] = 23,
+	}
+	,
+	["ResinCoconutPalm"] = 
+	{
+		["temp"] = 24,
+	}
+	,
+	["Cardamom"] = 
+	{
+	}
+	,
+	["ResinTapacaeMiralis"] = 
+	{
+		["temp"] = 7,
+	}
+	,
+	["ResinRedMaple"] = 
+	{
+		["temp"] = 87,
+	}
+	,
+	["Lythrum"] = 
+	{
+		["temp"] = 3,
+	}
+	,
+	["YellowTristeria"] = 
+	{
+	}
+	,
+	["DrapeauDor"] = 
+	{
+	}
+	,
+	["DustyBlueSage"] = 
+	{
+	}
+	,
+	["Chives"] = 
+	{
+		["temp"] = 73,
+	}
+	,
+	["Chatinabrae"] = 
+	{
+	}
+	,
+	["IndigoDamia"] = 
+	{
+		["temp"] = 51,
+	}
+	,
+	["ResinFernPalm"] = 
+	{
+		["temp"] = 18,
+	}
+	,
+	["PaleRusset"] = 
+	{
+	}
+	,
+	["PowderedRuby"] = 
+	{
+		["temp"] = 9,
+	}
+	,
+	["ResinMiniPalmetto"] = 
+	{
+		["temp"] = 41,
+	}
+	,
+	["Houseleek"] = 
+	{
+		["temp"] = 66,
+	}
+	,
+	["Hogweed"] = 
+	{
+	}
+	,
+	["SaltsOfAluminum"] = 
+	{
+		["temp"] = 89,
+	}
+	,
+	["ShrubbyBasil"] = 
+	{
+	}
+	,
+	["BlackPepperPlant"] = 
+	{
+	}
+	,
+	["ResinHokkaido"] = 
+	{
+		["temp"] = 30,
+	}
+	,
+	["Crampbark"] = 
+	{
+		["temp"] = 84,
+	}
+	,
+	["ResinMiniatureFernPalm"] = 
+	{
+		["temp"] = 42,
+	}
+	,
+	["Khokali"] = 
+	{
+	}
+	,
+	["MarbleDust"] = 
+	{
+	}
+	,
+	["ResinGiantCricklewood"] = 
+	{
+		["temp"] = 18,
+	}
+	,
+	["Ilex"] = 
+	{
+	}
+	,
+	["BeeBalm"] = 
+	{
+	}
+	,
+	["Mindanao"] = 
+	{
+		["temp"] = 22,
+	}
+	,
+	["PowderedTurquoise"] = 
+	{
+	}
+	,
+	["Digweed"] = 
+	{
+	}
+	,
+	["PowderedQuartz"] = 
+	{
+		["temp"] = 47,
+	}
+	,
+	["Shyama"] = 
+	{
+	}
+	,
+	["Lemondrop"] = 
+	{
+		["temp"] = 58,
+	}
+	,
+	["ResinHawthorn"] = 
+	{
+		["temp"] = 90,
+	}
+	,
+	["SugarCane"] = 
+	{
+	}
+	,
+	["CrimsonPipeweed"] = 
+	{
+	}
+	,
+	["ResinPhoenixPalm"] = 
+	{
+		["temp"] = 61,
+	}
+	,
+	["SaltsOfMagnesium"] = 
+	{
+		["temp"] = 19,
+	}
+	,
+	["Cinquefoil"] = 
+	{
+	}
+	,
+	["Ashoka"] = 
+	{
+	}
+	,
+	["Morpha"] = 
+	{
+		["temp"] = 66,
+	}
+	,
+	["ResinRazorPalm"] = 
+	{
+		["temp"] = 23,
+	}
+	,
+	["Fumitory"] = 
+	{
+	}
+	,
+	["WildYam"] = 
+	{
+	}
+	,
+	["GinsengRoot"] = 
+	{
+	}
+	,
+	["SaltsOfZinc"] = 
+	{
+		["temp"] = 23,
+	}
+	,
+	["PowderedOpal"] = 
+	{
+		["temp"] = 83,
+	}
+	,
+	["CommonRosemary"] = 
+	{
+		["temp"] = 58,
+	}
+	,
+	["CrimsonLettuce"] = 
+	{
+		["temp"] = 0,
+	}
+	,
+	["OrangeSweetgrass"] = 
+	{
+	}
+	,
+	["Tsangto"] = 
+	{
+	}
+	,
+	["Harebell"] = 
+	{
+		["temp"] = 20,
+	}
+	,
+	["ResinRoyalPalm"] = 
+	{
+		["temp"] = 41,
+	}
+	,
+	["ResinChakkanutTree"] = 
+	{
+		["temp"] = 74,
+	}
+	,
+	["ResinRanyahn"] = 
+	{
+		["temp"] = 80,
+	}
+	,
+	["BlueDamia"] = 
+	{
+	}
+	,
+	["Prisniparni"] = 
+	{
+	}
+	,
+	["Primula"] = 
+	{
+	}
+	,
+	["ResinStoutPalm"] = 
+	{
+		["temp"] = 6,
+	}
+	,
+	["Tagetese"] = 
+	{
+	}
+	,
+	["Fleabane"] = 
+	{
+		["temp"] = 10,
+	}
+	,
+	["PowderedDiamond"] = 
+	{
+		["temp"] = 36,
+	}
+	,
+	["SaltsOfIron"] = 
+	{
+		["temp"] = 38,
+	}
+	,
+	["PowderedSunstone"] = 
+	{
+	}
+	,
+	["Soapwort"] = 
+	{
+	}
+	,
+	["Cinnamon"] = 
+	{
+		["temp"] = 78,
+	}
+	,
+	["ResinCricklewood"] = 
+	{
+		["temp"] = 78,
+	}
+	,
+	["PowderedJade"] = 
+	{
+	}
+	,
+	["SaltsOfTungsten"] = 
+	{
+		["temp"] = 89,
+	}
+	,
+	["DwarfHogweed"] = 
+	{
+	}
+	,
+	["MountainMint"] = 
+	{
+		["temp"] = 38,
+	}
+	,
+	["TrueTarragon"] = 
+	{
+	}
+	,
+	["PowderedTopaz"] = 
+	{
+		["temp"] = 73,
+	}
+	,
+	["KatakoRoot"] = 
+	{
+	}
+	,
+	["PowderedSapphire"] = 
+	{
+		["temp"] = 52,
+	}
+	,
+	["SaltsOfSilver"] = 
+	{
+		["temp"] = 20,
+	}
+	,
+	["ResinChicory"] = 
+	{
+		["temp"] = 20,
+	}
+	,
+	["Meadowsweet"] = 
+	{
+		["temp"] = 48,
+	}
+	,
+	["CrumpledLeafBasil"] = 
+	{
+	}
+	,
+	["ResinSpikedFishtree"] = 
+	{
+		["temp"] = 24,
+	}
+	,
+	["Panoe"] = 
+	{
+	}
+	,
+	["ShrubSage"] = 
+	{
+		["temp"] = 8,
+	}
+	,
+	["PitcherPlant"] = 
+	{
+	}
+	,
+	["AltarsBlessing"] = 
+	{
+	}
+	,
+	["OrangeNiali"] = 
+	{
+	}
+	,
+	["Sweetflower"] = 
+	{
+	}
+	,
+	["Rhubarb"] = 
+	{
+	}
+	,
+	["CommonBasil"] = 
+	{
+		["temp"] = 28,
+	}
+	,
+	["Myrrh"] = 
+	{
+	}
+	,
+	["ResinDeltaPalm"] = 
+	{
+		["temp"] = 74,
+	}
+	,
+	["ResinWindriverPalm"] = 
+	{
+		["temp"] = 27,
+	}
+	,
+	["DwarfWildLettuce"] = 
+	{
+	}
+	,
+	["ResinBrambleHedge"] = 
+	{
+		["temp"] = 65,
+	}
+	,
+	["PaleOchoa"] = 
+	{
+	}
+	,
+	["WildLettuce"] = 
+	{
+		["temp"] = 48,
+	}
+	,
+	["SaltsOfTitanium"] = 
+	{
+		["temp"] = 22,
+	}
+	,
+	["Myristica"] = 
+	{
+		["temp"] = 69,
+	}
+	,
+	["PowderedLapis"] = 
+	{
+	}
+	,
+	["Hazlewort"] = 
+	{
+		["temp"] = 32,
+	}
+	,
+	["CommonSage"] = 
+	{
+		["temp"] = 33,
+	}
+	,
+	["Skirret"] = 
+	{
+	}
+	,
+	["ResinFoldedBirch"] = 
+	{
+		["temp"] = 12,
+	}
+	,
+	["BrownMuskerro"] = 
+	{
+	}
+	,
+	["PulmonariaOpal"] = 
+	{
+	}
+	,
+	["Satsatchi"] = 
+	{
+		["temp"] = 19,
+	}
+	,
+	["SaltsOfCopper"] = 
+	{
+		["temp"] = 71,
+	}
+	,
+	["HoneyMint"] = 
+	{
+	}
+	,
+	["StrawberryTea"] = 
+	{
+		["temp"] = 65,
+	}
+	,
+	["FireAllspice"] = 
+	{
+	}
+	,
+	["Gynura"] = 
+	{
+	}
+	,
+	["ResinTrilobellia"] = 
+	{
+		["temp"] = 7,
+	}
+	,
+	["SaltsOfStrontium"] = 
+	{
+		["temp"] = 68,
+	}
+	,
+	["ResinSavaka"] = 
+	{
+		["temp"] = 22,
+	}
+	,
+	["PowderedAmethyst"] = 
+	{
+	}
+	,
+	["Sorrel"] = 
+	{
+		["temp"] = 68,
+	}
+	,
+	["GoldenThyme"] = 
+	{
+	}
+	,
+	["ResinCinnar"] = 
+	{
+		["temp"] = 85,
+	}
+	,
+	["Thyme"] = 
+	{
+		["temp"] = 48,
+	}
+	,
+	["SaltsOfLead"] = 
+	{
+		["temp"] = 68,
+	}
+	,
+	["Banto"] = 
+	{
+	}
+	,
+	["PowderedEmerald"] = 
+	{
+		["temp"] = 48,
+	}
+	,
+	["Sweetsop"] = 
+	{
+	}
+	,
+	["Sweetgrass"] = 
+	{
+		["temp"] = 87,
+	}
+	,
+	["Anansi"] = 
+	{
+	}
+	,
+	["ResinUmbrellaPalm"] = 
+	{
+		["temp"] = 89,
+	}
+	,
+	["TinyClover"] = 
+	{
+		["temp"] = 89,
+	}
+	,
+	["Daggerleaf"] = 
+	{
+		["temp"] = 75,
+	}
+	,
+	["ResinElephantia"] = 
+	{
+		["temp"] = 70,
+	}
+	,
+	["VerdantSquill"] = 
+	{
+		["temp"] = 39,
+	}
+	,
+	["SaltsOfPlatinum"] = 
+	{
+		["temp"] = 26,
+	}
+	,
+	["ResinButterleafTree"] = 
+	{
+		["temp"] = 18,
+	}
+	,
+	["Xanosi"] = 
+	{
+		["temp"] = 30,
+	}
+	,
+	["ResinBeetlenut"] = 
+	{
+		["temp"] = 75,
+	}
+	,
+	["ResinBottleTree"] = 
+	{
+		["temp"] = 33,
+	}
+	,
+	["Whitebelly"] = 
+	{
+	}
+	,
+	["SticklerHedge"] = 
+	{
+		["temp"] = 69,
+	}
+	,
+	["Yava"] = 
+	{
+	}
+	,
+	["Dalchini"] = 
+	{
+	}
+	,
+	["JaggedDewcup"] = 
+	{
+	}
+	,
+	["Garcinia"] = 
+	{
+	}
+	,
+	["SaltsOfLithium"] = 
+	{
+		["temp"] = 25,
+	}
+	,
+	["ResinBroadleafPalm"] = 
+	{
+		["temp"] = 86,
+	}
+	,
+	["WeepingPatala"] = 
+	{
+	}
+	,
+	["ResinCeruleanBlue"] = 
+	{
+		["temp"] = 56,
+	}
+	,
+	["Motherwort"] = 
+	{
+		["temp"] = 8,
+	}
+	,
+	["ResinBloodbark"] = 
+	{
+		["temp"] = 69,
+	}
+	,
+	["CamelPheromoneMale"] = 
+	{
+	}
+	,
+	["PaleDhamasa"] = 
+	{
+		["temp"] = 29,
+	}
+	,
+	["MirabellisFern"] = 
+	{
+	}
+	,
+	["PowderedGarnet"] = 
+	{
+	}
+	,
+	["ResinFeatherTree"] = 
+	{
+		["temp"] = 86,
+	}
+	,
+	["ResinOrrorin"] = 
+	{
+		["temp"] = 14,
+	}
+	,
+	["ResinPratyekaTree"] = 
+	{
+		["temp"] = 12,
+	}
+	,
+	["DarkOchoa"] = 
+	{
+		["temp"] = 21,
+	}
+	,
+	["ResinAshPalm"] = 
+	{
+		["temp"] = 26,
+	}
+	,
+	["ResinMonkeyPalm"] = 
+	{
+		["temp"] = 42,
+	}
+	,
+	["ResinSpindleTree"] = 
+	{
+		["temp"] = 50,
+	}
+	,
+	["ResinToweringPalm"] = 
+	{
+		["temp"] = 72,
+	}
+	,
+}
