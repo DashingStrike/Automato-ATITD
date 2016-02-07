@@ -1,280 +1,50 @@
-Thoth,As----,Bi++++,Sp----|Blue Tarafern,Bramble Hedge,Fern Palm,Powdered Opal,Salts Of Iron
-Thoth,Bi++++,As----,Sp----|Blue Tarafern,Bramble Hedge,Fern Palm,Powdered Opal,Salts Of Iron
-Thoth,Bi++++,Sp----,As----|Blue Tarafern,Bramble Hedge,Fern Palm,Powdered Opal,Salts Of Iron
-Thoth,As----,Sp----,Bi++++|Blue Tarafern,Bramble Hedge,Fern Palm,Powdered Opal,Salts Of Iron
-Thoth,Sp----,As----,Bi++++|Blue Tarafern,Bramble Hedge,Fern Palm,Powdered Opal,Salts Of Iron
-Thoth,Sp----,Bi++++,As----|Blue Tarafern,Bramble Hedge,Fern Palm,Powdered Opal,Salts Of Iron
-Thoth,Bi----,Sw++++,To----|Bottle Tree,Dusty Blue Sage,Ginseng Root,Hogweed,Royal Palm
-Thoth,Sw++++,Bi----,To----|Bottle Tree,Dusty Blue Sage,Ginseng Root,Hogweed,Royal Palm
-Thoth,Sw++++,To----,Bi----|Bottle Tree,Dusty Blue Sage,Ginseng Root,Hogweed,Royal Palm
-Thoth,Bi----,To----,Sw++++|Bottle Tree,Dusty Blue Sage,Ginseng Root,Hogweed,Royal Palm
-Thoth,To----,Bi----,Sw++++|Bottle Tree,Dusty Blue Sage,Ginseng Root,Hogweed,Royal Palm
-Thoth,To----,Sw++++,Bi----|Bottle Tree,Dusty Blue Sage,Ginseng Root,Hogweed,Royal Palm
-Thoth,So++++,Sp----,To++++|Cinnamon,Golden Thyme,Savaka,Tapacae Miralis,Powdered Sapphire
-Thoth,Sp----,So++++,To++++|Cinnamon,Golden Thyme,Savaka,Tapacae Miralis,Powdered Sapphire
-Thoth,Sp----,To++++,So++++|Cinnamon,Golden Thyme,Savaka,Tapacae Miralis,Powdered Sapphire
-Thoth,So++++,To++++,Sp----|Cinnamon,Golden Thyme,Savaka,Tapacae Miralis,Powdered Sapphire
-Thoth,To++++,So++++,Sp----|Cinnamon,Golden Thyme,Savaka,Tapacae Miralis,Powdered Sapphire
-Thoth,To++++,Sp----,So++++|Cinnamon,Golden Thyme,Savaka,Tapacae Miralis,Powdered Sapphire
-Ra,Bi+++++,Sp-----|Cinnar,Indigo Damia,Windriver Palm,Powdered Opal,Salts Of Iron
-Ra,Sp-----,Bi+++++|Cinnar,Indigo Damia,Windriver Palm,Powdered Opal,Salts Of Iron
-Thoth,As----,So----,To++++|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Gold,Salts Of Tungsten
-Thoth,So----,As----,To++++|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Gold,Salts Of Tungsten
-Thoth,So----,To++++,As----|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Gold,Salts Of Tungsten
-Thoth,As----,To++++,So----|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Gold,Salts Of Tungsten
-Thoth,To++++,As----,So----|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Gold,Salts Of Tungsten
-Thoth,To++++,So----,As----|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Gold,Salts Of Tungsten
-Thoth,Ar++++,Sp----,Sw----|Butterleaf Tree,Ginger Root,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,Sp----,Ar++++,Sw----|Butterleaf Tree,Ginger Root,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,Sp----,Sw----,Ar++++|Butterleaf Tree,Ginger Root,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,Ar++++,Sw----,Sp----|Butterleaf Tree,Ginger Root,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,Sw----,Ar++++,Sp----|Butterleaf Tree,Ginger Root,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,Sw----,Sp----,Ar++++|Butterleaf Tree,Ginger Root,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,As++++,So++++,Sw----|Feather Tree,Hawthorn,Houseleek,Spindle Tree,Strawberry Tea
-Thoth,So++++,As++++,Sw----|Feather Tree,Hawthorn,Houseleek,Spindle Tree,Strawberry Tea
-Thoth,So++++,Sw----,As++++|Feather Tree,Hawthorn,Houseleek,Spindle Tree,Strawberry Tea
-Thoth,As++++,Sw----,So++++|Feather Tree,Hawthorn,Houseleek,Spindle Tree,Strawberry Tea
-Thoth,Sw----,As++++,So++++|Feather Tree,Hawthorn,Houseleek,Spindle Tree,Strawberry Tea
-Thoth,Sw----,So++++,As++++|Feather Tree,Hawthorn,Houseleek,Spindle Tree,Strawberry Tea
-Thoth,As----,Bi++++,Sa----|Cardamom,Fern Palm,Indigo Damia,Monkey Palm,Powdered Ruby
-Thoth,Bi++++,As----,Sa----|Cardamom,Fern Palm,Indigo Damia,Monkey Palm,Powdered Ruby
-Thoth,Bi++++,Sa----,As----|Cardamom,Fern Palm,Indigo Damia,Monkey Palm,Powdered Ruby
-Thoth,As----,Sa----,Bi++++|Cardamom,Fern Palm,Indigo Damia,Monkey Palm,Powdered Ruby
-Thoth,Sa----,As----,Bi++++|Cardamom,Fern Palm,Indigo Damia,Monkey Palm,Powdered Ruby
-Thoth,Sa----,Bi++++,As----|Cardamom,Fern Palm,Indigo Damia,Monkey Palm,Powdered Ruby
-Thoth,As++++,Bi----,So++++|Dusty Blue Sage,Feather Tree,Fumitory,Hawthorn,Strawberry Tea
-Thoth,Bi----,As++++,So++++|Dusty Blue Sage,Feather Tree,Fumitory,Hawthorn,Strawberry Tea
-Thoth,Bi----,So++++,As++++|Dusty Blue Sage,Feather Tree,Fumitory,Hawthorn,Strawberry Tea
-Thoth,As++++,So++++,Bi----|Dusty Blue Sage,Feather Tree,Fumitory,Hawthorn,Strawberry Tea
-Thoth,So++++,As++++,Bi----|Dusty Blue Sage,Feather Tree,Fumitory,Hawthorn,Strawberry Tea
-Thoth,So++++,Bi----,As++++|Dusty Blue Sage,Feather Tree,Fumitory,Hawthorn,Strawberry Tea
-Thoth,As++++,Sa----,So++++|Cricklewood,Folded Birch,Hawthorn,Spindle Tree,Strawberry Tea
-Thoth,Sa----,As++++,So++++|Cricklewood,Folded Birch,Hawthorn,Spindle Tree,Strawberry Tea
-Thoth,Sa----,So++++,As++++|Cricklewood,Folded Birch,Hawthorn,Spindle Tree,Strawberry Tea
-Thoth,As++++,So++++,Sa----|Cricklewood,Folded Birch,Hawthorn,Spindle Tree,Strawberry Tea
-Thoth,So++++,As++++,Sa----|Cricklewood,Folded Birch,Hawthorn,Spindle Tree,Strawberry Tea
-Thoth,So++++,Sa----,As++++|Cricklewood,Folded Birch,Hawthorn,Spindle Tree,Strawberry Tea
-Thoth,As----,Sa----,Sp++++|Bee Balm,Chakkanut Tree,Monkey Palm,Salts Of Gold,Salts Of Magnesium
-Thoth,Sa----,As----,Sp++++|Bee Balm,Chakkanut Tree,Monkey Palm,Salts Of Gold,Salts Of Magnesium
-Thoth,Sa----,Sp++++,As----|Bee Balm,Chakkanut Tree,Monkey Palm,Salts Of Gold,Salts Of Magnesium
-Thoth,As----,Sp++++,Sa----|Bee Balm,Chakkanut Tree,Monkey Palm,Salts Of Gold,Salts Of Magnesium
-Thoth,Sp++++,As----,Sa----|Bee Balm,Chakkanut Tree,Monkey Palm,Salts Of Gold,Salts Of Magnesium
-Thoth,Sp++++,Sa----,As----|Bee Balm,Chakkanut Tree,Monkey Palm,Salts Of Gold,Salts Of Magnesium
-Thoth,Sa----,Sp----,Sw++++|Dwarf Wild Lettuce,Oleaceae,Powdered Emerald,Powdered Ruby,Salts Of Iron
-Thoth,Sp----,Sa----,Sw++++|Dwarf Wild Lettuce,Oleaceae,Powdered Emerald,Powdered Ruby,Salts Of Iron
-Thoth,Sp----,Sw++++,Sa----|Dwarf Wild Lettuce,Oleaceae,Powdered Emerald,Powdered Ruby,Salts Of Iron
-Thoth,Sa----,Sw++++,Sp----|Dwarf Wild Lettuce,Oleaceae,Powdered Emerald,Powdered Ruby,Salts Of Iron
-Thoth,Sw++++,Sa----,Sp----|Dwarf Wild Lettuce,Oleaceae,Powdered Emerald,Powdered Ruby,Salts Of Iron
-Thoth,Sw++++,Sp----,Sa----|Dwarf Wild Lettuce,Oleaceae,Powdered Emerald,Powdered Ruby,Salts Of Iron
-Thoth,Ar++++,So----,To++++|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Ranyahn,Salts Of Strontium
-Thoth,So----,Ar++++,To++++|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Ranyahn,Salts Of Strontium
-Thoth,So----,To++++,Ar++++|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Ranyahn,Salts Of Strontium
-Thoth,Ar++++,To++++,So----|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Ranyahn,Salts Of Strontium
-Thoth,To++++,Ar++++,So----|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Ranyahn,Salts Of Strontium
-Thoth,To++++,So----,Ar++++|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Ranyahn,Salts Of Strontium
-Thoth,As++++,Bi----,Sa----|Feather Tree,Fumitory,Hawthorn,Lemondrop,Tiny Clover
-Thoth,Bi----,As++++,Sa----|Feather Tree,Fumitory,Hawthorn,Lemondrop,Tiny Clover
-Thoth,Bi----,Sa----,As++++|Feather Tree,Fumitory,Hawthorn,Lemondrop,Tiny Clover
-Thoth,As++++,Sa----,Bi----|Feather Tree,Fumitory,Hawthorn,Lemondrop,Tiny Clover
-Thoth,Sa----,As++++,Bi----|Feather Tree,Fumitory,Hawthorn,Lemondrop,Tiny Clover
-Thoth,Sa----,Bi----,As++++|Feather Tree,Fumitory,Hawthorn,Lemondrop,Tiny Clover
-Ra,Sa+++++,Sp-----|Ash Palm,Bottle Tree,Cerulean Blue,Katako Root,Salts Of Tin
-Ra,Sp-----,Sa+++++|Ash Palm,Bottle Tree,Cerulean Blue,Katako Root,Salts Of Tin
-Thoth,Bi++++,Sa----,Sp++++|Chakkanut Tree,Chatinabrae,Discorea,Monkey Palm,Umbrella Palm
-Thoth,Sa----,Bi++++,Sp++++|Chakkanut Tree,Chatinabrae,Discorea,Monkey Palm,Umbrella Palm
-Thoth,Sa----,Sp++++,Bi++++|Chakkanut Tree,Chatinabrae,Discorea,Monkey Palm,Umbrella Palm
-Thoth,Bi++++,Sp++++,Sa----|Chakkanut Tree,Chatinabrae,Discorea,Monkey Palm,Umbrella Palm
-Thoth,Sp++++,Bi++++,Sa----|Chakkanut Tree,Chatinabrae,Discorea,Monkey Palm,Umbrella Palm
-Thoth,Sp++++,Sa----,Bi++++|Chakkanut Tree,Chatinabrae,Discorea,Monkey Palm,Umbrella Palm
-Thoth,So++++,Sw++++,To----|Ginseng Root,Kaeshra,Pale Dhamasa,Wild Lettuce,Salts Of Silver
-Thoth,Sw++++,So++++,To----|Ginseng Root,Kaeshra,Pale Dhamasa,Wild Lettuce,Salts Of Silver
-Thoth,Sw++++,To----,So++++|Ginseng Root,Kaeshra,Pale Dhamasa,Wild Lettuce,Salts Of Silver
-Thoth,So++++,To----,Sw++++|Ginseng Root,Kaeshra,Pale Dhamasa,Wild Lettuce,Salts Of Silver
-Thoth,To----,So++++,Sw++++|Ginseng Root,Kaeshra,Pale Dhamasa,Wild Lettuce,Salts Of Silver
-Thoth,To----,Sw++++,So++++|Ginseng Root,Kaeshra,Pale Dhamasa,Wild Lettuce,Salts Of Silver
-Thoth,Ar----,So++++,Sw++++|Cinnamon,Common Rosemary,Pale Dhamasa,Powdered Ruby,Salts Of Silver
-Thoth,So++++,Ar----,Sw++++|Cinnamon,Common Rosemary,Pale Dhamasa,Powdered Ruby,Salts Of Silver
-Thoth,So++++,Sw++++,Ar----|Cinnamon,Common Rosemary,Pale Dhamasa,Powdered Ruby,Salts Of Silver
-Thoth,Ar----,Sw++++,So++++|Cinnamon,Common Rosemary,Pale Dhamasa,Powdered Ruby,Salts Of Silver
-Thoth,Sw++++,Ar----,So++++|Cinnamon,Common Rosemary,Pale Dhamasa,Powdered Ruby,Salts Of Silver
-Thoth,Sw++++,So++++,Ar----|Cinnamon,Common Rosemary,Pale Dhamasa,Powdered Ruby,Salts Of Silver
-Thoth,Ar++++,As----,Sa----|Bluebottle Clover,Phoenix Palm,Tiny Clover,Salts Of Gold,Salts Of Magnesium
-Thoth,As----,Ar++++,Sa----|Bluebottle Clover,Phoenix Palm,Tiny Clover,Salts Of Gold,Salts Of Magnesium
-Thoth,As----,Sa----,Ar++++|Bluebottle Clover,Phoenix Palm,Tiny Clover,Salts Of Gold,Salts Of Magnesium
-Thoth,Ar++++,Sa----,As----|Bluebottle Clover,Phoenix Palm,Tiny Clover,Salts Of Gold,Salts Of Magnesium
-Thoth,Sa----,Ar++++,As----|Bluebottle Clover,Phoenix Palm,Tiny Clover,Salts Of Gold,Salts Of Magnesium
-Thoth,Sa----,As----,Ar++++|Bluebottle Clover,Phoenix Palm,Tiny Clover,Salts Of Gold,Salts Of Magnesium
-Ra,Bi+++++,Sa-----|Chatinabrae,Crampbark,Indigo Damia,Monkey Palm,Salts Of Iron
-Ra,Sa-----,Bi+++++|Chatinabrae,Crampbark,Indigo Damia,Monkey Palm,Salts Of Iron
-Thoth,Bi++++,So----,Sp----|Cinnar,Stout Palm,Windriver Palm,Powdered Opal,Salts Of Zinc
-Thoth,So----,Bi++++,Sp----|Cinnar,Stout Palm,Windriver Palm,Powdered Opal,Salts Of Zinc
-Thoth,So----,Sp----,Bi++++|Cinnar,Stout Palm,Windriver Palm,Powdered Opal,Salts Of Zinc
-Thoth,Bi++++,Sp----,So----|Cinnar,Stout Palm,Windriver Palm,Powdered Opal,Salts Of Zinc
-Thoth,Sp----,Bi++++,So----|Cinnar,Stout Palm,Windriver Palm,Powdered Opal,Salts Of Zinc
-Thoth,Sp----,So----,Bi++++|Cinnar,Stout Palm,Windriver Palm,Powdered Opal,Salts Of Zinc
-Ra,Ar+++++,As-----|Bluebottle Clover,Ranyahn,Red Maple,Salts Of Magnesium,Salts Of Tungsten
-Ra,As-----,Ar+++++|Bluebottle Clover,Ranyahn,Red Maple,Salts Of Magnesium,Salts Of Tungsten
-Thoth,As----,Bi++++,To----|Blue Tarafern,Cardamom,Mountain Mint,Umbrella Palm,Wild Lettuce
-Thoth,Bi++++,As----,To----|Blue Tarafern,Cardamom,Mountain Mint,Umbrella Palm,Wild Lettuce
-Thoth,Bi++++,To----,As----|Blue Tarafern,Cardamom,Mountain Mint,Umbrella Palm,Wild Lettuce
-Thoth,As----,To----,Bi++++|Blue Tarafern,Cardamom,Mountain Mint,Umbrella Palm,Wild Lettuce
-Thoth,To----,As----,Bi++++|Blue Tarafern,Cardamom,Mountain Mint,Umbrella Palm,Wild Lettuce
-Thoth,To----,Bi++++,As----|Blue Tarafern,Cardamom,Mountain Mint,Umbrella Palm,Wild Lettuce
-Thoth,As++++,So----,Sp----|Broadleaf Palm,Cerulean Blue,Verdant Squill,Salts Of Tin,Salts Of Zinc
-Thoth,So----,As++++,Sp----|Broadleaf Palm,Cerulean Blue,Verdant Squill,Salts Of Tin,Salts Of Zinc
-Thoth,So----,Sp----,As++++|Broadleaf Palm,Cerulean Blue,Verdant Squill,Salts Of Tin,Salts Of Zinc
-Thoth,As++++,Sp----,So----|Broadleaf Palm,Cerulean Blue,Verdant Squill,Salts Of Tin,Salts Of Zinc
-Thoth,Sp----,As++++,So----|Broadleaf Palm,Cerulean Blue,Verdant Squill,Salts Of Tin,Salts Of Zinc
-Thoth,Sp----,So----,As++++|Broadleaf Palm,Cerulean Blue,Verdant Squill,Salts Of Tin,Salts Of Zinc
-Thoth,Bi----,Sa----,To++++|Lemondrop,Sagar Ghota,Tiny Clover,Tiny Oil Palm,Salts Of Lithium
-Thoth,Sa----,Bi----,To++++|Lemondrop,Sagar Ghota,Tiny Clover,Tiny Oil Palm,Salts Of Lithium
-Thoth,Sa----,To++++,Bi----|Lemondrop,Sagar Ghota,Tiny Clover,Tiny Oil Palm,Salts Of Lithium
-Thoth,Bi----,To++++,Sa----|Lemondrop,Sagar Ghota,Tiny Clover,Tiny Oil Palm,Salts Of Lithium
-Thoth,To++++,Bi----,Sa----|Lemondrop,Sagar Ghota,Tiny Clover,Tiny Oil Palm,Salts Of Lithium
-Thoth,To++++,Sa----,Bi----|Lemondrop,Sagar Ghota,Tiny Clover,Tiny Oil Palm,Salts Of Lithium
-Ra,As-----,So+++++|Anaxi,Bramble Hedge,Towering Palm,Powdered Ruby,Powdered Sapphire
-Ra,So+++++,As-----|Anaxi,Bramble Hedge,Towering Palm,Powdered Ruby,Powdered Sapphire
-Thoth,Ar++++,As----,So----|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Magnesium,Salts Of Tungsten
-Thoth,As----,Ar++++,So----|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Magnesium,Salts Of Tungsten
-Thoth,As----,So----,Ar++++|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Magnesium,Salts Of Tungsten
-Thoth,Ar++++,So----,As----|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Magnesium,Salts Of Tungsten
-Thoth,So----,Ar++++,As----|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Magnesium,Salts Of Tungsten
-Thoth,So----,As----,Ar++++|Elephantia,Miniature Fern Palm,Ranyahn,Salts Of Magnesium,Salts Of Tungsten
-Thoth,Ar----,As++++,Sw----|Bloodbark,Cricklewood,Feather Tree,Spiked Fishtree,Powdered Diamond
-Thoth,As++++,Ar----,Sw----|Bloodbark,Cricklewood,Feather Tree,Spiked Fishtree,Powdered Diamond
-Thoth,As++++,Sw----,Ar----|Bloodbark,Cricklewood,Feather Tree,Spiked Fishtree,Powdered Diamond
-Thoth,Ar----,Sw----,As++++|Bloodbark,Cricklewood,Feather Tree,Spiked Fishtree,Powdered Diamond
-Thoth,Sw----,Ar----,As++++|Bloodbark,Cricklewood,Feather Tree,Spiked Fishtree,Powdered Diamond
-Thoth,Sw----,As++++,Ar----|Bloodbark,Cricklewood,Feather Tree,Spiked Fishtree,Powdered Diamond
-Thoth,Bi----,Sa++++,So----|Bottle Tree,Hokkaido,Royal Palm,Salts Of Antimony,Salts Of Strontium
-Thoth,Sa++++,Bi----,So----|Bottle Tree,Hokkaido,Royal Palm,Salts Of Antimony,Salts Of Strontium
-Thoth,Sa++++,So----,Bi----|Bottle Tree,Hokkaido,Royal Palm,Salts Of Antimony,Salts Of Strontium
-Thoth,Bi----,So----,Sa++++|Bottle Tree,Hokkaido,Royal Palm,Salts Of Antimony,Salts Of Strontium
-Thoth,So----,Bi----,Sa++++|Bottle Tree,Hokkaido,Royal Palm,Salts Of Antimony,Salts Of Strontium
-Thoth,So----,Sa++++,Bi----|Bottle Tree,Hokkaido,Royal Palm,Salts Of Antimony,Salts Of Strontium
-Thoth,As++++,Bi----,Sa++++|Bucklerleaf,Marble Dust,Salts Of Aluminum,Salts Of Strontium,Salts Of Tin
-Thoth,Bi----,As++++,Sa++++|Bucklerleaf,Marble Dust,Salts Of Aluminum,Salts Of Strontium,Salts Of Tin
-Thoth,Bi----,Sa++++,As++++|Bucklerleaf,Marble Dust,Salts Of Aluminum,Salts Of Strontium,Salts Of Tin
-Thoth,As++++,Sa++++,Bi----|Bucklerleaf,Marble Dust,Salts Of Aluminum,Salts Of Strontium,Salts Of Tin
-Thoth,Sa++++,As++++,Bi----|Bucklerleaf,Marble Dust,Salts Of Aluminum,Salts Of Strontium,Salts Of Tin
-Thoth,Sa++++,Bi----,As++++|Bucklerleaf,Marble Dust,Salts Of Aluminum,Salts Of Strontium,Salts Of Tin
-Ra,Sp-----,Sw+++++|Bottle Tree,Cinnamon,Dusty Blue Sage,Dwarf Wild Lettuce,Oleaceae
-Ra,Sw+++++,Sp-----|Bottle Tree,Cinnamon,Dusty Blue Sage,Dwarf Wild Lettuce,Oleaceae
-Thoth,Bi----,Sa++++,Sp----|Bottle Tree,Marble Dust,Salts Of Lithium,Salts Of Strontium,Salts Of Tin
-Thoth,Sa++++,Bi----,Sp----|Bottle Tree,Marble Dust,Salts Of Lithium,Salts Of Strontium,Salts Of Tin
-Thoth,Sa++++,Sp----,Bi----|Bottle Tree,Marble Dust,Salts Of Lithium,Salts Of Strontium,Salts Of Tin
-Thoth,Bi----,Sp----,Sa++++|Bottle Tree,Marble Dust,Salts Of Lithium,Salts Of Strontium,Salts Of Tin
-Thoth,Sp----,Bi----,Sa++++|Bottle Tree,Marble Dust,Salts Of Lithium,Salts Of Strontium,Salts Of Tin
-Thoth,Sp----,Sa++++,Bi----|Bottle Tree,Marble Dust,Salts Of Lithium,Salts Of Strontium,Salts Of Tin
-Thoth,Ar----,Sa----,So++++|Common Rosemary,Dwarf Hogweed,Feather Tree,Powdered Emerald,Salts Of Silver
-Thoth,Sa----,Ar----,So++++|Common Rosemary,Dwarf Hogweed,Feather Tree,Powdered Emerald,Salts Of Silver
-Thoth,Sa----,So++++,Ar----|Common Rosemary,Dwarf Hogweed,Feather Tree,Powdered Emerald,Salts Of Silver
-Thoth,Ar----,So++++,Sa----|Common Rosemary,Dwarf Hogweed,Feather Tree,Powdered Emerald,Salts Of Silver
-Thoth,So++++,Ar----,Sa----|Common Rosemary,Dwarf Hogweed,Feather Tree,Powdered Emerald,Salts Of Silver
-Thoth,So++++,Sa----,Ar----|Common Rosemary,Dwarf Hogweed,Feather Tree,Powdered Emerald,Salts Of Silver
-Thoth,Sa----,So++++,Sp----|Bramble Hedge,Dwarf Hogweed,Folded Birch,Powdered Ruby,Salts Of Iron
-Thoth,So++++,Sa----,Sp----|Bramble Hedge,Dwarf Hogweed,Folded Birch,Powdered Ruby,Salts Of Iron
-Thoth,So++++,Sp----,Sa----|Bramble Hedge,Dwarf Hogweed,Folded Birch,Powdered Ruby,Salts Of Iron
-Thoth,Sa----,Sp----,So++++|Bramble Hedge,Dwarf Hogweed,Folded Birch,Powdered Ruby,Salts Of Iron
-Thoth,Sp----,Sa----,So++++|Bramble Hedge,Dwarf Hogweed,Folded Birch,Powdered Ruby,Salts Of Iron
-Thoth,Sp----,So++++,Sa----|Bramble Hedge,Dwarf Hogweed,Folded Birch,Powdered Ruby,Salts Of Iron
-Thoth,Ar----,Sw++++,To----|Cricklewood,Ginseng Root,Hogweed,Oleaceae,Pale Dhamasa
-Thoth,Sw++++,Ar----,To----|Cricklewood,Ginseng Root,Hogweed,Oleaceae,Pale Dhamasa
-Thoth,Sw++++,To----,Ar----|Cricklewood,Ginseng Root,Hogweed,Oleaceae,Pale Dhamasa
-Thoth,Ar----,To----,Sw++++|Cricklewood,Ginseng Root,Hogweed,Oleaceae,Pale Dhamasa
-Thoth,To----,Ar----,Sw++++|Cricklewood,Ginseng Root,Hogweed,Oleaceae,Pale Dhamasa
-Thoth,To----,Sw++++,Ar----|Cricklewood,Ginseng Root,Hogweed,Oleaceae,Pale Dhamasa
-Thoth,As----,Sa----,So++++|Anaxi,Bee Balm,Dwarf Hogweed,Monkey Palm,Powdered Ruby
-Thoth,Sa----,As----,So++++|Anaxi,Bee Balm,Dwarf Hogweed,Monkey Palm,Powdered Ruby
-Thoth,Sa----,So++++,As----|Anaxi,Bee Balm,Dwarf Hogweed,Monkey Palm,Powdered Ruby
-Thoth,As----,So++++,Sa----|Anaxi,Bee Balm,Dwarf Hogweed,Monkey Palm,Powdered Ruby
-Thoth,So++++,As----,Sa----|Anaxi,Bee Balm,Dwarf Hogweed,Monkey Palm,Powdered Ruby
-Thoth,So++++,Sa----,As----|Anaxi,Bee Balm,Dwarf Hogweed,Monkey Palm,Powdered Ruby
-Thoth,Ar----,Sp----,Sw++++|Cinnamon,Oleaceae,Orrorin,Pale Dhamasa,Powdered Ruby
-Thoth,Sp----,Ar----,Sw++++|Cinnamon,Oleaceae,Orrorin,Pale Dhamasa,Powdered Ruby
-Thoth,Sp----,Sw++++,Ar----|Cinnamon,Oleaceae,Orrorin,Pale Dhamasa,Powdered Ruby
-Thoth,Ar----,Sw++++,Sp----|Cinnamon,Oleaceae,Orrorin,Pale Dhamasa,Powdered Ruby
-Thoth,Sw++++,Ar----,Sp----|Cinnamon,Oleaceae,Orrorin,Pale Dhamasa,Powdered Ruby
-Thoth,Sw++++,Sp----,Ar----|Cinnamon,Oleaceae,Orrorin,Pale Dhamasa,Powdered Ruby
-Thoth,So++++,Sp----,Sw++++|Cinnamon,Dusty Blue Sage,Dwarf Hogweed,Dwarf Wild Lettuce,Pale Dhamasa
-Thoth,Sp----,So++++,Sw++++|Cinnamon,Dusty Blue Sage,Dwarf Hogweed,Dwarf Wild Lettuce,Pale Dhamasa
-Thoth,Sp----,Sw++++,So++++|Cinnamon,Dusty Blue Sage,Dwarf Hogweed,Dwarf Wild Lettuce,Pale Dhamasa
-Thoth,So++++,Sw++++,Sp----|Cinnamon,Dusty Blue Sage,Dwarf Hogweed,Dwarf Wild Lettuce,Pale Dhamasa
-Thoth,Sw++++,So++++,Sp----|Cinnamon,Dusty Blue Sage,Dwarf Hogweed,Dwarf Wild Lettuce,Pale Dhamasa
-Thoth,Sw++++,Sp----,So++++|Cinnamon,Dusty Blue Sage,Dwarf Hogweed,Dwarf Wild Lettuce,Pale Dhamasa
-Thoth,Ar++++,Sw----,To++++|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Tiny Clover,Salts Of Copper
-Thoth,Sw----,Ar++++,To++++|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Tiny Clover,Salts Of Copper
-Thoth,Sw----,To++++,Ar++++|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Tiny Clover,Salts Of Copper
-Thoth,Ar++++,To++++,Sw----|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Tiny Clover,Salts Of Copper
-Thoth,To++++,Ar++++,Sw----|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Tiny Clover,Salts Of Copper
-Thoth,To++++,Sw----,Ar++++|Broadleaf Palm,Butterleaf Tree,Miniature Fern Palm,Tiny Clover,Salts Of Copper
-Thoth,Sa----,So++++,Sw----|Gynura,Houseleek,Spindle Tree,Powdered Diamond,Salts Of Iron
-Thoth,So++++,Sa----,Sw----|Gynura,Houseleek,Spindle Tree,Powdered Diamond,Salts Of Iron
-Thoth,So++++,Sw----,Sa----|Gynura,Houseleek,Spindle Tree,Powdered Diamond,Salts Of Iron
-Thoth,Sa----,Sw----,So++++|Gynura,Houseleek,Spindle Tree,Powdered Diamond,Salts Of Iron
-Thoth,Sw----,Sa----,So++++|Gynura,Houseleek,Spindle Tree,Powdered Diamond,Salts Of Iron
-Thoth,Sw----,So++++,Sa----|Gynura,Houseleek,Spindle Tree,Powdered Diamond,Salts Of Iron
-Thoth,Bi++++,Sa----,Sp----|Crampbark,Indigo Damia,Powdered Opal,Powdered Ruby,Salts Of Iron
-Thoth,Sa----,Bi++++,Sp----|Crampbark,Indigo Damia,Powdered Opal,Powdered Ruby,Salts Of Iron
-Thoth,Sa----,Sp----,Bi++++|Crampbark,Indigo Damia,Powdered Opal,Powdered Ruby,Salts Of Iron
-Thoth,Bi++++,Sp----,Sa----|Crampbark,Indigo Damia,Powdered Opal,Powdered Ruby,Salts Of Iron
-Thoth,Sp----,Bi++++,Sa----|Crampbark,Indigo Damia,Powdered Opal,Powdered Ruby,Salts Of Iron
-Thoth,Sp----,Sa----,Bi++++|Crampbark,Indigo Damia,Powdered Opal,Powdered Ruby,Salts Of Iron
-Thoth,As++++,Sa++++,Sp----|Bottle Tree,Cerulean Blue,Marble Dust,Salts Of Aluminum,Salts Of Tin
-Thoth,Sa++++,As++++,Sp----|Bottle Tree,Cerulean Blue,Marble Dust,Salts Of Aluminum,Salts Of Tin
-Thoth,Sa++++,Sp----,As++++|Bottle Tree,Cerulean Blue,Marble Dust,Salts Of Aluminum,Salts Of Tin
-Thoth,As++++,Sp----,Sa++++|Bottle Tree,Cerulean Blue,Marble Dust,Salts Of Aluminum,Salts Of Tin
-Thoth,Sp----,As++++,Sa++++|Bottle Tree,Cerulean Blue,Marble Dust,Salts Of Aluminum,Salts Of Tin
-Thoth,Sp----,Sa++++,As++++|Bottle Tree,Cerulean Blue,Marble Dust,Salts Of Aluminum,Salts Of Tin
-Thoth,Ar----,So++++,To----|Cricklewood,Fool's Agar,Houseleek,Pale Dhamasa,Umbrella Palm
-Thoth,So++++,Ar----,To----|Cricklewood,Fool's Agar,Houseleek,Pale Dhamasa,Umbrella Palm
-Thoth,So++++,To----,Ar----|Cricklewood,Fool's Agar,Houseleek,Pale Dhamasa,Umbrella Palm
-Thoth,Ar----,To----,So++++|Cricklewood,Fool's Agar,Houseleek,Pale Dhamasa,Umbrella Palm
-Thoth,To----,Ar----,So++++|Cricklewood,Fool's Agar,Houseleek,Pale Dhamasa,Umbrella Palm
-Thoth,To----,So++++,Ar----|Cricklewood,Fool's Agar,Houseleek,Pale Dhamasa,Umbrella Palm
-Thoth,Bi----,So++++,Sw++++|Dusty Blue Sage,Ginseng Root,Mini Palmetto,Opal Harebell,Salts Of Silver
-Thoth,So++++,Bi----,Sw++++|Dusty Blue Sage,Ginseng Root,Mini Palmetto,Opal Harebell,Salts Of Silver
-Thoth,So++++,Sw++++,Bi----|Dusty Blue Sage,Ginseng Root,Mini Palmetto,Opal Harebell,Salts Of Silver
-Thoth,Bi----,Sw++++,So++++|Dusty Blue Sage,Ginseng Root,Mini Palmetto,Opal Harebell,Salts Of Silver
-Thoth,Sw++++,Bi----,So++++|Dusty Blue Sage,Ginseng Root,Mini Palmetto,Opal Harebell,Salts Of Silver
-Thoth,Sw++++,So++++,Bi----|Dusty Blue Sage,Ginseng Root,Mini Palmetto,Opal Harebell,Salts Of Silver
-Thoth,Ar----,As++++,Bi----|Beetlenut,Bucklerleaf,Feather Tree,Rhubarb,Salts Of Aluminum
-Thoth,As++++,Ar----,Bi----|Beetlenut,Bucklerleaf,Feather Tree,Rhubarb,Salts Of Aluminum
-Thoth,As++++,Bi----,Ar----|Beetlenut,Bucklerleaf,Feather Tree,Rhubarb,Salts Of Aluminum
-Thoth,Ar----,Bi----,As++++|Beetlenut,Bucklerleaf,Feather Tree,Rhubarb,Salts Of Aluminum
-Thoth,Bi----,Ar----,As++++|Beetlenut,Bucklerleaf,Feather Tree,Rhubarb,Salts Of Aluminum
-Thoth,Bi----,As++++,Ar----|Beetlenut,Bucklerleaf,Feather Tree,Rhubarb,Salts Of Aluminum
-Ra,Sa-----,So+++++|Dwarf Hogweed,Hawthorn,Tapacae Miralis,Powdered Ruby,Salts Of Silver
-Ra,So+++++,Sa-----|Dwarf Hogweed,Hawthorn,Tapacae Miralis,Powdered Ruby,Salts Of Silver
-Thoth,Sa----,So++++,Sw++++|Common Rosemary,Kaeshra,Powdered Emerald,Powdered Ruby,Salts Of Silver
-Thoth,So++++,Sa----,Sw++++|Common Rosemary,Kaeshra,Powdered Emerald,Powdered Ruby,Salts Of Silver
-Thoth,So++++,Sw++++,Sa----|Common Rosemary,Kaeshra,Powdered Emerald,Powdered Ruby,Salts Of Silver
-Thoth,Sa----,Sw++++,So++++|Common Rosemary,Kaeshra,Powdered Emerald,Powdered Ruby,Salts Of Silver
-Thoth,Sw++++,Sa----,So++++|Common Rosemary,Kaeshra,Powdered Emerald,Powdered Ruby,Salts Of Silver
-Thoth,Sw++++,So++++,Sa----|Common Rosemary,Kaeshra,Powdered Emerald,Powdered Ruby,Salts Of Silver
-Ra,Ar-----,So+++++|Common Rosemary,Cricklewood,Fool's Agar,Pale Dhamasa,Salts Of Silver
-Ra,So+++++,Ar-----|Common Rosemary,Cricklewood,Fool's Agar,Pale Dhamasa,Salts Of Silver
-Thoth,Sa++++,So----,Sp----|Ash Palm,Bottle Tree,Cerulean Blue,Hokkaido,Windriver Palm
-Thoth,So----,Sa++++,Sp----|Ash Palm,Bottle Tree,Cerulean Blue,Hokkaido,Windriver Palm
-Thoth,So----,Sp----,Sa++++|Ash Palm,Bottle Tree,Cerulean Blue,Hokkaido,Windriver Palm
-Thoth,Sa++++,Sp----,So----|Ash Palm,Bottle Tree,Cerulean Blue,Hokkaido,Windriver Palm
-Thoth,Sp----,Sa++++,So----|Ash Palm,Bottle Tree,Cerulean Blue,Hokkaido,Windriver Palm
-Thoth,Sp----,So----,Sa++++|Ash Palm,Bottle Tree,Cerulean Blue,Hokkaido,Windriver Palm
-Thoth,Sp----,Sw----,To++++|Ash Palm,Broadleaf Palm,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,Sw----,Sp----,To++++|Ash Palm,Broadleaf Palm,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,Sw----,To++++,Sp----|Ash Palm,Broadleaf Palm,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,Sp----,To++++,Sw----|Ash Palm,Broadleaf Palm,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,To++++,Sp----,Sw----|Ash Palm,Broadleaf Palm,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,To++++,Sw----,Sp----|Ash Palm,Broadleaf Palm,Golden Thyme,Miniature Fern Palm,Salts Of Copper
-Thoth,Bi----,So++++,To----|Dusty Blue Sage,Fumitory,Ginseng Root,Hawthorn,Hogweed
-Thoth,So++++,Bi----,To----|Dusty Blue Sage,Fumitory,Ginseng Root,Hawthorn,Hogweed
-Thoth,So++++,To----,Bi----|Dusty Blue Sage,Fumitory,Ginseng Root,Hawthorn,Hogweed
-Thoth,Bi----,To----,So++++|Dusty Blue Sage,Fumitory,Ginseng Root,Hawthorn,Hogweed
-Thoth,To----,Bi----,So++++|Dusty Blue Sage,Fumitory,Ginseng Root,Hawthorn,Hogweed
-Thoth,To----,So++++,Bi----|Dusty Blue Sage,Fumitory,Ginseng Root,Hawthorn,Hogweed
-Thoth,As++++,Bi----,Sp----|Bottle Tree,Bucklerleaf,Cerulean Blue,Fumitory,Marble Dust
-Thoth,Bi----,As++++,Sp----|Bottle Tree,Bucklerleaf,Cerulean Blue,Fumitory,Marble Dust
-Thoth,Bi----,Sp----,As++++|Bottle Tree,Bucklerleaf,Cerulean Blue,Fumitory,Marble Dust
-Thoth,As++++,Sp----,Bi----|Bottle Tree,Bucklerleaf,Cerulean Blue,Fumitory,Marble Dust
-Thoth,Sp----,As++++,Bi----|Bottle Tree,Bucklerleaf,Cerulean Blue,Fumitory,Marble Dust
-Thoth,Sp----,Bi----,As++++|Bottle Tree,Bucklerleaf,Cerulean Blue,Fumitory,Marble Dust
+RaBrilliant,Ar---,Bi+++,Sa+++,So---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Ar---,Bi+++,So---,Sa+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Ar---,Sa+++,Bi+++,So---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Ar---,Sa+++,So---,Bi+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Ar---,So---,Bi+++,Sa+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Ar---,So---,Sa+++,Bi+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Bi+++,Ar---,Sa+++,So---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Bi+++,Ar---,So---,Sa+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Bi+++,Sa+++,Ar---,So---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Bi+++,Sa+++,So---,Ar---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Bi+++,So---,Ar---,Sa+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Bi+++,So---,Sa+++,Ar---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Sa+++,Ar---,Bi+++,So---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Sa+++,Ar---,So---,Bi+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Sa+++,Bi+++,Ar---,So---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Sa+++,Bi+++,So---,Ar---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Sa+++,So---,Ar---,Bi+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,Sa+++,So---,Bi+++,Ar---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,So---,Ar---,Bi+++,Sa+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,So---,Ar---,Sa+++,Bi+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,So---,Bi+++,Ar---,Sa+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,So---,Bi+++,Sa+++,Ar---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,So---,Sa+++,Ar---,Bi+++|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,So---,Sa+++,Bi+++,Ar---|Ash Palm,Delta Palm,Mini Palmetto,Tapacae Miralis,Powdered Quartz
+RaBrilliant,As---,Bi+++,Sa+++,So---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,As---,Bi+++,So---,Sa+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,As---,Sa+++,Bi+++,So---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,As---,Sa+++,So---,Bi+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,As---,So---,Bi+++,Sa+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,As---,So---,Sa+++,Bi+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Bi+++,As---,Sa+++,So---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Bi+++,As---,So---,Sa+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Bi+++,Sa+++,As---,So---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Bi+++,Sa+++,So---,As---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Bi+++,So---,As---,Sa+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Bi+++,So---,Sa+++,As---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Sa+++,As---,Bi+++,So---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Sa+++,As---,So---,Bi+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Sa+++,Bi+++,As---,So---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Sa+++,Bi+++,So---,As---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Sa+++,So---,As---,Bi+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,Sa+++,So---,Bi+++,As---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,So---,As---,Bi+++,Sa+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,So---,As---,Sa+++,Bi+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,So---,Bi+++,As---,Sa+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,So---,Bi+++,Sa+++,As---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,So---,Sa+++,As---,Bi+++|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+RaBrilliant,So---,Sa+++,Bi+++,As---|Ash Palm,Bramble Hedge,Mini Palmetto,Red Maple,Powdered Opal
+Ra,As-----,To+++++|Chakkanut Tree,Elephantia,Orrorin,Savaka,Powdered Opal
+Ra,To+++++,As-----|Chakkanut Tree,Elephantia,Orrorin,Savaka,Powdered Opal
