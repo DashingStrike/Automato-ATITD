@@ -121,19 +121,20 @@ function makeRecipe(recipe, window)
   safeClick(t[0]+10, t[1]+5);
   t = waitForText("Mix Comp", nil, status);
   safeClick(t[0]+10, t[1]+5);
-  waitForText("do you wish to name it?", nil, status);
+  waitForText("lZUlll", nil, status);
   srKeyEvent("autocompound\n");
   sleepWithStatus(300, status);
   clickAllText("This is [a-z]+ Chemistry Lab", nil, REGEX);
-  sleepWithStatus(300, status);
+  sleepWithStatus(500, status);
   t = waitForText("Take...", nil, status);
   safeClick(t[0]+10, t[1]+5);
   t = waitForText("Everything", nil, status);
   safeClick(t[0]+10, t[1]+5);
+  sleepWithStatus(500, status);
+  srReadScreen();
   statusScreen("Creating extract", nil, status);
-  t = waitForText("Essential Comp", nil, status .. "\n\nWaiting for autocompound",
-		  makeBox(window.x + 10, window.y,
-			  window.width - 10, window.height));
+  requiredWindow = findText("Required:", nil, REGION);
+  t = findText("Essential Comp", requiredWindow, nil, CPLX_ITEM_CHOOSE);
   safeClick(t[0]+10, t[1]+5);
   sleepWithStatus(200, status);
   clickAllImages("Okb.png");
