@@ -28,6 +28,10 @@ Osiris,Ar----,So----|Arconis,Beetlenut,Delta Palm,Locust Palm,Powdered Quartz
 Osiris,So----,Ar----|Arconis,Beetlenut,Delta Palm,Locust Palm,Powdered Quartz
 Osiris,Ar----,So----|Arconis,Bramble Hedge,Delta Palm,Locust Palm,Powdered Quartz
 Osiris,So----,Ar----|Arconis,Bramble Hedge,Delta Palm,Locust Palm,Powdered Quartz
+Osiris,Ar----,Sp++++|Arconis,Cinnar,Locust Palm,Windriver Palm,Powdered Amethyst
+Osiris,Sp++++,Ar----|Arconis,Cinnar,Locust Palm,Windriver Palm,Powdered Amethyst
+Osiris,Ar----,Sp++++|Arconis,Cinnar,Towering Palm,Windriver Palm,Powdered Amethyst
+Osiris,Sp++++,Ar----|Arconis,Cinnar,Towering Palm,Windriver Palm,Powdered Amethyst
 Osiris,Ar----,Sw----|Arconis,Butterleaf Tree,Fern Palm,Locust Palm,Towering Palm
 Osiris,Sw----,Ar----|Arconis,Butterleaf Tree,Fern Palm,Locust Palm,Towering Palm
 Osiris,Ar----,Sw----|Arconis,Fern Palm,Giant Cricklewood,Locust Palm,Towering Palm
@@ -36,6 +40,10 @@ Osiris,Ar----,To++++|Arconis,Elephantia,Fern Palm,Locust Palm,Powdered Quartz
 Osiris,To++++,Ar----|Arconis,Elephantia,Fern Palm,Locust Palm,Powdered Quartz
 Osiris,Ar----,To++++|Arconis,Fern Palm,Locust Palm,Savaka,Powdered Quartz
 Osiris,To++++,Ar----|Arconis,Fern Palm,Locust Palm,Savaka,Powdered Quartz
+Osiris,As++++,To----|Coconut Palm,Cricklewood,Pratyeka Tree,Stout Palm,Powdered Ruby
+Osiris,To----,As++++|Coconut Palm,Cricklewood,Pratyeka Tree,Stout Palm,Powdered Ruby
+Osiris,As++++,To----|Coconut Palm,Cricklewood,Pratyeka Tree,Powdered Ruby,Powdered Sapphire
+Osiris,To----,As++++|Coconut Palm,Cricklewood,Pratyeka Tree,Powdered Ruby,Powdered Sapphire
 Osiris,As----,Bi----|Bloodbark,Orrorin,Phoenix Palm,Royal Palm,Tiny Oil Palm
 Osiris,Bi----,As----|Bloodbark,Orrorin,Phoenix Palm,Royal Palm,Tiny Oil Palm
 Osiris,As----,Bi----|Elephantia,Orrorin,Phoenix Palm,Royal Palm,Tiny Oil Palm
@@ -52,6 +60,10 @@ Osiris,As----,To++++|Ash Palm,Bloodbark,Elephantia,Orrorin,Savaka
 Osiris,To++++,As----|Ash Palm,Bloodbark,Elephantia,Orrorin,Savaka
 Osiris,As----,To++++|Ash Palm,Elephantia,Kaeshra,Orrorin,Savaka
 Osiris,To++++,As----|Ash Palm,Elephantia,Kaeshra,Orrorin,Savaka
+Osiris,Bi++++,So----|Ash Palm,Broadleaf Palm,Mini Palmetto,Pratyeka Tree,Powdered Emerald
+Osiris,So----,Bi++++|Ash Palm,Broadleaf Palm,Mini Palmetto,Pratyeka Tree,Powdered Emerald
+Osiris,Bi++++,So----|Ash Palm,Bramble Hedge,Mini Palmetto,Pratyeka Tree,Powdered Opal
+Osiris,So----,Bi++++|Ash Palm,Bramble Hedge,Mini Palmetto,Pratyeka Tree,Powdered Opal
 Osiris,Bi----,Sa++++|Bloodbark,Cricklewood,Feather Tree,Hokkaido,Oleaceae
 Osiris,Sa++++,Bi----|Bloodbark,Cricklewood,Feather Tree,Hokkaido,Oleaceae
 Osiris,Bi----,Sa++++|Bloodbark,Cricklewood,Feather Tree,Oleaceae,Spindle Tree
@@ -76,6 +88,10 @@ Osiris,Sa----,To++++|Butterleaf Tree,Chicory,Elephantia,Razor Palm,Savaka
 Osiris,To++++,Sa----|Butterleaf Tree,Chicory,Elephantia,Razor Palm,Savaka
 Osiris,Sa----,To++++|Butterleaf Tree,Cinnar,Elephantia,Razor Palm,Savaka
 Osiris,To++++,Sa----|Butterleaf Tree,Cinnar,Elephantia,Razor Palm,Savaka
+Osiris,So----,Sw++++|Beetlenut,Bramble Hedge,Chicory,Powdered Topaz,Powdered Amethyst
+Osiris,Sw++++,So----|Beetlenut,Bramble Hedge,Chicory,Powdered Topaz,Powdered Amethyst
+Osiris,So----,Sw++++|Beetlenut,Bramble Hedge,Delta Palm,Powdered Topaz,Powdered Amethyst
+Osiris,Sw++++,So----|Beetlenut,Bramble Hedge,Delta Palm,Powdered Topaz,Powdered Amethyst
 Osiris,So----,Sw----|Anaxi,Folded Birch,Miniature Fern Palm,Oil Palm,Trilobellia
 Osiris,Sw----,So----|Anaxi,Folded Birch,Miniature Fern Palm,Oil Palm,Trilobellia
 Osiris,So----,Sw----|Anaxi,Miniature Fern Palm,Oil Palm,Pratyeka Tree,Trilobellia
