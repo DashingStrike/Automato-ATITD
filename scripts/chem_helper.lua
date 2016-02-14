@@ -143,6 +143,13 @@ chem_data = {
 {"Powdered Lapis","43","6 Grain, 3 Vegetable, 1 Mineral","6","0","2","-2","0","-1","0","0","0"},
 {"Powdered Sunstone","9","1 Rock, 9 Wood","6","-1","1","-2","0","0","3","2","-3"},
 {"Powdered Turquoise","68","8 Mineral, 2 Vegetable","6","0","0","-1","-2","0","2","3","-3"},
+{"Salts Of Aluminum","89","9 Grey, 1 Fish","3","0","3","-1","0","0","-2","1","-3"},
+{"Salts Of Copper","71","1 Fish, 9 Mineral","6","-2","0","2","0","-1","0","3","1"},
+{"Salts Of Gold","85","1 Mineral, 1 Vegetable, 8 Grey","3","-1","-3","0","-2","0","1","0","2"},
+{"Salts Of Lead","68","8 Mineral, 2 Vegetable","6","-2","-3","1","0","3","-1","0","2"},
+{"Salts Of Strontium","68","10 Fish","6","1","0","3","-3","-2","-1","0","0"},
+{"Salts Of Tin","81","10 Fish","6","-1","0","0","-3","0","1","0","-2"},
+{"Salts Of Tungsten","89","9 Grey, 1 Fish","3","-3","-1","0","1","-2","0","0","0"},
 };
 
 function color(s)
