@@ -136,7 +136,7 @@ chem_data = {
 {"Powdered Ruby","10","10 Wood","6","3","2","0","0","0","-1","0","-3"},
 {"Powdered Sapphire","52","8 Vegetable, 2 Worm","6","0","3","-1","1","0","-3","2","0"},
 {"Powdered Topaz","73","3 Fish, 7 Mineral","6","-1","0","0","0","-2","3","2","-3"},
-{"Powdered Amethyst","3","7 Rock, 3 Wood","6","-2","0","0","0","-1","1","3","2"},
+{"Powdered Amethyst","3","7 Rock, 3 Wood","6","-2","0","0","0","-1","1","-3","2"},
 {"Powdered Citrine","83","10 Fish","4","-2","0","-3","0","0","0","-1","0"},
 {"Powdered Garnet","6","4 Rock, 6 Wood","6","3","1","0","0","-1","0","2","0"},
 {"Powdered Jade","49","5 Grain, 4 Mineral, 1 Vegetable","6","0","2","3","1","-3","-1","0","0"},
