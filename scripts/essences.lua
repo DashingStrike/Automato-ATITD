@@ -375,7 +375,7 @@ function getSpirits(goal)
 		end
 		return t;
 	end
-	if goal == 81 or goal == 82 then
+	if goal == 81 or goal == 82 or goal == 83 then
 		t[1] = {};
 		t[1][1] = "Fish";
 		t[1][2] = 10;
