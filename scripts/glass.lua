@@ -9,8 +9,8 @@ tol = 6500;
 -- It will make the first in the list if available, otherwise the next, etc
 -- This will let you make, e.g. Rods on your Soda Glass and Sheet Glass on your normal, by putting
 --   sheet glass before rods (on soda it'll fail to find sheet)
-item_priority = {"GlassMakeTorch.png","GlassMakeJar.png", "GlassMakeRod.png",
-                 "GlassMakePipe.png", "GlassMakeSheet.png", "GlassMakeWine.png",
+item_priority = {"GlassMakePipe.png", "GlassMakeRod.png", "GlassMakeJar.png", 
+                 "GlassMakeSheet.png", "GlassMakeWine.png","GlassMakeTorch.png",
                  "GlassMakeBlade.png", "GlassMakeFineRod.png", "GlassMakeFinePipe.png"};
 -- max temperature in which we will contine heating it, wait until it gets below this before adding
 max_add_temp = 2300;
@@ -167,7 +167,7 @@ function glassTick(window_pos, state)
 				if not made_one then
 					state.status = state.status .. " NothingToMake";
 					-- refresh window
-					srClickMouseNoMove(window_pos[0], window_pos[1]);
+					srClickMouseNoMove(window_pos[0]-10, window_pos[1]+window_h/2);
 				end
 			else
 				state.status = state.status .. " (temp out of range)";
