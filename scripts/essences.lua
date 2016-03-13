@@ -342,8 +342,8 @@ essences[336] = {"YellowGentian",};
 essences[337] = {"YellowTristeria",};
 essences[338] = {"Yigory",70};
 essences[339] = {"Zanthoxylum",};
-essences[340] = {"CamelPheromoneFemale",};
-essences[341] = {"CamelPheromoneMale",};
+essences[340] = {"CamelPheromoneFemale",9};
+essences[341] = {"CamelPheromoneMale",18};
 
 tick_time = 100;
 per_click_delay = 50;
