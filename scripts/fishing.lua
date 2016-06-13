@@ -1,5 +1,6 @@
 -- Pin up your Lures menu 'Self Click, Skills, Fishing, Use Lure' (no other pinned up windows can exist)
--- Should have (Chat-Related): 'Chat and Inventory can be minimized' AND 'Minimized chat-channels are still visible'.
+-- In Interface Options ensure 'Interface is Small'
+-- Should have (Chat-Related): 'Chat and Inventory can be minimized' AND 'Minimized chat-channels are still visible' AND 'Console Messages are Indented'
 -- You must have Main Chat tab showing at all times and window is long/wide enough so no lines don't wrap.
 
 -- Yes, this macro reads your MAIN chat screen, so make sure you read the above statement for it to work correctly.
