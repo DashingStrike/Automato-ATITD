@@ -9,6 +9,7 @@
 -- Another long message is "You didn't catch anything. You also lost your lure. Try different lures and locations"
 -- At 1280x1024 your chat screen should reach at least to the mid point of your screen to avoid having a chat line wrap to next line, for a long message, like above.
 -- Higher resolutions may not have to reach quite to the mid point.
+-- You should ensure that your chat has timestamps
 
 
 -- ********** This macro writes to a log file (Fishlog.txt) for most actions, so you can review later! ******
@@ -57,7 +58,7 @@ SkipCommon = false; --Skips to next lure if fish caught is a common (Choose True
 LogFails = false;  	-- Do you want to add Failed Catches to log file? 'Failed to catch anything' or 'No fish bit'. Note the log will still add an entry if you lost lure.
 LogStrangeUnusual = false; 	-- Do you want to add Strange and Unusual fish to the log file? Note the log will still add an entry if you lost lure.
 LogOdd = false; 	-- Do you want to add Odd fish to the log file? Note the log will still add an entry if you lost lure.
-muteSoundEffects = false;
+muteSoundEffects = true;
 
 function setOptions()
 
@@ -342,9 +343,27 @@ function UseLure()
 				break;
 			end
 		end
-
-
 	end
+end
+
+fishingText = { 
+") lure.", 
+"You didn't catch anything. Try",
+"You almost caught an ",
+"You didn't catch anything.",
+"The water is dead,",
+"Caught a",
+};
+
+function checkIfMain(chatText)
+   for i = 1, #fishingText do
+      for j = 1, #chatText do
+         if string.find(chatText[j][2], fishingText[i], 0, true) then
+            return true;
+         end
+      end
+   end
+   return false;
 end
 
 function ChatReadFish()
@@ -352,54 +371,34 @@ function ChatReadFish()
 	--lsSleep(100);
 	checkBreak();
 	srReadScreen();
-	imgs = findAllImages("fishing/chatlog_reddots.png");
-	Coords = imgs[#imgs];
+   local chatText = getChatText();
+   
+   local onMain = checkIfMain(chatText);
 
-	if not Coords or #imgs == 0 then
-		if not muteSoundEffects then
-		lsPlaySound("timer.wav");
-		end
-	end
+   if not onMain then
+      if not muteSoundEffects then
+         lsPlaySound("timer.wav");
+      end
+   end
 
-		-- Wait for Main chat screen and alert user if its not showing
-		while not Coords or #imgs == 0 do
-			checkBreak();
-			srReadScreen();
-			imgs = findAllImages("Fishing/chatlog_reddots.png");
-			Coords = imgs[#imgs];
-			sleepWithStatus(100, "Looking for Main chat screen ...");
-		end
-
-	
-	--Caught Something..  Find Fish Details
-	Sfish = "";
-				
-	for i = 1, #CL_Fish do
-	ChatFish = srFindImageInRange("Fishing/" .. CL_Fish[i],Coords[0] ,Coords[1],500,25);
-	if ChatFish then
-		Sfish = string.sub(CL_Fish[i],string.find(CL_Fish[i],"Fish_") + 5,string.len(CL_Fish[i]) - 4);
-		GrandTotalCaught = GrandTotalCaught + 1
-		break;
-
-	end
-					
-	end
-				
-	if  string.len(Sfish) < 1 then
-	-- This fish name and fishname.png file likely needs to be added to Fishing_Func.inc, under the CL_Fish array and the .png added to /Images/Fishing folder
-	--error("Unknown Fish! PLEASE, Take screenshot (Alt+C) of main chat tab, share with Talescripts team!");
-	Sfish = "Error/Unknown"
-	end
-				
-	--Find Size
-	for i = #CL_Number,1,-1 do
-		ChatSize =  srFindImageInRange("fishing/" .. CL_Number[i],Coords[0],Coords[1],500,25);
-		if ChatSize then
-			SNum = string.sub(CL_Number[i],string.find(CL_Number[i],"_") + 1, string.len(CL_Number[i]) - 4);
-			break;
-		end
-	end
-	GrandTotaldb = GrandTotaldb + SNum;
+   -- Wait for Main chat screen and alert user if its not showing
+   while not onMain do
+   	checkBreak();
+      srReadScreen();
+      chatText = getChatText();
+      onMain = checkIfMain(chatText);
+      sleepWithStatus(100, "Looking for Main chat screen ...");
+   end
+   
+   lastLine = chatText[#chatText][2];
+   
+   numCaught, fishType = string.match(lastLine, "(\d+) deben ([^.]+)\.");
+   if fishType then
+      GrandTotalCaught = GrandTotalCaught + 1
+      Sfish = string.gsub(fishType, "%W", "");
+      SNum = numCaught
+   end
+   
 	return("[" .. CurrentLure .. " (" .. LureType .. ")] "  .. Sfish .. " (" .. SNum .. "db)");
 	
 end
@@ -433,113 +432,50 @@ function findchat(line)
 
 	
 	--Find the last line of chat
-	--lsSleep(100);
 	checkBreak();
 	srReadScreen();
-	imgs = findAllImages("Fishing/chatlog_reddots.png");
-	Coords = imgs[#imgs];
+   local chatText = getChatText();
+   
+   local onMain = checkIfMain(chatText);
 
-	if not Coords or #imgs == 0 then
-		if not muteSoundEffects then
-		lsPlaySound("timer.wav");
-		end
-	end
-		-- Wait for Main chat screen and alert user if its not showing
-		while not Coords or #imgs == 0 do
-			checkBreak();
-			srReadScreen();
-			imgs = findAllImages("Fishing/chatlog_reddots.png");
-			Coords = imgs[#imgs];
-			sleepWithStatus(100, "Looking for Main chat screen ...");
-		end
+   if not onMain then
+      if not muteSoundEffects then
+         lsPlaySound("timer.wav");
+      end
+   end
 
+   -- Wait for Main chat screen and alert user if its not showing
+   while not onMain do
+   	checkBreak();
+      srReadScreen();
+      chatText = getChatText();
+      onMain = checkIfMain(chatText);
+      sleepWithStatus(100, "Looking for Main chat screen ...");
+   end
+   
+   lastLine = chatText[#chatText][2];
 	gui_refresh();
-
-	
-	if line and line > 0 then
-		Coords = imgs[(#imgs) - line];
-
-		-- Wait for Main chat screen and alert user if its not showing
-		--while not Coords or #imgs == 0 do
-			--checkBreak();
-			--srReadScreen();
-			--imgs = findAllImages("Fishing/chatlog_reddots.png");
-			--Coords = imgs[#imgs];
-			--sleepWithStatus(100, "Looking for Main chat screen ...");
-		--end
-
-			--if not Coords then
-			--error 'Main chat tab is not showing or the chat window needs to be adjusted!'
-			--end
-
-	end
 	
 	--Find What Happened
-
-	ChatType = "";
-	
-	for i = 1, #Chat_Types -1,2 do
-		test = srFindImageInRange("Fishing/" .. Chat_Types[i],Coords[0],Coords[1],500,30);		
-		if test then
-			--Found Chat
-			ChatType = Chat_Types[i + 1];
-			break;
-		end
-	end
-	
-	
-	--Break down!
-	if ChatType then
-		--if ChatType == "lure" then
-		--elseif ChatType == "nofishlostlure" then
-		--elseif ChatType == "nofish" then
-		--elseif ChatType == "strange" then
-		--elseif ChatType == "unusual" then
-		return ChatType;
-	else
-		error(ChatType);
-
-	end
+   
+   for k, v in pairs(Chat_Types) do
+      for i = 1, #chatText do
+         if string.find(lastLine, k, 0, true) then
+            return v
+         end
+      end
+   end
+   
+   error("Could not decipher chat properly");
 end
 
 
 function findClockInfo()
-	srReadScreen();
-  anchor = findText("Year");
-  if(not anchor) then
-    anchor = findText("ar 1");
-  end
-  if(not anchor) then
+  srReadScreen();
+  clockWin = findText("Year", nil, REGION, NOPIN);
 
-    anchor = findText("ar 2");
-  end
-  if(not anchor) then
-    anchor = findText("ar 3");
-  end
-  if(not anchor) then
-    anchor = findText("ar 4");
-  end
-  if(not anchor) then
-    anchor = findText("ar 5");
-  end
-  if(not anchor) then
-    anchor = findText("ar 6");
-  end
-  if(not anchor) then
-    anchor = findText("ar 7");
-  end
-  if(not anchor) then
-    anchor = findText("ar 8");
-  end
-  if(not anchor) then
-    anchor = findText("ar 9");
-  end
-
-
-  if anchor then
-    lsPrintln("Found Clock");
-    window = getWindowBorders(anchor[0], anchor[1]);
-    lines = findAllText(nil, window, nil, NOPIN);
+  if clockWin then
+    lines = findAllText(nil, clockWin, nil, NOPIN);
     for i=1,#lines do
       --lsPrintln("LINE " .. i .. " : " .. table.concat(lines[i], ","));
 
@@ -784,7 +720,7 @@ end
 
 function doit()
 
-  askForWindow("Fishing v1.53 (by Tutmault, revised by KasumiGhia, revised by Cegaiel)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window!");
+  askForWindow("Fishing v1.53 (by Tutmault, revised by KasumiGhia, Cegaiel, and Skyfeather)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window! Ensure that your chat displays timestamps");
 
 ----------------------------------------
 --Variables Used By Program -- Don't Edit Unless you know what you're doing!
