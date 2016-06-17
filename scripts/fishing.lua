@@ -346,19 +346,10 @@ function UseLure()
 	end
 end
 
-fishingText = { 
-") lure.", 
-"You didn't catch anything. Try",
-"You almost caught an ",
-"You didn't catch anything.",
-"The water is dead,",
-"Caught a",
-};
-
 function checkIfMain(chatText)
-   for i = 1, #fishingText do
+   for k, v in pairs(Chat_Types) do
       for j = 1, #chatText do
-         if string.find(chatText[j][2], fishingText[i], 0, true) then
+         if string.find(chatText[j][2], k, 0, true) then
             return true;
          end
       end
@@ -369,8 +360,6 @@ end
 function ChatReadFish()
 	--Find the last line of chat
 	--lsSleep(100);
-	checkBreak();
-	srReadScreen();
    local chatText = getChatText();
    
    local onMain = checkIfMain(chatText);
@@ -392,11 +381,12 @@ function ChatReadFish()
    
    lastLine = chatText[#chatText][2];
    
-   numCaught, fishType = string.match(lastLine, "(\d+) deben ([^.]+)\.");
+   numCaught, fishType = string.match(lastLine, "(%d+) deben ([^.]+)%.");
    if fishType then
       GrandTotalCaught = GrandTotalCaught + 1
       Sfish = string.gsub(fishType, "%W", "");
       SNum = numCaught
+      GrandTotaldb = GrandTotaldb + SNum
    end
    
 	return("[" .. CurrentLure .. " (" .. LureType .. ")] "  .. Sfish .. " (" .. SNum .. "db)");
@@ -465,7 +455,6 @@ function findchat(line)
          end
       end
    end
-   
    error("Could not decipher chat properly");
 end
 
