@@ -347,8 +347,11 @@ function UseLure()
 end
 
 function checkIfMain(chatText)
-   for k, v in pairs(Chat_Types) do
-      for j = 1, #chatText do
+   for j = 1, #chatText do
+      if string.find(chatText[j][2], "^%*%*", 0) then
+         return true;
+      end
+      for k, v in pairs(Chat_Types) do
          if string.find(chatText[j][2], k, 0, true) then
             return true;
          end
