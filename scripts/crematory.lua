@@ -18,7 +18,7 @@ SAME_UP = 1;
 SAME_DOWN = 2;
 
 tolerance = 6500;
-tickTime = 1000;
+tickTime = 500;
 maxWait = 1000;
 longWait = 500;
 shortWait = 30;
@@ -83,6 +83,14 @@ function runCrematories()
   askForFocus();
   for i=1,passCount do
     currentPass = i;
+    local iter = 0;
+    srReadScreen();
+    while closeEmptyAndErrorWindows() ~= 0 and iter < 10 do
+      lsSleep(100);
+      checkBreak();
+      srReadScreen();
+      iter = iter + 1;
+    end
     takeAll();
     loadAll();
     start();
@@ -238,20 +246,17 @@ end
 -------------------------------------------------------------------------------
 
 function checkDone()
-  local all_done = true;
-  for i=1,#windows do
-    if not windows[i].done then
-      local done = srFindImageInRange("crem-done.png", windows[i].origin[1] - 3,
-                                      windows[i].origin[2] - 15, 40, 40,
-                                      tolerance);
-      if done then
-        windows[i].done = true;
-      else
-        all_done = false;
+   local allFound = true;
+   cremWins = findAllText("This is a Crematory", nil, REGION);
+   for i = 1, #cremWins do
+      safeClick(cremWins[i].x + 5, cremWins[i].y + 5);
+   end
+   for i = 1, #cremWins do
+      if not findText("Fire the Crematory", cremWins[i]) then
+         allFound = false;
       end
-    end
-  end
-  return all_done;
+   end
+   return allFound;
 end
 
 -------------------------------------------------------------------------------
@@ -338,7 +343,6 @@ function probeNext(current, points)
 
       current.buttonState[current.probe] = newProbe;
       safeClick(clickX, clickY);
-      lsSleep(shortWait);
     end
   end
 end
@@ -401,7 +405,6 @@ function toggleButtons(current, points, buttonState)
        (not goalState and buttonState[i]) then
       safeClick(current.origin[1] + buttonOffsets[i][1] + buttonClick,
         current.origin[2] + buttonOffsets[i][2] + buttonClick);
-      lsSleep(shortWait);
       buttonState[i] = goalState;
     end
   end
@@ -452,22 +455,15 @@ end
 
 function takeAll()
   srReadScreen();
-  local updateList = findAllImages("ThisIs.png");
-  for i=1,#updateList do
-    safeClick(updateList[i][0], updateList[i][1]);
-  end
-  sleepWithStatus(longWait, updateMessage("Update Crematory Windows"));
-  srReadScreen();
-  local takeList = findAllImages("crem-take.png");
-  for i=1,#takeList do
-    safeClick(takeList[i][0] + 5, takeList[i][1] + 5);
-    sleepWithStatus(shortWait*2, "Waiting for Everything");
-    srReadScreen();
-    local all = waitForImage("Everything.png", maxWait, "Grabbing Everything");
-    if all then
-      safeClick(all[0] + 5, all[1] + 5);
+  local wins = findAllText("This is a Crematory", nil, REGION);
+  for i, win in ipairs(wins) do
+    local t = findText("Take...", win);
+    if t then
+      clickText(findText("Take...", win));
+      t = waitForText("Everything");
+      clickText(t);
+      waitForNoText("Everything");
     end
-    lsSleep(shortWait*2);
   end
 end
 
@@ -530,52 +526,34 @@ end
 -------------------------------------------------------------------------------
 
 function loadAll()
-  srReadScreen();
-  local posList = findAllImages("ThisIs.png");
-  for i=1,#posList do
-    safeClick(posList[i][0], posList[i][1]);
-  end
-  sleepWithStatus(longWait, updateMessage("Update Crematory Windows"));
-  srReadScreen();
-  posList = findAllImages("crem-fire.png");
-  for i=1,#posList do
-    loadSingle(posList[i], woodOffset, "Wood");
-    if load_flax then
-      loadSingle(posList[i], flaxOffset, "Flax");
-    end
-    if load_papyrus then
-      loadSingle(posList[i], papyrusOffset, "Papyrus");
-    end
-    if load_leeks then
-      loadSingle(posList[i], leeksOffset, "Leeks");
-    end
-    if load_limestone then
-      loadSingle(posList[i], limestoneOffset, "Limestone");
-    end
-  end
-end
-
--------------------------------------------------------------------------------
--- loadSingle
--------------------------------------------------------------------------------
-
-function loadSingle(pos, offset, type)
-  sleepWithStatus(200, "Waiting to load");
-  safeClick(pos[0]+5, pos[1]+5+16);
-  lsSleep(100);
-  local limePos = waitForImage("crem-limestone.png", maxWait,
-                    "Loading " .. type .. " Into Crematory");
-  if limePos then
-    safeClick(limePos[0] + 5, limePos[1] + 5 + offset);
-    lsSleep(100);
-    local maxPos = waitForImage("crem-max.png", maxWait,
-                    "Adding Maximum Amount", nil, 3000);
-    if maxPos then
-      safeClick(maxPos[0]+5, maxPos[1]+5);
-    end
-  end
-  lsSleep(100);
-  sleepWithStatus(shortWait, "Waiting for load to complete");
+   cremWins = findAllText("This is a Crematory", nil, REGION);
+   lsPrintln("loading");
+   loads = {};
+   if load_flax then
+      table.insert(loads, "Flax");
+   end
+   if load_papyrus then
+      table.insert(loads, "Papyrus");
+   end
+   if load_limestone then
+      table.insert(loads, "Limestone");
+   end
+   if load_leeks then
+      table.insert(loads, "Leeks");
+   end
+   table.insert(loads, "Wood");
+   for i=1, #cremWins do
+      cremWin = cremWins[i]
+      for i, v in ipairs(loads) do
+         clickText(findText("Load the Crematory...", cremWin));
+         local t = waitForText("Wood", nil, nil, nil, REGION);
+         t = waitForText(v, nil, nil, t);
+         clickText(t);
+         t = waitForText("Load how much", nil, nil, nil, REGION);
+         safeClick(t.x + t.width/2, t.bottom - 50);
+         waitForNoText("Load how much");
+      end
+   end
 end
 
 -------------------------------------------------------------------------------
