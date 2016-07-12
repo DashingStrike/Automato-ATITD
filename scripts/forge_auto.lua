@@ -17,6 +17,13 @@ function pairsByKeys (t, f)
 	return iter
 end
 
+function scrollWindow(window)
+   local x = window.right - 18;
+   startY = window.y + 56;
+   stopY = window.bottom - 34;
+   return safeDrag(x, startY, x, stopY);
+end
+
 local scale;
 forgeInfo = {};
 
@@ -149,7 +156,9 @@ function chooseItems(itemList, multiple)
       end
       currentItem.num = promptNumber(string.format("How many %s%s would you like to make?",                                           leafParentsString, currentItem.name),nil,0.66);
       if multiple then
-         table.insert(retList, currentItem);
+         if currentItem.num ~= 0 then
+            table.insert(retList, currentItem);
+         end
       else
          return currentItem
       end
@@ -183,7 +192,18 @@ local function makeItem(currentItem, window)
    end
    local text;
    local lastParent = parents[#parents];
-   if lastParent == "Foil" or lastParent == "Sheeting" or lastParent == "Wire" or lastParent == "Bars" then
+
+   -- Check if we have to drag the menu to the bottom
+   if lastParent == "Small Gear" and name > "10 Pewter" then
+      local t = waitForText("Make 1 Aluminum Small Gear", nil, nil, nil, REGION);
+      scrollWindow(t);
+   end
+   if lastParent == "Bars" and name > "5 Copper" then
+      local t = waitForText("Make Aluminum Bars", nil, nil, nil, REGION);
+      scrollWindow(t);
+   end
+
+   if lastParent == "Sheeting" or lastParent == "Wire" or lastParent == "Bars" then
       text = string.format("Make %s %s", name, lastParent);
    elseif lastParent == "Pipes" or lastParent == "Foils" or lastParent == "Straps" then
       text = string.format("Make %s %s", name, string.sub(lastParent, 1, #lastParent-1));
