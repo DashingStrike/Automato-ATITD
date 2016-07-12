@@ -37,7 +37,7 @@ colOffsets = {
 
 colWidth = 36-35+6;
 colHeight = 323-204;
-colMiddle = 52;
+colMiddle = 57;
 
 buttonOffsets = {
   {32, 151}, --{49-40, 333-182}
