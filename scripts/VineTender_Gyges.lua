@@ -26,20 +26,19 @@ vineyardImages = { "", "Harvest the Gr", "Take a Cutting of the V" };
 stateNames = {"Fat", "Musty", "Rustle", "Sagging", "Shimmer",
 	      "Shrivel", "Wilting"};
 
-local tendType = {"Aerate", "Mist", "Pinch", "Shade", "Spread", "Tie", "Trim"};
-
 tendActions = {"AS", "MG", "PO", "SL", "SV", "TL", "TV"};
 tendIndices = { ["AS"] = 1, ["MG"] = 2, ["PO"] = 3, ["SL"] = 4, ["SV"] = 5,
 		["TL"] = 6, ["TV"] = 7 };
 
-tendImages = {
-  ["AS"] = "vineyard/Action_AS.png",
-  ["MG"] = "vineyard/Action_MG.png",
-  ["PO"] = "vineyard/Action_PO.png",
-  ["SL"] = "vineyard/Action_SL.png",
-  ["SV"] = "vineyard/Action_SV.png",
-  ["TL"] = "vineyard/Action_TL.png",
-  ["TV"] = "vineyard/Action_TV.png" };
+tendText = {
+  ["AS"] = "Aerate",
+  ["MG"] = "Mist",
+  ["PO"] = "Pinch",
+  ["SL"] = "Shade",
+  ["SV"] = "Spread",
+  ["TL"] = "Tie",
+  ["TV"] = "Trim",
+}
 
 vigorNames = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
 	       "12", "13", "14", "15" };
@@ -451,7 +450,7 @@ function processVineyard()
 
 
 
-  local clickPos = srFindImage(tendImages[vineType.tends[vineState]]);
+  local clickPos = srFindText(tendText[vineType.tends[vineState]]);
   if not clickPos then
     return "Could not find tend action to click";
   end
@@ -561,8 +560,8 @@ end
 function findVineState()
   local result = 0;
   srReadScreen();
-  for i=1,#tendType do
-    if findText(tendType[i]) then
+  for i=1,#stateNames do
+    if findText(string.lower(stateNames[i])) then
       return i
     end
   end
@@ -592,7 +591,7 @@ function parseVines()
 	if #sub ~= 2 then
 	  error("Failed parsing line: " .. line);
 	end
-	if not tendImages[sub[1]] then
+	if not tendText[sub[1]] then
 	  error("Failed parsing line: " .. line);
 	end
 	vines[#vines].tends[i-2] = sub[1];
