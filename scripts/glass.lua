@@ -1,16 +1,22 @@
+-- glass.lua  modified by Silden 17-AUG-2017
+
+
+dofile("common.inc"); -- To allow the findAllText function
 dofile("screen_reader_common.inc");
 dofile("ui_utils.inc");
 
-window_w = 285;
+-- Initial variables
+window_w = 320;
 window_h = 415;
-temp_width = 75;
+temp_width = 95;
 tol = 6500;
+menuButtonSelected = 0;
 
 -- It will make the first in the list if available, otherwise the next, etc
 -- This will let you make, e.g. Rods on your Soda Glass and Sheet Glass on your normal, by putting
 --   sheet glass before rods (on soda it'll fail to find sheet)
-item_priority = {"GlassMakePipe.png", "GlassMakeRod.png", "GlassMakeJar.png", 
-                 "GlassMakeSheet.png", "GlassMakeWine.png","GlassMakeTorch.png",
+item_priority = {"GlassMakeSheet.png", "GlassMakeRod.png", "GlassMakeWine.png", 
+                 "GlassMakePipe.png", "GlassMakeJar.png","GlassMakeTorch.png",
                  "GlassMakeBlade.png", "GlassMakeFineRod.png", "GlassMakeFinePipe.png"};
 -- max temperature in which we will contine heating it, wait until it gets below this before adding
 max_add_temp = 2300;
@@ -20,12 +26,20 @@ min_new_temp = 1750;
 tick_time = 3000;
 
 function ocrNumber(x, y)
-	-- find first number
-	local digit=nil;
+	-- Finds the number at the given coordinate. 
+	-- Glass numbers are now bigger than other numbers, so a different set of number files are needed 
+	-- (glass0.png to glass9.png)
+	
+	local numberImageWidth = 7;
+	local numberImageHeight = 11
+	
+	-- Find the first number
+	local digit=nil; -- digit found
 	local offset=0;
 	while (not digit) and (offset < 10) do
 		for i=0, 9 do
-			local pos = srFindImageInRange(i .. ".png", x, y, 6, 9, tol);
+			-- loop through each number 0 to 9 and see if it exists at the location x, y
+			local pos = srFindImageInRange("glass" .. i .. ".png", x, y, numberImageWidth, numberImageHeight, tol);
 			if pos then
 				digit=i;
 				break;
@@ -42,9 +56,9 @@ function ocrNumber(x, y)
 	local ret = digit;
 	while 1 do
 		digit = nil;
-		x = x + 7;
+		x = x + numberImageWidth + 1;
 		for i=0, 9 do
-			local pos = srFindImageInRange(i .. ".png", x, y, 6, 9, tol);
+			local pos = srFindImageInRange("glass" .. i .. ".png", x, y, numberImageWidth, numberImageHeight, tol);
 			if pos then
 				digit=i;
 				break;
@@ -88,14 +102,19 @@ function glassTick(window_pos, state)
 		state.status = state.status .. " No temperature found, ignoring";
 		return state.status;
 	end
-	local temp = ocrNumber(pos[0] + temp_width, pos[1]);
 	
+
+	local temp = ocrNumber(pos[0] + temp_width, pos[1]);
+	if temp == null then
+		-- If we don't get a valid number at the end of the Temperature Label, then complain loudly
+		error("Did not find a valid temperature at " .. pos[0] .. " (+" .. temp_width .. "), " .. pos[1]);
+	end
 
 	state.status = (state.status .. "  Temp:" .. temp);
 
-	nothing_cooking = srFindImageInRange("GlassNothingCooking.png", window_pos[0]-5, window_pos[1], window_w, window_h, tol);
-
-	if (stop_cooking or out_of_glass) and nothing_cooking then
+	cooking = srFindImageInRange("GlassCooking.png", window_pos[0], window_pos[1], window_w, window_h, tol);
+	
+	if (stop_cooking or out_of_glass) and not cooking then
 		return nil;
 	end
 	
@@ -150,7 +169,7 @@ function glassTick(window_pos, state)
 
 	-- Monitor what we're making
 	
-	if nothing_cooking then
+	if not cooking then
 		state.status = state.status .. " NothingCooking";
 		if not stop_cooking then
 			if temp > 1600 and temp < 2400 then
@@ -178,7 +197,7 @@ function glassTick(window_pos, state)
 		state.status = state.status .. " InUse";
 	end
 	
-	state.last_nothing_cooking = nothing_cooking;
+	state.last_nothing_cooking = not cooking;
 	lsPrintln(state.status);
 	return state.status; -- keep going and return status
 end
@@ -190,6 +209,9 @@ function allowReorder(x, y)
 	lsPrint(x, y, z, scale, scale, 0xFFFFFFff, "Click an item to raise priority");
 	y=y+20;
 	x=x+5;
+	
+
+	
 	local item_index;
 	for item_index=1, #item_priority do
 		if lsButtonText(x, y, z, 100, 0xFFFFFFff, string.sub(string.sub(item_priority[item_index], 10), 1, -5)) then
@@ -221,7 +243,7 @@ function doit()
 
 	-- testReorder();
 	
-	askForWindow("Pin your benches, put the cursor over the ATITD window, press Shift.  Then add charcoal until the benches are hot enough, melt your materials, an as it cools back down into useable temperature ranges, the macro will take over.  Please pause the macro when you need to use your mouse. Self Click, Options, Interface Options, Notifications: \"Use the chat area instead of popups\" MUST be CHECKED!");
+	askForWindow("To make glass, pin open Glazier's Bench then press Shift over the ATiTD window. Add charcoal (press the +2cc button for 5 temperature ticks, 6 for Jewel Glass), then wait for the glaziers to reach a temperature of 3200 (4400 for jewel). At this point, melt materials either manually or click M to show Melt Material windows, then smelt your materials (S=Soda, N=Normal, J=Jewel). Once you have melted the materials, the macro will take over.  Pause the macro when you need to use your mouse. If all lines don't say COOL DOWN on the macro before you add materials, you will need to pause the macro whilst any of the benches are between 1600 and 2400 otherwise you risk losing glass. Self Click, Options, Interface Options, Notifications: \"Use the chat area instead of popups\" MUST be CHECKED!");
 	
 	srReadScreen();
 	
@@ -280,6 +302,31 @@ function doit()
 					lsPrint(10, 80 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - COOL DOWN");
 				end
 			end
+			
+			-- New buttons to help add charcoal and melt materials
+			if lsButtonText(lsScreenX - 90, lsScreenY - 115, z, 60, 0x00FFFFff, "+2cc") then
+				menuButtonSelected = 1;
+			end
+			
+			if lsButtonText(lsScreenX - 110, lsScreenY - 90, z, 22, 0xFFFF00ff, "M") then
+				menuButtonSelected = 2;
+			end
+
+			if lsButtonText(lsScreenX - 85, lsScreenY - 90, z, 25, 0xFF00FFff, "S") then
+				menuButtonSelected = 3;
+			end
+
+			if lsButtonText(lsScreenX - 60, lsScreenY - 90, z, 25, 0xFF00FFff, "N") then
+				menuButtonSelected = 4;
+			end
+
+			if lsButtonText(lsScreenX - 35, lsScreenY - 90, z, 25, 0xFF00FFff, "J") then
+				menuButtonSelected = 5;
+			end
+
+			
+			
+
 			if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Finish up") then
 				stop_cooking = 1;
 			end
@@ -290,11 +337,50 @@ function doit()
 			allowReorder(10, 100+15*#glass_windows);
 			
 			checkBreak();
+			checkButtons();
 			lsDoFrame();
 			lsSleep(25);
 		end
 		
 		checkBreak();
 		-- error 'done';
+	end
+
+end
+
+function checkButtons()
+	if (menuButtonSelected == 1) then
+		-- User has clicked the +2 cc button, so click all Add 2 Charcoal buttons on the screen
+		clickAllText("Add 2 Charcoal");
+	end
+	
+	if (menuButtonSelected == 2) then
+		-- User has clicked the M button, so click all Melt Materials buttons
+		clickAllText("Melt Materials...");
+	end
+	
+	if (menuButtonSelected == 3) then
+		-- User has clicked the S button, so click all Into Soda Glass buttons on the screen
+		clickAllText("Into Soda Glass");
+	end
+	
+	if (menuButtonSelected == 4) then
+		-- User has clicked the N button, so click all Into Normal Glass buttons on the screen
+		clickAllText("Into Normal Glass");
+	end
+	
+	if (menuButtonSelected == 5) then
+		-- User has clicked the J button, so click all Into Jewel Glass buttons on the screen
+		clickAllText("Into Jewel Glass");
+	end
+	
+	menuButtonSelected= 0;
+end
+
+function clickAllText(textToFind)
+	local allTextReferences = findAllText(textToFind);
+	
+	for buttons=1, #allTextReferences do
+		srClickMouseNoMove(allTextReferences[buttons][0]+20, allTextReferences[buttons][1]+5);
 	end
 end
