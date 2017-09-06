@@ -463,6 +463,7 @@ function takeAll()
       t = waitForText("Everything");
       clickText(t);
       waitForNoText("Everything");
+      safeClick(wins[i].x + 25, wins[i].y + 5);
     end
   end
 end
