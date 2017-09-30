@@ -18,9 +18,10 @@ askText = singleLine([[
   of the screen. You may need to
   F12 at low resolutions or hide your chat window (if it starts
   planting and fails to move downward, it probably clicked on your
-  chat window). Will plant grid NE of current location.  'Plant all
-  crops where you stand' must be ON.  'Right click pins/unpins a menu'
-  must be ON. Enable Hotkeys on flax must be OFF.
+  chat window). 
+  Will plant a spiral grid heading North-East of current  location.  
+  'Plant all crops where you stand' must be ON.  
+  'Right click pins/unpins a menu' must be ON.
 ]]);
 
 -- Global parameters set by prompt box.
@@ -58,8 +59,11 @@ xyCenter = {};
 xyFlaxMenu = {};
 
 -- The flax bed window
-window_w = 168;
-window_h = 150;
+local window_w = 0;  -- Just a declaration, changes based on method in promptFlaxNumbers()
+window_h = 145;  
+
+-- To allow 5x5 seeds on a 1920 width screen, we need to tweak the arrangeStashed function to only allow 50px for automato window
+space_to_leave = 50; 
 
 FLAX = 0;
 ONIONS = 1;
@@ -192,28 +196,41 @@ function promptFlaxNumbers()
       y = y + 32;
     end
 
-    is_plant = lsCheckBox(10, y, z+10, 0xFFFFFFff, "Grow Flax", is_plant);
+    is_plant = lsCheckBox(120, y+5, z+10, 0xFFFFFFff, "Grow Flax", is_plant);
     y = y + 32;
 
-    if lsButtonText(170, y-32, z, 100, 0xFFFFFFff, "OK") then
+    if lsButtonText(10, y-32, z, 100, 0xFFFFFFff, "Start!") then
       is_done = 1;
     end
 
     if is_plant then
+      -- Will plant and harvest flax
+      window_w = 250; 
+      space_to_leave = false; 
       lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
                      "This will plant and harvest a " .. grid_w .. "x" ..
                      grid_w .. " grid of " .. seedType .. " Flax " .. num_loops ..
                      " times, requiring " .. (grid_w * grid_w * num_loops) ..
                      " seeds, doing " .. (grid_w*grid_w*num_loops) ..
-                     " flax harvests.");
+                     " flax harvests.\n\n");
     else
+      -- Will make seeds
+      
+      -- Flax window will grow to 333 px before returning to 290.
+      -- This window MUST be big enough otherwise rip out seeds will hang automato!
+      -- As a result, we need to reduce space on the right to accomodate a 5x5 grid on widescreen monitors
+      window_w = 333; 
+      space_to_leave = 50;
+      
       local seedTotal = grid_w * grid_h * num_loops * seeds_per_pass
       lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
                      "This will plant a " .. grid_w .. "x" .. grid_w ..
                      " grid of " .. seedType .. " Flax and harvest it " .. seeds_per_pass ..
                      " times, requiring " .. (grid_w * grid_w) ..
                      " seeds, and repeat this " .. num_loops ..
-                     " times, yielding " .. seedTotal .. " seed harvests.");
+                     " times, yielding " .. seedTotal .. " seed harvests." ..
+		     " Put automato as far right as possible, you may need to " ..
+                     " reduce my width (or minimize me!)");
     end
 
     if is_done and (not num_loops or not grid_w) then
@@ -443,7 +460,7 @@ end
 function dragWindows(loop_count)
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ")  " ..
                "Dragging Windows into Grid");
-  arrangeStashed(nil, true, nil, window_h);
+  arrangeStashed(nil, true, window_w, window_h, space_to_leave);
 end
 
 -------------------------------------------------------------------------------
