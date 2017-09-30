@@ -2,6 +2,7 @@
 --
 -- Thanks to veggies.lua for the build button locations
 -- Updated 29-SEP-2017 by Silden to take into account UI changes that meant the windows would not close properly
+-- Updated 30-SEP-2017 by Silden to increase default values to cater for long veg names, such as Cabbage
 
 dofile("common.inc")
 dofile("settings.inc")
