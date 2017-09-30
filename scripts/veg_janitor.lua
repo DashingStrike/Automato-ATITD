@@ -2,6 +2,7 @@
 --
 -- Thanks to veggies.lua for the build button locations
 -- Updated 29-SEP-2017 by Silden to take into account UI changes that meant the windows would not close properly
+-- Updated 30-SEP-2017 by Silden to increase default values to cater for long veg names, such as Cabbage
 
 dofile("common.inc")
 dofile("settings.inc")
@@ -77,8 +78,8 @@ SEED_TYPES = {
 
 
 -- Used to control the plant window placement and tiling.
-WINDOW_HEIGHT=80
-WINDOW_WIDTH=220
+WINDOW_HEIGHT=120 -- Was 80
+WINDOW_WIDTH=240 -- Was 220
 WINDOW_OFFSET_X=150
 WINDOW_OFFSET_Y=150
 
@@ -413,6 +414,7 @@ function clickPlantButton(seed_name)
             clickText(plantButton, 1)
             build_menu_opened = waitForChange(spot,click_delay*5)
         else
+	    lsPlaySound("fail.wav");
             error("Text " .. seed_name .. " Not found.")
         end
         sleepWithStatus(tick_delay, "Planting...") --Retrying build menu open
