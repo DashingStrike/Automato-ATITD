@@ -9,10 +9,10 @@ dofile("common.inc");
 -- <ingredient> should be quoted, no spaces or special characters. IE: "MaltMediumRoasted"
 --
 ingredients = { 
-	{ "MaltMediumRoasted", 100, 120 },
-	{ "Honey", 100, 60 }
+	{ "WheatDriedRaw", 60, 1200 },
+	{ "Honey", 160, 1200 }
 };
-sealTime = 1400;
+sealTime = 10;
 
 -- Please DON'T modify anything below for proper operation
 kettles = {};
@@ -119,6 +119,13 @@ end
 
 function kettleTick(kettle)
 	local anchor = findText("Utility", kettle);
+	if anchor == nil then
+		kettle.stage = STAGE_COMPLETE
+		kettle.status = "Parse Error";
+		finished = finished + 1;
+		return;
+	end
+	
 	anchor[0] = anchor[0]+8;
 	
 	if kettle.stage == STAGE_WAITING then
@@ -142,11 +149,11 @@ function kettleTick(kettle)
 			srReadScreen();
 			pos = srFindImageInRange("BrewTime.png", kettle.x, kettle.y, kettle.width, kettle.height);
 			local time = ocrNumber(pos[0] + 47, pos[1], SMALL_SET);
-			for i=1, #kettle.ingredients do
-				if not (kettle.ingredients[i][1] == nil) then
-					if time <= kettle.ingredients[i][3] then
-						AddIngredient(kettle, kettle.ingredients[i]);
-						kettle.ingredients[i][1] = nil;
+			for i=1, #ingredients do
+				if kettle.lasting < i then
+					if time <= ingredients[i][3] then
+						AddIngredient(kettle, i);
+						kettle.lasting = i;
 					end
 				end
 			end
@@ -169,7 +176,7 @@ function kettleTick(kettle)
 	end
 end
 
-function AddIngredient(kettle, ingredient)
+function AddIngredient(kettle, ing)
 	local pos = srFindImageInRange("BeerIngredient.png", kettle.x, kettle.y, kettle.width, kettle.height);
 	safeClick(pos[0] + 30, pos[1] + 6);
 	local rw = waitForText("Choose Beer Ingredient:", nil, nil, nil, REGION);
@@ -185,12 +192,12 @@ function AddIngredient(kettle, ingredient)
 		for i = 1, #parse do
 			parse[i][2] = stripCharacters(parse[i][2]);
 			if foundIng == false then
-				if ingredient[1] == parse[i][2] then
+				if ingredients[ing][1] == parse[i][2] then
 					safeClick(parse[i][0]+13, parse[i][1]+5);
 					lsSleep(200);
 					safeClick(rw.x + 96, rw.y + 263);
 					lsSleep(200)
-					srKeyEvent(ingredient[2] .. "\n");
+					srKeyEvent(ingredients[ing][2] .. "\n");
 					lsSleep(200);
 					while clickAll("OK1.png") == false do
 						lsSleep(50);
@@ -210,8 +217,8 @@ function doit()
 	
 	for window_index=1, #kettles do
 		kettles[window_index].stage = STAGE_WAITING;
-		kettles[window_index].ingredients = ingredients;
 		kettles[window_index].status = "Waiting";
+		kettles[window_index].lasting = 0;
 	end
 	
 	while finished < #kettles do
@@ -219,7 +226,7 @@ function doit()
 			if not (kettles[index].stage == STAGE_COMPLETE) then
 				kettleTick(kettles[index]);
 			else
-				kettles[window_index].status = "Finished";
+				kettles[index].status = "Finished";
 			end
 
 			-- Display status and sleep
