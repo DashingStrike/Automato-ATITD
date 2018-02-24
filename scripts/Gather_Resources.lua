@@ -39,7 +39,7 @@ function gatherSlate()
 		checkBreak();
 		srReadScreen();
 		local slate = srFindImage("slate.png");
-			if grass then
+			if slate then
 			srClickMouseNoMove(slate[0]+5,slate[1],1);
 			sleepWithStatus(100, "Clicking Gather Slate Icon");
 			else
