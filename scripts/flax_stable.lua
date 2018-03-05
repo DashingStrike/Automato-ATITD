@@ -301,10 +301,10 @@ function doit()
   initGlobals();
   srReadScreen();
   local startPos = findCoords();
-  lsPrintln("Start pos:" .. startPos[0] .. ", " .. startPos[1]);
   if not startPos then
     error("ATITD clock not found.\Verify entire clock and borders are visible. Try moving clock slightly.");
   end
+  lsPrintln("Start pos:" .. startPos[0] .. ", " .. startPos[1]);
 
   setCameraView(CARTOGRAPHER2CAM);
   drawWater();
