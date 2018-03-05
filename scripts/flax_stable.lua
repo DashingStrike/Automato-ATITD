@@ -49,7 +49,7 @@ imgSeeds = "HarvestSeeds.png";
 
 -- Tweakable delay values
 refresh_time = 60; -- Time to wait for windows to update
-walk_time = 300;
+walk_time = 600; -- Reduce to 300 if you're fast.
 
 -- Don't touch. These are set according to Jimbly's black magic.
 walk_px_y = 340;
@@ -205,7 +205,7 @@ function promptFlaxNumbers()
 
     if is_plant then
       -- Will plant and harvest flax
-      window_w = 250; 
+      window_w = 285; 
       space_to_leave = false; 
       lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
                      "This will plant and harvest a " .. grid_w .. "x" ..
