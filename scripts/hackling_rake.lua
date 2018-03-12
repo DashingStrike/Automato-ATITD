@@ -7,7 +7,8 @@ dofile("common.inc");
 
 askText = singleLine([[
 Hackling Rake v1.0 (by Bardoth - Revised by Cegaiel) --
-Pin Hacking Rake or Flax Comb window up and have Rotten Flax in you inventory. Make sure your rake is on the first step before starting. You MUST have Skills window open and everything from Strength to Perception skill should be visible.
+Pin Hacking Rake or Flax Comb window up and have Rotten Flax in your inventory. Make sure your rake is showing "Step 1, Remove Straw" before starting. You MUST have Skills window open and everything from Strength to Perception skill should be visible.
+This macro will not break if you need to alt-tab out of game to do something or need to move pinned window. As soon as you flip back in game, it will continue where it left off at!
 Press Shift to continue.
 ]]);
 
@@ -54,7 +55,9 @@ function promptRakeNumbers()
 		end
 		
 		num_loops = math.floor(num_flax / per_rake);
-		
+			if num_loops == 0 then
+				num_loops = 1;
+			end
 		y = y + 32;
 
 		if lsButtonText(170, y+32, z, 100, 0xFFFFFFff, "OK") then
@@ -137,7 +140,7 @@ function doit()
 		
 		if not stats_black and not stats_black2 and not stats_black3 then
 			sleepWithStatus(1200, "Next Step: " .. step .. "/4 - " .. task_text .. "\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. num_loops*per_rake .. "\n2) Tow Seperated: " .. tow .. "/" .. num_loops*per_rake .. "\n3) Lint Refined: " .. lint .. "/" .. num_loops*per_rake .. "\n4) Cleanings: " .. clean .. "/" .. num_loops .. "\n----------------------------------------------\nFlax Processed: " .. (loop_count-1)*per_rake .. "\nFlax Remaining: " .. num_flax - ((loop_count-1)*per_rake) .. "\n" .. warning);
-		elseif loop_count >= num_loops then
+		elseif loop_count > num_loops then
 			num_loops = nil;
 		else
 			
@@ -172,11 +175,17 @@ function doit()
 		end
 
 end
-	if num_loops == nil then
-			sleepWithStatus(5000, "ALL DONE!\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. clean*10 .. "\n2) Tow Seperated: " .. tow .. "/" .. clean*10 .. "\n3) Lint Refined: " .. lint .. "/" .. clean*10 .. "\n4) Cleanings: " .. clean .. "/" .. clean .. "\n----------------------------------------------\nFlax Processed: " .. (loop_count-1)*10 .. "\nFlax Remaining: " .. num_flax - ((loop_count-1)*10));
 
-	lsPlaySound("Complete.wav");
-	end
+		while num_loops == nil do
+--We're done now, but keep Window open so player can review stats (in case they were afk).
+		statusScreen("ALL DONE!\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. clean*10 .. "\n2) Tow Seperated: " .. tow .. "/" .. clean*10 .. "\n3) Lint Refined: " .. lint .. "/" .. clean*10 .. "\n4) Cleanings: " .. clean .. "/" .. clean .. "\n----------------------------------------------\nFlax Processed: " .. (loop_count-1)*10 .. "\nFlax Remaining: " .. num_flax - ((loop_count-1)*10) .. "\n\nYou may End Script now...");
+
+
+		checkBreak();
+		lsSleep(500);
+		end
+
+
 end
 
 
