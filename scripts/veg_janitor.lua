@@ -1,6 +1,8 @@
 -- Vegetable Macro for Tale 7 by thejanitor.
 --
 -- Thanks to veggies.lua for the build button locations
+-- Updated 29-SEP-2017 by Silden to take into account UI changes that meant the windows would not close properly
+-- Updated 30-SEP-2017 by Silden to increase default values to cater for long veg names, such as Cabbage
 
 dofile("common.inc")
 dofile("settings.inc")
@@ -76,8 +78,8 @@ SEED_TYPES = {
 
 
 -- Used to control the plant window placement and tiling.
-WINDOW_HEIGHT=80
-WINDOW_WIDTH=220
+WINDOW_HEIGHT=120 -- Was 80
+WINDOW_WIDTH=240 -- Was 220
 WINDOW_OFFSET_X=150
 WINDOW_OFFSET_Y=150
 
@@ -352,18 +354,17 @@ function Plant:water(args)
 end
 
 function Plant:close(config)
-    local search_box = makeBox(self.window_pos.x+120,self.window_pos.y-50,80,80)
+    -- New UI changes affected the closing of finished windows.
+    -- Now look for the UnPin image, and safeClick it closed if found.
+    
+    local search_box = makeBox(self.window_pos.x+20,self.window_pos.y-50,220,80)
     srReadScreen()
-    local unpin_loc = srFindImageInRange("blank.png", search_box.left, search_box.top, search_box.width, search_box.height, 4800)
-    if not unpin_loc then
-        lsPrintln("Didn't find upin image for plant " .. self.index)
-        return
-    end
-    unpin_loc = Vector:new{x=unpin_loc[0],y=unpin_loc[1] }
-    if not inside(unpin_loc+{25,10},search_box) then
-        lsPrintln("Trying to unpin outside of the search box????")
+    local unpin_loc = srFindImageInRange("UnPin.png", search_box.left, search_box.top, search_box.width, search_box.height, 4800)
+    if unpin_loc then
+	safeClick(unpin_loc[0],unpin_loc[1]);
     else
-        click(unpin_loc+{25,10})
+	lsPrintln("Didn't find unpin image for plant " .. self.index .. " looking left:" .. search_box.left .. ", top: " .. search_box.top .. ", width: " .. search_box.width .. ", height: " .. search_box.height .. ".");
+        return
     end
 end
 
@@ -413,6 +414,7 @@ function clickPlantButton(seed_name)
             clickText(plantButton, 1)
             build_menu_opened = waitForChange(spot,click_delay*5)
         else
+	    lsPlaySound("fail.wav");
             error("Text " .. seed_name .. " Not found.")
         end
         sleepWithStatus(tick_delay, "Planting...") --Retrying build menu open
