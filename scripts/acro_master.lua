@@ -13,7 +13,7 @@
 
 dofile("common.inc");
 
-askText = "Acrobat Master v1.1 by Cegaiel\n \nOpen acro window before continuing!\n \nYou can test without a partner by Self Click, Tests of Acrobat, Show Moves. You may move the acro window while its running. If you are acroing many people, you do not need to quit/restart macro between each person. Click Menu, when you are done acroing the current avatar, open new acro window (ask to acro). Make sure you drag the acro window so all the moves are showing. Your available moves will stay in memory. Press Shift over ATITD window to continue.";
+askText = "Acrobat Master v1.1 by Cegaiel\n \nWait until you have Acrobat window open, from a partner, (won\'t work with Self Click, Acrobat, Show Moves) before you start macro! It will memorize your moves for future partners (even if you close acro window). You can move acro window while its running. You do not need to quit/restart macro between each partner. Click \"Menu\" button, when you are done acroing the current player. Optionally, click \"Refresh\" button when your next partner\'s acro window is open. This will prevent the same moves you both know from appearing in checklist. Make sure you resize the acro window so all the buttons are showing. Press Shift over ATITD window to continue.";
 
 
 moveImages = {
@@ -123,6 +123,7 @@ end
 
 function findMoves()
   lsDoFrame();
+  statusScreen("Scanning acro buttons...");
   foundMovesName = {};
   foundMovesImage = {};
   foundMovesShortName = {};
@@ -188,7 +189,7 @@ function doMoves()
 					lsSleep(1500);
 					break;
 				  else
-				  statusScreen("Waiting on Acro timer" .. GUI);
+				  statusScreen("WAITING ON ACRO TIMER!" .. GUI);
 				  end
 			    else
 				  acroTimer = false;
