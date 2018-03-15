@@ -460,7 +460,13 @@ end
 function dragWindows(loop_count)
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ")  " ..
                "Dragging Windows into Grid");
-  arrangeStashed(nil, true, window_w, window_h, space_to_leave);
+
+  if plantType == ONIONS then
+    arrangeStashed(nil, true, onion_window_w, onion_window_h, space_to_leave);
+  else
+    arrangeStashed(nil, true, window_w, window_h, space_to_leave);
+  end
+
 end
 
 -------------------------------------------------------------------------------
