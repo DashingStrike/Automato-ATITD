@@ -15,7 +15,7 @@ items = {
 --dex
 {""},
 --end
-{"", "Comb Flax", "Dig Dirt", "Dig Hole", "Dig Limestone", "Stir Cement", "Excavate Blocks", "Push Pyramid", "Weave Canvas", "Weave Silk",
+{"", "Flax Comb", "Hackling Rake", "Dig Dirt", "Dig Hole", "Dig Limestone", "Stir Cement", "Excavate Blocks", "Push Pyramid", "Weave Canvas", "Weave Silk",
  "Weave Linen", "Weave Wool Cloth"},
 --spd
 {""},
@@ -150,6 +150,41 @@ function weave(clothType)
 end
 
 function combFlax()
+   flaxReg = findText("This is [a-z]+ Flax Comb", nil, REGION+REGEX);
+   if flaxReg == nil then
+      return;
+   end
+   flaxText = findText("This is [a-z]+ Flax Comb", flaxReg, REGEX);
+   clickText(flaxText);
+   lsSleep(per_tick);
+   srReadScreen();
+   s1 = findText("Separate Rotten", flaxReg);
+   s23 = findText("Continue processing", flaxReg);
+   clean = findText("Clean the");
+   if s1 then
+      clickText(s1);
+   elseif s23 then
+      clickText(s23);
+   elseif clean then
+      if takeAllWhenCombingFlax == true then
+         clickText(findText("Take...", flaxReg));
+         everythingObj = waitForText("Everything", 1000);
+         if everythingObj == nil then
+             return;
+         end
+         clickText(everythingObj);
+         lsSleep(150);
+      end
+      clickText(clean);
+   else
+      lsPrint(5, 0 ,10, 1, 1, "Found Stats");
+      lsDoFrame();
+      lsSleep(2000);
+   end
+end
+
+
+function hacklingRake()
    flaxReg = findText("This is [a-z]+ Hackling Rake", nil, REGION+REGEX);
    if flaxReg == nil then
       return;
@@ -313,8 +348,10 @@ function doTasks()
             --check for special cases, like flax.
             lsPrint(10, 10, 0, 0.7, 0.7, 0xB0B0B0ff,"Working on " .. curTask);
             lsDoFrame();
-            if curTask == "Comb Flax" then
+            if curTask == "Flax Comb" then
                combFlax();
+            elseif curtask == "Hackling Rake" then
+               hacklingRake();
             elseif curTask == "Dig Dirt" then
                t = srFindImage("dirt.png", 10000);
                if t then
