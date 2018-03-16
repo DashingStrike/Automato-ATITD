@@ -1,4 +1,4 @@
--- cc-auto.lua v1.0 -- by Tallow, based on Tak's cc program
+-- cc-auto.lua v1.0 -- by Tallow, based on Tak's cc program, updated by Manon on 5 jan 2018
 --
 -- Automatically runs many charcoal hearths or ovens simultaneously.
 --
@@ -6,9 +6,9 @@
 dofile("cc_Assist.lua");
 
 askText = singleLine([[
-  CC Auto v1.0 (by Tallow, based on Tak's cc program) --
+  CC Auto v1.0 (by Tallow, based on Tak's cc program, updated by Manon on 5 jan 2018) --
   Automatically runs many charcoal hearths or ovens 
-  simultaneously. Make sure the VT window is in the TOP-RIGHT corner 
+  simultaneously. Make sure this window is in the TOP-RIGHT corner 
   of the screen. 
 ]]);
 
@@ -38,7 +38,7 @@ function findOvens()
     if not corner then
       error("Failed to find corner of cc window.");
     end
-    result[i][1] = corner[1];-- - 102;
+    result[i][1] = corner[1];-- - 0;
   end
   return result;
 end
@@ -93,18 +93,18 @@ end
 --px85 = 162
 --px90 = 168
 
-progressGreen = makePoint(70, 174-102);
-maxDangerGreen = makePoint(150, 162-102);
-minHeat = makePoint(147, 115-102);
-minWood = makePoint(98, 139-102);
-minOxy = makePoint(80, 126-102);
-maxOxy = makePoint(100, 126-102);
-maxDanger = makePoint(165, 162-102);
-uberDanger = makePoint(174, 162-102);
-minWater = makePoint(67, 150-102);
+minHeat = makePoint(199, 15-0);
+minOxy = makePoint(80, 33-0);
+maxOxy = makePoint(116, 33-0);
+minWood = makePoint(112, 50-0);
+minWater = makePoint(57, 70-0);
+maxDangerGreen = makePoint(205, 90-0);
+maxDanger = makePoint(219, 90-0);
+uberDanger = makePoint(228, 90-0);
+progressGreen = makePoint(62, 110-0);
 
 greenColor = 0x07FE05;
-barColor = 0x0706FD;
+barColor = 0x0606FD;
 
 function processOven(oven, vent)
   local newVent = vent;
