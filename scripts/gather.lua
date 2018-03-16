@@ -1,5 +1,3 @@
-
-
 dofile("screen_reader_common.inc");
 dofile("ui_utils.inc");
 dofile("common.inc");
@@ -1583,39 +1581,7 @@ function prepareForWalking()
     mid[1] = xyWindowSize[1] / 2;
     srSetMousePos(mid[0],mid[1]);
     lsSleep(150);
-    local escape = "\27";
-    srKeyEvent(escape);
-    lsSleep(150);
-    srReadScreen();
-    local options = findText("Options...");
-    if(options) then
-        srClickMouse(options[0]+10,options[1]+5);
-        lsSleep(150);
-        srReadScreen();
-        local camera = findText("Camera");
-        if(camera) then
-            clickText(camera);
-            lsSleep(150);
-            srReadScreen();
-            local cartCam = findText("Cartographer's Cam");
-            if(cartCam) then
-                clickText(cartCam);
-                srReadScreen();
-                local ok = srFindImage("ok-faint.png");
-                if(ok) then
-                    clickText(ok);
-                else
-                    error("Unable to find the Ok button.");
-                end
-            else
-                error("Unable to find the Cartographer's Cam item.");
-            end
-        else
-            error("Unable to find the Camera menu item.");
-        end
-    else
-        error("Unable to find the Options menu item.");
-    end
+    setCameraView(CARTOGRAPHERCAM);
 end
 
 function zoomIn()
@@ -1764,7 +1730,3 @@ function deleteMenuText(where,thisRoute)
     end
     return thisRoute;
 end
-
-
-
-
