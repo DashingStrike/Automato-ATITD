@@ -357,6 +357,14 @@ function promptFlaxNumbers()
 		     water_req .. " water each tending. " .. num_loops ..
                      " times. You will need " .. grid_w*grid_w*num_loops*water_req .. " jugs.");
 
+    y = y + 40;
+
+
+
+    lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
+		   "This script will likely fail at 3x3 or higher, for now...");
+
+
 
 
     if is_done and (not num_loops or not grid_w) then
