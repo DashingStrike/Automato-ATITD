@@ -81,23 +81,16 @@ function ccRun(pass, passCount)
   end
 end
 
---px05 = 70
---px25 = 93
---px30 = 98
---px35 = 104
---px45 = 116
---px50 = 121
---px60 = 133
---px65 = 139
---px70 = 144
---px85 = 162
---px90 = 168
+-- 0% = 56, 100% = 249, each % = 1.94
 
 minHeat = makePoint(199, 15-0);
+minHeatProgress = makePoint(152, 15-0);
 minOxy = makePoint(80, 33-0);
 maxOxy = makePoint(116, 33-0);
-minWood = makePoint(112, 50-0);
-minWater = makePoint(57, 70-0);
+maxOxyLowHeat = makePoint(160, 33-0);
+minWood = makePoint(108, 50-0);
+minWater = makePoint(58, 70-0);
+minWaterGreen = makePoint(96, 70-0);
 maxDangerGreen = makePoint(205, 90-0);
 maxDanger = makePoint(219, 90-0);
 uberDanger = makePoint(228, 90-0);
@@ -110,6 +103,11 @@ function processOven(oven, vent)
   local newVent = vent;
   if pixelMatch(oven, progressGreen, greenColor, 4) then
     -- Progress is green
+    if not pixelMatch(oven, minWaterGreen, barColor, 8) then
+      -- Aggressively add water
+      clickButton(oven, WATER);
+      clickButton(oven, WATER);
+    end
     if pixelMatch(oven, maxDangerGreen, barColor, 4) then
       -- Danger too high
       clickButton(oven, WATER);
@@ -133,17 +131,23 @@ function processOven(oven, vent)
 	newVent = 3;
 	clickButton(oven, FULL);
       end
-    elseif pixelMatch(oven, maxOxy, barColor, 8) then
-      -- Oxygen too high
-      if vent ~= 1 then
-	newVent = 1;
-	clickButton(oven, CLOSE);
-      end
     else
-      -- Oxygen OK
-      if vent ~= 2 then
-	newVent = 2;
-	clickButton(oven, OPEN);
+      local point = maxOxy;
+      if not pixelMatch(oven, minHeatProgress, barColor, 8) then
+        point = maxOxyLowHeat;
+      end
+      if pixelMatch(oven, point, barColor, 8) then
+        -- Oxygen too high
+        if vent ~= 1 then
+	  newVent = 1;
+	  clickButton(oven, CLOSE);
+        end
+      else
+        -- Oxygen OK
+        if vent ~= 2 then
+	  newVent = 2;
+	  clickButton(oven, OPEN);
+        end
       end
     end
 
