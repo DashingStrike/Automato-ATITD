@@ -350,7 +350,7 @@ function doTasks()
             lsDoFrame();
             if curTask == "Flax Comb" then
                combFlax();
-            elseif curtask == "Hackling Rake" then
+            elseif curTask == "Hackling Rake" then
                hacklingRake();
             elseif curTask == "Dig Dirt" then
                t = srFindImage("dirt.png", 10000);
