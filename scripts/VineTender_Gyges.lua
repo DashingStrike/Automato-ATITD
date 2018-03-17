@@ -26,23 +26,19 @@ vineyardImages = { "", "Harvest the Gr", "Take a Cutting of the V" };
 stateNames = {"Fat", "Musty", "Rustle", "Sagging", "Shimmer",
 	      "Shrivel", "Wilting"};
 
-vineStates = { "vineyard/State_Fat.png", "vineyard/State_Musty.png",
-	       "vineyard/State_Rustle.png", "vineyard/State_Sagging.png",
-	       "vineyard/State_Shimmer.png", "vineyard/State_Shrivel.png",
-	       "vineyard/State_Wilting.png" };
-
 tendActions = {"AS", "MG", "PO", "SL", "SV", "TL", "TV"};
 tendIndices = { ["AS"] = 1, ["MG"] = 2, ["PO"] = 3, ["SL"] = 4, ["SV"] = 5,
 		["TL"] = 6, ["TV"] = 7 };
 
-tendImages = {
-  ["AS"] = "vineyard/Action_AS.png",
-  ["MG"] = "vineyard/Action_MG.png",
-  ["PO"] = "vineyard/Action_PO.png",
-  ["SL"] = "vineyard/Action_SL.png",
-  ["SV"] = "vineyard/Action_SV.png",
-  ["TL"] = "vineyard/Action_TL.png",
-  ["TV"] = "vineyard/Action_TV.png" };
+tendText = {
+  ["AS"] = "Aerate",
+  ["MG"] = "Mist",
+  ["PO"] = "Pinch",
+  ["SL"] = "Shade",
+  ["SV"] = "Spread",
+  ["TL"] = "Tie",
+  ["TV"] = "Trim",
+}
 
 vigorNames = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
 	       "12", "13", "14", "15" };
@@ -95,7 +91,7 @@ function doit()
         if alsoTend then
           sleepWithStatus(1000, "Waiting for plants to grow");
           if refreshVineyard() then
-            local tendAfterHarvest = waitForImage("vineyard/CanBeTended.png",2000,"Waiting for refresh")
+            local tendAfterHarvest = waitForText("This Vine can be Tended now",2000,"Waiting for refresh")
             sleepWithStatus(500, "Preparing to tend");
             status = status .. "\n\n" .. processVineyard();
           else
@@ -411,23 +407,18 @@ end
 function processVineyard()
   local status = "";
   srReadScreen();
-  harvestFlag = 0
+  local vineyardWindow = waitForText("This is a Vineyard", nil, nil, nil, REGION);
+  local vigorLine = findText("Vigor", vineyardWindow);
+  if not vigorLine then
+    return "Could not find Vigor";
+  end
+  local vigor = tonumber(string.match(vigorLine[2], "(%d+)"));
 
-  --sleepWithStatus(1500, "Current harvestFlag is (" .. harvestFlag .. ")");
-
-
-  local window = srFindImage("vineyard/CanBeTended.png" );
+  local window = findText("This Vine can be Tended now", vineyardWindow);
   if not window then
     return "Vineyard is not ready for tending";
   end
 
-  local vigorPos = srFindImage("vineyard/Number_Vigor.png" );
-  if not vigorPos then
-    return "Could not find Vigor";
-  end
-
-  local vigorSize = srImageSize("vineyard/Number_Vigor.png")
-  local vigor = ocrNumber(vigorPos[0] + vigorSize[0], vigorPos[1], BOLD_SET);
   if not vigor then
     return "Could not read Vigor";
   end
@@ -450,7 +441,8 @@ function processVineyard()
       harvestFlag = 2;
       --sleepWithStatus(1000, "setting harvestFlag to (" .. harvestFlag .. ")");
     end
-    return "This vine does not have enough vigor. Time to harvest.";
+
+    return vigor;
   end
 
   harvestFlag = 0
@@ -458,7 +450,7 @@ function processVineyard()
 
 
 
-  local clickPos = srFindImage(tendImages[vineType.tends[vineState]]);
+  local clickPos = srFindText(tendText[vineType.tends[vineState]]);
   if not clickPos then
     return "Could not find tend action to click";
   end
@@ -528,22 +520,21 @@ function statusSuccess(vine)
 end
 
 function statusNumber(name,endCharacter,suppressName)
+  local textLine = findText(name);
+  local number;
+  if textLine then
+    number = tonumber(string.match(textLine[2], "(%d+)"));
+  end
   local result = "";
-  local image = "vineyard/Number_" .. name .. ".png"
-  local anchor = srFindImage(image);
   if not endCharacter then 
     endCharacter = "\n";
   end
-  if anchor then
-    local number = ocrNumber(anchor[0] + srImageSize(image)[0],
-			     anchor[1], BOLD_SET);
-    if number then
-	if not suppressName then
+  if number then
+    if not suppressName then
       result = name .. ": " .. number .. endCharacter;
-	else
+	 else
       result = number .. endCharacter;	
-	end
-	end
+	 end
   end
   return result;
 end
@@ -569,10 +560,9 @@ end
 function findVineState()
   local result = 0;
   srReadScreen();
-  for i=1,#vineStates do
-    if srFindImage(vineStates[i]) then
-      result = i;
-      break;
+  for i=1,#stateNames do
+    if findText(string.lower(stateNames[i])) then
+      return i
     end
   end
   return result;
@@ -601,7 +591,7 @@ function parseVines()
 	if #sub ~= 2 then
 	  error("Failed parsing line: " .. line);
 	end
-	if not tendImages[sub[1]] then
+	if not tendText[sub[1]] then
 	  error("Failed parsing line: " .. line);
 	end
 	vines[#vines].tends[i-2] = sub[1];
@@ -634,4 +624,3 @@ function saveVines()
   end
   io.close(file);
 end
-
