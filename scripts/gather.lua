@@ -1,3 +1,6 @@
+-- Macro created by Unknown, updated for T8 by Manon on 10 march 2018.
+-- waypointcolors are gotten by converting the color hex code to dec.
+
 dofile("screen_reader_common.inc");
 dofile("ui_utils.inc");
 dofile("common.inc");
@@ -17,7 +20,7 @@ WindriverPalm = 4;
 UmbrellaPalm = 5;
 ToweringPalm = 6;
 TinyOilPalm = 7;
-Tapacae = 8;
+TapacaeMiralis = 8;
 StoutPalm = 9;
 SpindleTree = 10;
 SpikedFishTree = 11;
@@ -59,6 +62,10 @@ AshPalm = 46;
 Anaxi = 47;
 Water = 48;
 MenuClick = 49;
+Arconis = 50;
+PratyekaTree = 51;
+Savaka = 52;
+Trilobellia = 53;
 
 WaypointOrder = {};
 WaypointOrder[#WaypointOrder+1] = Waypoint;
@@ -68,16 +75,19 @@ WaypointOrder[#WaypointOrder+1] = Warehouse;
 WaypointOrder[#WaypointOrder+1] = Water;
 WaypointOrder[#WaypointOrder+1] = WindriverPalm;
 WaypointOrder[#WaypointOrder+1] = UmbrellaPalm;
+WaypointOrder[#WaypointOrder+1] = Trilobellia;
 WaypointOrder[#WaypointOrder+1] = ToweringPalm;
 WaypointOrder[#WaypointOrder+1] = TinyOilPalm;
-WaypointOrder[#WaypointOrder+1] = Tapacae;
+WaypointOrder[#WaypointOrder+1] = TapacaeMiralis;
 WaypointOrder[#WaypointOrder+1] = StoutPalm;
 WaypointOrder[#WaypointOrder+1] = SpindleTree;
 WaypointOrder[#WaypointOrder+1] = SpikedFishTree;
+WaypointOrder[#WaypointOrder+1] = Savaka;
 WaypointOrder[#WaypointOrder+1] = RoyalPalm;
 WaypointOrder[#WaypointOrder+1] = RedMaple;
 WaypointOrder[#WaypointOrder+1] = RazorPalm;
 WaypointOrder[#WaypointOrder+1] = Ranyahn;
+WaypointOrder[#WaypointOrder+1] = PratyekaTree;
 WaypointOrder[#WaypointOrder+1] = PhoenixPalm;
 WaypointOrder[#WaypointOrder+1] = Passam;
 WaypointOrder[#WaypointOrder+1] = Orrorin;
@@ -109,6 +119,7 @@ WaypointOrder[#WaypointOrder+1] = BottleTree;
 WaypointOrder[#WaypointOrder+1] = Bloodbark;
 WaypointOrder[#WaypointOrder+1] = Beetlenut;
 WaypointOrder[#WaypointOrder+1] = AshPalm;
+WaypointOrder[#WaypointOrder+1] = Arconis;
 WaypointOrder[#WaypointOrder+1] = Anaxi;
 
 WaypointTypes = {};
@@ -150,7 +161,7 @@ WaypointTypes[Orrorin] = "Orrorin";
 WaypointTypes[FeatherTree] = "Feather Tree";
 WaypointTypes[AshPalm] = "Ash Palm";
 WaypointTypes[Kaeshra] = "Kaeshra";
-WaypointTypes[Tapacae] = "Tapacae";
+WaypointTypes[TapacaeMiralis] = "Tapacae Miralis";
 WaypointTypes[CoconutPalm] = "Coconut Palm";
 WaypointTypes[MonkeyPalm] = "Monkey Palm";
 WaypointTypes[LocustPalm] = "Locust Palm";
@@ -162,56 +173,63 @@ WaypointTypes[Hawthorn] = "Hawthorn";
 WaypointTypes[BrambleHedge] = "BrambleHedge";
 WaypointTypes[Cricklewood] = "Cricklewood";
 WaypointTypes[GiantCricklewood] = "Giant Cricklewood";
+WaypointTypes[Arconis] = "Arconis";
+WaypointTypes[PratyekaTree] = "Pratyeka Tree";
+WaypointTypes[Savaka] = "Savaka";
+WaypointTypes[Trilobellia] = "Trilobellia";
 
 WaypointColors = {};
-WaypointColors[Bonfire] = 437126143; -- 1329403647;
-WaypointColors[Warehouse] = 959060991;
+WaypointColors[Bonfire] = 1060316671;
+WaypointColors[Warehouse] = 1599225343;
 WaypointColors[MenuClick] = 0;
-WaypointColors[ToweringPalm] = 1585197055; -- -1749467393; -- 1313688319; -- 2124039935;
-WaypointColors[RoyalPalm] = 138019071;
-WaypointColors[StoutPalm] = -1919065601;
-WaypointColors[FernPalm] = 1819547903; -- -2070857985;
-WaypointColors[BottleTree] = 983295;
-WaypointColors[Hokkaido] = 676680447;
-WaypointColors[Ranyahn] = -1872604673; -- -575760641;
-WaypointColors[BrambleHedge] = 1869507071;
-WaypointColors[CeruleanBlue] = 1349224959;
-WaypointColors[Bloodbark] = 1378758911;
-WaypointColors[Beetlenut] = 924713471;
-WaypointColors[DeltaPalm] = -1229005825;
-WaypointColors[OilPalm] = 356385023;
-WaypointColors[TinyOilPalm] = 2025007615;
-WaypointColors[Chicory] = 1111971071;
-WaypointColors[SpikedFishTree] = -974498817;
-WaypointColors[PhoenixPalm] = -1533797889;
-WaypointColors[RedMaple] = -1912602369;
-WaypointColors[Elephantia] = 1146624511;
-WaypointColors[Passam] = -1278889473;
-WaypointColors[SpindleTree] = 1007026431;
-WaypointColors[UmbrellaPalm] = 995229951;
-WaypointColors[WindriverPalm] = 1179903;
-WaypointColors[Oleaceae] = 857866751;
-WaypointColors[Cinnar] = 807870463;
-WaypointColors[FoldedBirch] = 1902663935;
-WaypointColors[RazorPalm] = 671154431;
-WaypointColors[BroadLeafPalm] = 1900884479;
-WaypointColors[ButterleafTree] = -218765057;
-WaypointColors[Orrorin] = -296088321;
-WaypointColors[FeatherTree] = 321480447;
-WaypointColors[AshPalm] = 620760319;
-WaypointColors[Kaeshra] = -2096623105;
-WaypointColors[Tapacae] = -1047501825;
-WaypointColors[CoconutPalm] = -993551617;
-WaypointColors[MonkeyPalm] = 1482119423;
-WaypointColors[LocustPalm] = -2005639937;
-WaypointColors[ChakkanutTree] = 1632002559;
-WaypointColors[Anaxi] = 931172095;
-WaypointColors[MiniPalmetto] = -1131076353;
-WaypointColors[MiniatureFernPalm] = -926394113;
-WaypointColors[Hawthorn] = 1212628735;
-WaypointColors[BrambleHedge] = 909322239;
-WaypointColors[Cricklewood] = 1478492415;
-WaypointColors[GiantCricklewood] = 1293615359;
+WaypointColors[ToweringPalm] = 1585197055;
+WaypointColors[RoyalPalm] = 137495039;
+WaypointColors[StoutPalm] = 1416185343;
+WaypointColors[FernPalm] = 2055087359;
+WaypointColors[BottleTree] = 1331891455;
+WaypointColors[Hokkaido] = 625623807;
+WaypointColors[Ranyahn] = 2557039615;
+WaypointColors[BrambleHedge] = 1431589631;
+WaypointColors[CeruleanBlue] = 1349156095;
+WaypointColors[Bloodbark] = 1092822271;
+WaypointColors[Beetlenut] = 508701183;
+WaypointColors[DeltaPalm] = 2341971711;
+WaypointColors[OilPalm] = 861744383;
+WaypointColors[TinyOilPalm] = 895494143;
+WaypointColors[Chicory] = 1417086975;
+WaypointColors[SpikedFishTree] = 2495826943;
+WaypointColors[PhoenixPalm] = 3030340863;
+WaypointColors[RedMaple] = 2065760767;
+WaypointColors[Elephantia] = 1805078527;
+WaypointColors[Passam] = 2477428991;
+WaypointColors[SpindleTree] = 960697599;
+WaypointColors[UmbrellaPalm] = 1196499711;
+WaypointColors[WindriverPalm] = 203227391;
+WaypointColors[Oleaceae] = 1548165887;
+WaypointColors[Cinnar] = 1315773951;
+WaypointColors[FoldedBirch] = 1804154367;
+WaypointColors[RazorPalm] = 1163409919;
+WaypointColors[BroadLeafPalm] = 977146879;
+WaypointColors[ButterleafTree] = 1533364479;
+WaypointColors[Orrorin] = 2423085567;
+WaypointColors[FeatherTree] = 355035135;
+WaypointColors[AshPalm] = 369103871;
+WaypointColors[Kaeshra] = 1586186239;
+WaypointColors[TapacaeMiralis] = 2640857343;
+WaypointColors[CoconutPalm] = 2374980095;
+WaypointColors[MonkeyPalm] = 1650483199;
+WaypointColors[LocustPalm] = 2626321407;
+WaypointColors[ChakkanutTree] = 1010447103;
+WaypointColors[Anaxi] = 205011199;
+WaypointColors[MiniPalmetto] = 2339054079;
+WaypointColors[MiniatureFernPalm] = 1701386239;
+WaypointColors[Hawthorn] = 505093375;
+WaypointColors[Cricklewood] = 1563361535;
+WaypointColors[GiantCricklewood] = 1075118335;
+WaypointColors[Arconis] = 1351035391;
+WaypointColors[PratyekaTree] = 624561919;
+WaypointColors[Savaka] = 1484523775;
+WaypointColors[Trilobellia] = 2625241855;
 
 keyDelay = 30;
 minDelta = 45;
@@ -233,6 +251,9 @@ routeStartTime = 0;
 
 function doit()
     if(not promptOkay("WARNING! This macro requires your chats to be minimized and your \"Use arrow keys for movement\" option to be enabled.")) then
+        return;
+    end
+    if(not promptOkay("Time of day, shadows and light intensity should be on lowest setting. Updated for T8 by Manon.")) then
         return;
     end
     math.randomseed(lsGetTimer());
@@ -282,9 +303,6 @@ function queryRoute()
                     updateUnique();
                 end
             end
-        end
-        if lsButtonText(269, y, z, 142, 0xFFFFFFff, "Load defaults") then
-            loadDefaults();
         end
         y = y + 64;
         wood = readSetting("wood",wood);
@@ -581,53 +599,6 @@ function clearScrollArea(area)
     lsScrollAreaEnd(1);
 end
 
-function loadDefaults()
-    if(not promptOkay("This will add all of the default routes to the end of your list of routes.")) then
-        return;
-    end
-    d = {};
-    d = deserialize(defaultRoutesFileName);
-    local added = 0;
-    local replaced = 0;
-    local i;
-    for i = 1, #d do
-        local include = true;
-        local replace = false;
-        if(alreadyExists(d[i][0])) then
-            if(promptOkay("Route \"" .. d[i][0] .. "\" already exists in your list.  Press Ok to replace yours with the default or Cancel to continue without loading this one.")) then
-                replace = true;
-            else
-                include = false;
-            end
-        end
-        if(include) then
-            if(replace) then
-                deleteNamedRoute(d[i][0]);
-                replaced = replaced + 1;
-            else
-                added = added + 1;
-            end
-            local r = #routes + 1;
-            routes[r] = {};
-            routes[r][0] = d[i][0];
-            routes[r][1] = {};
-            local j
-            for j = 1, #d[i][1] do
-                routes[r][1][j] = {};
-                routes[r][1][j][1] = d[i][1][j][1];
-                routes[r][1][j][2] = d[i][1][j][2];
-                routes[r][1][j][3] = d[i][1][j][3];
-            end
-        end
-    end
-    if(not promptOkay("Added " .. added .. " and replaced " .. replaced .. " routes.")) then
-        error("Macro aborted by user");
-    end
-    if(added > 0 or replaced > 0) then
-        saveRoutes();
-    end
-end
-
 function alreadyExists(name)
     local i;
     for i = 1, #routes do
@@ -798,21 +769,7 @@ end
 
 
 function followRoute(route)
-    if(wood) then
-        local haveBonfire = false;
-        local i;
-        for i = 1, #routes[route][1] do
-            if(routes[route][1][i][3] == Bonfire) then
-                haveBonfire = true;
-            end
-        end
-        if(not haveBonfire) then
-            if(not promptOkay("This route does not include a bonfire.  If you add a bonfire's coords to this route, wood will be stashed there every time you reach those coordinates.")) then
-                return;
-            end
-        end
-    end
-    if(slate or clay or grass) then
+    if(slate or clay or grass or wood) then
         local haveWarehouse = false;
         local i;
         for i = 1, #routes[route][1] do
@@ -826,16 +783,13 @@ function followRoute(route)
             end
         end
     else
-        if(not wood) then
+        if(not wood or slate or clay or grass) then
             if(not promptOkay("You have not specified any resources to gather.  Are you sure that's what you want?")) then
                 return;
             end
         end
     end
     prepareForWalking();
-    if(wood) then
-        zoomIn();
-    end
     local curr = 1;
     local fails = 0;
     local direction = 1;
@@ -1525,15 +1479,22 @@ function stashAllButWood()
                                 stashItem(pos,true);
                                 stashedSomething = true;
                             else
-                                pos = findText("Insect...");
-                                if(pos) then
-                                    safeClick(pos[0] + 10, pos[1] + 5);
-                                    lsSleep(150);
-                                    srReadScreen();
-                                    pos = findText("Stash All Insect");
-                                    if(pos) then
-                                        stashItem(pos,false);
-                                        stashedSomething = true;
+                            		pos = findText("Wood");
+                            		if(pos) then
+                            				stashItem(pos,true);
+                            				stashedSomething = true;
+                            		else
+                                		pos = findText("Insect...");
+                                		if(pos) then
+                                    		safeClick(pos[0] + 10, pos[1] + 5);
+                                    		lsSleep(150);
+                                    		srReadScreen();
+                                    		pos = findText("All Insect");
+                                    		if(pos) then
+                                        		stashItem(pos,false);
+                                        		stashedSomething = true;
+                                						
+                                				end
                                     end
                                 end
                             end
@@ -1581,7 +1542,7 @@ function prepareForWalking()
     mid[1] = xyWindowSize[1] / 2;
     srSetMousePos(mid[0],mid[1]);
     lsSleep(150);
-    setCameraView(CARTOGRAPHERCAM);
+    setCameraView(CARTOGRAPHER2CAM);
 end
 
 function zoomIn()
@@ -1598,7 +1559,7 @@ function zoomIn()
     end
     srClickMouse(pos[0]+10, pos[1]+10);
     srSetMousePos(100,-20);
-    sleepWithStatus(10000,"Zooming in");
+    sleepWithStatus(1000,"Zooming in");
 end
 
 local statusMessage = "";
@@ -1730,3 +1691,7 @@ function deleteMenuText(where,thisRoute)
     end
     return thisRoute;
 end
+
+
+
+

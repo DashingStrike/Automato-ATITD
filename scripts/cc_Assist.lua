@@ -1,4 +1,4 @@
--- cc-assist.lua v1.2 -- by Makazi, revised by Tallow
+-- cc-assist.lua v1.2 -- by Makazi, revised by Tallow, updated by Manon on 5 jan 2018.
 --
 -- Provides a control interface for running many charcoal hearths or
 -- ovens simultaneously.
@@ -7,7 +7,7 @@
 dofile("common.inc");
 
 askText = singleLine([[
-  CC Assist v1.2 (by Makazi, revised by Tallow) --
+  CC Assist v1.2 (by Makazi, revised by Tallow, updated by Manon on 5 jan 2018) --
   Provides a control interface for running many charcoal hearths or
   ovens simultaneously. Make sure the VT window is in the TOP-RIGHT
   corner of the screen.
@@ -22,42 +22,42 @@ buttons = {
     name = "Begin",
     buttonPos = makePoint(10, 110),
     buttonSize = 270,
-    image = "mm_Begin.png",
+    image = "cc_Begin.png",
     offset = makePoint(25, 10)
   },
   {
     name = "Wood",
     buttonPos = makePoint(10, 166),
     buttonSize = 130,
-    image = "mm_Wood.png",
+    image = "cc_Wood.png",
     offset = makePoint(20-4, 30-2)
   },
   {
     name = "Water",
     buttonPos = makePoint(150, 166),
     buttonSize = 130,
-    image = "mm_Water.png",
-    offset = makePoint(20-5, 30-2)
+    image = "cc_Water.png",
+    offset = makePoint(20-10, 30-10)
   },
   {
     name = "Closed",
     buttonPos = makePoint(10, 215),
     buttonSize = 80,
-    image = "mm_Vent.png",
-    offset = makePoint(15-9, 30-2)
+    image = "cc_Vent.png",
+    offset = makePoint(20-9, 30-2)
   },
   {
     name = "Open",
     buttonPos = makePoint(105, 215),
     buttonSize = 80,
-    image = "mm_Vent.png",
+    image = "cc_Vent.png",
     offset = makePoint(40-9, 30-2)
   },
   {
     name = "Full",
     buttonPos = makePoint(200, 215),
     buttonSize = 80,
-    image = "mm_Vent.png",
+    image = "cc_Vent.png",
     offset = makePoint(65-9, 30-2)
   }
 };

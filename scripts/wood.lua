@@ -1,4 +1,4 @@
---
+--Updated by Manon for T8 beta
 -- 
 --
 
@@ -37,7 +37,11 @@ function doit()
 				srClickMouseNoMove(add_wood[0]+5, add_wood[1]+5);
 				lsSleep(500);
 				-- click Max
-				srClickMouseNoMove(xyWindowSize[0]/2, xyWindowSize[1]/2 + 55);
+				click_max = srFindImage("maxButton.png");
+				if(not click_max) then
+					click_max = srFindImage("maxButton2.png");
+					srClickMouseNoMove(xyWindowSize[0]/2, xyWindowSize[1]/2 + 5);
+				end
 			else
 				statusScreen("No add wood button, refreshing bonfire");
 				-- refresh bonfire window
