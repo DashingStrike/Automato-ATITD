@@ -211,6 +211,14 @@ local function makeItem(currentItem, window)
       text = string.format("Make %s %s", name, lastParent);
    elseif lastParent == "Pots" then
       text = "Make " .. name;
+   elseif lastParent == "Steam Mechanics" then
+      text = "Make a " .. name;
+   elseif lastParent == "Tools" then
+      if name == "Iron Poker" then
+         text = "Make an " .. name;
+      else
+         text = "Make a " .. name;
+      end
    elseif lastParent == "Make some Treated Metal Sheeting" then
       text = "From";
    else
