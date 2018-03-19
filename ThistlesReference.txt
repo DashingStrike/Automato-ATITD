@@ -1,23 +1,22 @@
-
 Below is the process I would recommend for starting to make thistles:
 
 == Prerequisite: Understand the basics ==
 Using the information on the [[Thistles]] page and related guides, you should:
 # Understand Thistle types (e.g. A-B-C+F~N~P+T+) and Thistle requirements (e.g. A-C+N~P+)
 # Be able to use ThistleSim.xls to simulate a recipe and see the results
-# Generate a simple recipe (try to make anything other than A-B-C-F-N-P-T-) and run it by hand on a single [[Thistle Garden]]
+# Generate a simple recipe (try to make anything other than A-B-C-F-N-P-T-) and run it by hand on a single Thistle Garden
 # Understand what a "void" is (a rule that is not active for an in-game week (~2.5 real days)
 # Be confused as to how anyone makes all of their complicated recipes by hand (optional)
 
 In order to be most productive, I would also expect you to have access to:
-# Multiple [[Silkworm Farm|Silkworm Farms]] (I am generally tracking 10-20, only a subset of these have requirements that can be made any given week), though this approach will work even if you have just 1 or 2.
-# Around 20 [[Thistle Garden|Thistle Gardens]] (there are numerous public arrays of Thistle Gardens you can use, you shouldn't need to build these yourself).
+# Multiple Silkworm Farms (I am generally tracking 10-20, only a subset of these have requirements that can be made any given week), though this approach will work even if you have just 1 or 2.
+# Around 20 Thistle Gardens (there are numerous public arrays of Thistle Gardens you can use, you shouldn't need to build these yourself).
 
 == Install Automato ==
-Download and install Automato from [[Jimbly's Macros]].  ''Automato'' is my macroing program, with some other fun tools (like the Thistle Recipe Generator) built in as well.  Currently this is on Windows only, but I can provide almost-portable source code for anyone who is interested in helping port it to Linux/MacOS, just [[User:Jimbly/Contact|ask]].
+Download and install Automato from http://www.dashingstrike.com/Automato/  'Automato' is my macroing program, with some other fun tools (like the Thistle Recipe Generator) built in as well.  Currently this is on Windows only, but I can provide almost-portable source code for anyone who is interested in helping port it to Linux/MacOS, just ask.
 
 == Enter your requirements ==
-Open up ''config_thistle.txt'' (in the Automato installation directory), and you will find a list of desired requirements.  You should remove the existing ones in there (they are probably whatever I was looking for when I last made a build), and replace them with your own.  You can have blocks of requirements with different labels to make the output easier to read, e.g.:
+Open up 'config_thistle.txt' (in the Automato installation directory), and you will find a list of desired requirements.  You should remove the existing ones in there (they are probably whatever I was looking for when I last made a build), and replace them with your own.  You can have blocks of requirements with different labels to make the output easier to read, e.g.:
  desired "label:My farms"
  desired A+B+C+F+
  desired B-C+F+T~
@@ -26,11 +25,11 @@ Open up ''config_thistle.txt'' (in the Automato installation directory), and you
 
 == Generate no-void recipe(s) ==
 
-Near the top of thistle_config.txt there will be a bunch of lines indicating each of the rules and whether they are on or off.  Change all of these to "1" to enable the rules.  Then, launch ''Automato'', and click ''Thistle Mode''.  This will churn away for a while, and after 40 ticks will have written out a history.txt file containing any recipes found (with no voids, it will find recipes for most requirements).
+Near the top of thistle_config.txt there will be a bunch of lines indicating each of the rules and whether they are on or off.  Change all of these to "1" to enable the rules.  Then, launch 'Automato', and click 'Thistle Mode'.  This will churn away for a while, and after 40 ticks will have written out a history.txt file containing any recipes found (with no voids, it will find recipes for most requirements).
 
 Open history.txt, and scroll down to the bottom, and find a requirement you're looking for, there will be a line like:
  Best for A+B+C+F+: 1000/17 (D)
-The two numbers are how many actions (water in this case) must be done to run this recipe, one number being how many if it's run at night, the other during the day, with ''1000'' indicating it did not find a recipe.  In this case, this recipe can only be run during the day (also indicated by the ''(D)'').
+The two numbers are how many actions (water in this case) must be done to run this recipe, one number being how many if it's run at night, the other during the day, with '1000' indicating it did not find a recipe.  In this case, this recipe can only be run during the day (also indicated by the '(D)').
 
 Search upwards in the file for the previous occurrence of your requirement, and it will be the best recipe it wrote out (it may have written multiple, and if there is one for each day and night, then search to find one which has an appropriate sun value).
 
@@ -41,12 +40,13 @@ The first of what is in history.txt is a full history of every action that was d
  0,0,0,0,33
  0,0,0,2,99
  0,0,1,0,99
+
 These are the actual recipe.  The can be copy and pasted directly into ThistleSim (the 41 lines and 5 columns for inputs), and also into a macro to run the recipe.
 
 
-Note: If you are have problems copying the recipes into ThistleSim (ie it tries to put all the data into one cell), then try my web page for converting the commas into tabs. It will then paste correctly. Just paste the output into Line 3, Cell B of the master section. ~Cegaiel
+Note: If you are have problems copying the recipes into ThistleSim (Thistle Sim is an excel spreadsheet that can be downloaded at http://www.atitd.org/wiki/tale4/images/9/97/ThistleSim.zip ) ie it tries to put all the data into one cell, then try my web page for converting the commas into tabs. It will then paste correctly. Just paste the output into Line 3, Cell B of the master section. ~Cegaiel
 
-Conversion page: [http://sharpnetwork.net/atitd/jimbly2sim.asp http://sharpnetwork.net/atitd/jimbly2sim.asp]
+Conversion page: http://atitd.sharpnetwork.net/jimbly2sim.asp
 
 == Verify your recipe ==
 
@@ -58,16 +58,16 @@ Now you want to actually run your recipe on a thistle garden!  If the recipe is 
 
 Open games/ATITD/scripts/thistle_custom.lua in any text editor.  Near the top are a few values to change, specifically the number of gardens you have open, the current sun value on those gardens (if it's night, set it to 0, if it's daytime and the lid is open, set it to 99, if it's daytime and it's closed, set it to 33 - all gardens must be in the same state), and the instructions to run the recipe.  Paste the recipe over the one that already exists in the macro.
 
-To run the macro, you need to open and pin some number of thistle gardens, make sure they are either not overlapping, or overlapping such that you can still see the buttons to add H2O/Oxy/etc regardless of which window is in the front.  The easiest is to just not have them overlapping if you do not understand (hopefully screenshots coming soon).  Then, fire up ''Automato'', choose ''LUA Scripts'', thistle_custom.lua, and enter the number of passes to run (start with just 1 if testing voids).  As directed in the program, click on the ATITD window to put it in focus, and press Shift, and the macro will start running.
+To run the macro, you need to open and pin some number of thistle gardens, make sure they are either not overlapping, or overlapping such that you can still see the buttons to add H2O/Oxy/etc regardless of which window is in the front.  The easiest is to just not have them overlapping if you do not understand (hopefully screenshots coming soon).  Then, fire up 'Automato', choose 'LUA Scripts', thistle_custom.lua, and enter the number of passes to run (start with just 1 if testing voids).  As directed in the program, click on the ATITD window to put it in focus, and press Shift, and the macro will start running.
 
 This macro (like all of mine) only use mouse clicks which means that while the macro is running, you can freely chat within ATITD by typing and using F9/F10 to switch between tabs.
 
 == Determine voids ==
-If someone else has already determined the voids for this week (see [http://sharpnetwork.net/atitd/calendar.asp http://sharpnetwork.net/atitd/calendar.asp]), you can simply jump ahead and enter the voids into the config file.  Generally those who determine the thistle voids place the information in their info text.  Try /info <b>Tribisha</b> or /info <b>Nissim</b> to see if we have the voids for this week.
+If someone else has already determined the voids for this week (see http://atitd.sharpnetwork.net/calendar.asp ), you can simply jump ahead and enter the voids into the config file.  Generally those who determine the thistle voids place the information in their info text.  Try /info Tribisha or /info Nissim to see if we have the voids for this week.
 
 When you are watching your recipe run, compare the results happening in-game with the results you see in ThistleSim.  If you don't have two computers side-by-side, you may want to save screenshots every 8 ticks or so.  If there is a tick in which the results differ, you need to determine which rule, when voided, would cause that result.  The way I do this is to go down the list of rules, and try turning each one off and then back on.  Generally, one of 3 things will happen:
 # Nothing will change, or only later ticks will change - we gain no information about this rule
-# One of the earlier ticks will change - we now know this rule ''must'' be active, flag it (I just put a comment in the column to the right of the rule), and you know you don't need to test it later
+# One of the earlier ticks will change - we now know this rule 'must' be active, flag it (I just put a comment in the column to the right of the rule), and you know you don't need to test it later
 # The tick which differed will change to be what you see in-game - we now know this rule must be voided.
 It's possible that no single rule will get the result you saw in-game, in which case it might be a pair of 2 rules voided, both active on the same tick, causing the result.  By looking at what actual vitamins differ, and what rules cause/create them, you should be able to logic out what pair of rules it is, but this is less common.
 
@@ -76,39 +76,34 @@ Repeat this process until the results in ThistleSim look exactly like what happe
 If the results were identical, you have found all of the voids (or, at least, the ones which will affect your current recipe), move on to making them in bulk!
 
 == Enter voids and generate recipe(s) again ==
-Chances are, if you found a new void, your recipe did not make the thistles you were looking for.  Enter the voids into config_thistle.txt (there should be a '''0''' next to each rule with is voided, '''1''' next to each which is active, just like in ThistleSim), and generate recipes again.
+Chances are, if you found a new void, your recipe did not make the thistles you were looking for.  Enter the voids into config_thistle.txt (there should be a '0' next to each rule with is voided, '1' next to each which is active, just like in ThistleSim), and generate recipes again.
 
 == Run recipe in bulk via macro ==
 
 Now, you have a recipe that works, and you've run it in a macro on a couple gardens, you want to run it on lots of gardens at once!
 
-First, open and pin a bunch of garden windows.  The macro window_opener.lua will help with this.  Turn ON the ATITD Option ''Right Click opens menu as pinned'' under Options | Interface before running this macro.  Then if you have a grid of thistle gardens, in just seconds it can open pinned menus for every one of them.
+First, open and pin a bunch of garden windows.  The macro window_opener.lua will help with this.  Turn ON the ATITD Option 'Right Click opens menu as pinned' under Options | Interface before running this macro.  Then if you have a grid of thistle gardens, in just seconds it can open pinned menus for every one of them.
 
-Next, arrange them to make the macro happy.  The macro window_arranger.lua will help with this, though you can also do it by hand.  For thistle_custom.lua, you will need to edit window_arranger.lua to use dy = 190, and num_high = somewhere between 3 and 5 depending on your resolution.  Changing the line ''if nil then'' to ''if 1 then'' should take care of this.
+Next, arrange them to make the macro happy.  The macro window_arranger.lua will help with this, though you can also do it by hand.  For thistle_custom.lua, you will need to edit window_arranger.lua to use dy = 190, and num_high = somewhere between 3 and 5 depending on your resolution.  Changing the line 'if nil then' to 'if 1 then' should take care of this.
 
-'''''[optional]''''' The other option is to use a new macro I'm actively testing, thistle_new.lua, which can handle many more gardens, but is more susceptible to lag issues (I can run around 32 thistle gardens simultaneously reasonably reliably).  For this macro, the window positions are much more finicky, so you must arrange them with window_arranger.lua (just need to edit num_high to an appropriate number for your screen, 33 high should fit at 1920x1200).  Only one row of cascaded windows is currently supported, so close any extra windows that didn't get lined up in the one cascaded row.
+[optional The other option is to use a new macro I'm actively testing, thistle_new.lua, which can handle many more gardens, but is more susceptible to lag issues (I can run around 32 thistle gardens simultaneously reasonably reliably).  For this macro, the window positions are much more finicky, so you must arrange them with window_arranger.lua (just need to edit num_high to an appropriate number for your screen, 33 high should fit at 1920x1200).  Only one row of cascaded windows is currently supported, so close any extra windows that didn't get lined up in the one cascaded row.
 
 Now, edit thistle_custom.lua again to make sure it has the right number of gardens, and has the current state of the sun for all of your gardens, and then run it to your hearts content!
 
 == Profit ==
 (but not too much, help out your neighbors as well, please)
 
-== Unsticking farms with "expensive" recipes ==
-
-
-
 
 == Convert Chest contents into Stock format==
 I have added a webpage that will let you copy (Utilty menu - Copy contents to clipboard) your chest contents and convert them into the format needed for the stock section in config_thistles.txt . Note the stock is optional. But all recipes generated in history.txt will display any thistles you may have in stock already (that match the recipe). This is handy when you have many different thistles. Manually replacing or editing by hand gets tedious. ~Cegaiel
 
 
-Conversion page: [http://sharpnetwork.net/atitd/jimblychest2stock.asp http://sharpnetwork.net/atitd/jimblychest2stock.asp]
+Conversion page: http://atitd.sharpnetwork.net/jimblychest2stock.asp
 
 
 
 Example clipboard contents of chest:
 
-<pre>
     25 Thistle:A+B+C-F-N-P-T-
      5 Thistle:A+B+C~F+N-P-T~
     30 Thistle:A+B-C+F~N+P-T+
@@ -118,11 +113,9 @@ Example clipboard contents of chest:
     20 Thistle:A-B+C-F+N-P-T-
      5 Thistle:A-B+C-F+N-P-T~
    230 Thistle:A-B+C-F+N~P-T-
-</pre>
 
 Converted format, ready to paste into config_thistles.txt:
 
-<pre>
 Stock "25 A+B+C-F-N-P-T-"
 Stock "5 A+B+C~F+N-P-T~"
 Stock "30 A+B-C+F~N+P-T+"
@@ -132,4 +125,3 @@ Stock "65 A-B+C+F-N-P-T-"
 Stock "20 A-B+C-F+N-P-T-"
 Stock "5 A-B+C-F+N-P-T~"
 Stock "230 A-B+C-F+N~P-T-"
-</pre>
