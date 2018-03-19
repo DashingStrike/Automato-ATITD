@@ -8,4 +8,3 @@ Having an issue with an ATITD script or need assistance?  If you have a GitHub a
 Attribution
 -----------
 Iconset: Long Shadow Media Icons by PelFusion from http://pelfusion.com/media-long-shadow-icons
-
