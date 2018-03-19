@@ -39,10 +39,10 @@ MATCH_GRID_SIZE=5
 -- to harvest before it is ready and trying to rewater a plants 3rd stage. Increase the harvest wait to hopefully fix this.
 
 -- TODO: Scale these based on global (and ideally local) teppy time.
-FIRST_STAGE_WAIT = 4
-SECOND_STAGE_WAIT = 24
-THIRD_STAGE_WAIT = 34
-HARVEST_STAGE_WAIT = 52
+FIRST_STAGE_WAIT = 6
+SECOND_STAGE_WAIT = 32
+THIRD_STAGE_WAIT = 51
+HARVEST_STAGE_WAIT = 78
 
 STAGE_WAITS = { FIRST_STAGE_WAIT, SECOND_STAGE_WAIT, THIRD_STAGE_WAIT, HARVEST_STAGE_WAIT }
 
