@@ -1,4 +1,4 @@
--- mining_ore.lua v1.4 -- by Cegaiel
+-- mining_ore.lua v1.5 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -7,10 +7,14 @@
 dofile("common.inc");
 
 askText = singleLine([[
-  Ore Mining v1.4 (by Cegaiel) --
+  Ore Mining v1.5 by Cegaiel --\n\n 
   Brute Force method. Will try every possible 3 node/stone combination.
   Make sure chat is MINIMIZED! Press Shift over ATITD window.
 ]]);
+
+
+info = "Ore Mining v1.5 by Cegaiel --\n\nUses Brute Force method.\n\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMake sure chat is MINIMIZED!\n\nPress Shift over ATITD window.";
+
 
 miningTime = 0;
 autoWorkMine = true;
@@ -21,7 +25,7 @@ dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)
 dropdown_ore_cur_value = 1;
 
 function doit()
-  askForWindow(askText);
+  askForWindow(info);
   promptDelays();
   getMineLoc();
   getPoints();
@@ -71,7 +75,7 @@ function getMineLoc()
     lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
 	    "Set Mine Location");
     local y = 60;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Lock ATITD screen (Alt+L) .");
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Lock ATITD screen (Alt+L) - OPTIONAL!");
     y = y + 20;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Suggest F5 view, zoomed about 75% out.");
     y = y + 60;
@@ -236,6 +240,13 @@ function getPoints()
       end
     end
 
+
+
+      if lsButtonText(208, lsScreenY -65, z, 80, 0xffffffff, "Delays") then
+        promptDelays();
+      end
+
+
     if #clickList > 0 then
       if lsButtonText(10, lsScreenY - 30, z, 100, 0xff8080ff, "Reset") then
         reset();
@@ -311,15 +322,15 @@ function clickSequence()
 			--lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Time Elapsed: " .. math.floor(elapsedTime/100)/10 .. " secs");
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. (elapsedTime/100)/10 .. " secs");
 			y = y + 16;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Last Time Elapsed: " .. miningTimeGUI);
+			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
 			y = y + 32;
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Node Delay: " .. clickDelay .. " ms");
 			y = y + 16;
 			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Popup Delay: " .. popDelay .. " ms");
 			y = y + 32;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Hold Shift to Abort and Return to Menu.");
+			lsPrint(5, y, 0, 0.7, 0.7, 0xffff80ff, "Hold Shift to Abort and Return to Menu.");
 			y = y + 32;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Don't touch mouse until finished!");
+			lsPrint(5, y, 0, 0.7, 0.7, 0xff8080ff, "Don't touch mouse until finished!");
 			lsDoFrame();
 			end
 		end
@@ -416,7 +427,7 @@ function promptDelays()
 	y = y + 40;
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Popup Delay (ms):");
       is_done, popDelay = lsEditBox("delay2", 170, y, 0, 50, 30, 1.0, 1.0,
-                                      0x000000ff, 250);
+                                      0x000000ff, 1000);
       popDelay = tonumber(popDelay);
       if not popDelay then
         is_done = false;
