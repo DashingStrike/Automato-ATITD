@@ -1,7 +1,7 @@
 dofile("common.inc");
 
 local askText = singleLine([[
-   "This macro eats a meal and times how long it's effects last in ducktime.
+   "cookingTimer 1.0 by Skyfeather. This macro eats a meal and times how long it's effects last in ducktime.
    Pin a kitchen ready to be eaten from. Ensure that your stats are visible and that you're not doing any
    stat timed activities, such as combing flax."
 ]]);
