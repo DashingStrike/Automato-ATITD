@@ -39,10 +39,10 @@ MATCH_GRID_SIZE=5
 -- to harvest before it is ready and trying to rewater a plants 3rd stage. Increase the harvest wait to hopefully fix this.
 
 -- TODO: Scale these based on global (and ideally local) teppy time.
-FIRST_STAGE_WAIT = 6
-SECOND_STAGE_WAIT = 32
-THIRD_STAGE_WAIT = 51
-HARVEST_STAGE_WAIT = 78
+FIRST_STAGE_WAIT = 4
+SECOND_STAGE_WAIT = 28
+THIRD_STAGE_WAIT = 41
+HARVEST_STAGE_WAIT = 65
 
 STAGE_WAITS = { FIRST_STAGE_WAIT, SECOND_STAGE_WAIT, THIRD_STAGE_WAIT, HARVEST_STAGE_WAIT }
 
@@ -560,7 +560,7 @@ function getUserParams()
             end
             config.num_plants      = drawNumberEditBox("num_plants", "How many to plant per run? Max " .. max_plants, 12)
             config.num_runs        = drawNumberEditBox("num_runs", "How many runs? ", 20)
-            config.click_delay     = drawNumberEditBox("click_delay", "What should the click delay be? ", 50)
+            config.click_delay     = drawNumberEditBox("click_delay", "What should the click delay be? ", 100)
             config.alternate_drag  = lsCheckBox(X_PADDING, current_y, 10, WHITE, "Alternate (slow) dragging?", config.alternate_drag)
             got_user_params = true
             for k,v in pairs(config) do
