@@ -68,7 +68,9 @@ function checkFood()
    stripRegion(invLoc);
    inv = parseRegion(invLoc);
    if inv == nil then
-      return;
+      lsPlaySound("Clank.wav");
+      sleepWithStatus(2000, "Could not find stats");
+      return checkFood();
    end
    onFood = false;
    allStatsVisible = true;
@@ -91,7 +93,7 @@ function checkFood()
    if allStatsVisible == false then
       lsPlaySound("Clank.wav");
       sleepWithStatus(2000, "Could not find stats");
-      return checkFood()
+      return checkFood();
    end
    return onFood;
 end
