@@ -40,7 +40,7 @@ function waitForTimeShift()
    srReadScreen();
    startTime = getTime();
    while true do
-      sleepWithStatus(500, "Waiting for clock to change");
+      sleepWithStatus(500, "Waiting for the next Egyptian Minute");
       srReadScreen();
       curTime = getTime();
       if curTime ~= startTime then
@@ -106,6 +106,7 @@ function eatAndCalculate()
    -- Wait until the next time shift to see how long the real duration is
    checkFood();
    local startTime = waitForTimeShift();
+   cookingStartTime = lsGetTimer();
    eatFood();
    local minTimer = lsGetTimer();
    local curMin = startTime;
@@ -117,7 +118,7 @@ function eatAndCalculate()
       return nil;
    end
    while true do
-      sleepWithStatus(750, "Waiting for stat change");
+      sleepWithStatus(750, "Waiting for stats to change again.  \n\nTime Elapsed: " .. getElapsedTime(cookingStartTime));
       srReadScreen();
       if not checkFood() then
          break;
