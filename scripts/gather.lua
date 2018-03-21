@@ -587,7 +587,7 @@ function editRoute(route)
         lsDoFrame();
         lsSleep(tick_delay);
         if(gotoRoute) then
-            goto(gotoRoute, thisRoute);
+            routeTo(gotoRoute, thisRoute);
             updateUnique();
         end
     end
@@ -750,7 +750,7 @@ function loadRoutes()
     end
 end
 
-function goto(waypoint,thisRoute)
+function routeTo(waypoint,thisRoute)
     prepareForWalking();
     local x = tonumber(thisRoute[1][waypoint][1]);
     local y = tonumber(thisRoute[1][waypoint][2]);

@@ -302,7 +302,7 @@ function doit()
   srReadScreen();
   local startPos = findCoords();
   if not startPos then
-    error("ATITD clock not found.\Verify entire clock and borders are visible. Try moving clock slightly.");
+    error("ATITD clock not found. Verify entire clock and borders are visible. Try moving clock slightly.");
   end
   lsPrintln("Start pos:" .. startPos[0] .. ", " .. startPos[1]);
 
