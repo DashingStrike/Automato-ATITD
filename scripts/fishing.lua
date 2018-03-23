@@ -458,7 +458,6 @@ function findchat(line)
          end
       end
    end
-   error("Could not decipher chat properly");
 end
 
 
