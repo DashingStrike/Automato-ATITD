@@ -1,17 +1,17 @@
--- mining_sand.lua v1.2 -- by Cegaiel
+-- mining_sand.lua v1.3 -- by Cegaiel
 --
 -- Works the sand mine, but requires a little thought and input from you ;)
 -- You must click on all Quintuple colors FIRST, all Quadruple colors NEXT, all Triple colors NEXT, all Paired colors NEXT, then ALL Single colored stones LAST.
 --
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- Additional credits to Tallow for his assistance with stream lining code (embedded arrays and more efficient looping in function clickSequence() - v1.2) 
---
+-- Thanks to Sabahl for the new 6 color (1 Pair) array, which is alternative method that breaks 6 nodes simutaneously. Supposedly better chance at a Huge Gem.
 
 dofile("common.inc");
 dofile("settings.inc");
 
 
-askText = "Sand Mining v1.2 (by Cegaiel) --\n\nMake sure chat is MINIMIZED!\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
+askText = "Sand Mining v1.3 by Cegaiel --\n\nMake sure chat is MINIMIZED!\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
 
 
 
@@ -24,20 +24,20 @@ dropdown_pattern_cur_value = 1;
 allSets = {
 
 {  --6 color (1 Pair)
-{1,3,4,7},
-{1,5,6},
-{1,4,5,6},
-{1,3,7},
-{1,5,6,7},
 {1,3,4},
-{1,3,6,7},
+{1,5,6,7},
+{1,3,5},
+{1,4,6,7},
+{1,3,6},
+{1,4,5,7},
+{1,3,7},
+{2,4,5,6},
+{2,3,4},
 {2,4,5},
 {2,5,6},
-{2,3,4,7},
-{2,4,7},
-{2,3,6,5},
-{2,3,6},
-{2,4,5,7}
+{2,6,7},
+{2,3,7},
+{2,3,4,5,6,7}
 },
 
 {  --5 color (2 Pair)
