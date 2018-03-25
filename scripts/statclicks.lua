@@ -246,6 +246,13 @@ function pyramidPush()
    end
 end
 
+function splitCoconuts()
+  t=findText("Separate Coconut Meat");
+  if t~= nil then
+    clickText(t);
+  end
+end
+
 function stirCement()
    t = waitForText("Stir the cement", 1000);
    if t then
@@ -380,6 +387,8 @@ function doTasks()
                tapRods();
             elseif curTask == "Stir Cement" then
                stirCement();
+            elseif curTask =="Coconuts" then
+               splitCoconuts();
             else
 --               lsPrintln("finding text: " .. textLookup[curTask]);
                clickText(findText(textLookup[curTask]));
