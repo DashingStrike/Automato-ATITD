@@ -1,10 +1,4 @@
--- This is the first script I got to work fairly well in Tale 8, to plant onions.
--- It needs more tweaking. I encourage players to use this a starting template
--- So far I have gotten 1x1 and 2x2 grids to work fairly well. I have not progressed to 3x3 grids yet. Those will likely fail for now...
--- Note I am using 1900x1080 resolution, I'm not sure if this plays a factor for you.
--- If you like to tweak macros, then have at it. Otherwise I'll try to get tweak more later, but encourage your help!
--- Regards, Cegaiel
-
+-- So far I have gotten 1x1 and 2x2 grids to work fairly well. 3x3 grids likely will fail as there isn't enough time to water them all
 
 dofile("Flax_stable.lua");
 
@@ -29,8 +23,8 @@ grid_w = 2;
 grid_h = 2;
 
 -- Plant more densely than flax
-walk_px_y = 140;
-walk_px_x = 170;
+walk_px_y = 100;
+walk_px_x = 130;
 
 -- Override flax default, allow a few ms more in case lag messed the
 -- walk. Less forgiving, by lag, on tight grids from onions vs flax.
@@ -42,15 +36,10 @@ walk_time = 500;
 -- of the time. Just as long as it clicks all windows before you can
 -- walk from first to last plant is fine.
 
+click_water_delay = 1400;
 
-
---click_water_delay = 1400;
-click_water_delay = 500;
-
-
-
-refresh_time = 200;
-click_delay = 150;
+refresh_time = 100;
+click_delay = 100;
 
 seedType = "Amun";
 waterImage = "WaterThese.png";
@@ -64,7 +53,6 @@ xLeafRadius = 38;
 --How far apart to pin the onion windows
 --onion_window_w = 285;
 onion_window_w = 250;
-
 onion_window_h = 145;  
 
 tending_req = 3;  --How many growth stages before it's ready for heavest
@@ -72,20 +60,26 @@ water_req = 1;  -- How many times to click the Water button per onion seed. Most
 
 
 
+function refreshWindow()
 
+--1st window frequently doesn't show Water these. This will loop forever until the number of pin windows and the # of 'Water these' are equal.
 
-function RefreshWindow()
+	while 1 do
+        srReadScreen();
+        --sleepWithStatus(10, "Checking windows")
 
---1st window frequently doesn't get refreshed, doing overkill of repeating 10x to be 100% sure it got clicked. Change for i=1, <10> do reduce from 10
-	for i=1,10 do
+        local tops = findAllText(thisIs);
+        local waterShowing = findAllText("Water these");
 
-    srReadScreen();
-    local tops = findAllText(thisIs);
-    for i=1,#tops do
-      safeClick(tops[i][0], tops[i][1]);
-	lsSleep(10);
-    end
-	end	
+ 	  if #tops == #waterShowing then
+	   break;
+	  end
+
+    	  	for i=1,#tops do
+        	  safeClick(tops[i][0], tops[i][1]);
+	       end
+
+	end
 end
 
 
@@ -96,17 +90,17 @@ function harvestAll(loop_count)
   if grid_w == 1 then
     -- 1x1 grid
     timing = 10000;
-    harvest_timing = 0;
+    harvest_timing = 2000;
     
   elseif grid_w == 2 then
     -- 2x2 grid
     timing = 6000;
-    harvest_timing = 3000;
+    harvest_timing = 5000;
 
   elseif grid_w == 3 then
     -- 3x3 grid
-    timing = 9000;
-    harvest_timing = 6000;
+    timing = 1000;
+    harvest_timing = 12000;
 
   else
     -- 4x4 grid 
@@ -116,17 +110,16 @@ function harvestAll(loop_count)
 
 
 
-
   local globalStr = "[" .. loop_count .. "/" .. num_loops .. "] Passes" .. "\n";
 
-RefreshWindow()
+  refreshWindow()
 
-	--I find the Tear of Sinai requires a bit more time to grow, this offsets that by giving an additional 2500ish ms when plants requring watering > 1
-	timing = (timing) + (2700 * (water_req-1));
 
-if click_water_delay < 0 then
-click_water_delay = 0;
-end
+	--I find the Tear of Sinai requires a bit more time to grow, this offsets that by giving an additional 2000ish ms when plants requring watering > 1
+	timing = (timing) + (2000 * (water_req-1));
+		 if click_water_delay < 0 then
+		  click_water_delay = 0;
+		 end
 
 
   for pass=1,tending_req do
@@ -273,34 +266,31 @@ function promptFlaxNumbers()
     -- Make sure we don't lock up with no easy way to escape!
     checkBreak();
 
+    lsSetCamera(0,0,lsScreenX*1.1,lsScreenY*1.1);
 
     lsPrint(10, 10, z, scale, scale, 0xFFFFFFff, "Choose passes and grid size");
 
     -- lsEditBox needs a key to uniquely name this edit box
     --   let's just use the prompt!
     -- lsEditBox returns two different things (a state and a value)
-    local y = 40;
-
-
-
+    local y = 50;
 
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Onion Name:");
     is_done, seedType = lsEditBox("flaxname", 135, y, z, 100, 30, scale, scale,
                                    0x000000ff, seedType);
-    y = y + 32;
-
+    y = y + 45;
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
-    is_done, num_loops = lsEditBox("passesO", 110, y, z, 50, 30, scale, scale,
+    is_done, num_loops = lsEditBox("passesO", 115, y, z, 50, 30, scale, scale,
                                    0x000000ff, num_loops);
     if not tonumber(num_loops) then
       is_done = nil;
       lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
       num_loops = 1;
     end
-    y = y + 32;
 
+    y = y + 32;
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Grid size:");
-    is_done, grid_w = lsEditBox("gridO", 110, y, z, 50, 30, scale, scale,
+    is_done, grid_w = lsEditBox("gridO", 115, y, z, 50, 30, scale, scale,
                                 0x000000ff, grid_w);
     if not tonumber(grid_w) then
       is_done = nil;
@@ -310,11 +300,10 @@ function promptFlaxNumbers()
     end
     grid_w = tonumber(grid_w);
     grid_h = grid_w;
+
     y = y + 32;
-
-
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Tending:");
-    is_done, tending_req = lsEditBox("tendings0", 110, y, z, 50, 30, scale, scale,
+    is_done, tending_req = lsEditBox("tendings0", 115, y, z, 50, 30, scale, scale,
                                 0x000000ff, tending_req);
     if not tonumber(tending_req) then
       is_done = nil;
@@ -322,11 +311,9 @@ function promptFlaxNumbers()
 	tending_req = 3;
     end
 
-
     y = y + 32;
-
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Water Req:");
-    is_done, water_req = lsEditBox("water0", 110, y, z, 50, 30, scale, scale,
+    is_done, water_req = lsEditBox("water0", 115, y, z, 50, 30, scale, scale,
                                 0x000000ff, water_req);
     if not tonumber(water_req) then
       is_done = nil;
@@ -334,42 +321,28 @@ function promptFlaxNumbers()
 	water_req = 1;
     end
 
-
-
     y = y + 35;
-
-
-    if lsButtonText(170, y-32, z, 100, 0xFFFFFFff, "OK") then
+    if lsButtonText(175, y-32, z, 100, 0xFFFFFFff, "OK") then
       is_done = 1;
     end
+
+    y = y + 15;
 
     lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
 		   "This will plant and harvest a " .. grid_w .. "x" ..
 		     grid_w .. " grid of Onions " .. num_loops ..
                      " times, yielding " .. (grid_w*grid_w*num_loops) ..
                      " onion harvests.");
-    y = y + 50;
 
-
-
+    y = y + 56;
     lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
-		   "Onions req " .. tending_req .. " tendings and " ..
-		     water_req .. " water each tending. " .. num_loops ..
-                     " times. You will need " .. grid_w*grid_w*num_loops*water_req .. " jugs.");
-
-    y = y + 40;
-
-
-
-    lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
-		   "This script will likely fail at 3x3 or higher, for now...");
-
-
-
+                     "You will need " .. grid_w*grid_w*num_loops .. " seeds and " .. grid_w*grid_w*num_loops*water_req*tending_req .. " jugs.");
 
     if is_done and (not num_loops or not grid_w) then
       error 'Canceled';
     end
+
+    lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 		
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
                     "End script") then
