@@ -2,6 +2,8 @@
 --
 -- Repeatedly click a single location whenever stats are black.
 --
+--March 28, 2018: Added ability to enter # of clicks, Elapsed Timer ~Cegaiel
+
 
 dofile("common.inc");
 
@@ -21,12 +23,26 @@ largeWarning = singleLine([[
   here will not work correctly.
 ]]);
 
+
+
 function doit()
+
   local mousePos = askForWindow(askText);
+  askQty();
+
+  local startTime = lsGetTimer();
 
   local clickCount = 0;
   local lastClickTime = lsGetTimer();
+
   while 1 do
+
+      if clickQty > 0 and (clickQty == clickCount) then
+        lsMessageBox(clickCount .. " clicks executed in ", elapsedTime, 1);
+        break;
+      end
+
+    elapsedTime = getElapsedTime(startTime)
     srReadScreen();
     local warning = "";
     local stats = srFindImage("AllStats-Black.png");
@@ -43,7 +59,7 @@ function doit()
       end
     end
 
-    local message = ""
+    local message = "Time Elapsed: " .. getElapsedTime(startTime) .. "\n\n"
     local color = 0xffffffff;
     if not stats then
       message = message .. "Waiting (stats not black or not visible).\n\n";
@@ -56,8 +72,46 @@ function doit()
       clickCount = clickCount + 1;
       message = message .. "Clicking. ";
     end
-    message = message .. clickCount .. " clicks so far. " .. warning;
+
+    if clickQty > 0 then
+    message = message .. clickCount .. "/" .. clickQty .. " clicks so far.\n\n" .. warning;
+    else
+    message = message .. clickCount .. " clicks so far.\n\n" .. warning;
+    end
 
     sleepWithStatus(250, message, color);
   end
+end
+
+
+
+function askQty()
+  local is_done = false;
+  local count = 1;
+  while not is_done do
+	checkBreak();
+      local y = 10;
+      lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "How many clicks?");
+	y = y + 22;
+      is_done, clickQty = lsEditBox("clickQty", 5, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 0);
+      clickQty = tonumber(clickQty);
+      if not clickQty then
+        is_done = false;
+        lsPrint(5, y+32, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        clickQty = 0;
+      end
+	y = y + 50;
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Enter 0 to repeat clicks until manually stopped");
+	y = y + 22;
+    if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
+        is_done = 1;
+    end
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
+                    "End script") then
+      error(quitMessage);
+    end
+  lsDoFrame();
+  lsSleep(50);
+  end
+  return count;
 end
