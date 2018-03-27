@@ -1,16 +1,13 @@
--- modified by Silden 03-SEP-17
--- * Fixed UI Changes (twice in one tale!)
--- * Added buttons to handle loading charcoal and materials
--- * Added sound when all glass has been made
-
-
 dofile("common.inc"); -- To allow the findAllText function
 dofile("screen_reader_common.inc");
 dofile("ui_utils.inc");
 
 -- Initial variables
 window_w = 320;
-window_h = 415;
+--Height in pixels when all options shown as of 3/26/18
+window_h = 330;
+--Should have the refresh hitting down near the bars, which is a safe area to click
+glassRefreshYOffset = 260;
 temperature_width = 85; -- Width of the Temperature label
 tol = 6500;
 menuButtonSelected = 0;
@@ -196,7 +193,7 @@ function glassTick(window_pos, state)
 				if not made_one then
 					state.status = state.status .. " NothingToMake";
 					-- refresh window
-					srClickMouseNoMove(window_pos[0]-10, window_pos[1]+window_h/2);
+					srClickMouseNoMove(window_pos[0] + 10, window_pos[1]+glassRefreshYOffset);
 				end
 			else
 				state.status = state.status .. " (temp out of range)";
