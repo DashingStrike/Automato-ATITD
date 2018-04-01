@@ -120,7 +120,7 @@ function doit()
   displayMoves();
 end
 
-
+-- TODO: this should only find buttons north of the break
 function findMoves()
   lsDoFrame();
   statusScreen("Scanning acro buttons...");
@@ -145,80 +145,145 @@ function findMoves()
   end
 end
 
-
 function doMoves()
-  local currentMove = 0;
-  local skip = false;
-  startTime = lsGetTimer();
+	local skip = false;
+	
+	-- if someone knows better how to better implement a basic finite state machine in lua, be my guest.
+	-- only one of these should ever be true at a time
+	local doAcroClick = true;
+	local waitForAcroStart = false;
+	local waitForAcroEnd = false;
+	
+	
+	local badLagMessageTimer = 5000;
+	
+	-- total timeout waiting for acro start time will be acroStartIttr * acroStartTimeout ms
+	local acroStartTries = 0;
+	local acroStartIttr = 15; 		-- increase total timeout here first
+	local acroStartTimeout = 1000; 	-- be careful extending this value.
+	
+	-- total timeout waiting for acro start time will be acroEndIttr * acroEndTimeout ms
+	local acroEndTries = 0;
+	local acroEndIttr = 20; 		-- increase total timeout here first
+	local acroEndTimeout = 1000; 	-- be careful extending this value.
 
-
-	for i=1,checkedBoxes do
-	    currentMove = currentMove + 1;
-	    currentClick = 0;
+	for currentMove=1,checkedBoxes do
    	    checkBreak();
-
-		for j=1,perMoves do
-		  checkBreak();
-
-	         if skip then
+	
+		for currentClick=1,perMoves do
+			checkBreak();
+					
+	        if skip then
 	           skip = false;
 	           break;
-               end
-
-
-		  local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[i] .. "\n[" .. currentClick .. "/" .. perMoves .. "] Clicked\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.\n\nClick Skip to advance to next move on list (ie partner follows the move).";
-
-		  local acroTimer = true;
-			while acroTimer do
-
-			    if lsButtonText(10, lsScreenY - 30, z, 75, 0xffff80ff, "Menu") then
-				--lsDoFrame();
-				sleepWithStatus(1000, "Returning to Menu")
-				displayMoves();
-			    end
-			    if lsButtonText(100, lsScreenY - 30, z, 75, 0xff8080ff, "Skip") then
-				skip = true;
-			    end
-
-			  checkBreak();
-			  srReadScreen();
-			  acro = findAllImages("Acro.png");
-			    if #acro == 2 then
-				  if skip then
-				  statusScreen("Skipping to Next Move" .. GUI);
-					lsSleep(1500);
+            end					
+					
+			doAcro = true;
+			
+			-- reset state for safety's sake
+			-- only one of these should ever be true at a time
+			doAcroClick = true;
+			waitForAcroStart = false;
+			waitForAcroEnd = false;
+			acroStartTries = 0;
+			acroEndTries = 0;
+			
+			while doAcro do
+				checkBreak();
+				
+				local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[currentMove] .. "\n[" .. currentClick .. "/" .. perMoves .. "] Clicked\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.\n\nClick Skip to advance to next move on list (ie partner follows the move).";
+			
+				if lsButtonText(10, lsScreenY - 30, z, 75, 0xffff80ff, "Menu") then
+					sleepWithStatus(1000, "Returning to Menu")
+					displayMoves();
 					break;
-				  else
-				  statusScreen("WAITING ON ACRO TIMER!" .. GUI);
-				  end
-			    else
-				  acroTimer = false;
-		     		  clickMove = srFindImage("acro/" .. checkedMovesImage[i]);
-
-		    			if clickMove then
-					  srClickMouseNoMove(clickMove[0], clickMove[1]-1);
-					  --srSetMousePos(clickMove[0], clickMove[1]-1);
-					  status = checkedMovesName[i] .. " clicked";
-					  currentClick = currentClick + 1;
-					  lsSleep(200);
+				end
+				
+				if lsButtonText(100, lsScreenY - 30, z, 75, 0xff8080ff, "Skip") then
+					skip = true;
+					break;
+				end
+			
+				-- handle do click state
+				if doAcroClick then
+		     		clickMove = srFindImage("acro/" .. checkedMovesImage[currentMove]);
+					
+					if clickMove then
+						srReadScreen();
+						srClickMouseNoMove(clickMove[0], clickMove[1]-1);
+						status = checkedMovesName[currentMove] .. " clicked";
+						statusScreen(status .. GUI);
+						
+						-- change state to acro start
+						-- only one of these should ever be true at a time
+						doAcroClick = false;
+						waitForAcroStart = true;
+						waitForAcroEnd = false;
 					else
-					  status = "BUTTON NOT FOUND!\nSkipping: " .. checkedMovesName[i];
-					  skip = true;
+						status = "BUTTON NOT FOUND!\nSkipping: " .. checkedMovesName[currentMove];
+						statusScreen(status .. GUI);
+						skip = true;
+					end
+					lsSleep(1000); -- timer here to make sure the status message can be seen before moving on to acro timer
+				end
+				
+				-- handle acro start state
+				if waitForAcroStart then
+					statusScreen("WAITING FOR ACRO TIMER TO START " .. acroStartTries .. "/" .. acroStartIttr .. GUI);
+					
+					img = waitForImage("acro.png", acroStartTimeout);
+					
+					if img ~= nil then
+						-- change state to acro end
+						-- only one of these should ever be true at a time
+						doAcroClick = false;
+						waitForAcroStart = false;
+						waitForAcroEnd = true;
+					else
+						acroStartTries = acroStartTries + 1
+					end
+					
+					if acroStartTries == acroStartIttr then
+						acroStartTries = acroStartTries - 5;
+						statusScreen("The lag is pretty bad... are you sure you want to be acroing?  Trying 5 more times...");
+						lsSleep(badLagMessageTimer);
+					end
+				end
+				
+				-- handle acro end state
+				if waitForAcroEnd then
+					statusScreen("WAITING FOR ACRO TIMER TO END " .. acroEndTries .. "/" .. acroEndIttr .. GUI);
+					
+					img = waitForNoImage("acro.png", acroEndTimeout);
+					
+					if img == nil then
+						-- change state to do click
+						-- only one of these should ever be true at a time
+						doAcroClick = true;
+						waitForAcroStart = false;
+						waitForAcroEnd = false;
+						
+						break;
+					else
+						acroEndTries = acroEndTries + 1
+					end
+					
+					if acroEndTries == acroEndIttr then
+						acroEndTries = acroEndTries - 5;
+						statusScreen("The lag is pretty bad... are you sure you want to be acroing?  Trying 5 more times...");
+						lsSleep(badLagMessageTimer);
+					end
+					
+				end
+				
+				lsDoFrame();
+			end
+			
+		end -- currentClick
+	
+	end -- currentMove
 
-		    			end
-
-	    	       local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[i] .. "\n[" .. currentClick .. "/" .. perMoves .. "] Clicked\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.\n\nClick Skip to advance to next move on list (ie partner follows the move).";
-
- 	    	       statusScreen(status .. GUI);
-			lsSleep(1500);	
-			    end --if skip, acro=2
-		       end --while acroTimer
-		  end --for j
-        end --for i
-  sleepWithStatus(1000, "ALL DONE!\n \nReturning to Menu")
-  displayMoves();
 end
-
 
 function processCheckedBoxes()
   checkedMovesName = {};
