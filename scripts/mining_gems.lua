@@ -422,6 +422,7 @@ end
 
 
 function chatRead()
+   srReadScreen();
    local chatText = getChatText();
    lsSleep(100);
    local onMain = checkIfMain(chatText);
@@ -455,20 +456,22 @@ function findClosePopUp()
 
     while 1 do
       checkBreak();
-      srReadScreen();
-	chatRead();
-	lsSleep(100);
+ 	chatRead();
+	lsSleep(clickDelay);
        OK = srFindImage("OK.png");
-
-	  if (lastLineFound ~= lastLineParse) or ( (lsGetTimer() - startTime) > 6000) then
-	    break;
-	  end
 
 	  if OK then  
 	    srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
 	    lsSleep(clickDelay);
 	    break;
 	  end
+
+	lsSleep(clickDelay);
+
+	  if (lastLineFound ~= lastLineParse) or ( (lsGetTimer() - startTime) > 6000) then
+	    break;
+	  end
+
     end
 end
 
