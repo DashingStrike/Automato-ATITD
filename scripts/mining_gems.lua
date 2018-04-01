@@ -422,10 +422,8 @@ end
 
 
 function chatRead()
-	--Find the last line of chat
-	--lsSleep(100);
    local chatText = getChatText();
-   
+   lsSleep(100);
    local onMain = checkIfMain(chatText);
 
    if not onMain then
@@ -452,8 +450,7 @@ end
 
 function findClosePopUp()
 
-lastLineFound = lastLineParse;
-
+  lastLineFound = lastLineParse;
   startTime = lsGetTimer();
 
     while 1 do
@@ -478,8 +475,8 @@ end
 
 function clickSequence()
   sleepWithStatus(150, "Starting...");
-  --lastLineFound = "";
-  --lastLineParse = "";
+  chatRead();
+
   local startMiningTime = lsGetTimer();
   local worked = 1;
 
