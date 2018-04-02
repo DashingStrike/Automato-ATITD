@@ -308,6 +308,7 @@ function doit()
 
   setCameraView(CARTOGRAPHER2CAM);
   drawWater();
+  startTime = lsGetTimer();
 
   for loop_count=1, num_loops do
     error_status = "";
@@ -320,6 +321,7 @@ function doit()
     drawWater();
   end
   lsPlaySound("Complete.wav");
+  lsMessageBox("Elapsed Time:", getElapsedTime(startTime), 1);
 end
 
 -------------------------------------------------------------------------------
@@ -345,7 +347,7 @@ function plantAndPin(loop_count)
   for y=1, grid_h do
     for x=1, grid_w do
       statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Planting " ..
-                   x .. ", " .. y);
+                   x .. ", " .. y .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
       success = plantHere(xyPlantFlax, y);
       if not success then
         break;
@@ -459,7 +461,7 @@ end
 
 function dragWindows(loop_count)
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ")  " ..
-               "Dragging Windows into Grid");
+               "Dragging Windows into Grid" .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
 
   if plantType == ONIONS then
     arrangeStashed(nil, true, onion_window_w, onion_window_h, space_to_leave);
@@ -481,7 +483,9 @@ function harvestAll(loop_count)
   local seedIndex = 1;
   local seedWave = 1;
   local lastTops = {};
+
   while not did_harvest do
+
     -- Monitor for Weed This/etc
     lsSleep(refresh_time);
     srReadScreen();
@@ -497,7 +501,7 @@ function harvestAll(loop_count)
     end
 
     statusScreen("(" .. loop_count .. "/" .. num_loops ..
-                 ") Harvests Left: " .. harvestLeft);
+                 ") Harvests Left: " .. harvestLeft .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
 
     lsSleep(refresh_time);
     srReadScreen();
@@ -517,6 +521,8 @@ function harvestAll(loop_count)
       for i=#waters, 1, -1 do
         lastClick = lastClickTime(waters[i][0], waters[i][1]);
         if lastClick == nil or lsGetTimer() - lastClick >= CLICK_MIN_WEED then
+
+
           clickText(waters[i]);
           trackClick(waters[i][0], waters[i][1]);
         end
@@ -579,7 +585,7 @@ function walkHome(loop_count, finalPos)
   -- Close all empty windows
   closeEmptyAndErrorWindows();
   -- remove any screens with the too far away text
-  statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Walking...");
+  statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Walking..." .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
 
   walkTo(finalPos);
 
@@ -606,7 +612,7 @@ end
 -------------------------------------------------------------------------------
 
 function ripOutAllSeeds()
-  statusScreen("Ripping Out");
+  statusScreen("Ripping Out" .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
   srReadScreen();
   flaxRegions = findAllText("This is ", nil, REGION)
   for i = 1, #flaxRegions do
