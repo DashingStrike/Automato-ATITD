@@ -74,7 +74,7 @@ clickList = {};
     y = y + 40;
     lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "1) Set all pottery wheel locations:");
     y = y + 20;
-    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Hover mouse, tap " .. key .. " over each")
+    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Hover mouse, " .. key .. " over each")
     y = y + 20;
     lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "pottery wheel.")
     y = y + 30;
@@ -121,6 +121,10 @@ function findClosePopUp()
     end
 end
 
+
+
+
+
 function checkCloseWindows()
 -- Rare situations a click can cause a window to appear for a pottery wheel, blocking the view to other pottery wheels.
 -- This is a safeguard to keep random windows that could appear, from remaining on screen and blocking the view of other pottery wheels from being selected.
@@ -141,6 +145,7 @@ end
 function clickSequence()
 
 	sleepWithStatus(500, "Starting... Don\'t move mouse!");
+	startTime = lsGetTimer();
 	for l=1, num_loops do  
     	for i=1,#clickList do
 		checkBreak();
@@ -150,7 +155,7 @@ function clickSequence()
 		count = i;
     	end
     local time_left = total_delay_time - #clickList * wheelDelay;
-	sleepWithStatus(time_left,"Pass " .. l .. " of " .. num_loops .. ".  Waiting for jugs to finish");
+	sleepWithStatus(time_left,"Pass " .. l .. " of " .. num_loops .. "\nWaiting for jugs to finish");
 	end
 	    
     for i=1,#clickList do
@@ -162,6 +167,7 @@ function clickSequence()
 	end
 	
   lsPlaySound("Complete.wav");
+  lsMessageBox("Elapsed Time:", getElapsedTime(startTime), 1);
 end
 
 function MakeJugs()
@@ -197,13 +203,22 @@ function promptDelays()
 	dropdown_cur_value = lsDropdown("ArrangerDropDown", 5, y, 0, 200, dropdown_cur_value, dropdown_values);
 	lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 	y = y + 20;
+      lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Timer (ms):");
+      is_done, total_delay_time = lsEditBox("total_delay_time", 170, y, 0, 80, 30, 1.0, 1.0, 0x000000ff, 72000);
+      total_delay_time = tonumber(total_delay_time);
+      if not total_delay_time then
+        is_done = false;
+        lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        total_delay_time = 72000;
+      end
+	y = y + 40;
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Wheel Delay (ms):");
-      is_done, wheelDelay = lsEditBox("delay", 170, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 250);
+      is_done, wheelDelay = lsEditBox("wheelDelay", 170, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 100);
       wheelDelay = tonumber(wheelDelay);
       if not wheelDelay then
         is_done = false;
         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-        wheelDelay = 250;
+        wheelDelay = 100;
       end
 	y = y + 40;
       lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Passes:");
@@ -214,13 +229,17 @@ function promptDelays()
         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
         num_loops = 10;
       end      
-      
 	y = y + 40;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Wheel Delay: Pause between starting each");
-	y = y + 20;
-	  lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "pottery wheel.");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Timer: 72 seconds is default, but if server is");
+	y = y + 15;
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "lagging, 100+ seconds may be required.");
+
 	y = y + 30;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Raise value to run slower (try increments of 50)");
+
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Wheel Delay: Pause between starting each");
+	y = y + 15;
+	  lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "pottery wheel. Raise value to click slower.");
+
 	y = y + 22;
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
