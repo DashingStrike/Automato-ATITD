@@ -31,13 +31,13 @@ function doit()
   askQty();
 
   local startTime = lsGetTimer();
-
   local clickCount = 0;
   local lastClickTime = lsGetTimer();
 
   while 1 do
 
       if clickQty > 0 and (clickQty == clickCount) then
+	  lsPlaySound("Complete.wav");
         lsMessageBox(clickCount .. " clicks executed in ", elapsedTime, 1);
         break;
       end
@@ -78,7 +78,6 @@ function doit()
     else
     message = message .. clickCount .. " clicks so far.\n\n" .. warning;
     end
-
     sleepWithStatus(250, message, color);
   end
 end

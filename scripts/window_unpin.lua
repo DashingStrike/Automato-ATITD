@@ -26,11 +26,11 @@ function doit()
 	-- Pause, say something to user, wait for Shift key to continue. Give opportunity to put ATITD in focus, if needed.
 	askForWindow("This will right click all windows, attempting to close any pinned windows. This will also close/click any PopUp windows with 'OK' buttons. This will find any windows or popups that are hidden behind other windows, too. Press Shift key continue.");  
 	
-	statusScreen("Closing windows and popups...");
 
 	--Keep looking for and closing windows with Image1 until no more found, then move to Method 2.
 
 	while repeatMethod1 == 1 do
+	sleepWithStatus(100, "Closing windows and popups, Method 1");
 	closeMethod1();
 	end
 
@@ -40,6 +40,7 @@ lsSleep(200);
 	--Keep looking for and closing windows with Image2 until no more found, then move to Method 3.
 
 	while repeatMethod2 == 1 do
+	sleepWithStatus(100, "Closing windows and popups, Method 2");
 	closeMethod2();
 	end
 
@@ -49,10 +50,12 @@ lsSleep(200);
 	--Keep looking for and closing windows with Image3 until no more found, then done.
 
 	while repeatMethod3 == 1 do
+	sleepWithStatus(100, "Closing windows and popups, Method 3");
 	closeMethod3();
 	end
 
-error 'Closed all windows and popups.';
+  lsPlaySound("Complete.wav");
+  error 'Closed all windows and popups.';
 
 
 end

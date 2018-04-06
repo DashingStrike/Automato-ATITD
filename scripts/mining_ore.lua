@@ -501,7 +501,7 @@ function chatRead()
       srReadScreen();
       chatText = getChatText();
       onMain = checkIfMain(chatText);
-      sleepWithStatus(100, "Looking for Main chat screen ...");
+      sleepWithStatus(100, "Looking for Main chat screen ...\n\nIf main chat is showing, then try clicking Work Mine to clear this screen");
    end
    
    lastLine = chatText[#chatText][2];
