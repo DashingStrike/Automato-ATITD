@@ -16,7 +16,7 @@ items = {
 {""},
 --end
 {"", "Flax Comb", "Hackling Rake", "Dig Dirt", "Dig Hole", "Dig Limestone", "Stir Cement", "Excavate Blocks", "Push Pyramid", "Weave Canvas", "Weave Silk",
- "Weave Linen", "Weave Wool Cloth"},
+ "Weave Linen", "Weave Wool Cloth", "Churn Butter"},
 --spd
 {""},
 --con
@@ -40,6 +40,7 @@ textLookup["Sharpened Stick"] = "Whittle a Sharpened Stick";
 textLookup["Tinder"] = "Shred Wood into Tinder";
 textLookup["Weave Canvas"] = "Weave Twine into Canvas";
 textLookup["Coconuts"] = "Separate Coconut Meat";
+textLookup["Churn Butter"] = "Churn";
 textLookup["Crudely Carved Handle"] = "Whittle a Crudely Carved Handle";
 textLookup["Wooden Peg"] = "Whittle a small Wooden Peg";
 textLookup["Barrel Tap"] = "Whittle a Barrel Tap";
@@ -253,6 +254,13 @@ function splitCoconuts()
   end
 end
 
+function churnButter()
+  t=findText("Churn");
+  if t~= nil then
+    clickText(t);
+  end
+end
+
 function stirCement()
    t = waitForText("Stir the cement", 1000);
    if t then
@@ -389,6 +397,8 @@ function doTasks()
                stirCement();
             elseif curTask =="Coconuts" then
                splitCoconuts();
+            elseif curTask =="Churn Butter" then
+               churnButter();
             else
 --               lsPrintln("finding text: " .. textLookup[curTask]);
                clickText(findText(textLookup[curTask]));
