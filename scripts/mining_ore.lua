@@ -1,4 +1,4 @@
--- mining_ore.lua v2.0 -- by Cegaiel
+-- mining_ore.lua v2.01 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -14,17 +14,14 @@
 
 dofile("common.inc");
 
-
-
-info = "Ore Mining v2.0 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
+info = "Ore Mining v2.01 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
 --["Your workload had"] = "workload",
 --};
 
-
-
+-- Start don't alter these ...
 oreGathered = 0;
 oreGatheredTotal = 0;
 oreGatheredLast = 0;
@@ -36,9 +33,12 @@ dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
 dropdown_cur_value = 1;
 dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)", "Iron (7)", "Lead (9)", "Lithium (10)", "Magnesium (9)", "Platinum (12)", "Silver (10)", "Strontium (10)", "Tin (9)", "Tungsten (12)", "Zinc (10)"};
 dropdown_ore_cur_value = 1;
+-- End Don't alter these ...
 
+
+--Customizable
 muteSoundEffects = false;
-
+minPopSleepDelay = 100;  -- The minimum delay time used during findClosePopUp() function
 
 function doit()
   askForWindow(info);
@@ -48,14 +48,13 @@ function doit()
   clickSequence();
 end
 
+
 function doit2()
   promptDelays();
   getMineLoc();
   getPoints();
   clickSequence();
 end
-
-
 
 
 function getMineLoc()
@@ -98,20 +97,20 @@ function getMineLoc()
     end
     was_shifted = is_shifted;
     checkBreak();
-    lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
+    lsPrint(10, 10, z, 1.0, 1.0, 0xc0c0ffff,
 	    "Set Mine Location");
     local y = 60;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Lock ATITD screen (Alt+L) - OPTIONAL!");
+    lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Lock ATITD screen (Alt+L) - OPTIONAL!");
     y = y + 20;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Suggest F5 view, zoomed about 75% out.");
+    lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Suggest F5 view, zoomed about 75% out.");
     y = y + 60;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Hover and " .. key .. " over the MINE.");
+    lsPrint(10, y, z, 0.7, 0.7, 0xc0c0ffff, "Hover and " .. key .. " over the MINE !");
     y = y + 70;
-    lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "TIP (Optional):");
+    lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "TIP (Optional):");
     y = y + 20;
-    lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "For Maximum Performance (least lag) Uncheck:");
+    lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "For Maximum Performance (least lag) Uncheck:");
     y = y + 16;
-    lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Options, Interface, Other: 'Use Flyaway Messages'");
+    lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Options, Interface, Other: 'Use Flyaway Messages'");
     local start = math.max(1, #mineList - 20);
     local index = 0;
     for i=start,#mineList do
@@ -142,6 +141,7 @@ function fetchTotalCombos()
 		end
 	end
 end
+
 
 function getPoints()
   clickList = {};
@@ -224,38 +224,38 @@ function getPoints()
     end
     was_shifted = is_shifted;
     checkBreak();
-    lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
+    lsPrint(10, 10, z, 1.0, 1.0, 0xc0c0ffff,
 	    "Set Node Locations (" .. #clickList .. "/" .. stonecount .. ")");
     local y = 60;
     lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
-    autoWorkMine = lsCheckBox(15, y, z, 0xffffffff, " Auto 'Work Mine'", autoWorkMine);
+    autoWorkMine = lsCheckBox(15, y, z, 0xffff80ff, " Auto 'Work Mine'", autoWorkMine);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     y = y + 10
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Hover and " .. key .. " over each node.");
-    y = y + 15;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Make sure chat is MINIMIZED!");
+    lsPrint(10, y, z, 0.7, 0.7, 0xc0c0ffff, "Hover and " .. key .. " over each node.");
+    y = y + 20;
+    lsPrint(10, y, z, 0.7, 0.7, 0xff8080ff, "Make sure chat is MINIMIZED!");
     y = y + 30;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Type:  " .. ore);
-    y = y + 15;
+    lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Mine Type:  " .. ore);
+    y = y + 20;
     miningTimeGUI = "N/A";
     if miningTime ~= 0 then
       --miningTimeGUI = math.floor(miningTime/100)/10 .. " secs";
       miningTimeGUI = (miningTime/100)/10 .. " secs";
     end
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Worked:  " .. timesworked .. " times  (Last: " .. miningTimeGUI .. ")");
+    lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Worked:  " .. timesworked .. " times  Last: " .. miningTimeGUI);
     y = y + 20;
-
-    lsPrint(5, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found:  " .. oreGatheredTotal .. "  (Last Round: " .. oreGatheredLast .. ")");
+    --lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found:  " .. math.floor(oreGatheredTotal) .. "  (Last Round: " .. math.floor(oreGatheredLast) .. ")");
+    lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found:  " .. math.floor(oreGatheredTotal));
+    lsPrint(165, y, z, 0.7, 0.7, 0x40ffffff, " Last Round: " .. math.floor(oreGatheredLast));
     y = y + 20;
-
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Select " .. nodeleft .. " more nodes to automatically start!");
+    lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Select " .. nodeleft .. " more nodes to automatically start!");
     y = y + 30;
     local start = math.max(1, #clickList - 20);
     local index = 0;
     for i=start,#clickList do
       local xOff = (index % 3) * 100;
       local yOff = (index - index%3)/2 * 15;
-      lsPrint(20 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff,
+      lsPrint(20 + xOff, y + yOff, z, 0.5, 0.5, 0xffff80ff,
               i .. ": (" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
       index = index + 1;
     end
@@ -289,6 +289,7 @@ function getPoints()
   end
 end
 
+
 function fetchTotalCombos()
   TotalCombos = 0;
 	for i=1,#clickList do
@@ -299,6 +300,7 @@ function fetchTotalCombos()
 		end
 	end
 end
+
 
 function clickSequence()
   fetchTotalCombos();
@@ -341,32 +343,29 @@ function clickSequence()
 			local setTime = lsGetTimer() - startSetTime;
 
 		       local y = 10;
-
 		       lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
 		       y = y +15
 		       lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Alt+Shift to pause this script.");
-
-		       y = y +50
-
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "[" .. worked .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k);
+		       y = y +35
+			lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "[" .. worked .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k);
 			y = y + 32;
-			--lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. math.floor(setTime/100)/10 .. " secs");
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. (setTime/100)/10 .. " secs");
+			--lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. math.floor(setTime/100)/10 .. " secs");
+			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. (setTime/100)/10 .. " secs");
 			y = y + 32;
-			--lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Time Elapsed: " .. math.floor(elapsedTime/100)/10 .. " secs");
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. (elapsedTime/100)/10 .. " secs");
+			--lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Time Elapsed: " .. math.floor(elapsedTime/100)/10 .. " secs");
+			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. (elapsedTime/100)/10 .. " secs");
 			y = y + 16;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
+			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
 			y = y + 16;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Node Delay: " .. clickDelay .. " ms");
+			lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Node Click Delay: " .. clickDelay .. " ms");
 			y = y + 32;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Ore Found this Round: " .. oreGatheredLast);
-			y = y + 16;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Total Ore Found: " .. oreGatheredTotal);
+			lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Ore Found this Round: " .. math.floor(oreGatheredLast));
+			y = y + 20;
+			lsPrint(10, y, 0, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal));
 			y = y + 32;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xffff80ff, "Hold Shift to Abort and Return to Menu.");
+			lsPrint(10, y, 0, 0.7, 0.7, 0xffff80ff, "HOLD Shift to Abort and Return to Menu.");
 			y = y + 32;
-			lsPrint(5, y, 0, 0.7, 0.7, 0xff8080ff, "Don't touch mouse until finished!");
+			lsPrint(10, y, 0, 0.7, 0.7, 0xff8080ff, "Don't touch mouse until finished!");
 			lsDoFrame();
 			end
 		end
@@ -380,6 +379,7 @@ function clickSequence()
   reset();
 end
 
+
 function workMine()
       srSetMousePos(mineX, mineY);
       lsSleep(clickDelay);
@@ -388,6 +388,7 @@ function workMine()
       sleepWithStatus(1000, "Working mine (Fetching new nodes)");
 	findClosePopUpOld();
 end
+
 
 function checkCloseWindows()
 -- Rare situations a click can cause a window to appear for a node, blocking the view to other nodes.
@@ -427,25 +428,34 @@ function findClosePopUp()
     while 1 do
       checkBreak();
       srReadScreen();
+	lsSleep(50);
 	chatRead();
-	lsSleep(10);
+	lsSleep(50);
        OK = srFindImage("OK.png");
+
+		if clickDelay < minPopSleepDelay then
+		  popSleepDelay = minPopSleepDelay;
+		else
+		  popSleepDelay = clickDelay
+		end
 
 		--If we gathered new ore, add to tally and don't wait for popup.
 		--Beware, ugly quick hack: In the rare chance you get the exact # of ore back to back, then that 6000ms countdown timer will also force the break.
 	  if (lastOreGathered ~= oreGathered) or ( (lsGetTimer() - startTime) > 6000) then
 	  	oreGatheredTotal = oreGatheredTotal + oreGathered;
 	  	oreGatheredLast = oreGatheredLast + oreGathered;
+	    lsSleep(popSleepDelay);
 	    break;
 	  end
 
 	  if OK then  
 	    srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
-	    lsSleep(clickDelay);
+	    lsSleep(popSleepDelay);
 	    break;
 	  end
     end
 end
+
 
 function findClosePopUpOld()
     while 1 do
@@ -474,19 +484,15 @@ function checkIfMain(chatText)
             --return true;
          --end
       --end
-
-
    end
    return false;
 end
-
 
 
 function chatRead()
 	--Find the last line of chat
 	--lsSleep(100);
    local chatText = getChatText();
-   
    local onMain = checkIfMain(chatText);
 
    if not onMain then
@@ -506,7 +512,6 @@ function chatRead()
    
    lastLine = chatText[#chatText][2];
    oreGathered = string.match(lastLine, "(%d+) " .. ore);
-
 	if not oreGathered then
 	oreGathered = 0;
 	end
@@ -519,35 +524,34 @@ function promptDelays()
   while not is_done do
 	checkBreak();
 	local y = 10;
-	lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff,
+	lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff,
             "Key or Mouse to Select Nodes:");
 	y = y + 35;
 	lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
-	dropdown_cur_value = lsDropdown("ArrangerDropDown", 5, y, 0, 200, dropdown_cur_value, dropdown_values);
+	dropdown_cur_value = lsDropdown("ArrangerDropDown", 10, y, 0, 200, dropdown_cur_value, dropdown_values);
 	lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 	y = y + 20;
-	lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "How many Nodes?");
+	lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "How many Nodes?");
 	y = y + 50;
 	lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
-	dropdown_ore_cur_value = lsDropdown("ArrangerDropDown2", 5, y, 0, 200, dropdown_ore_cur_value, dropdown_ore_values);
+	dropdown_ore_cur_value = lsDropdown("ArrangerDropDown2", 10, y, 0, 200, dropdown_ore_cur_value, dropdown_ore_values);
 	lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 	y = y + 10;
 
-      lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
+      lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Node Click Delay (ms):");
 	y = y + 22;
-      is_done, clickDelay = lsEditBox("delay", 5, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 100);
+      is_done, clickDelay = lsEditBox("delay", 10, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 100);
       clickDelay = tonumber(clickDelay);
       if not clickDelay then
         is_done = false;
-        lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        lsPrint(10, y+34, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
         clickDelay = 100;
       end
 
-
 	y = y + 50;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Pause between selecting each node.");
+      lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Pause between selecting each node.");
 	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Raise value to run slower (try increments of 25)");
+      lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Raise value to run slower (try increments of 25)");
 	y = y + 22;
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
