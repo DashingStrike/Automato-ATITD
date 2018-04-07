@@ -145,15 +145,29 @@ function findMoves()
   end
 end
 
+local enummt = {
+	__index = function(table, key)
+		if rawget(table.enums, key) then
+			return key
+		end
+	end
+}
+
+local function Enum(t)
+	local e = { enums = t}
+	return setmetatable(e, enummt)
+end
+
+local AcroState = Enum {
+	AcroClick = 1,
+	AcroStart = 1,
+	TimerEnd = 1
+}
+
 function doMoves()
 	local skip = false;
-	
-	-- if someone knows better how to better implement a basic finite state machine in lua, be my guest.
-	-- only one of these should ever be true at a time
-	local doAcroClick = true;
-	local waitForAcroStart = false;
-	local waitForAcroEnd = false;
-	
+		
+	local state = AcroState.AcroClick;
 	
 	local badLagMessageTimer = 5000;
 	
@@ -168,31 +182,31 @@ function doMoves()
 	local acroEndTimeout = 1000; 	-- be careful extending this value.
 
 	for currentMove=1,checkedBoxes do
-   	    checkBreak();
+		checkBreak();
 	
 		for currentClick=1,perMoves do
 			checkBreak();
-					
-	        if skip then
-	           skip = false;
-	           break;
-            end					
-					
-			doAcro = true;
 			
+			if skip then
+				skip = false;
+				break;
+			end					
+					
 			-- reset state for safety's sake
-			-- only one of these should ever be true at a time
-			doAcroClick = true;
-			waitForAcroStart = false;
-			waitForAcroEnd = false;
+			state = AcroState.AcroClick;
+			
 			acroStartTries = 0;
 			acroEndTries = 0;
 			
-			while doAcro do
+			while true do
 				checkBreak();
 				
 				local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[currentMove] .. "\n[" .. currentClick .. "/" .. perMoves .. "] Clicked\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.\n\nClick Skip to advance to next move on list (ie partner follows the move).";
 			
+				if skip == true then
+					GUI = "Skipping current move\n" .. GUI
+				end
+
 				if lsButtonText(10, lsScreenY - 30, z, 75, 0xffff80ff, "Menu") then
 					sleepWithStatus(1000, "Returning to Menu")
 					displayMoves();
@@ -200,13 +214,18 @@ function doMoves()
 				end
 				
 				if lsButtonText(100, lsScreenY - 30, z, 75, 0xff8080ff, "Skip") then
+					-- breaking the loop will happen in AcroClick state
 					skip = true;
-					break;
 				end
 			
 				-- handle do click state
-				if doAcroClick then
-		     		clickMove = srFindImage("acro/" .. checkedMovesImage[currentMove]);
+				if state == AcroState.AcroClick then
+					-- skip here to give AcroStart/End states time to complete
+					if skip == true then
+						break;
+					end
+
+		     	clickMove = srFindImage("acro/" .. checkedMovesImage[currentMove]);
 					
 					if clickMove then
 						srReadScreen();
@@ -214,31 +233,24 @@ function doMoves()
 						status = checkedMovesName[currentMove] .. " clicked";
 						statusScreen(status .. GUI);
 						
-						-- change state to acro start
-						-- only one of these should ever be true at a time
-						doAcroClick = false;
-						waitForAcroStart = true;
-						waitForAcroEnd = false;
+						state = AcroState.AcroStart
 					else
 						status = "BUTTON NOT FOUND!\nSkipping: " .. checkedMovesName[currentMove];
 						statusScreen(status .. GUI);
 						skip = true;
+						break;
 					end
 					lsSleep(1000); -- timer here to make sure the status message can be seen before moving on to acro timer
 				end
 				
 				-- handle acro start state
-				if waitForAcroStart then
+				if state == AcroState.AcroStart then
 					statusScreen("WAITING FOR ACRO TIMER TO START " .. acroStartTries .. "/" .. acroStartIttr .. GUI);
 					
 					img = waitForImage("acro.png", acroStartTimeout);
 					
 					if img ~= nil then
-						-- change state to acro end
-						-- only one of these should ever be true at a time
-						doAcroClick = false;
-						waitForAcroStart = false;
-						waitForAcroEnd = true;
+						state = AcroState.AcroEnd
 					else
 						acroStartTries = acroStartTries + 1
 					end
@@ -251,18 +263,13 @@ function doMoves()
 				end
 				
 				-- handle acro end state
-				if waitForAcroEnd then
+				if state == AcroState.AcroEnd then
 					statusScreen("WAITING FOR ACRO TIMER TO END " .. acroEndTries .. "/" .. acroEndIttr .. GUI);
 					
 					img = waitForNoImage("acro.png", acroEndTimeout);
 					
 					if img == nil then
-						-- change state to do click
-						-- only one of these should ever be true at a time
-						doAcroClick = true;
-						waitForAcroStart = false;
-						waitForAcroEnd = false;
-						
+						state = AcroState.AcroClick;
 						break;
 					else
 						acroEndTries = acroEndTries + 1
