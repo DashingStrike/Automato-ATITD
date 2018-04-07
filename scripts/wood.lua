@@ -83,7 +83,7 @@ function doit()
 			carrot_note = "  " .. math.floor(carrot_time_left / 1000) .. "s until eating carrots.";
 		else
 			carrot_note = "";
-		endn
+		end
 
 		if eat_carrots then
 			srReadScreen();
