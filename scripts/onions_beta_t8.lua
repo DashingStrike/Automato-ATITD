@@ -331,12 +331,12 @@ function promptFlaxNumbers()
     lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
 		   "This will plant and harvest a " .. grid_w .. "x" ..
 		     grid_w .. " grid of Onions " .. num_loops ..
-                     " times, yielding " .. (grid_w*grid_w*num_loops) ..
+                     " times, yielding " .. (math.floor(grid_w*grid_w*num_loops)) ..
                      " onion harvests.");
 
     y = y + 56;
     lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
-                     "You will need " .. grid_w*grid_w*num_loops .. " seeds and " .. grid_w*grid_w*num_loops*water_req*tending_req .. " jugs.");
+                     "You will need " .. math.floor(grid_w*grid_w*num_loops) .. " seeds and " .. math.floor(grid_w*grid_w*num_loops*water_req*tending_req) .. " jugs.");
 
     if is_done and (not num_loops or not grid_w) then
       error 'Canceled';
