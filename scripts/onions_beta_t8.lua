@@ -123,7 +123,7 @@ function harvestAll(loop_count)
 
 
   for pass=1,tending_req do
-    local passStr = "[" .. tending_req-pass .. "] Growths until Harvest\n"
+    local passStr = "[" .. math.floor(tending_req-pass) .. "] Growths until Harvest\n"
     srReadScreen();
     local waters = findAllImages(waterImage);
     for i=#waters,1,-1 do
@@ -133,10 +133,10 @@ function harvestAll(loop_count)
 			lsSleep(100);
 		end
 
-      sleepWithStatus(click_water_delay, globalStr .. passStr ..
-		      "[" .. i .. "] Watering plants...\n\nTiming: " .. timing);
+      sleepWithStatus(math.floor(click_water_delay), globalStr .. passStr ..
+		      "[" .. i .. "] Watering plants...\n\nTiming: " .. math.floor(timing));
     end
-    sleepWithStatus(timing + click_water_delay*(grid_w*grid_w - #waters),
+    sleepWithStatus(math.floor(timing + click_water_delay*(grid_w*grid_w - #waters)),
 		    globalStr .. passStr .. "Waiting for next growth");
   end
   local anchors = findAllImages(waterImage);
