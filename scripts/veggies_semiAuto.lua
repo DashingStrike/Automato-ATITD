@@ -18,8 +18,10 @@ harvestImage = "HarvestThese.png";
 thisIs = "This is";
 water_req = 1;  -- How many times to click the Water button per onion seed. Most are 1, some variations might need 2 per click.
 useWinManager = true;
-plantCloser = true;
+plantCloser = false;
 autoWater = true;
+pauseAfterHarvest = true;
+delayAfterHarvestPerPlant = 2000;
 
 
 function doit()
@@ -46,7 +48,14 @@ wmText = "Tap control over planted veggies to open/pin.";
 	end
 
 	waterThese();
-	waitForShift();
+
+	if pauseAfterHarvest then
+	  waitForShift();
+	else
+	  refreshWindows();
+	  sleepWithStatus(delayAfterHarvestPerPlant*#tops, "Harvesting vegetables ...");
+	end
+
 	closeAllWindows(); -- This won't close the plant window, only the veggy windows
 
   end
@@ -284,17 +293,23 @@ function chooseMethod()
         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
         click_delay = 50;
       end
-	y = y + 130;
+	y = y + 120;
       lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
-      useWinManager = lsCheckBox(15, y, z, 0xffffffff, " Use Windows Manager to pin", useWinManager);
-	y = y + 30;
       plantCloser = lsCheckBox(15, y, z, 0xffffffff, " Plant Veggies closer together", plantCloser);
-	y = y + 30;
+
+
+	y = y + 25;
+      useWinManager = lsCheckBox(15, y, z, 0xffffffff, " Use Windows Manager to pin", useWinManager);
+	y = y + 25;
       autoWater = lsCheckBox(15, y, z, 0xffffffff, " Auto gather water", autoWater);
+	y = y + 25;
+      pauseAfterHarvest = lsCheckBox(15, y, z, 0xffffffff, " Pause/Wait for Hotkey after Harvest", pauseAfterHarvest);
+
+
       lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-	y = y - 70;
+	y = y - 75;
       lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Click Delay: Pause between clicking each plant");
-	y = y + 20;
+	y = y + 15;
       lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Plant closer: Not for large veggies, like cabbage");
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
@@ -350,7 +365,7 @@ end
 
 function refreshWindows()
   srReadScreen();
-	local tops = findAllText(thisIs);
+	tops = findAllText(thisIs);
 
 		for i=1,#tops do
         	  safeClick(tops[i][0], tops[i][1]);
