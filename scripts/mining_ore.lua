@@ -1,4 +1,4 @@
--- mining_ore.lua v2.0.1 -- by Cegaiel
+-- mining_ore.lua v2.0.2 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -14,7 +14,7 @@
 
 dofile("common.inc");
 
-info = "Ore Mining v2.0.1 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
+info = "Ore Mining v2.0.2 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -33,6 +33,7 @@ dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
 dropdown_cur_value = 1;
 dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)", "Iron (7)", "Lead (9)", "Lithium (10)", "Magnesium (9)", "Platinum (12)", "Silver (10)", "Strontium (10)", "Tin (9)", "Tungsten (12)", "Zinc (10)"};
 dropdown_ore_cur_value = 1;
+cancelButton = 0;
 -- End Don't alter these ...
 
 
@@ -244,9 +245,9 @@ function getPoints()
     end
     lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Worked:  " .. timesworked .. " times  Last: " .. miningTimeGUI);
     y = y + 20;
-    --lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found:  " .. math.floor(oreGatheredTotal) .. "  (Last Round: " .. math.floor(oreGatheredLast) .. ")");
+    --lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal) .. "  (Last Round: " .. math.floor(oreGatheredLast) .. ")");
     lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found:  " .. math.floor(oreGatheredTotal));
-    lsPrint(165, y, z, 0.7, 0.7, 0x40ffffff, " Last Round: " .. math.floor(oreGatheredLast));
+    lsPrint(175, y, z, 0.7, 0.7, 0x40ffffff, " Last Round: " .. math.floor(oreGatheredLast));
     y = y + 20;
     lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Select " .. nodeleft .. " more nodes to automatically start!");
     y = y + 30;
@@ -271,6 +272,7 @@ function getPoints()
     end
 
       if lsButtonText(208, lsScreenY -65, z, 80, 0xffffffff, "Config") then
+	  cancelButton = 1;
         doit2();
       end
 
@@ -348,6 +350,8 @@ function clickSequence()
 		       lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Alt+Shift to pause this script.");
 		       y = y +35
 			lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "[" .. worked .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k);
+			y = y + 25;
+			lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Node Click Delay: " .. clickDelay .. " ms");
 			y = y + 32;
 			--lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. math.floor(setTime/100)/10 .. " secs");
 			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. (setTime/100)/10 .. " secs");
@@ -356,8 +360,6 @@ function clickSequence()
 			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. (elapsedTime/100)/10 .. " secs");
 			y = y + 16;
 			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
-			y = y + 16;
-			lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Node Click Delay: " .. clickDelay .. " ms");
 			y = y + 32;
 			lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Ore Found this Round: " .. math.floor(oreGatheredLast));
 			y = y + 20;
@@ -536,27 +538,48 @@ function promptDelays()
 	lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
 	dropdown_ore_cur_value = lsDropdown("ArrangerDropDown2", 10, y, 0, 200, dropdown_ore_cur_value, dropdown_ore_values);
 	lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-	y = y + 10;
-
+	y = y + 5;
       lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Node Click Delay (ms):");
 	y = y + 22;
       is_done, clickDelay = lsEditBox("delay", 10, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 100);
       clickDelay = tonumber(clickDelay);
       if not clickDelay then
         is_done = false;
-        lsPrint(10, y+34, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        lsPrint(75, y+6, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
         clickDelay = 100;
       end
-
-	y = y + 50;
+	y = y + 40;
+      lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Total Ore Found Starting Value:");
+	y = y + 22;
+      is_done, oreGatheredTotal = lsEditBox("oreGatheredTotal", 10, y, 0, 80, 30, 1.0, 1.0, 0x000000ff, 0);
+      oreGatheredTotal = tonumber(oreGatheredTotal);
+      if not oreGatheredTotal then
+        is_done = false;
+        lsPrint(100, y+6, 20, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        oreGatheredTotal = 0;
+      end
+	y = y + 40;
       lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Pause between selecting each node.");
 	y = y + 16;
       lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Raise value to run slower (try increments of 25)");
-	y = y + 22;
 
-    if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
+	y = y + 20;
+      lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Total Ore Starting Value: Useful to keep track of");
+	y = y + 16;
+      lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "ore already in the mine. Set to value of ore in mine");
+
+	y = y + 22;
+    if lsButtonText(10, lsScreenY - 30, 0, 70, 0xFFFFFFff, "Next") then
         is_done = 1;
     end
+
+	if cancelButton == 1 then
+    if lsButtonText(96, lsScreenY - 30, 0, 80, 0xFFFFFFff, "Cancel") then
+	getPoints();
+	cancelButton = 0;
+    end
+	end
+
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
                     "End script") then
       error(quitMessage);
