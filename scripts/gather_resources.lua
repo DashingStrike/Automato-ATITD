@@ -160,7 +160,7 @@ gatherResources();
 end
 
 function gatherResources()
-	askForWindow('Searches for and clicks the selected resource (clay, grass, slate) until stopped. Icons can be on either side of the screen and either large or small.\n\nGrass/Clay: It\'s efficient (less running) if you walk instead of run (Self Click -> Emote -> Gait: Walking -- Gait: Running to restore)\n\nPress Shift over ATITD window to continue.');
+	askForWindow('Searches for and clicks the selected resource (clay, grass, slate) until stopped. Icons can be on either side of the screen and either large or small.\n\nGrass: It\'s efficient (less running) if you walk instead of run (Self Click -> Emote -> Gait: Walking -- Gait: Running to restore)\n\nPress Shift over ATITD window to continue.');
 	while 1 do
 		-- Ask for which button
 		local image_name = nil;
