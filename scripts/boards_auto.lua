@@ -15,7 +15,7 @@ askText = singleLine([[
 wmText = "Tap control on Wood Planes or Carpentry Benches to open and pin.";
 
 --Amount of time to pause after clicking the plane woods button (ms)
-pause_time = 3000; 
+pause_time = 5000; 
 
 function doit()
   askForWindow(askText);
