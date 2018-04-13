@@ -91,41 +91,43 @@ clockSize = {
 
 		while not Time do
 		  checkBreak();
-		  findClockInfo();
 		  message = "";
 		  message1 = "";
 		  message1b = "";
 		  message2 = "";
 		  message2b = "";
+		  findClockInfo();
 
-			for i=1,#clockSize do
+			for i=1,#clockSize do  --Find T8 Clock
 			  checkBreak();
 			  findClock = findNewClock(clockSize[i]);
 			    if findClock then
 				message1 = "It appears you have the new (T8) clock showing! However, this macro requires the legacy clock.\n\nIn fact, all macros in Automato requires the legacy clock.\n\nUnder Options, Interface-Options, Actions: Use Legacy Interface";
 				message1b = "\n\nYou are using \"" .. clockSize[i] .. "\" Interface";
+				break;
 			    end
 			end
 
-			for i=1,#clockSize do
 
+				  if not findClock then
+			for i=1,#clockSize do
 			  checkBreak();
 			  findClock2 = findLegacyClock(clockSize[i]);
-			    if findClock2 == "Small" then
-	 		      message2 = "Can not find Clock!\n\nIf you have no clock displaying, type /clockinfo in game.\n\nMake sure your clock and all 4 clock borders are visible.\n\nTry moving your clock until macro resumes...";
-			    elseif findClock2 and findClock2 ~= "Small" then
+			    if findClock2 then
 	 		      message2 = "Found Legacy Clock, but wrong interface size.\n\nAll macros in Automato requires the \"Small\" interface size.\n\nCheck Options, Interface-Options, Interface Size: Interface is \"Small\".";
 			      message2b = "\n\nYou are using \"" .. clockSize[i] .. "\" Interface";
+			      break;
 			    end
+			end
+				  end
 
 			    if  message1 == "" and message2 == "" then
 			      message2 = "Can not find Clock!\n\nIf you have no clock displaying, type /clockinfo in game.\n\nMake sure your clock and all 4 clock borders are visible.\n\nTry moving your clock until macro resumes...";
 			    end
 
-			end
 
 		  sleepWithStatus(200, message1 .. message1b .. message2 .. message2b, nil, 0.7);
-		end
+		end -- while not Time do
 
       statusScreen("Mouse Pos: " .. pos[0] .. ", " .. pos[1] .. "\n\nYear: " .. year .. "\nDate: " .. Date .. "\nTime: " .. Time .. "\nRegion: " .. regionName .. "\nCoords: " 
 	  .. Coordinates .. "\nFaction: " .. faction .. "\n\nElapsed Egypt Mins: " .. minsElapsedGUI .. "\nLast Secs per Egypt Minute: " .. elapsedTimeSeconds .. "\nAvg Secs per Egypt Minute: " .. elapsedTimeAvg .. "\nEstimated Last Duck Time: " 
@@ -138,6 +140,7 @@ clockSize = {
 		elseif faction == "Meshwesh" or faction == " Meshwesh" then
 		  lsButtonImg(170, 110, 1, 0.20, 0xFFFFFFff, "factions/hyksos.png");
 		end
+	lsSleep(200);
 	end
 end
 
