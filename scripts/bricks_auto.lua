@@ -1,15 +1,12 @@
-
-
 dofile("ui_utils.inc");
 dofile("settings.inc");
 dofile("constants.inc");
 dofile("screen_reader_common.inc");
 dofile("common.inc");
 
-imgThisIs = "ThisIs.png";
 imgTake = "Take.png";
 imgEverything = "Everything.png";
-imtToMake = "toMake.png";
+imgToMake = "toMake.png";
 brickNames = { "Bricks", "Clay Bricks", "Firebricks" };
 brickImages = { "makeBricks.png", "makeClayBricks.png", "makeFirebricks.png" };
 typeOfBrick = 1;
@@ -17,7 +14,7 @@ arrangeWindows = true;
 unpinWindows = true;
 
 function doit()
-	promptParameters();
+  	promptParameters();
 	askForWindow("Make sure your chats are minimized and brick rack menus are pinned then hover ATITD window and press Shift to continue.");
 	if(arrangeWindows) then
 		arrangeInGrid();
@@ -80,46 +77,49 @@ function promptParameters()
 end
 
 function makeBricks()
-	statusScreen("Making bricks");
-	checkBreak();
+    -- Click pin ups to refresh the window
+	clickAllImages("ThisIs.png");
+	
+    statusScreen("Making bricks");	
 	srReadScreen();
-	local posList;
-	posList = findAllImages(imgThisIs);
-	if #posList > 0 then
-		for i=1,#posList do
-			safeClick(posList[i][0], posList[i][1]);
-			lsSleep(click_delay);
-			checkBreak();
-		end
-	end
-	posList = findAllImages(brickImages[typeOfBrick]);
-	if #posList > 0 then
-		for i=1,#posList do
-			safeClick(posList[i][0], posList[i][1]);
-			lsSleep(click_delay);
-			checkBreak();
-			srReadScreen();
-			local s = findAllImages(imtToMake);
-			if(#s > 0) then
-				cleanup();
-				error("Out of supplies.");
+
+	local ThisIsList;
+	ThisIsList	= findAllImages("ThisIs.png");
+	local i;
+	for i=1,#ThisIsList do
+		local x = ThisIsList[i][0];
+		local y = ThisIsList[i][1];
+		local width = 100;
+		local height = 250;
+		local util = srFindImageInRange("utility.png", x, y, width, height, 5000);
+		if(util) then
+			height = util[1] - y;
+			local p = srFindImageInRange(brickImages[typeOfBrick], x, y, width, height);
+			if(p) then
+				safeClick(p[0]+4,p[1]+4);
+				lsSleep(click_delay);
+				srReadScreen();
+			else
+				local s = findAllImages(imgToMake);
+					if(#s > 0) then
+						cleanup();
+						error("Out of supplies.");
+					else
+				p = srFindImageInRange("Take.png", x, y, width, height, 5000);
+				if(p) then
+					safeClick(p[0]+4,p[1]+4);
+					lsSleep(click_delay);
+					srReadScreen();
+					p = srFindImage("Everything.png", 5000);
+					if(p) then
+						safeClick(p[0]+4,p[1]+4);
+						lsSleep(click_delay);
+						srReadScreen();
+
+						end
+					end
+				end
 			end
-		end
-	end
-	posList = findAllImages(imgTake);
-	if #posList > 0 then
-		for i=1,#posList do
-			safeClick(posList[i][0], posList[i][1]);
-			lsSleep(click_delay);
-			checkBreak();
-		end
-	end
-	posList = findAllImages(imgEverything);
-	if #posList > 0 then
-		for i=1,#posList do
-			safeClick(posList[i][0], posList[i][1]);
-			lsSleep(click_delay);
-			checkBreak();
 		end
 	end
 end
