@@ -31,6 +31,9 @@ grid_h = 5;
 is_plant = true;
 seeds_per_pass = 5;
 seeds_per_iter = 0;
+finish_up = 0;
+finish_up_message = "";
+
 
 seedType = "Old";
 harvest = "Harvest this";
@@ -135,7 +138,7 @@ end
 -------------------------------------------------------------------------------
 
 function promptFlaxNumbers()
-  scale = 1.0;
+  scale = 0.8;
 	
   local z = 0;
   local is_done = nil;
@@ -144,19 +147,16 @@ function promptFlaxNumbers()
   while not is_done do
     -- Make sure we don't lock up with no easy way to escape!
     checkBreak();
-
     lsPrint(10, 10, z, scale, scale, 0xFFFFFFff, "Choose passes and grid size");
 
     -- lsEditBox needs a key to uniquely name this edit box
     --   let's just use the prompt!
     -- lsEditBox returns two different things (a state and a value)
     local y = 40;
-
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Flax Name:");
     is_done, seedType = lsEditBox("flaxname", 120, y, z, 100, 30, scale, scale,
                                    0x000000ff, seedType);
     y = y + 32
-
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
     is_done, num_loops = lsEditBox("passes", 120, y, z, 50, 30, scale, scale,
                                    0x000000ff, num_loops);
@@ -166,7 +166,6 @@ function promptFlaxNumbers()
       num_loops = 1;
     end
     y = y + 32;
-
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Grid size:");
     is_done, grid_w = lsEditBox("grid", 120, y, z, 50, 30, scale, scale,
                                 0x000000ff, grid_w);
@@ -195,25 +194,31 @@ function promptFlaxNumbers()
       end
       y = y + 32;
     end
-
     is_plant = lsCheckBox(120, y+5, z+10, 0xFFFFFFff, "Grow Flax", is_plant);
-    y = y + 32;
-
+    y = y + 36;
     if lsButtonText(10, y-32, z, 100, 0xFFFFFFff, "Start!") then
       is_done = 1;
     end
+    y = y + 8;
 
     if is_plant then
       -- Will plant and harvest flax
       window_w = 285; 
       space_to_leave = false; 
+      lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xffff40ff, "Uncheck \"Grow Flax\" for SEEDS!");
+      y = y + 24;
       lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
                      "This will plant and harvest a " .. grid_w .. "x" ..
                      grid_w .. " grid of " .. seedType .. " Flax " .. num_loops ..
-                     " times, requiring " .. (grid_w * grid_w * num_loops) ..
-                     " seeds, doing " .. (grid_w*grid_w*num_loops) ..
-                     " flax harvests.\n\n");
+                     " times, requiring " .. math.floor(grid_w * grid_w * num_loops) ..
+                     " seeds, doing " .. math.floor(grid_w*grid_w*num_loops) ..
+                     " flax harvests.\n\n" ..
+                     "Put automato as far right as possible, you may need to " ..
+                     " reduce my width (or minimize me!)");
     else
+    lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0x00ff00ff, "Check \"Grow Flax\" for FLAX!");
+    y = y + 24;
+
       -- Will make seeds
       
       -- Flax window will grow to 333 px before returning to 290.
@@ -228,7 +233,7 @@ function promptFlaxNumbers()
                      " grid of " .. seedType .. " Flax and harvest it " .. seeds_per_pass ..
                      " times, requiring " .. (grid_w * grid_w) ..
                      " seeds, and repeat this " .. num_loops ..
-                     " times, yielding " .. seedTotal .. " seed harvests." ..
+                     " times, yielding " .. math.floor(seedTotal) .. " seed harvests." ..
 		     " Put automato as far right as possible, you may need to " ..
                      " reduce my width (or minimize me!)");
     end
@@ -319,6 +324,9 @@ function doit()
     harvestAll(loop_count);
     walkHome(loop_count, startPos);
     drawWater();
+	if finish_up == 1 then
+	  break;
+	end
   end
   lsPlaySound("Complete.wav");
   lsMessageBox("Elapsed Time:", getElapsedTime(startTime), 1);
@@ -500,8 +508,15 @@ function harvestAll(loop_count)
       harvestLeft = seeds_per_iter - numSeedsHarvested;
     end
 
+  if finish_up == 0 and tonumber(loop_count) ~= tonumber(num_loops) then
+	if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Finish up") then
+	  finish_up = 1;
+	  finish_up_message = "\n\nFinishing up..."
+	end
+  end
+
     statusScreen("(" .. loop_count .. "/" .. num_loops ..
-                 ") Harvests Left: " .. harvestLeft .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
+                 ") Harvests Left: " .. harvestLeft .. "\n\nElapsed Time: " .. getElapsedTime(startTime) .. finish_up_message);
 
     lsSleep(refresh_time);
     srReadScreen();
