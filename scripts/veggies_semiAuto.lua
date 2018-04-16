@@ -17,74 +17,63 @@ waterImage = "WaterThese.png";
 harvestImage = "HarvestThese.png";
 thisIs = "This is";
 water_req = 1;  -- How many times to click the Water button per onion seed. Most are 1, some variations might need 2 per click.
-useWinManager = true;
 plantCloser = false;
 autoWater = true;
-pauseAfterHarvest = true;
-delayAfterHarvestPerPlant = 2000;
+delayAfterHarvestPerPlant = 2500;
+grid_x = 215;
+grid_y = 288;
 
 
 function doit()
   askForWindow("This macro does nothing except plant veggie seeds.\n\nIt will assist you by watering and harvesting your pinned windows when you click the trigger key. You must manually pin (or use Windows Manager) them yourself!\n\nBe in F8F8, zoomed in. Must have 'Plant all crops where you stand' turned OFF! Probably want to have chat minimized as well. Right click pins/unpins should be checked to properly close old windows\n\nPress Shift on ATITD window to continue.");
 
-wmText = "Tap control over planted veggies to open/pin.";
+center = getCenterPos();
 
 	chooseMethod();
 	config();
 
   while 1 do
+	  firstWater = 1;
+
+	main();
+	getPoints();
+	pinWindows();
+	waterThese();
+	refreshWindows();
+	  sleepWithStatus(delayAfterHarvestPerPlant*#tops, "Harvesting vegetables ...");
+	closeAllWindows(); -- This won't close the plant window, only the veggy windows
 
 	 if autoWater then
 	  drawWater();
 	 end
-
-	main();
-
-	 if useWinManager then
-	  windowManager("Plant Setup", wmText, false, true, 215, 288);
-	  firstWater = 1;
-	else
-	  firstWater = 0;
-	end
-
-	waterThese();
-
-	if pauseAfterHarvest then
-	  waitForShift();
-	else
-	  refreshWindows();
-	  sleepWithStatus(delayAfterHarvestPerPlant*#tops, "Harvesting vegetables ...");
-	end
-
-	closeAllWindows(); -- This won't close the plant window, only the veggy windows
-
   end
 end
 
 
 function waterThese()
-
   local was_shifted = lsShiftHeld();
   
   if (dropdown_cur_value == 1) then
   was_shifted = lsShiftHeld();
-  key = "tap Shift";
+  key = "Tap Shift";
   elseif (dropdown_cur_value == 2) then
   was_shifted = lsControlHeld();
-  key = "tap Ctrl";
+  key = "Tap Ctrl";
   elseif (dropdown_cur_value == 3) then
   was_shifted = lsAltHeld();
-  key = "tap Alt";
+  key = "Tap Alt";
   elseif (dropdown_cur_value == 4) then
   was_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
   key = "click MWheel ";
   end
   
   local is_done = false;
-
   while not is_done do
 
-    sleepWithStatus(100, key .. " to water/harvest pinned plants");
+  if firstWater == 0 then
+    sleepWithStatus(100, "When plant grows:\n\n" .. key .. " to water/harvest pinned plants");
+  end
+
     local is_shifted = lsShiftHeld();
 
     if (dropdown_cur_value == 1) then
@@ -96,20 +85,21 @@ function waterThese()
     elseif (dropdown_cur_value == 4) then
       is_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
     end
-    
+
     if (is_shifted and not was_shifted) or (firstWater == 1) then
-
-	firstWater = 0;
+	checkBreak();
 	refreshWindows();
-	lsSleep(200);
-
+	lsSleep(100);
 	srReadScreen();
 	local waters = findAllImages(waterImage);
 	local harvest = findAllImages(harvestImage);
 
+	statusScreen("Watering / Harvesting plants ...");
+
 	  if #harvest >= 1 then
 
 		  for i=#harvest,1,-1 do
+			checkBreak();
 			safeClick(harvest[i][0] + 5, harvest[i][1]);
 			lsSleep(click_delay);
 		  end
@@ -119,23 +109,22 @@ function waterThese()
 	  else
 
 		  for i=#waters,1,-1 do
-
+			checkBreak();
 			for water=1,water_req do
 			safeClick(waters[i][0] + 5, waters[i][1] + 5);
 			lsSleep(click_delay);
-
 		  end
+
+		if firstWater == 1 then
+	        sleepWithStatus(3000, "Giving first water, to ALL plants ...");
+		firstWater = 0;
+		end
     end
-
 	end
-
     end
     was_shifted = is_shifted;
-
   end
 end
-
-
 
 
 function config()
@@ -145,13 +134,13 @@ clickList = {};
   
   if (dropdown_cur_value == 1) then
   was_shifted = lsShiftHeld();
-  key = "tap Shift";
+  key = "Tap Shift";
   elseif (dropdown_cur_value == 2) then
   was_shifted = lsControlHeld();
-  key = "tap Ctrl";
+  key = "Tap Ctrl";
   elseif (dropdown_cur_value == 3) then
   was_shifted = lsAltHeld();
-  key = "tap Alt";
+  key = "Tap Alt";
   elseif (dropdown_cur_value == 4) then
   was_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
   key = "click MWheel ";
@@ -163,7 +152,7 @@ clickList = {};
   local z = 0;
 
   while not is_done do
-    sleepWithStatus(100, key .. " over plant window to record location and start planting"); 
+    sleepWithStatus(100, key .. " over seed name (in pinned plant window) to record location and begin planting"); 
     mx, my = srMousePos();
     local is_shifted = lsShiftHeld();
     
@@ -187,51 +176,7 @@ clickList = {};
 end
 
 
-function waitForShift()
-
-  local was_shifted = lsShiftHeld();
-  
-  if (dropdown_cur_value == 1) then
-  was_shifted = lsShiftHeld();
-  key = "tap Shift";
-  elseif (dropdown_cur_value == 2) then
-  was_shifted = lsControlHeld();
-  key = "tap Ctrl";
-  elseif (dropdown_cur_value == 3) then
-  was_shifted = lsAltHeld();
-  key = "tap Alt";
-  elseif (dropdown_cur_value == 4) then
-  was_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
-  key = "click MWheel ";
-  end
-  
-  local is_done = false;
-
-  while not is_done do
-    sleepWithStatus(100, "When done harvesting " .. key .. " to unpin old veggie windows.\n\nIf you need a break, do so now before you " .. key .. "\n\nIf you're tired, now is a good time to Ctrl+Shift to quit ...");
-    local is_shifted = lsShiftHeld();
-
-    if (dropdown_cur_value == 1) then
-      is_shifted = lsShiftHeld();
-    elseif (dropdown_cur_value == 2) then
-      is_shifted = lsControlHeld();
-    elseif (dropdown_cur_value == 3) then
-      is_shifted = lsAltHeld();
-    elseif (dropdown_cur_value == 4) then
-      is_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
-    end
-    
-    if is_shifted and not was_shifted then
-	break;
-    end
-    was_shifted = is_shifted;
-
-  end
-end
-
-
 function main()
-  srReadScreen();
   lsSleep(click_delay);
 
   for i = 0, count-1 do
@@ -250,8 +195,10 @@ function main()
 	end
     safeClick(BuildButton[0], BuildButton[1]);
     lsSleep(click_delay);
+    srSetMousePos(center[0],center[1]);
   end
 end
+
 
 
 function chooseMethod()
@@ -296,21 +243,13 @@ function chooseMethod()
 	y = y + 120;
       lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
       plantCloser = lsCheckBox(15, y, z, 0xffffffff, " Plant Veggies closer together", plantCloser);
-
-
-	y = y + 25;
-      useWinManager = lsCheckBox(15, y, z, 0xffffffff, " Use Windows Manager to pin", useWinManager);
 	y = y + 25;
       autoWater = lsCheckBox(15, y, z, 0xffffffff, " Auto gather water", autoWater);
-	y = y + 25;
-      pauseAfterHarvest = lsCheckBox(15, y, z, 0xffffffff, " Pause/Wait for Hotkey after Harvest", pauseAfterHarvest);
-
-
+	y = y + 50;
+      lsPrint(10, y, 0, 0.9, 0.9, 0xffffffff, "Click Delay: Pause between clicking each plant");
+	y = y + 20;
+      lsPrint(10, y, 0, 0.9, 0.9, 0xffffffff, "Plant closer: Not for large veggy, like cabbage");
       lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-	y = y - 75;
-      lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Click Delay: Pause between clicking each plant");
-	y = y + 15;
-      lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Plant closer: Not for large veggies, like cabbage");
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
         is_done = 1;
@@ -342,11 +281,12 @@ function closeAllWindows(x, y, width, height)
 
   local closeImages = {"ThisIs.png", "Ok.png"};
   local closeRight = {1, 1, nil};
-
   local found = true;
+
   while found do
     found = false;
     for i=1,#closeImages do
+
       local image = closeImages[i];
       local right = closeRight[i];
       srReadScreen();
@@ -371,4 +311,86 @@ function refreshWindows()
         	  safeClick(tops[i][0], tops[i][1]);
 		  lsSleep(10);
 	       end
+end
+
+
+function getCenterPos()
+	xyWindowSize = srGetWindowSize()
+	local ret = {};
+	ret[0] = xyWindowSize[0] / 2;
+	ret[1] = xyWindowSize[1] / 2;
+	return ret;
+end
+
+
+function pinWindows()
+    for i=1,#vegclickList do
+	checkBreak();
+	srSetMousePos(vegclickList[i][1], vegclickList[i][2]);
+	srSetMousePos(35, 135);
+	lsSleep(100);
+	srClickMouseNoMove(vegclickList[i][1], vegclickList[i][2], 1);
+	lsSleep(100);
+	end
+
+	arrangeInGrid(false, false, grid_x, grid_y);
+end
+
+
+function getPoints()
+vegclickList = {};
+  local was_shifted = lsShiftHeld();
+  
+  if (dropdown_cur_value == 1) then
+  was_shifted = lsShiftHeld();
+  key = "Tap Shift";
+  elseif (dropdown_cur_value == 2) then
+  was_shifted = lsControlHeld();
+  key = "Tap Ctrl";
+  elseif (dropdown_cur_value == 3) then
+  was_shifted = lsAltHeld();
+  key = "Tap Alt";
+  elseif (dropdown_cur_value == 4) then
+  was_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
+  key = "click MWheel ";
+  end
+  
+  local is_done = false;
+  local mx = 0;
+  local my = 0;
+  local z = 0;
+  while not is_done do
+    mx, my = srMousePos();
+    local is_shifted = lsShiftHeld();
+    
+    if (dropdown_cur_value == 1) then
+      is_shifted = lsShiftHeld();
+    elseif (dropdown_cur_value == 2) then
+      is_shifted = lsControlHeld();
+    elseif (dropdown_cur_value == 3) then
+      is_shifted = lsAltHeld();
+    elseif (dropdown_cur_value == 4) then
+      is_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
+    end
+    
+    if is_shifted and not was_shifted then
+      vegclickList[#vegclickList + 1] = {mx, my};
+    end
+    was_shifted = is_shifted;
+    checkBreak();
+    lsPrint(10, 10, z, 0.7, 0.7, 0xFFFFFFff,
+	    "Set Planted Veggy Locations (" .. #vegclickList .. ")");
+    lsPrint(10, 50, z, 0.7, 0.7, 0xFFFFFFff, "Quickly!");
+    lsPrint(10, 85, z, 0.7, 0.7, 0xFFFFFFff, key .. " over each veggie in ground!");
+    if #vegclickList == count then -- Break out of loop once #plants clicked
+    lsDoFrame();
+	break;
+    end
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
+                    "End script") then
+      error "Clicked End Script button";
+    end
+    lsDoFrame();
+    lsSleep(50);
+  end
 end
