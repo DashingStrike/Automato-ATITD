@@ -20,7 +20,7 @@ water_req = 1;  -- How many times to click the Water button per onion seed. Most
 plantCloser = false;
 autoWater = true;
 delayAfterHarvestPerPlant = 2500;
-grid_x = 215;
+grid_x = 240;
 grid_y = 288;
 
 
