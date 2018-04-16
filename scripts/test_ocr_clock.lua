@@ -130,7 +130,7 @@ clockSize = {
 		end -- while not Time do
 
       statusScreen("Mouse Pos: " .. pos[0] .. ", " .. pos[1] .. "\n\nYear: " .. year .. "\nDate: " .. Date .. "\nTime: " .. Time .. "\nRegion: " .. regionName .. "\nCoords: " 
-	  .. Coordinates .. "\nFaction: " .. faction .. "\n\nElapsed Egypt Mins: " .. minsElapsedGUI .. "\nLast Secs per Egypt Minute: " .. elapsedTimeSeconds .. "\nAvg Secs per Egypt Minute: " .. elapsedTimeAvg .. "\nEstimated Last Duck Time: " 
+	  .. Coordinates .. "\nFaction: " .. faction .. "\n" .. bonus .. "\n\nElapsed Egypt Mins: " .. minsElapsedGUI .. "\nLast Secs per Egypt Minute: " .. elapsedTimeSeconds .. "\nAvg Secs per Egypt Minute: " .. elapsedTimeAvg .. "\nEstimated Last Duck Time: " 
 	  .. duckTimeSeconds .. "\nEstimated Duck Time Avg: " .. duckTimeAvg, nil, nil, 0.7);
 
 		if faction == "Hyksos" or faction == " Hyksos" then
@@ -199,8 +199,18 @@ Time = nil;
 	regionInfo = string.sub(regionInfo,string.find(regionInfo,",")+1);
 	Coordinates = string.sub(regionInfo,string.find(regionInfo,":") + 2);
 	regionName = string.sub(regionInfo, 1,( string.len(regionInfo) - string.len(Coordinates) -2));
-	faction = table.concat(lines[3]) -- Line 3 on the clock
-	faction = string.sub(faction, 13);
+
+	faction = table.concat(lines[3], ",") -- Line 3 on the clock
+	faction = string.sub(faction,string.find(faction,":") + 2);
+
+	benefit = findText("Who benefit from");
+	  if benefit then
+	    bonus = table.concat(lines[4], ",") -- Line 4 on the clock
+	    bonus = string.sub(bonus,string.find(bonus,":") + 2);
+	  else
+	    bonus = "";
+	  end
+
     end
   end
 end
