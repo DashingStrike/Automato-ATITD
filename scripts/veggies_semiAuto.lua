@@ -21,7 +21,7 @@ autoWater = true;
 pauseAfterHarvest = true;
 manualPin = false;
 
-delayAfterHarvestPerPlant = 2250;
+delayAfterHarvestPerPlant = 2500;
 grid_x = 240;
 grid_y = 100;
 
@@ -94,11 +94,9 @@ function waterThese()
     end
 
   if firstWater == 0 then
-    sleepWithStatus(100, "When plant grows:\n\n" .. key .. " to water/harvest pinned plants");
+    sleepWithStatus(100, "When ALL plants grow:\n\n" .. key .. " to Water/Harvest plants");
   elseif firstWater == 1 and manualPin then
     sleepWithStatus(100, "After you pin your windows:\n\n" .. key .. " to water pinned plants");
-  elseif firstWater == 1 and not manualPin then
-    statusScreen("Giving first water, to ALL plants ...");
   else
    checkBreak();
   end
@@ -128,11 +126,16 @@ function waterThese()
 
 		  for i=#waters,1,-1 do
 		    checkBreak();
-		    firstWater = 0;
 			  for water=1,water_req do
 			    safeClick(waters[i][0] + 5, waters[i][1] + 5);
 			    lsSleep(click_delay);
 		         end
+
+			if firstWater == 1 and not manualPin then
+			  sleepWithStatus(3000, "Giving FIRST watering, to ALL plants ...");
+			end
+
+		  firstWater = 0;
 		  end
 	  end
     end
@@ -207,8 +210,8 @@ function main()
 	end
     safeClick(BuildButton[0], BuildButton[1]);
     lsSleep(click_delay);
-    srSetMousePos(center[0],center[1]);
   end
+    srSetMousePos(center[0],center[1]);
 end
 
 
@@ -259,7 +262,7 @@ function chooseMethod()
 	y = y + 25;
       pauseAfterHarvest = lsCheckBox(15, y, z, 0xffffffff, " Pause/Wait for Trigger after Harvest", pauseAfterHarvest);
 	y = y + 25;
-      manualPin = lsCheckBox(15, y, z, 0xffffffff, " Let me Pin plant windows manually", manualPin);
+      manualPin = lsCheckBox(15, y, z, 0xffffffff, " Let me Pin plant windows Manually", manualPin);
 	y = y + 40;
       lsPrint(10, y, 0, 0.9, 0.9, 0xffffffff, "Click Delay: Pause between clicking each plant");
 	y = y + 20;
