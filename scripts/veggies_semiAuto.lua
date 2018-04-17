@@ -29,7 +29,7 @@ grid_y = 100;
 function doit()
   askForWindow("This macro will assist you by planting seeds, watering/harvesting your pinned windows when you tap the hotkey. After seeds are planted, you will tap hotkey over each plant, it will then pin the windows for you and do first watering automatically. After first watering, you will then tap hotkey to water/harvest (after you see it grow).\n\nBe in F8F8, zoomed in. Must have 'Plant all crops where you stand' turned OFF! Right click pins/unpins Must be ON!\n\nPress Shift over ATITD window to continue.");
 
-center = getCenterPos();
+  center = getCenterPos();
 
 	chooseMethod();
 	setCameraView(CARTOGRAPHER2CAM);
@@ -233,7 +233,7 @@ function chooseMethod()
       count = tonumber(count);
       if not count then
         is_done = false;
-        lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        lsPrint(10, y+19, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
         count = 6;
       end
 	y = y + 35;
@@ -242,7 +242,7 @@ function chooseMethod()
       water_req = tonumber(water_req);
       if not water_req then
         is_done = false;
-        lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        lsPrint(10, y+19, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
         water_req = 1;
       end
 	y = y + 35;
@@ -251,7 +251,7 @@ function chooseMethod()
       click_delay = tonumber(click_delay);
       if not click_delay then
         is_done = false;
-        lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        lsPrint(10, y+19, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
         click_delay = 50;
       end
 	y = y + 120;
@@ -352,6 +352,7 @@ function pinWindows()
 	lsSleep(75);
 	end
 	arrangeStashed(false, false, grid_x, grid_y);
+    srSetMousePos(center[0],center[1]);
 end
 
 
