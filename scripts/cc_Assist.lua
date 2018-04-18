@@ -13,7 +13,7 @@ askText = singleLine([[
   corner of the screen.
 ]]);
 
-wmText = "Tap control on Charcoal Hearths or Ovens to open and pin.";
+wmText = "Tap Ctrl on Charcoal Hearths or Ovens\nto open and pin. Tap Alt to open, pin\nand stash.";
 
 click_delay = 0;
 

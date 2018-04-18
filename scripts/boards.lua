@@ -12,7 +12,7 @@ askText = singleLine([[
   corner of the screen.
 ]]);
 
-wmText = "Tap control on Wood Planes or Carpentry Benches to open and pin.";
+wmText = "Tap Ctrl on Wood Planes or Carpentry\nBenches to open and pin.\n\nTap Alt to open, pin and stash.";
 
 --Amount of time to pause after clicking the plane woods button (ms)
 pause_time = 3000; 

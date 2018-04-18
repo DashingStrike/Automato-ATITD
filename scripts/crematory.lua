@@ -11,7 +11,7 @@ askText = singleLine([[
   Automatically runs one or more crematories.
 ]]);
 
-wmText = "Tap control on Crematories to open and pin.";
+wmText = "Tap Ctrl on Crematories to open and pin.\nTap Alt to open, pin and stash.";
 
 OPP = 0;
 SAME_UP = 1;

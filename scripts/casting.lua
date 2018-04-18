@@ -12,7 +12,7 @@ askText = singleLine([[
   corner of the screen.
 ]]);
 
-wmText = "1) Manually add charcoal and light CB\'s.\n2) Make sure CB\'s are lit before pinning!\n3) Tap Ctrl on CB\'s to open and pin.";
+wmText = "1) Manually add charcoal and light CB\'s.\n2) Make sure CB\'s are lit before pinning!\n\nTap Ctrl on CB\'s to open and pin.\nTap Alt on CB\'s to open, pin and stash.";
 
 --Global Variables. Dont change!
 click_delay = 0;

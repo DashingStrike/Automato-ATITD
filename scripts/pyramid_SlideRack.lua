@@ -9,7 +9,7 @@ askText = singleLine([[
   Pyramid - Slide Rolling Rack Assistant by Cegaiel --
 This macro assists in digging around the limestone blocks. Pin up all 'Tooth Limestone Block Excavation' windows near you. The macro will always click 'Slide a rolling rack under the block' when it appears. Else it will keep clicking 'Dig around this block'. Windows will close automatically once the 'Slide a rolling rack' has been clicked. Make sure no windows overlap each other (Optionally, you can use Windows Manager on next screen, to assist). Make sure your skills window is visible. Macro DOES monitor if you're tired (Red stats). Press Shift over ATITD windows to continue.]])
 
-wmText = "Tap Ctrl on Limestone Blocks to open/pin.";
+wmText = "Tap Ctrl on Limestone Blocks to open/pin.\nTap Alt to open, pin and stash.";
 
 
 

@@ -12,7 +12,7 @@ askText = singleLine([[
   corner of the screen.
 ]]);
 
-wmText = "1) Manually add charcoal and light forges.\n2) Make sure forges are lit before pinning!\n3) Tap control on Forges to open and pin.";
+wmText = "1) Manually add charcoal and light forges.\n2) Make sure forges are lit before pinning!\n\nTap Ctrl on Forges to open and pin.\nTap Alt on Forges to open, pin and stash.";
 
 --Global Variables. Dont change!
 click_delay = 0;

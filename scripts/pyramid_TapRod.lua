@@ -9,7 +9,7 @@ askText = singleLine([[
   Pyramid - Bore Hole Assistant by Cegaiel --
 This macro assists in digging up limestone blocks. Pin up all 'Bore Hole' windows near you. The macro will always click 'Crack Outline' when it appears. Else it will keep clicking 'Tap Bore'. Windows will close automatically once the 'Crack Outline' has been clicked. Make sure no Bore windows overlap each other (Optionally, you can use Windows Manager on next screen, to assist). Make sure your skills window is visible. Macro DOES monitor if you're tired (Red stats). Press Shift over ATITD windows to continue.]])
 
-wmText = "Tap Ctrl on Bore Holes to open and pin.";
+wmText = "Tap Ctrl on Bore Holes to open and pin.\nTap Alt to open, pin and stash.";
 
 
 
