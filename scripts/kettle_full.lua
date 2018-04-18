@@ -11,7 +11,7 @@ askText = singleLine([[
   VT window is in the TOP-RIGHT corner of the screen.
 ]])
 
-wmText = "Tap control on kettles to open and pin.";
+wmText = "Tap Ctrl on kettles to open and pin.\nTap Alt on kettles to open, pin and stash.";
 
 actions = {
   {
@@ -202,7 +202,7 @@ end
 
 function doit()
   askForWindow(askText);
-  windowManager("Kettle Setup", wmText, false, true, 215, 298);
+  windowManager("Kettle Setup", wmText, false, true, 215, 288);
   askForFocus();
   unpinOnExit(menuKettles);
 end
