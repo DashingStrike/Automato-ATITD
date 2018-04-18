@@ -157,6 +157,8 @@ function igniteAll()
     lsSleep(50);
   end
   if #ignite > 0 then
+    --The lag is causing the refresh to not show "stoke max". Need a bit of a pause.
+    sleepWithStatus(2000, "Waiting for refresh");
     refreshAll();
   end
 end
