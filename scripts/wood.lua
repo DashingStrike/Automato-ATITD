@@ -74,6 +74,7 @@ function doit()
 		carrots = srFindImage("EatSomeGrilledCarrots.png");
 
 		carrot_note = "";
+		eat_carrots = nil;
 		if carrots then
 			carrot_time_left = carrot_timer + carrot_delay_time - lsGetTimer();
 			if carrot_time_left < 0 then
