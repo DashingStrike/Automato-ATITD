@@ -40,7 +40,7 @@ elapsedTimeAvg = 0;
 duckTime = 0;
 duckTimeSeconds = 0;
 duckTimeAvg = 0;
-minsElapsedGUI = "Waiting change";
+minsElapsedGUI = "Awaiting Change";
 message = "";
 message2 = "";
 
