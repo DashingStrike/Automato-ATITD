@@ -382,6 +382,8 @@ function checkAbort()
 end
 
 function workMine()
+	workMineButtonLoc = getMousePos(); 
+	workMineButtonLocSet = true;
       srSetMousePos(mineX, mineY);
       lsSleep(clickDelay);
       --Send 'W' key over Mine to Work it (Get new nodes)
@@ -532,6 +534,10 @@ function clickSequence()
   end
 	if autoWorkMine then
 	workMine();
+	else
+	    if workMineButtonLocSet then
+            srSetMousePos(workMineButtonLoc[0], workMineButtonLoc[1]); 
+	    end
 	end
 
   TakeGemWindowRefresh();
