@@ -349,9 +349,8 @@ function getPoints()
 
   if #clickList == 0 then
     if lsButtonText(10, lsScreenY - 30, z, 110, 0xffff80ff, "Work Mine") then
-	local pos = getMousePos();	
       workMine();
-	srSetMousePos(pos[0], pos[1]);
+	srSetMousePos(mineX, mineY);
     end
   end
 
