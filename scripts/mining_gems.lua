@@ -1,24 +1,29 @@
--- mining_sand.lua v2.0 -- by Cegaiel
+-- mining_sand.lua v2.0.1 -- by Cegaiel
 --
 -- Works the sand mine, but requires a little thought and input from you ;)
 -- You must click on all Quintuple colors FIRST, all Quadruple colors NEXT, all Triple colors NEXT, all Paired colors NEXT, then ALL Single colored stones LAST.
 --
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- Additional credits to Tallow for his assistance with stream lining code (embedded arrays and more efficient looping in function clickSequence() - v1.2) 
--- Thanks to Sabahl for the new 6 color (1 Pair) array, which is alternative method that breaks 6 nodes simutaneously. Supposedly better chance at a Huge Gem.
+-- Thanks to Sabahl for the new 6 color (1 Pair) array, which is alternative method that breaks 6 nodes simultaneously. Supposedly better chance at a Huge Gem, when breaking more stones at same time.
 
---Version has jumped from 1.3 to 2.0.  2.0 now reads main chat and no longer asks you to enter Node Delay. It should be able to run very fast and auto-adjust to lag.
---It will pause after clicking each sequence until one of 3 things happens
---1: A popup occurs (popup's are bad on Sand Mines and shouldn't occur). This suggests you didn't set the stones correctly or chose wrong option on pulldown menu
---2: The main chat's last line change (ie you got sand, gem or something)
---3: A 6 second pause has occured. Likely super lag or something wrong in macro happened (bug)
+-- Version has jumped from 1.3 to 2.0.  2.0 now reads main chat and no longer asks you to enter Node Delay. It should be able to run very fast and auto-adjust to lag.
+-- It will pause after clicking each sequence until one of 3 things happens
+-- 1: A popup occurs (popup's are bad on Sand Mines and shouldn't occur). This suggests you didn't set the stones correctly or chose wrong option on pulldown menu.
+-- 2: The main chat's last line change (ie you got sand, gem or something)
+-- 3: A 6 second pause has occured. Likely super lag or something wrong in macro happened (bug)
 
+-- Version 2.0.1 Some regions give a faction bonus to Ore Yield ( this includes bonus to Sand, go figure ^_^ ).  ATITD Clock will tell when bonuses apply; ie 'Who Benefit From: Increased Ore Yield by 10%'.
+-- This bonus causes two messages to appear simultaneously, in main chat, for every action that normally produces a message. 
+-- 1st Message: 'Local support boosted your pull from ### to ###'. 2nd message (normal message): Your workload contained ### Sand or 'You got some coal and a Small Sapphire', etc.
+-- 2.0.1 attempts to address this extra message which might result in unintended behavior. Sometimes when parsing last chat line, it catches the 'Local support boosted' message, causing it to break look prematurely.
+-- Also reduced the 6s timer down to 5s (something went wrong or couldn't detect a new message (likely two messages back to back), break loop and continue).
 
 dofile("common.inc");
 dofile("settings.inc");
 
 
-askText = "Sand Mining v2.0 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
+askText = "Sand Mining v2.0.1 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
 
 
 muteSoundEffects = true;
@@ -27,6 +32,8 @@ dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
 dropdown_cur_value = 1;
 dropdown_pattern_values = {"6 color (1 Pair) (*)", "5 color (2 Pair) (*)", "4 color (3 Pair) (*)", "5 color (Triple) (1)", "4 color (Triple+Pair) (3)", "4 color (Quadruple) (1)", "3 Color (Quad + Pair) (6)", "3 color (Quintuple) (2)", "7 Color (All Different) (*)"};
 dropdown_pattern_cur_value = 1;
+lastLineFound = "";
+debug = false;
 
 allSets = {
 
@@ -216,16 +223,16 @@ function getMineLoc()
     end
     was_shifted = is_shifted;
     checkBreak();
-    lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
+    lsPrint(10, 10, z, 1.0, 1.0, 0x80ff80ff,
 	    "Set Mine Location");
-    local y = 60;
+    local y = 50;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Lock ATITD screen (Alt+L) .");
     y = y + 20;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Suggest F5 view, zoomed about 75% out.");
-    y = y + 60;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Hover and " .. key .. " over the MINE.");
-    y = y + 70;
-    lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "TIP (Optional):");
+    y = y + 40;
+    lsPrint(5, y, z, 0.7, 0.7, 0x80ff80ff, "Hover and " .. key .. " over the MINE.");
+    y = y + 40;
+    lsPrint(5, y, 0, 0.6, 0.6, 0xffff80ff, "TIP (Optional):");
     y = y + 20;
     lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "For Maximum Performance (least lag) Uncheck:");
     y = y + 16;
@@ -299,21 +306,25 @@ function getPoints()
     y = y + 20;
     lsPrint(5, y, z, 0.8, 0.8, 0xFFFFFFff,
 	    "Set Node Locations (" .. #clickList .. "/7)");
-    y = y + 75;
-    lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
+    y = y + 60;
+    lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
 	autoWorkMine = readSetting("autoWorkMine",autoWorkMine);
     autoWorkMine = lsCheckBox(15, y, z, 0xffffffff, " Auto 'Work Mine'", autoWorkMine);
 	writeSetting("autoWorkMine",autoWorkMine);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-    y = y - 20
-    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Hover and " .. key .. " each node, in this order:");
-    y = y + 15;
-    lsPrint(5, y, z, 0.5, 0.5, 0xf0f0f0ff, "Quintuples (5 same color), Quadruples (4 same color)");
-    y = y + 15;
-    lsPrint(5, y, z, 0.5, 0.5, 0xf0f0f0ff, "Triples (3 same color), Pairs (2 same color)");
-    y = y + 15;
-    lsPrint(5, y, z, 0.5, 0.5, 0xf0f0f0ff, "Single colored nodes (1 color)");
+    y = y + 5
+    lsPrint(5, y, z, 0.65, 0.65, 0xf0f0f0ff, "Hover and " .. key .. " each node, in this order:");
     y = y + 20;
+    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Quintuples (5 same color)");
+    y = y + 15;
+    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Quadruples (4 same color)");
+    y = y + 15;
+    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Triples (3 same color)");
+    y = y + 15;
+    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Pairs (2 same color)");
+    y = y + 15;
+    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Single colored nodes (1 color)");
+    y = y + 30;
     lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Ingame Popup? Suggests you chose wrong pattern.");
     y = y + 15;
     lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Or you need to adjust the delays (previous menu).");
@@ -342,9 +353,7 @@ function getPoints()
 
   if #clickList == 0 then
     if lsButtonText(10, lsScreenY - 30, z, 110, 0xffff80ff, "Work Mine") then
-	local pos = getMousePos();	
       workMine();
-	srSetMousePos(pos[0], pos[1]);
     end
   end
 
@@ -397,7 +406,7 @@ function TakeGemWindowRefresh()
  findHugeGems = findText("Huge");
  if findHugeGems then
   lsPlaySound("applause.wav");
- sleepWithStatus(15000, "Congrats! You found a huge gem... You should take it now! If you have a Huge Gem in inventory, then hide your inventory to stop this alert/applause.");
+ sleepWithStatus(15000, "Congrats! You found a Huge Gem!\n\nYou should take it now!\n\nIf you already have a Huge Gem in inventory, then hide your inventory to stop this alert/applause.", 0x80ff80ff, 0.7, 0.7);
  end
 
 end
@@ -446,6 +455,15 @@ function chatRead()
    --Read last line of chat and strip the timer ie [01m]+space from it.
    lastLineParse = string.sub(lastLine,string.find(lastLine,"m]")+3,string.len(lastLine));
 
+   if string.sub(lastLineParse, 1, 21) == "Local support boosted" then
+	  localSupportResult = true;
+	  localSupportResultDebug = "True";
+	  localSupportResultDebugColor = 0xff8080ff;
+	else
+	  localSupportResult = false;
+	  localSupportResultDebug = "False"
+	  localSupportResultDebugColor = 0xffffffff;
+	end
 end
 
 
@@ -455,10 +473,9 @@ function findClosePopUp()
   startTime = lsGetTimer();
 
     while 1 do
-      checkBreak();
- 	chatRead();
-	lsSleep(clickDelay);
-       OK = srFindImage("OK.png");
+	checkBreak();
+	chatRead();
+	OK = srFindImage("OK.png");
 
 	  if OK then  
 	    srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
@@ -466,9 +483,12 @@ function findClosePopUp()
 	    break;
 	  end
 
-	lsSleep(clickDelay);
+			-- Use to Debug before and after messages in main chat
+			if localSupportResult and debug then
+			  sleepWithStatus(1000, "lastLineFound:\n" .. lastLineFound .. "\n\nlastLineParse:\n" .. lastLineParse .. "\n\nlocalSupport: " .. localSupportResultDebug, localSupportResultDebugColor, 0.8, 0.8);  
+			end
 
-	  if (lastLineFound ~= lastLineParse) or ( (lsGetTimer() - startTime) > 6000) then
+	  if ( lastLineFound ~= lastLineParse and not localSupportResult ) or ( (lsGetTimer() - startTime) > 5000 )  then
 	    break;
 	  end
 
@@ -477,7 +497,7 @@ end
 
 
 function clickSequence()
-  sleepWithStatus(150, "Starting...");
+  sleepWithStatus(250, "Starting...\n\nDon\'t touch mouse!");
   chatRead();
 
   local startMiningTime = lsGetTimer();
@@ -504,7 +524,7 @@ function clickSequence()
   y = y +50
   lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "[" .. worked .. "/" .. #sets .. "]  " .. #currentSet .. " Nodes Worked: " .. table.concat(currentSet, ", "));
   y = y + 40;
-  lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Node Delay: " .. clickDelay .. " ms");
+  lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Click Delay: " .. clickDelay .. " ms");
   y = y + 40;
   lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Hold Shift to Abort and Return to Menu.");
   y = y + 40;
@@ -537,8 +557,8 @@ function promptDelays()
 	writeSetting("dropdown_cur_value",dropdown_cur_value);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     y = y + 35;
-    lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Node Delay (ms):");
-    is_done, clickDelay = lsEditBox("delay", 165, y, 0, 50, 30, 1.0, 1.0,
+    lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Click Delay (ms):");
+    is_done, clickDelay = lsEditBox("delay", 155, y, 0, 50, 30, 1.0, 1.0,
                                      0x000000ff, 150);
      clickDelay = tonumber(clickDelay);
        if not clickDelay then
@@ -546,14 +566,20 @@ function promptDelays()
          lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
          clickDelay = 200;
        end
-	y = y + 60;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Delay between selecting each node.");
+	y = y + 50;
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Click Delay: Delay between most actions.");
 	y = y + 16;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Decrease value to run faster (try increments of 50)");
-	y = y + 60;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffff80ff, "Minimized Chat Channels MUST BE VISIBLE!");
+	y = y + 30;
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffff80ff, "Minimized chat-channels MUST be ON!");
 	y = y + 16;
-      lsPrint(5, y, 0, 0.6, 0.6, 0xffff80ff, "Options, Chat-Related, Minimize");
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffff80ff, "See: Options, Chat-Related, 'Minimize' section.");
+	y = y + 28;
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffff80ff, "Main chat tab MUST be showing and wide enough");
+	y = y + 16;
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffff80ff, "so that word wrapping does NOT occur.");
+	y = y + 28;
+      lsPrint(5, y, 0, 0.6, 0.6, 0xffff80ff, "Chat window MUST be minimized!");
 	y = y + 16;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffff80ff, "Main chat tab MUST be showing!");
 
