@@ -543,6 +543,9 @@ function clickSequence()
   TakeGemWindowRefresh();
   reset();
 
+    if workMineButtonLocSet and not autoWorkMine then
+     srSetMousePos(workMineButtonLoc[0], workMineButtonLoc[1]); 
+    end
 end
 
 function promptDelays()
