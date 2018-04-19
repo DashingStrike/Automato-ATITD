@@ -306,25 +306,21 @@ function getPoints()
     y = y + 20;
     lsPrint(5, y, z, 0.8, 0.8, 0xFFFFFFff,
 	    "Set Node Locations (" .. #clickList .. "/7)");
-    y = y + 60;
-    lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
+    y = y + 75;
+    lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
 	autoWorkMine = readSetting("autoWorkMine",autoWorkMine);
     autoWorkMine = lsCheckBox(15, y, z, 0xffffffff, " Auto 'Work Mine'", autoWorkMine);
 	writeSetting("autoWorkMine",autoWorkMine);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-    y = y + 5
-    lsPrint(5, y, z, 0.65, 0.65, 0xf0f0f0ff, "Hover and " .. key .. " each node, in this order:");
+    y = y - 20
+    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Hover and " .. key .. " each node, in this order:");
+    y = y + 15;
+    lsPrint(5, y, z, 0.5, 0.5, 0xf0f0f0ff, "Quintuples (5 same color), Quadruples (4 same color)");
+    y = y + 15;
+    lsPrint(5, y, z, 0.5, 0.5, 0xf0f0f0ff, "Triples (3 same color), Pairs (2 same color)");
+    y = y + 15;
+    lsPrint(5, y, z, 0.5, 0.5, 0xf0f0f0ff, "Single colored nodes (1 color)");
     y = y + 20;
-    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Quintuples (5 same color)");
-    y = y + 15;
-    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Quadruples (4 same color)");
-    y = y + 15;
-    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Triples (3 same color)");
-    y = y + 15;
-    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Pairs (2 same color)");
-    y = y + 15;
-    lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Single colored nodes (1 color)");
-    y = y + 30;
     lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Ingame Popup? Suggests you chose wrong pattern.");
     y = y + 15;
     lsPrint(5, y, z, 0.6, 0.6, 0xf0f0f0ff, "Or you need to adjust the delays (previous menu).");
@@ -338,9 +334,9 @@ function getPoints()
     local index = 0;
 
     for i=start,#clickList do
-      local xOff = (index % 3) * 100;
-      local yOff = (index - index%3)/2 * 15;
-      lsPrint(20 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff,
+      local xOff = (index % 4) * 70;
+      local yOff = (index - index%4)/2 * 7;
+      lsPrint(5 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff,
               i .. ": (" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
       index = index + 1;
     end
@@ -353,7 +349,9 @@ function getPoints()
 
   if #clickList == 0 then
     if lsButtonText(10, lsScreenY - 30, z, 110, 0xffff80ff, "Work Mine") then
+	local pos = getMousePos();	
       workMine();
+	srSetMousePos(pos[0], pos[1]);
     end
   end
 
