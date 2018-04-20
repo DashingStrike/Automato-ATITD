@@ -1,4 +1,4 @@
--- mining_ore.lua v2.0.2 -- by Cegaiel
+-- mining_ore.lua v2.1.0 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -14,7 +14,7 @@
 
 dofile("common.inc");
 
-info = "Ore Mining v2.0.2 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
+info = "Ore Mining v2.1.0 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -229,7 +229,7 @@ function getPoints()
 	    "Set Node Locations (" .. #clickList .. "/" .. stonecount .. ")");
     local y = 60;
     lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
-    autoWorkMine = lsCheckBox(15, y, z, 0xffff80ff, " Auto 'Work Mine'", autoWorkMine);
+    autoWorkMine = lsCheckBox(15, y, z, 0xffffffff, " Auto 'Work Mine'", autoWorkMine);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     y = y + 10
     lsPrint(10, y, z, 0.7, 0.7, 0xc0c0ffff, "Hover and " .. key .. " over each node.");
@@ -254,9 +254,9 @@ function getPoints()
     local start = math.max(1, #clickList - 20);
     local index = 0;
     for i=start,#clickList do
-      local xOff = (index % 3) * 100;
-      local yOff = (index - index%3)/2 * 15;
-      lsPrint(20 + xOff, y + yOff, z, 0.5, 0.5, 0xffff80ff,
+      local xOff = (index % 4) * 70;
+      local yOff = (index - index%4)/2 * 7;
+      lsPrint(5 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff,
               i .. ": (" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
       index = index + 1;
     end
@@ -429,10 +429,7 @@ function findClosePopUp()
 
     while 1 do
       checkBreak();
-      srReadScreen();
-	lsSleep(50);
 	chatRead();
-	lsSleep(50);
        OK = srFindImage("OK.png");
 
 		if clickDelay < minPopSleepDelay then
@@ -441,20 +438,21 @@ function findClosePopUp()
 		  popSleepDelay = clickDelay
 		end
 
+	  if OK then  
+	    srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
+	    lsSleep(clickDelay);
+	    break;
+	  end
+
 		--If we gathered new ore, add to tally and don't wait for popup.
-		--Beware, ugly quick hack: In the rare chance you get the exact # of ore back to back, then that 6000ms countdown timer will also force the break.
-	  if (lastOreGathered ~= oreGathered) or ( (lsGetTimer() - startTime) > 6000) then
+		--Beware, ugly quick hack: In the rare chance you get the exact # of ore back to back, then that 5000ms countdown timer will also force the break.
+	  if (lastOreGathered ~= oreGathered and not localSupportResult) or ( (lsGetTimer() - startTime) > 5000) then
 	  	oreGatheredTotal = oreGatheredTotal + oreGathered;
 	  	oreGatheredLast = oreGatheredLast + oreGathered;
 	    lsSleep(popSleepDelay);
 	    break;
 	  end
 
-	  if OK then  
-	    srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
-	    lsSleep(popSleepDelay);
-	    break;
-	  end
     end
 end
 
@@ -492,9 +490,9 @@ end
 
 
 function chatRead()
-	--Find the last line of chat
-	--lsSleep(100);
+   srReadScreen();
    local chatText = getChatText();
+   lsSleep(100);
    local onMain = checkIfMain(chatText);
 
    if not onMain then
@@ -513,9 +511,21 @@ function chatRead()
    end
    
    lastLine = chatText[#chatText][2];
-   oreGathered = string.match(lastLine, "(%d+) " .. ore);
-	if not oreGathered then
-	oreGathered = 0;
+   --Read last line of chat and strip the timer ie [01m]+space from it.
+   lastLineParse = string.sub(lastLine,string.find(lastLine,"m]")+3,string.len(lastLine));
+
+	if string.sub(lastLineParse, 1, 21) == "Local support boosted" then
+	  localSupportResult = true;
+	  localSupportResultDebug = "True";
+	  localSupportResultDebugColor = 0xff8080ff;
+	else
+	  localSupportResult = false;
+	  localSupportResultDebug = "False"
+	  localSupportResultDebugColor = 0xffffffff;
+	  oreGathered = string.match(lastLine, "(%d+) " .. ore);
+		if not oreGathered then
+		  oreGathered = 0;
+		end
 	end
 end
 
