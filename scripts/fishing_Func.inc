@@ -74,13 +74,13 @@ Chat_Types = {
 
 -- Don't change order, we want the best towards the top, worst at the bottom. We want to select the best lure first.
 Lure_Types = {
-"Fresh",
-"Glazed",
-"Preserved",
-"Hardened",
-"Mummified",
-"Petrified",
 "Glassified",
+"Petrified",
+"Mummified",
+"Hardened",
+"Preserved",
+"Glazed",
+"Fresh",
 };
 
 
