@@ -143,18 +143,43 @@ function drawBottomButton(xOffset, text)
     return lsButtonText(lsScreenX - xOffset, lsScreenY - 30, z, 100, WHITE, text);
 end
 
+-- Added in an explode function (delimiter, string) to deal with broken csplit.
+function explode(d,p)
+   local t, ll
+   t={}
+   ll=0
+   if(#p == 1) then
+      return {p}
+   end
+   while true do
+      l = string.find(p, d, ll, true) -- find the next d in the string
+      if l ~= nil then -- if "not not" found then..
+         table.insert(t, string.sub(p,ll,l-1)) -- Save it in our array.
+         ll = l + 1 -- save just after where we found it for searching next time.
+      else
+         table.insert(t, string.sub(p,ll)) -- Save what's left in our array.
+         break -- Break at end, as it should be, according to the lua manual.
+      end
+   end
+   return t
+end
+
 function setLine(tree, line, lineNo)
-    local sections = csplit(line, ":");
+    --local sections = csplit(line, ":");
+	local sections = explode(":",line);
+	--error(sections[2])
     if #sections ~= 2 then
-        error("Cannot parse line: " .. line);
+        error("Cannot parse line: " .. line .. " Sections equal " .. #sections);
     end
     COLOR_NAMES[lineNo] = sections[1]:match( "^%s*(.-)%s*$" );
-    sections = csplit(sections[2], "-");
+    --sections = csplit(sections[2], "-");
+	sections = explode("-",sections[2])
     if #sections ~= 2 then
         error("Cannot parse line: " .. line);
     end
-    local tags = csplit(sections[1]:match( "^%s*(.-)%s*$" ), " ");
-    local index = 1;
+    --local tags = csplit(sections[1]:match( "^%s*(.-)%s*$" ), " ");
+    local tags = explode(" ",sections[1]:match( "^%s*(.-)%s*$" ));
+	local index = 1;
     tree[lineNo] = {ingredient={},amount={}};
     for i=1, #tags do
         if i % 2 == 1 then
