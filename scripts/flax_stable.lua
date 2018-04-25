@@ -317,6 +317,8 @@ function doit()
   startTime = lsGetTimer();
 
   for loop_count=1, num_loops do
+    firstSeedHarvest = false;
+    quit = false;
     error_status = "";
     numSeedsHarvested = 0;
     clicks = {};
@@ -325,7 +327,7 @@ function doit()
     harvestAll(loop_count);
     walkHome(loop_count, startPos);
     drawWater();
-	if finish_up == 1 then
+	if finish_up == 1 or quit then
 	  break;
 	end
   end
@@ -508,6 +510,13 @@ function harvestAll(loop_count)
       harvestLeft = seeds_per_iter - numSeedsHarvested;
     end
 
+    if not is_plant and firstSeedHarvest then
+	if lsButtonText(lsScreenX - 110, lsScreenY - 90, z, 100, 0xFFFFFFff, "Rip Plants") then
+	  ripOutAllSeeds();
+	  quit = true; 
+	end
+  end
+
   if finish_up == 0 and tonumber(loop_count) ~= tonumber(num_loops) then
 	if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Finish up") then
 	  finish_up = 1;
@@ -570,6 +579,7 @@ function harvestAll(loop_count)
           trackClick(seedsList[i][0], seedsList[i][1]);
           numSeedsHarvested = numSeedsHarvested + 1;
         end
+      firstSeedHarvest = true;
       end
     end
     
