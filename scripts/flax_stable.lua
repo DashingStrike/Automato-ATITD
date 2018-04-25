@@ -63,7 +63,7 @@ xyFlaxMenu = {};
 
 -- The flax bed window
 local window_w = 0;  -- Just a declaration, changes based on method in promptFlaxNumbers()
-window_h = 125;  
+window_h = 145;  
 
 -- To allow 5x5 seeds on a 1920 width screen, we need to tweak the arrangeStashed function to only allow 50px for automato window
 space_to_leave = 50; 
@@ -204,6 +204,7 @@ function promptFlaxNumbers()
     if is_plant then
       -- Will plant and harvest flax
       window_w = 255; 
+      window_h = 133;
       space_to_leave = false; 
       lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xffff40ff, "Uncheck \"Grow Flax\" for SEEDS!");
       y = y + 24;
@@ -476,7 +477,6 @@ function dragWindows(loop_count)
   else
     arrangeStashed(nil, true, window_w, window_h, space_to_leave);
   end
-
 end
 
 -------------------------------------------------------------------------------
@@ -627,10 +627,12 @@ end
 -------------------------------------------------------------------------------
 
 function ripOutAllSeeds()
+  checkBreak();
   statusScreen("Ripping Out" .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
   srReadScreen();
   flaxRegions = findAllText("This is ", nil, REGION)
   for i = 1, #flaxRegions do
+    checkBreak();
     local utloc = waitForText(utility, nil, nil, flaxRegions[i]);
     lsPrintln("Clicking Utility.. button at: " .. utloc[0] .. ", " .. utloc[1]);
     clickText(utloc);
@@ -640,7 +642,6 @@ function ripOutAllSeeds()
     lsPrintln("Unpinning region");
     unpinWindow(flaxRegions[i]);
     lsSleep(refresh_time);
-    checkBreak();
   end
 end
 
