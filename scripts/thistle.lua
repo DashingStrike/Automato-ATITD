@@ -158,7 +158,8 @@ function promptRecipe()
     end
 
     local badList = false;
-    local list = csplit(singleLine(recipe), ",");
+    --local list = csplit(singleLine(recipe), ",");
+    local list = explode(",",singleLine(recipe)); 
     if list[#list] == "" then
       table.remove(list);
     end
@@ -484,3 +485,27 @@ function clickHarvest(anchorIndex, image_names)
     safeClick(pos[0] + 5, pos[1] + 5);
   end
 end
+
+
+--------------
+-- Added in an explode function (delimiter, string) to deal with broken csplit.
+function explode(d,p)
+   local t, ll
+   t={}
+   ll=0
+   if(#p == 1) then
+      return {p}
+   end
+   while true do
+      l = string.find(p, d, ll, true) -- find the next d in the string
+      if l ~= nil then -- if "not not" found then..
+         table.insert(t, string.sub(p,ll,l-1)) -- Save it in our array.
+         ll = l + 1 -- save just after where we found it for searching next time.
+      else
+         table.insert(t, string.sub(p,ll)) -- Save what's left in our array.
+         break -- Break at end, as it should be, according to the lua manual.
+      end
+   end
+   return t
+end
+
