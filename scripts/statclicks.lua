@@ -40,7 +40,6 @@ textLookup["Sharpened Stick"] = "Whittle a Sharpened Stick";
 textLookup["Tinder"] = "Shred Wood into Tinder";
 textLookup["Weave Canvas"] = "Weave Twine into Canvas";
 textLookup["Coconuts"] = "Separate Coconut Meat";
-textLookup["Churn Butter"] = "Churn";
 textLookup["Crudely Carved Handle"] = "Whittle a Crudely Carved Handle";
 textLookup["Wooden Peg"] = "Whittle a small Wooden Peg";
 textLookup["Barrel Tap"] = "Whittle a Barrel Tap";
@@ -254,13 +253,6 @@ function splitCoconuts()
   end
 end
 
-function churnButter()
-  t=findText("Churn");
-  if t~= nil then
-    clickText(t);
-  end
-end
-
 function stirCement()
    t = waitForText("Stir the cement", 1000);
    if t then
@@ -398,9 +390,8 @@ function doTasks()
             elseif curTask =="Coconuts" then
                splitCoconuts();
             elseif curTask =="Churn Butter" then
-               churnButter();
+               clickText(findText("Churn", nil, EXACT));
             else
---               lsPrintln("finding text: " .. textLookup[curTask]);
                clickText(findText(textLookup[curTask]));
             end
             statTimer[i] = lsGetTimer();
