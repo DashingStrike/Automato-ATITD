@@ -227,11 +227,14 @@ function allowReorder(x, y)
 	local z = 0
 	local scale=0.7;
 	local dy = 28;
+
+	if setPriority then
+	  y = 100;
+	end
+
 	lsPrint(x, y, z, scale, scale, 0xFFFFFFff, "Click an item to raise priority");
 	y=y+20;
 	x=x+5;
-	
-
 	
 	local item_index;
 	for item_index=1, #item_priority do
@@ -268,13 +271,35 @@ function doit()
 	askForWindow("Pin Glazier's Bench(es). [+2cc] adds charcoal (5 temperature ticks, 6 for Jewel Glass). Above high tempearture (3200, or 4400 for jewel) melt materials ([M] to show Melt Material window, [S]=Soda, [N]=Normal, [J]=Jewel). With materials loaded, the macro will take over.  ***NOTE*** If all lines don't say COOL DOWN on the macro before you add materials, you will need to pause the macro whilst any of the benches are between 1600 and 2400 otherwise you will lose glass already in the Glaziers Bench. Self Click, Options, Interface Options, Notifications: \"Use the chat area instead of popups\" MUST be CHECKED! Pause the macro when you need to use your mouse. ");
 	
 	srReadScreen();
+	setPriority = true;
 	
 	local glass_windows = findAllImages("ThisIs.png");
 	
 	if #glass_windows == 0 then
 		error 'Could not find any \'Glazier\'s Bench\' windows.';
 	end
-	
+
+
+	--Pause before starting macro, to allow player to set priority. Hopefully prevent making an unintended item on first round.
+	while setPriority do
+	  checkBreak();
+	  lsPrint(5, 10, z, 0.7, 0.7, 0xFFFFFFff, "Set priority below then click Start ...");
+	  lsSetCamera(0,0,lsScreenX*1.1,lsScreenY*1.1);
+	  allowReorder(10, 100+15*#glass_windows);
+
+		if  setPriority then
+			if lsButtonText(15, 45, z, 100, 0x00FFFFff, "START") then
+			  setPriority = false;
+			  lsDoFrame();
+			  break;
+			end
+		end
+
+	  lsDoFrame();
+	  lsSleep(100);
+	end
+
+
 	local glass_state = {};
 	for window_index=1, #glass_windows do
 		glass_state[window_index] = {};
@@ -314,12 +339,14 @@ function doit()
 				  lsPrint(10, 32, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting " .. time_left .. " ms ...");
 				end
 
+
+
 			if not (#glass_windows == #glass_windows2) then
-				lsPrintWrapped(10, 55, 5, lsScreenX-15, 1, 1, 0xFF7070ff, "Expected " .. #glass_windows .. " windows, found " .. #glass_windows2 .. ", not ticking.");		
+				lsPrintWrapped(10, 50, 5, lsScreenX-15, 0.7, 0.7, 0xFF7070ff, "Expected " .. #glass_windows .. " windows, found " .. #glass_windows2 .. ", not ticking.");		
 				--lsPlaySound("error.wav");
 				--sleepWithStatus(10000, "Expected " .. #glass_windows .. " windows, found " .. #glass_windows2 .. ", not ticking.");
 			elseif not should_continue then
-				lsPrint(10, 60, 5, 1.5, 1.5, 0x70FF70ff, "All benches done!");
+				lsPrint(10, 50, 5, 0.8, 0.8, 0x70FF70ff, "All benches done!");
 				if (madeSomeGlass) then
 					lsPlaySound("Complete.wav");
 					madeSomeGlass = false;
@@ -330,9 +357,9 @@ function doit()
 			for window_index=1, #glass_windows do
 				if last_ret[window_index] then
 					should_continue = 1;
-					lsPrint(10, 75 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - " .. last_ret[window_index]);
+					lsPrint(10, 65 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - " .. last_ret[window_index]);
 				else
-					lsPrint(10, 75 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - COOL DOWN");
+					lsPrint(10, 65 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - COOL DOWN");
 				end
 			end
 			
