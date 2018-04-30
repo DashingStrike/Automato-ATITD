@@ -314,8 +314,6 @@ function doit()
 				  lsPrint(10, 32, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting " .. time_left .. " ms ...");
 				end
 
-			lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
-			
 			if not (#glass_windows == #glass_windows2) then
 				lsPrintWrapped(10, 55, 5, lsScreenX-15, 1, 1, 0xFF7070ff, "Expected " .. #glass_windows .. " windows, found " .. #glass_windows2 .. ", not ticking.");		
 				--lsPlaySound("error.wav");
