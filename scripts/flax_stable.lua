@@ -204,7 +204,6 @@ function promptFlaxNumbers()
     if is_plant then
       -- Will plant and harvest flax
       window_w = 285; 
-      window_h = 133;
       space_to_leave = false; 
       lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xffff40ff, "Uncheck \"Grow Flax\" for SEEDS!");
       y = y + 24;
