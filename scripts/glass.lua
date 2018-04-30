@@ -425,11 +425,3 @@ function clickAllText(textToFind)
 		srClickMouseNoMove(allTextReferences[buttons][0]+20, allTextReferences[buttons][1]+5);
 	end
 end
-
-function fetchItemName()
-      for k, v in pairs(item_name) do
-         if string.find(chatText[j][2], k, 0, true) then
-            return true;
-         end
-      end
-end
