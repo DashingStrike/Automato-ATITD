@@ -1,13 +1,16 @@
+-- modified by Silden 03-SEP-17
+-- * Fixed UI Changes (twice in one tale!)
+-- * Added buttons to handle loading charcoal and materials
+-- * Added sound when all glass has been made
+
+
 dofile("common.inc"); -- To allow the findAllText function
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
+--dofile("screen_reader_common.inc");
+--dofile("ui_utils.inc");
 
 -- Initial variables
 window_w = 320;
---Height in pixels when all options shown as of 3/26/18
-window_h = 330;
---Should have the refresh hitting down near the bars, which is a safe area to click
-glassRefreshYOffset = 260;
+window_h = 415;
 temperature_width = 85; -- Width of the Temperature label
 tol = 6500;
 menuButtonSelected = 0;
@@ -19,7 +22,11 @@ madeSomeGlass = false; -- Becomes true when you've started to make anything
 item_priority = {"GlassMakeSheet.png", "GlassMakeRod.png", "GlassMakeWine.png", 
                  "GlassMakePipe.png", "GlassMakeJar.png","GlassMakeTorch.png",
                  "GlassMakeBlade.png", "GlassMakeFineRod.png", "GlassMakeFinePipe.png"};
-		  
+
+item_name = {["GlassMakeSheet.png"] = "Sheet", ["GlassMakeRod.png"] = "Rod", ["GlassMakeWine.png"] = "Wine",
+		["GlassMakePipe.png"] = "Pipe", ["GlassMakeJar.png"] = "Jar", ["GlassMakeTorch.png"] = "Torch",
+		["GlassMakeBlade.png"] = "Blade", ["GlassMakeFineRod.png"] = "Fine Rod", ["GlassMakeFinePipe.png"] = "Fine Pipe"};		
+  
 -- max temperature in which we will contine heating it, wait until it gets below this before adding
 max_add_temp = 2290; -- Rare (0.5%) occurance of temperature too high at 2300
 -- minimum temperature in which we will start a new project, otherwise will reheat
@@ -114,7 +121,7 @@ function glassTick(window_pos, state)
 		error("Whilst the macro picked up the Temperature label, it could not work out the actual temperature. Has the UI changed?");
 	end
 
-	state.status = (state.status .. "  Temp:" .. temp);
+	state.status = (state.status .. " Temp:" .. temp);
 
 	cooking = srFindImageInRange("GlassCooking.png", window_pos[0], window_pos[1], window_w, window_h, tol);
 	
@@ -131,11 +138,11 @@ function glassTick(window_pos, state)
 		local fell = temp < state.last_temp;
 		local rose = temp > state.last_temp;
 		if fell then
-			state.status = state.status .. " (fell)";
+			state.status = state.status .. " (Fell)";
 			state.spiking = nil;
 		end
 		if rose then
-			state.status = state.status .. " (rose)";
+			state.status = state.status .. " (Rose)";
 		end
 		--  if just fell, and under max threshold, add 1 CC
 		if fell and (temp < max_add_temp) then
@@ -162,11 +169,11 @@ function glassTick(window_pos, state)
 	end
 
 	if state.want_spike then
-		state.status = state.status .. " (wait to spike: " .. state.timer .. ")";
+		state.status = state.status .. " (Wait to Spike: " .. state.timer .. ")";
 	end
 
 	if state.spiking then
-		state.status = state.status .. " (spiking)";
+		state.status = state.status .. " (Spiking)";
 	end
 	
 	state.last_temp = temp;
@@ -184,7 +191,14 @@ function glassTick(window_pos, state)
 				for item_index=1, #item_priority do
 					pos = srFindImageInRange(item_priority[item_index], window_pos[0], window_pos[1], window_w, window_h, tol);
 					if pos then
-						state.status = state.status .. " Making:" .. item_priority[item_index];
+							for pngName, glassName in pairs(item_name) do
+								if pngName == item_priority[item_index] then
+								  making = glassName;
+								  break;
+								end
+							end
+						--state.status = state.status .. " Making:" .. item_priority[item_index];
+						state.status = state.status .. " Making:" .. making;
 						srClickMouseNoMove(pos[0]+5, pos[1]+2);
 						made_one = 1;
 						break;
@@ -193,10 +207,10 @@ function glassTick(window_pos, state)
 				if not made_one then
 					state.status = state.status .. " NothingToMake";
 					-- refresh window
-					srClickMouseNoMove(window_pos[0] + 10, window_pos[1]+glassRefreshYOffset);
+					clickAllText("This is");
 				end
 			else
-				state.status = state.status .. " (temp out of range)";
+				state.status = state.status .. " (Temp out of range)";
 			end
 		end
 	else
@@ -212,7 +226,7 @@ end
 function allowReorder(x, y)
 	local z = 0
 	local scale=0.7;
-	local dy = 26;
+	local dy = 28;
 	lsPrint(x, y, z, scale, scale, 0xFFFFFFff, "Click an item to raise priority");
 	y=y+20;
 	x=x+5;
@@ -221,6 +235,7 @@ function allowReorder(x, y)
 	
 	local item_index;
 	for item_index=1, #item_priority do
+
 		if lsButtonText(x, y, z, 100, 0xFFFFFFff, string.sub(string.sub(item_priority[item_index], 10), 1, -5)) then
 			if item_index > 1 then
 				local temp = item_priority[item_index-1];
@@ -293,57 +308,70 @@ function doit()
 
 			lsPrint(10, 6, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
 			lsPrint(10, 18, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Alt+Shift to pause this script.");
-			lsPrint(10, 30, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting " .. time_left .. "ms...");
+				if stop_cooking then
+				  lsPrint(10, 32, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting (Finishing up) " .. time_left .. " ms ...");
+				else
+				  lsPrint(10, 32, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting " .. time_left .. " ms ...");
+				end
+
+			lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
 			
 			if not (#glass_windows == #glass_windows2) then
-				lsPrintWrapped(10, 45, 5, lsScreenX-15, 1, 1, 0xFF7070ff, "Expected " .. #glass_windows .. " windows, found " .. #glass_windows2 .. ", not ticking.");		
+				lsPrintWrapped(10, 55, 5, lsScreenX-15, 1, 1, 0xFF7070ff, "Expected " .. #glass_windows .. " windows, found " .. #glass_windows2 .. ", not ticking.");		
 				--lsPlaySound("error.wav");
 				--sleepWithStatus(10000, "Expected " .. #glass_windows .. " windows, found " .. #glass_windows2 .. ", not ticking.");
 			elseif not should_continue then
-				lsPrint(10, 45, 5, 1.5, 1.5, 0x70FF70ff, "All benches done.");
+				lsPrint(10, 60, 5, 1.5, 1.5, 0x70FF70ff, "All benches done!");
 				if (madeSomeGlass) then
 					lsPlaySound("Complete.wav");
 					madeSomeGlass = false;
 				end
 			end
 			
+			  lsSetCamera(0,0,lsScreenX*1.1,lsScreenY*1.1);
 			for window_index=1, #glass_windows do
 				if last_ret[window_index] then
 					should_continue = 1;
-					lsPrint(10, 80 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - " .. last_ret[window_index]);
+					lsPrint(10, 75 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - " .. last_ret[window_index]);
 				else
-					lsPrint(10, 80 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - COOL DOWN");
+					lsPrint(10, 75 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - COOL DOWN");
 				end
 			end
 			
 			-- New buttons to help add charcoal and melt materials
-			if lsButtonText(lsScreenX - 90, lsScreenY - 115, z, 60, 0x00FFFFff, "+2cc") then
+			if lsButtonText(lsScreenX - 59, lsScreenY - 100, z, 60, 0x00FFFFff, "+2cc") then
 				menuButtonSelected = 1;
 			end
 			
-			if lsButtonText(lsScreenX - 110, lsScreenY - 90, z, 22, 0xFFFF00ff, "M") then
+			if lsButtonText(lsScreenX - 86, lsScreenY - 65, z, 22, 0xFFFF00ff, "M") then
 				menuButtonSelected = 2;
 			end
 
-			if lsButtonText(lsScreenX - 85, lsScreenY - 90, z, 25, 0xFF00FFff, "S") then
+			if lsButtonText(lsScreenX - 59, lsScreenY - 65, z, 25, 0xFF00FFff, "S") then
 				menuButtonSelected = 3;
 			end
 
-			if lsButtonText(lsScreenX - 60, lsScreenY - 90, z, 25, 0xFF00FFff, "N") then
+			if lsButtonText(lsScreenX - 32, lsScreenY - 65, z, 25, 0xFF00FFff, "N") then
 				menuButtonSelected = 4;
 			end
 
-			if lsButtonText(lsScreenX - 35, lsScreenY - 90, z, 25, 0xFF00FFff, "J") then
+			if lsButtonText(lsScreenX - 5, lsScreenY - 65, z, 25, 0xFF00FFff, "J") then
 				menuButtonSelected = 5;
 			end
 
 			
-			
-
-			if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Finish up") then
-				stop_cooking = 1;
+			if not stop_cooking then
+				if lsButtonText(lsScreenX - 80, lsScreenY - 30, z, 100, 0xFFFFFFff, "Finish Up") then
+					stop_cooking = 1;
+				end
+			else
+				if lsButtonText(lsScreenX - 80, lsScreenY - 30, z, 100, 0x80ff80ff, "Cancel ...") then
+					stop_cooking = nil;
+				end
 			end
-			if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
+
+
+			if lsButtonText(lsScreenX - 80, lsScreenY, z, 100, 0xFFFFFFff, "End script") then
 				error "Clicked End Script button";
 			end
 			
@@ -396,4 +424,12 @@ function clickAllText(textToFind)
 	for buttons=1, #allTextReferences do
 		srClickMouseNoMove(allTextReferences[buttons][0]+20, allTextReferences[buttons][1]+5);
 	end
+end
+
+function fetchItemName()
+      for k, v in pairs(item_name) do
+         if string.find(chatText[j][2], k, 0, true) then
+            return true;
+         end
+      end
 end
