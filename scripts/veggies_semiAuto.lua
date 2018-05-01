@@ -1,4 +1,4 @@
---- Veggies SemiAuto v1.3.1 by Cegaiel
+--- Veggies SemiAuto v1.3.2 by Cegaiel
 -- Credits to the Author of veggies.lua (Submitted to Github by MHoroszowski on Sep 19, 2015) for his work as a starting point.
 
 -- Make sure Automato is not at the bottom right corner, as this is where the plant windows are stashed, prior to pinning.
@@ -58,12 +58,14 @@ grid_x = 240;
 grid_y = 100;
 
 firstLoop = true;
+totalHarvests = 0;
 
 function doit()
   askForWindow("This macro will assist you by planting seeds, watering/harvesting your pinned windows when you tap the hotkey. After seeds are planted, you will tap hotkey over each plant, it will then pin the windows for you and do first watering automatically. After first watering, you will then tap hotkey to water/harvest (after you see it grow).\n\nMust have 'Plant all crops where you stand' turned OFF! Right click pins/unpins Must be ON! One-Click: Auto-take Piles ON!\n\nMake sure plant seed menu window AND Automato is in the TOP-RIGHT corner of the screen.");
 
   center = getCenterPos();
   size = srGetWindowSize();
+  thisSessionTimer = lsGetTimer();
 
 	chooseMethod();
 
@@ -84,6 +86,7 @@ function doit()
 
   while 1 do
 	firstWater = 1;
+	reset = false;
 
 	closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
 	closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
@@ -118,16 +121,19 @@ function doit()
 	closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
 	closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
 
+
 	if pauseAfterHarvest then
 	  waitForShift();
 	else
 	  sleepWithStatus(delayAfterHarvestPerPlant*#tops, "Harvesting vegetables ...");
 	end
+
   end
 end
 
 
 function waterThese()
+  harvestTimer = lsGetTimer();
   local was_shifted = lsShiftHeld();
   if (dropdown_cur_value == 1) then
   was_shifted = lsShiftHeld();
@@ -135,6 +141,8 @@ function waterThese()
   elseif (dropdown_cur_value == 2) then
   was_shifted = lsControlHeld();
   key = "Tap Ctrl";
+
+
   elseif (dropdown_cur_value == 3) then
   was_shifted = lsAltHeld();
   key = "Tap Alt";
@@ -145,6 +153,9 @@ function waterThese()
   
   local is_done = false;
   while not is_done do
+	if lsButtonText(5, lsScreenY - 30, z, 100, 0xFFFFFFff, "Abort") then
+	  break;
+	end
     checkBreak();
     local is_shifted = lsShiftHeld();
     if (dropdown_cur_value == 1) then
@@ -157,20 +168,15 @@ function waterThese()
       is_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
     end
 
+
   if firstWater == 0 then
-    statusScreen("When ALL plants GROW:\n" .. key .. " to Water/Harvest plants\n\n[" .. tended .. "] All Plants Watered\n\nYou can " .. key .. " even if you are still watering (animations) last growth. Watering/Harvests will be queued!\n\n\nClick Abort button if something went wrong. This will close all veggie windows and start over.", nil, 0.7, 0.7);
+    statusScreen("When ALL plants GROW:\n" .. key .. " to Water/Harvest plants\n\n[" .. tended .. "] Tendings -- All Plants Watered\n\nYou can " .. key .. " even if you are still watering (animations) last growth. Watering/Harvests will be queued!\n\n\nClick Abort button if something went wrong. This will close all veggie windows and start over.", nil, 0.7, 0.7);
 	refreshWindows();
   elseif firstWater == 1 and manualPin then
     statusScreen("After you pin your windows:\n\n" .. key .. " to water pinned plants", nil, 0.7, 0.7);
   end
 
-	if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Abort") then
-	  break;
-	end
-
-
     if (is_shifted and not was_shifted) or (firstWater == 1 and not manualPin) then
-	statusScreen("Watering / Harvesting plants ...");
 	checkBreak();
 	srReadScreen();
 	local waters = findAllImages(waterImage);
@@ -183,20 +189,30 @@ function waterThese()
 	end
 
 
-	  if #harvest >= 1 then
+	  if #harvest >= 1 and #waters == 0 then  --If there is any 'Water these' remaining and some can be harvested, that suggests one plant is lagging behind or shrunk and you're still trying to catch up. Don't harvest yet.
+			statusScreen("Harvesting [".. #harvest .. "] plants ...");
+			stats = stats .. "\nHarvested @ " .. (lsGetTimer() - harvestTimer) .. " ms - " .. round((lsGetTimer() - waterTimer)/1000, 2) .. " s\n";
 
 		  for i=#harvest,1,-1 do
 			checkBreak();
 			safeClick(harvest[i][0] + 5, harvest[i][1]);
 			lsSleep(click_delay);
+			totalHarvests = totalHarvests + 1;
 		  end
-
 			break;  -- Break the loop after Harvest found and clicked
 
 	  else
-		     tended = tended + 1
+			statusScreen("Watering [".. #waters .. "] plants ...");
+			tended = tended + 1
+			  if tended == 1 then
+			    stats = stats .. "Tend #" .. tended .. " @ First Water / Timer Started\n"; 
+			    waterTimer = lsGetTimer();
+			  else
+			    stats = stats .. "Tend #" .. tended .. " @ " .. (lsGetTimer() - waterTimer) .. " ms - " .. round((lsGetTimer() - waterTimer)/1000, 2) .. " s\n";
+			  end
+
 		  for i=#waters,1,-1 do
-		    checkBreak();
+			checkBreak();
 
 			  for water=1,water_req do
 			    safeClick(waters[i][0] + 5, waters[i][1] + 5);
@@ -219,6 +235,7 @@ end
 function main()
   getPlantWindowPos();
   tended = 0;
+  stats = "";
 
   for i = 0, count-1 do
 	checkBreak();
@@ -502,7 +519,19 @@ function waitForShift()
 	  closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
 	end
 
-    statusScreen(key .. " to continue planting!\n\nWait until ALL animations STOP and ALL plants disappear, FIRST.\n\nNote: 'Pick Seeds Up' button isn\'t foolproof.\n\nIt simply right-clicks where you previously set plant locations.\n\nIf you moved too far from starting position, it will likely misclick and fail! If this happens, you need to manually click the seeds (bags)", nill, 0.7, 0.7);
+	if saveCoords then
+		if lsButtonText(5, lsScreenY - 60, z, 150, 0xFFFFFFff, "Reset Coords") then
+	  	  reset = true;
+	  	  firstLoop = true;
+	  	  break;
+		end
+	end
+
+	if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Stats") then
+	  Stats();
+	end
+
+    statusScreen(key .. " to continue planting!\n\nWait until ALL animations STOP and ALL plants disappear, FIRST.\n\nNote: 'Pick Seeds Up' button isn\'t foolproof.\n\nIt simply right-clicks where you previously set plant locations.\n\nIf you moved too far from starting position, it will likely misclick and fail!", nill, 0.7, 0.7);
     local is_shifted = lsShiftHeld();
 
     if (dropdown_cur_value == 1) then
@@ -556,11 +585,10 @@ function displayError(message)
   local is_done = false;
 
   while not is_done do
---    statusScreen("Could not find any pinned veggies!\n\nThis usually happens if you missed a plant when you " .. key .. ".\n\nHigh resolutions, such as 1920x1080 has such a small margin of where you clicked on veggie.\n\nIf avatar moves or body is facing a certain direction MIGHT be a factor...\n\n" .. key .. " to continue", nil, 0.7, 0.7);
+    checkBreak();
     statusScreen(message, nil, 0.7, 0.7);
 
     local is_shifted = lsShiftHeld();
-
     if (dropdown_cur_value == 1) then
       is_shifted = lsShiftHeld();
     elseif (dropdown_cur_value == 2) then
@@ -571,7 +599,6 @@ function displayError(message)
       is_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
     end
     
-	checkBreak();
     if is_shifted and not was_shifted then
 	break;
     end
@@ -606,7 +633,7 @@ function pickUpSeeds()
   srReadScreen();
 
   bags = findText("Make nearby");
-  lsSleep(250);
+  lsSleep(100);
 
 	if bags then
 	  srClickMouseNoMove(bags[0]+12,bags[1]+5);
@@ -623,5 +650,22 @@ function pickUpSeeds()
 	--lsSleep(click_delay);
     end
   end
+end
 
+
+function Stats()
+    lsDoFrame();
+  while 1 do
+	if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Exit") then
+	  break;
+	end
+    checkBreak();
+    statusScreen("Macro has been running: " .. getElapsedTime(thisSessionTimer) .. "\n\nTotal Harvests: " .. totalHarvests .. "\n\nLast Tending/Harvest Timer Report:\n\n" .. stats, nil, 0.7, 0.7);
+    lsSleep(200);
+  end
+end
+
+function round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
 end
