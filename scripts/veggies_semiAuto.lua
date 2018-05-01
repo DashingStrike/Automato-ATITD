@@ -1,4 +1,4 @@
---- Veggies SemiAuto v1.3.0 by Cegaiel
+--- Veggies SemiAuto v1.3.1 by Cegaiel
 -- Credits to the Author of veggies.lua (Submitted to Github by MHoroszowski on Sep 19, 2015) for his work as a starting point.
 
 -- Make sure Automato is not at the bottom right corner, as this is where the plant windows are stashed, prior to pinning.
@@ -68,12 +68,19 @@ function doit()
 	chooseMethod();
 
 	if saveCoords and not plantCloser then
-	  message = "Note:\n\nWhen using 'Remember Plant Coords' option, you may find that also using the 'Plant veggies closer' option MIGHT provide better results (when trying to use previous coordinates).\n\nThis is not required, but might be worth experimenting!\n\n" .. key .. " to continue!";
+	  message = "NOTE:\n\nWhen using 'Remember Plant Coords' option, you may find that also using the 'Plant veggies closer' option MIGHT provide better results (when trying to use previous coordinates).\n\nThis is not required, but might be worth experimenting!\n\n" .. key .. " to continue!";
 	  displayError(message);
 	end
 
+	if autoWater and not manualPin and saveCoords then
+	  message = "NOTE:\n\nWhen using 'Auto Gather Water' option, you MUST be standing near water (so the water icon appears) or have a Rain Barrel pinned.\n\nThere needs to be a pause (gather water delay) before pinning windows so that the 'Water these' option has enough time to appear on plant windows.\n\nUncheck 'Auto Gather Water' if you are NOT near a water source (so macro can add the needed delay)!\n\n" .. key .. " to continue!";
+	  displayError(message);
+	end
+
+
 	setCameraView(CARTOGRAPHER2CAM);
-	lsSleep(1000);
+	lsSleep(500);
+	repositionAvatar();
 
   while 1 do
 	firstWater = 1;
@@ -81,25 +88,31 @@ function doit()
 	closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
 	closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
 
-	 if autoWater then
+	 if autoWater and (manualPin or not saveCoords or firstLoop) then --If using manual Pin mode or not saving coords, then do autowater first, to avoid it getting in the way later.
 	   drawWater();
 	 end
 
-	if saveCoords then
-	  repositionAvatar();	
-	end
+--	if saveCoords then
+--	  repositionAvatar();	
+--	end
 
 	main();
+
+	 if autoWater and not manualPin and saveCoords and not firstLoop then -- If using saveCoords mode, then take advantage of the 3 second water animation
+	   drawWater(); -- This has 3 second pause, so no point below delay
+	 elseif not autoWater and not manualPin and saveCoords and not firstLoop then -- If we pin windows too quickly, then the 'Water These' option doesn't appear, right away. Wait a moment...
+  	  sleepWithStatus(2500,"Slight pause for 'Water These' to appear on plants, before we pin",nil, 0.7, 0.7);
+	 end
+
 
 	if not manualPin then
 		if firstLoop or not saveCoords then
 		  getPoints();
 		  firstLoop = false;
-		else
-		  sleepWithStatus(2500,"Slight pause for 'Water These' to appear on plants, before we pin",nil, 0.7, 0.7);
 		end
 	  pinWindows();
 	end
+
 
 	waterThese();
 	closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
@@ -290,7 +303,7 @@ function chooseMethod()
       end
 	y = y + 105;
       lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
-      autoWater = lsCheckBox(15, y, z, 0xffffffff, " Auto gather water", autoWater);
+      autoWater = lsCheckBox(15, y, z, 0xffffffff, " Auto Gather Water", autoWater);
 	y = y + 25;
       pauseAfterHarvest = lsCheckBox(15, y, z, 0xffffffff, " Pause/Wait for Trigger after Harvest", pauseAfterHarvest);
 	y = y + 25;
@@ -483,13 +496,13 @@ function waitForShift()
   local is_done = false;
 
   while not is_done do
-	if lsButtonText(5, lsScreenY - 30, z, 150, 0xFFFFFFff, "Pick Up Seeds") then
+	if lsButtonText(5, lsScreenY - 30, z, 150, 0xFFFFFFff, "Pick Seeds Up") then
 	  pickUpSeeds();
 	  closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
 	  closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
 	end
 
-    statusScreen(key .. " to continue planting!\n\nWait until ALL animations STOP and ALL plants disappear, FIRST.\n\nNote: 'Pick Up Seeds' button isn\'t foolproof.\n\nIt simply right-clicks where you previously set plant locations.\n\nIf you moved too far from starting position, it will likely misclick and fail! If this happens, you need to manually click the seeds (bags)", nill, 0.7, 0.7);
+    statusScreen(key .. " to continue planting!\n\nWait until ALL animations STOP and ALL plants disappear, FIRST.\n\nNote: 'Pick Seeds Up' button isn\'t foolproof.\n\nIt simply right-clicks where you previously set plant locations.\n\nIf you moved too far from starting position, it will likely misclick and fail! If this happens, you need to manually click the seeds (bags)", nill, 0.7, 0.7);
     local is_shifted = lsShiftHeld();
 
     if (dropdown_cur_value == 1) then
@@ -558,6 +571,7 @@ function displayError(message)
       is_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
     end
     
+	checkBreak();
     if is_shifted and not was_shifted then
 	break;
     end
