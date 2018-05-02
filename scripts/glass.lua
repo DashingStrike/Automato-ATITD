@@ -207,7 +207,7 @@ function glassTick(window_pos, state)
 				if not made_one then
 					state.status = state.status .. " NothingToMake";
 					-- refresh window
-					clickAllText("This is");
+					clickAllText("Temperature");
 				end
 			else
 				state.status = state.status .. " (Temp out of range)";
