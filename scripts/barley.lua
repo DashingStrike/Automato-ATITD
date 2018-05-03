@@ -1,410 +1,556 @@
+ -- barley.lua v2.0 -- by Cegaiel (but based off flax_stable.lua; credits of flax_stable.lua to Jimbly KasumiGhia, Tallow, SkyFeather)
+--
 
--- Edit these first 2 to adjust how much is planted in a pass
--- May need to adjust walk_time in Barley_common.inc if you move too slowly to keep up
--- grids tested: 2x2, 3x3, 5x5, 6x6 (probably need 3+ dex and 600ms walk time)
+dofile("common.inc");
+
+askText = "Barley v2.0 by Cegaiel (many credits included in script comments)\n\nThis macro is not fancy It simply converts 1 of you barley into 2.\n\n'Right click pins/unpins a menu' must be ON.\n\n'Plant all crops where you stand' must be ON.\n\n'Right click pins/unpins a menu' must be ON.\n\nPin Barley Plant window in TOP-RIGHT. Automato: Slighty in TOP-RIGHT.";
+
+
+-- Global parameters set by prompt box.
+num_loops = 5;
 grid_w = 5;
 grid_h = 5;
-watered = {};
-loop_count = 0;
-skip_water = 0;
-
-dofile("Flax_common.inc");
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
+is_plant = true;
+seeds_per_pass = 5;
+seeds_per_iter = 0;
+finish_up = 0;
+finish_up_message = "";
 
 
-function promptBarleyNumbers(is_plant)
-	scale = 1.0;
-	
-	local z = 0;
-	local is_done = nil;
-	local value = nil;
-	-- Edit box and text display
-	while not is_done do
-		-- Put these everywhere to make sure we don't lock up with no easy way to escape!
-		checkBreak("disallow pause");
-		
-		lsPrint(10, 10, z, scale, scale, 0xFFFFFFff, "Choose passes and grid size");
-		
-		-- lsEditBox needs a key to uniquely name this edit box
-		--   let's just use the prompt!
-		-- lsEditBox returns two different things (a state and a value)
-		local y = 40;
-		lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
-		is_done, num_loops = lsEditBox("passes",
-			100, y, z, 50, 30, scale, scale,
-			0x000000ff, 1);
-		if not tonumber(num_loops) then
-			is_done = nil;
-			lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-			num_loops = 1;
-		end
-		y = y + 32;
+seedType = "Barley";
+useable = "Useable";
 
-		lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Grid size:");
-		is_done, grid_w = lsEditBox("grid",
-			100, y, z, 50, 30, scale, scale,
-			0x000000ff, grid_w);
-		if not tonumber(grid_w) then
-			is_done = nil;
-			lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-			grid_w = 1;
-			grid_h = 1;
-		end
+imgUseable = "UseableBy.png";
+imgThisIs = "ThisIs.png";
+imgUtility = "Utility.png";
 
-		grid_w = tonumber(grid_w);
-		grid_h = grid_w;
-		y = y + 32;
+-- Tweakable delay values
+refresh_time = 60; -- Time to wait for windows to update
+walk_time = 600; -- Reduce to 300 if you're fast.
 
-		if lsButtonText(170, y-32, z, 100, 0xFFFFFFff, "OK") then
-			is_done = 1;
-		end
+-- Don't touch. These are set according to Jimbly's black magic.
+walk_px_y = 340;
+walk_px_x = 380;
 
-		if is_plant then
-			lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff, "This will plant and harvest a " .. grid_w .. "x" .. grid_w .. " grid of Barley " .. num_loops .. " times, requiring " .. (grid_w * grid_w) .. " raw barley and ".. (grid_w * grid_w * num_loops * 4) .. "water in jugs, doing " .. (grid_w*grid_w*num_loops) .. " harvests.");
-		else
-			lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff, "This will plant a " .. grid_w .. "x" .. grid_w .. " grid of Flax " .. num_loops .. " times, requiring " .. (grid_w * grid_w) .. " seeds, yielding " .. (grid_w * grid_w * num_loops) .. " seeds.");
-		end
-		y = y + 50;
-		skip_water = lsCheckBox(10, y, z, 0xFFFFFFff, "Skip Rain Barrel", skip_water);
+xyCenter = {};
+xyFlaxMenu = {};
 
-		if is_done and (not num_loops or not grid_w) then
-			error 'Canceled';
-		end
-		
-		if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
-			error "Clicked End Script button";
-		end
-	
-		
-		lsDoFrame();
-		lsSleep(10); -- Sleep just so we don't eat up all the CPU for no reason
-	end
+-- The barley bed window
+local window_w = 258;  -- Just a declaration, changes based on method in promptFlaxNumbers()
+window_h = 218;  
+
+
+
+-------------------------------------------------------------------------------
+-- initGlobals()
+--
+-- Set up black magic values used for trying to walk a standard grid.
+-------------------------------------------------------------------------------
+
+function initGlobals()
+  -- Macro written with 1720 pixel wide window
+
+  srReadScreen();
+  xyWindowSize = srGetWindowSize();
+
+  local pixel_scale = xyWindowSize[0] / 1720;
+  lsPrintln("pixel_scale " .. pixel_scale);
+
+  walk_px_y = math.floor(walk_px_y * pixel_scale);
+  walk_px_x = math.floor(walk_px_x * pixel_scale);
+
+  local walk_x_drift = 14;
+  local walk_y_drift = 18;
+  if (lsScreenX < 1280) then 
+    -- Have to click way off center in order to not move at high resolutions
+    walk_x_drift = math.floor(walk_x_drift * pixel_scale);
+    walk_y_drift = math.floor(walk_y_drift * pixel_scale);
+  else
+    -- Very little drift at these resolutions, clicking dead center barely moves
+    walk_x_drift = 1;
+    walk_y_drift = 1;
+  end
+
+  xyCenter[0] = xyWindowSize[0] / 2 - walk_x_drift;
+  xyCenter[1] = xyWindowSize[1] / 2 + walk_y_drift;
+    xyFlaxMenu[0] = xyCenter[0] - 20;
+    xyFlaxMenu[1] = xyCenter[1] - 10;
 end
 
+-------------------------------------------------------------------------------
+-- checkWindowSize()
+--
+-- Set width and height of barley window based on whether they are guilded.
+-------------------------------------------------------------------------------
 
-function doit()
+window_check_done_once = false;
+function checkWindowSize(x, y)
+  if not window_check_done_once then
+    srReadScreen();
+    window_check_done_once = true;
+     local pos = srFindImageInRange(imgUseable, x-5, y-50, 150, 100);
+  end
+end
 
-  promptBarleyNumbers(1);
-  askForWindow("Make sure the plant barley window is pinned and you are in F8F8 cam zoomed in.  You may need to F12 at low resolutions or hide your chat window (if it starts planting and fails to move downward, it probably clicked on your chat window).  Will plant grid NE of current location.  'Plant all crops where you stand' must be ON.  'Right click pins/unpins a menu' must be ON.");
-  lsSleep(1000);
-  delay_time = 2000;
-  local x = 1;
-  local y = 1;
-  initGlobals();
-  -- Find the plant barley button
+-------------------------------------------------------------------------------
+-- promptFlaxNumbers()
+--
+-- Gather user-settable parameters before beginning
+-------------------------------------------------------------------------------
+
+function promptFlaxNumbers()
+  scale = 0.8;
+	
+  local z = 0;
+  local is_done = nil;
+  local value = nil;
+  -- Edit box and text display
+  while not is_done do
+    -- Make sure we don't lock up with no easy way to escape!
+    checkBreak();
+    lsPrint(10, 10, z, scale, scale, 0xFFFFFFff, "Choose passes and grid size");
+
+    -- lsEditBox needs a key to uniquely name this edit box
+    --   let's just use the prompt!
+    -- lsEditBox returns two different things (a state and a value)
+    local y = 40;
+    lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
+    is_done, num_loops = lsEditBox("passes", 120, y, z, 50, 30, scale, scale,
+                                   0x000000ff, num_loops);
+    if not tonumber(num_loops) then
+      is_done = nil;
+      lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+      num_loops = 1;
+    end
+    y = y + 32;
+    lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Grid size:");
+    is_done, grid_w = lsEditBox("grid", 120, y, z, 50, 30, scale, scale,
+                                0x000000ff, grid_w);
+    if not tonumber(grid_w) then
+      is_done = nil;
+      lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+      grid_w = 1;
+      grid_h = 1;
+    end
+    grid_w = tonumber(grid_w);
+    grid_h = grid_w;
+    y = y + 32;
+
+    if not is_plant then
+      lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Seeds per:");
+      is_done, seeds_per_pass = lsEditBox("seedsper", 120, y, z, 50, 30,
+                                          scale, scale, 0x000000ff, 4);
+      seeds_per_pass = tonumber(seeds_per_pass);
+      if seeds_per_pass then
+        seeds_per_iter = seeds_per_pass * grid_w * grid_h;
+      end
+      if not seeds_per_pass then
+        is_done = nil;
+        lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        seeds_per_pass = 1;
+      end
+      y = y + 32;
+    end
+    y = y + 30;
+
+    if is_plant then
+      -- Will plant and harvest flax
+      --window_w = 285; 
+
+    if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Next") then
+        is_done = 1;
+    end
+
+
+      lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
+                     "This will plant and harvest a " .. grid_w .. "x" ..
+                     grid_w .. " grid of " .. seedType .. "  " .. num_loops ..
+                     " times.\n\nRequires (" .. math.floor(grid_w * grid_w * num_loops) .. ") Barley\nRequires (" .. math.floor(grid_w * grid_w * num_loops*6) .. ") Water"  );
+    end
+
+    if is_done and (not num_loops or not grid_w) then
+      error 'Canceled';
+    end
+		
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
+                    "End script") then
+      error "Clicked End Script button";
+    end
+
+    lsDoFrame();
+    lsSleep(tick_delay);
+  end
+end
+
+-------------------------------------------------------------------------------
+-- getPlantWindowPos()
+-------------------------------------------------------------------------------
+
+lastPlantPos = null;
+
+function getPlantWindowPos()
   srReadScreen();
-
-  local imgBarley = "barley.png";
-  local xyPlantBarley = srFindImage(imgBarley);
-  if not xyPlantBarley then
+  local plantPos = findText(seedType);
+  if plantPos then
+    plantPos[0] = plantPos[0] + 20;
+    plantPos[1] = plantPos[1] + 10;
+  else
+    plantPos = lastPlantPos;
+    if plantPos then
+      safeClick(plantPos[0], plantPos[1]);
+      lsSleep(refresh_time);
+    end
+  end
+  if not plantPos then
     error 'Could not find plant window';
   end
-  xyPlantBarley[0] = xyPlantBarley[0] + 5;
-  
-  -- Find the Rain Barrel
-  if not skip_water then
-	local imgDrawWater = "draw_water.png";
-	local xyDrawWater = srFindImage(imgDrawWater);
-	if not xyDrawWater then
-		error 'Could not find rain barrel';
-	end 
-	xyDrawWater[0] = xyDrawWater[0] + 5;
-  end
+  lastPlantPos = plantPos;
+  return plantPos;
+end
 
- 
+-------------------------------------------------------------------------------
+-- getToggle()
+--
+-- Returns 0 or 2 alternately. Used to slightly shift position of windows
+-- while collecting them.
+-------------------------------------------------------------------------------
+
+toggleBit = 0;
+
+function getToggle()
+  if toggleBit == 0 then
+    toggleBit = 2;
+  else
+    toggleBit = 0;
+  end
+  return toggleBit;
+end
+
+-------------------------------------------------------------------------------
+-- doit()
+-------------------------------------------------------------------------------
+
+function doit()
+waterings = 0;
+  size = srGetWindowSize();
+
+  promptFlaxNumbers();
+  askForWindow(askText);
+  initGlobals();
+  srReadScreen();
+  local startPos = findCoords();
+  if not startPos then
+    error("ATITD clock not found. Verify entire clock and borders are visible. Try moving clock slightly.");
+  end
+  lsPrintln("Start pos:" .. startPos[0] .. ", " .. startPos[1]);
+
+
+  setCameraView(CARTOGRAPHER2CAM);
+  drawWater();
+  startTime = lsGetTimer();
 
   for loop_count=1, num_loops do
-    local start_time = lsGetTimer();
-    harvested = 0;
-    -- Init watered array to 0
-    for y=grid_h, 1, -1 do
-      for x=grid_w, 1, -1 do 
-        watered[x+((y-1)*grid_w)] = 1;
+    waters = 0;
+    quit = false;
+    error_status = "";
+    clicks = {};
+    local finalPos = plantAndPin(loop_count);
+    dragWindows(loop_count);
+    waterBarley();
+    lsSleep(500);
+    barleyWaterBar = true;
+    waters = 1;
+
+  while 1 do
+    checkBreak();
+    lsSleep(100);
+    findWaterBar();
+
+	if not barleyWaterBar then
+	  waters = waters + 1;
+		if waters < 4 then
+	  waterBarley();
+	  	  sleepWithStatus(1000, "Watering Barley...",nil, 0.7, 0.7);
+		end
       end
-    end	
-	  -- Local variables
-    local xyCenter = getCenterPos();
-    local xyBarleyMenu = {};
-    xyBarleyMenu[0] = xyCenter[0] - 43;
-    xyBarleyMenu[1] = xyCenter[1] + 0;
-    local dxi=1;
-    local dt_max=grid_w;
-    local dt=grid_w;
-    local dx={1, 0, -1, 0};
-    local dy={0, -1, 0, 1};
-    local num_at_this_length = 3;
-    local x_pos = 0;
-    local y_pos = 0;
-    for y=1, grid_h do
-      for x=1, grid_w do
-        lsPrintln('doing ' .. x .. ',' .. y .. ' of ' .. grid_w .. ',' .. grid_h);
-        statusScreen("Planting " .. x .. ", " .. y);
-        
-        -- Plant
-        lsPrintln('planting ' .. xyPlantBarley[0] .. ',' .. xyPlantBarley[1]);
-        setWaitSpot(xyBarleyMenu[0], xyBarleyMenu[1]);
-        srClickMouseNoMove(xyPlantBarley[0], xyPlantBarley[1], 0);
-        srSetMousePos(xyBarleyMenu[0], xyBarleyMenu[1]);
-        waitForChange();
-        
-        -- Bring up menu
-        lsPrintln('menu ' .. xyBarleyMenu[0] .. ',' .. xyBarleyMenu[1]);
-        setWaitSpot(xyBarleyMenu[0]+5, xyBarleyMenu[1]);
-        srClickMouse(xyBarleyMenu[0], xyBarleyMenu[1], 0);
-        waitForChange();
 
-        -- Check for window size
-        window_w = 214;
-        window_h = 218;
 
-        -- Pin
-        lsPrintln('pin ' .. (xyBarleyMenu[0]+5) .. ',' .. xyBarleyMenu[1]);
-        srClickMouseNoMove(xyBarleyMenu[0]+5, xyBarleyMenu[1]+0, 1);
+  if waters == 4 then
+    break;
+  end
 
-        -- Move window
-        local pp = pinnedPos(x, y);
-        lsPrintln('move ' .. (xyBarleyMenu[0]+5) .. ',' .. xyBarleyMenu[1] .. ' to ' .. pp[0] .. ',' .. pp[1]);
-        drag(xyBarleyMenu[0] + 5, xyBarleyMenu[1], pp[0], pp[1], 0);
+  sleepWithStatus(150, "Watching Top Left Window:\n\nWaiting for Water Bar to drop: " .. waters .. "/4",nil, 0.7, 0.7);
+  end
+
+  harvestAll();
+
+  sleepWithStatus(3000, "Preparing to close windows");
+  srReadScreen();
+
+
+  clickAllText("This is"); -- Right click to close all windows in range
+
+    walkHome(loop_count, startPos);
+    drawWater();
+	if finish_up == 1 or quit then
+	  break;
+	end
+  end
+  lsPlaySound("Complete.wav");
+  lsMessageBox("Elapsed Time:", getElapsedTime(startTime), 1);
+end
+
+-------------------------------------------------------------------------------
+-- plantAndPin()
+--
+-- Walk around in a spiral, planting flax seeds and grabbing windows.
+-------------------------------------------------------------------------------
+
+function plantAndPin(loop_count)
+  local xyPlantFlax = getPlantWindowPos();
 		
-        -- Add 2 water now
-        srReadScreen();
-        local barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
-        local barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
-        if not barleyAddButton or not barleyWater then
-          -- bugfix maybe for lag.
-          lsSleep(100);
-          srReadScreen();
-          barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
-          barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
-        end
+  -- for spiral
+  local dxi=1;
+  local dt_max=grid_w;
+  local dt=grid_w;
+  local dx={1, 0, -1, 0};
+  local dy={0, -1, 0, 1};
+  local num_at_this_length = 3;
+  local x_pos = 0;
+  local y_pos = 0;
+  local success = true;
 
-        srClickMouseNoMove(barleyAddButton[0]+8, barleyWater[1]);
-        srClickMouseNoMove(barleyAddButton[0]+8, barleyWater[1]);
-        watered[x+((y-1)*grid_w)] = watered[x+((y-1)*grid_w)] + 2;
-
-        -- move to next position
-        if not ((x == grid_w) and (y == grid_h)) then
-          lsPrintln('walking dx=' .. dx[dxi] .. ' dy=' .. dy[dxi]);
-          x_pos = x_pos + dx[dxi];
-          y_pos = y_pos + dy[dxi];
-          srClickMouseNoMove(xyCenter[0] + walk_px_x*dx[dxi], xyCenter[1] + walk_px_y*dy[dxi], 0);
-          lsSleep(walk_time);
-          dt = dt - 1;
-          if dt == 1 then
-            dxi = dxi + 1;
-            num_at_this_length = num_at_this_length - 1;
-            if num_at_this_length == 0 then
-              dt_max = dt_max - 1;
-              num_at_this_length = 2;
-            end
-            if dxi == 5 then
-              dxi = 1;
-            end
-            dt = dt_max;
-          else
-            lsPrintln('skipping walking, on last leg');
-          end
-        end
-        checkBreak();
-      end
-    end
-  
-    statusScreen("Refocusing windows...");
-    -- Bring windows to front
-    for y=grid_h, 1, -1 do
-      for x=grid_w, 1, -1 do 
-        local rp = refreshPosUp(x, y);
-        srClickMouseNoMove(rp[0], rp[1], 0);
-        lsSleep(refocus_click_time);
-      end
-    end
-    lsSleep(refocus_time); -- Wait for last window to bring to the foreground before clicking again
-  
-    -- Barley has been planted, pinned and refocused	
- 
-    while 1 do
-      for y=1, grid_h do
-        for x=1, grid_w do 
-          local pp = pinnedPos(x, y);
-          local rp = refreshPosDown(x, y);
-          srClickMouse(rp[0],rp[1]);
-          lsSleep(200);
-          srReadScreen();
-          local leftBar = srFindImageInRange("barleyBarLeft.png", pp[0], pp[1] - 50, 120, 100);
-          if leftBar then
-            leftBar[0] = leftBar[0] + 4;
-          end
-          local rightBar = srFindImageInRange("barleyBarRight.png", pp[0], pp[1] - 50, 220, 200);
-          if rightBar then
-            rightBar[0] = rightBar[0] + 1;
-          end
-          if not rightBar then
-            error 'Could not find rightbar';
-          end
-          local barleyWater = srFindImageInRange("barleyWater.png", pp[0], pp[1] - 50, 220, 150);
-          if not barleyWater then error 'Could not find water button.'; end
-          local barleyAddButton = srFindImageInRange("BarleyAdd.png", pp[0], pp[1], 200, 100);
-          if not barleyAddButton then error 'Could not find add button. Ended at batch '; end
-
-          while 1 do
-            if leftBar then
-              waterBlue = 0;
-              if rightBar then
-                if barleyWater then
-                  srReadScreen();
-                  for i=leftBar[0],rightBar[0] do
-                    pxval = srReadPixelFromBuffer(i, barleyWater[1]);
-                    b = (math.floor(pxval/256) % 256);
-                    if b > 220 then
-                      waterBlue = waterBlue + 1;
-                    end
-                  end
-                  waterBlue = (waterBlue/(rightBar[0]-leftBar[0])*100);
-                end
-              end
-            end
-            checkBreak();
-			
-            if watered[x+((y-1)*grid_w)] < 5 then
-              statusScreen("Watering " .. x .. "," .. y .. "step " .. watered[x+((y-1)*grid_w)] .. ".");
-              if waterBlue < 90 then
-                if watered[x+((y-1)*grid_w)] == 0 then
-                end
-                srClickMouseNoMove(barleyAddButton[0]+8, barleyWater[1]);
-                watered[x+((y-1)*grid_w)] = watered[x+((y-1)*grid_w)] + 1;
-                lsSleep(100);
-                break;
-              end
-            else
-              statusScreen("Harvesting " .. x .. "," .. y .. ".");
-              if waterBlue < 90 then
-                srClickMouseNoMove(pp[0]+90, pp[1]+90);
-                lsSleep(100);
-                srClickMouseNoMove(pp[0]+180, pp[1]-25);
-                if watered[x+((y-1)*grid_w)] == 5 then
-                  harvested = 1;
-                end
-                break;
-              end
-            end
-          end
-        end
-      end
-
-      if harvested == 0 then
-        statusScreen("Refocusing windows...");
-        -- Bring windows to front
-        for y=grid_h, 1, -1 do
-          for x=grid_w, 1, -1 do 
-            local rp = refreshPosUp(x, y);
-            srClickMouseNoMove(rp[0], rp[1], 0);
-            lsSleep(refocus_click_time);
-          end
-        end
-        lsSleep(refocus_time); -- Wait for last window to bring to the foreground before clicking again
-      else
-        for x=1, x_pos do
-          srClickMouseNoMove(xyCenter[0] + walk_px_x*-1, xyCenter[1], 0);
-          lsSleep(walk_time);
-        end
-        for x=1, -y_pos do
-          srClickMouseNoMove(xyCenter[0], xyCenter[1] + walk_px_y, 0);
-          lsSleep(walk_time);
-        end
+  for y=1, grid_h do
+    for x=1, grid_w do
+      statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Planting " ..
+                   x .. ", " .. y .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
+      success = plantHere(xyPlantFlax, y);
+      if not success then
         break;
       end
-    end
-    local end_time = lsGetTimer();
-    statusScreen("Time taken: " .. (end_time-start_time)/1000);
-    -- move X and Y every 4 batches, but skip the Y move every 20th batch
-    if loop_count % 4 == 0 and loop_count % 5 == 0 then
-      doCorrectiveMove('x')
-    elseif loop_count % 4 == 0 then
-      doCorrectiveMove('xy')
-    end 
-    --doStashWH(num_loops*grid_w*grid_w);
-    --doRefillWater(4*numloops*grid_w*grid_w);
-    doStashWH(grid_w*grid_w);
-	if not skip_water then
-		doRefillWater(4*grid_w*grid_w);
+
+      -- Move to next position
+      if not ((x == grid_w) and (y == grid_h)) then
+        lsPrintln('walking dx=' .. dx[dxi] .. ' dy=' .. dy[dxi]);
+	lsSleep(40);
+        x_pos = x_pos + dx[dxi];
+        y_pos = y_pos + dy[dxi];
+	local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
+        safeClick(xyCenter[0] + walk_px_x*dx[dxi],
+                  xyCenter[1] + walk_px_y*dy[dxi], 0);
+	
+        spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
+	if not waitForChange(spot, 1500) then
+	  error_status = "Did not move on click.";
+	  break;
 	end
-    debug('end of batch #' .. loop_count)
-  end
-end
-
-function doCorrectiveMove(move)
-  statusScreen("Moving to correct for drift");
-  local xyCenter = getCenterPos();
-  if move == 'xy' or move == 'x' then
-    srClickMouseNoMove(xyCenter[0] + walk_px_x*-1, xyCenter[1], 0);
-    lsSleep(walk_time);
-  end
-  if move == 'xy' or move == 'y' then
-    srClickMouseNoMove(xyCenter[0], xyCenter[1] + walk_px_y, 0);
-    lsSleep(walk_time);
-  end
-end
-
-function doStashWH(qty)
-  local wh = srFindImage("stash.png");
-  if wh then
-    srClickMouseNoMove(wh[0]+9,wh[1]+9)
-    debug('found stash, clicked it');
-    lsSleep(250);
-
-    srReadScreen();
-    local insects = srFindImage("stashInsectEllipsis.png");
-
-    local stashes = srFindImage("stashBarley.png");
-    if not stashes then
-      error "no barley to stash"
-    end
-    srClickMouseNoMove(stashes[0],stashes[1]);
-
-    lsSleep(250);
-    -- stash exactly the right amount by number so we don't lose our seed barley
-    srKeyEvent(qty);
-    srKeyEvent('\n');
-
-    if insects then
-      srClickMouseNoMove(wh[0]+9,wh[1]+9)
-      lsSleep(250);
-      srReadScreen();
-
-      local insects = srFindImage("stashInsectEllipsis.png");
-      if insects then
-        srClickMouseNoMove(insects[0],insects[1]);
-        lsSleep(250);
-
-        srReadScreen();
-        insects = srFindImage("stashAllTheInsects.png");
-        if not insects then
-          error "found insects but couldn't stash them";
+        lsSleep(walk_time);
+        waitForStasis(spot, 1500);
+        dt = dt - 1;
+        if dt == 1 then
+          dxi = dxi + 1;
+          num_at_this_length = num_at_this_length - 1;
+          if num_at_this_length == 0 then
+            dt_max = dt_max - 1;
+            num_at_this_length = 2;
+          end
+          if dxi == 5 then
+            dxi = 1;
+          end
+          dt = dt_max;
         end
-        srClickMouseNoMove(insects[0],insects[1]);
+      else
+        lsPrintln('skipping walking, on last leg');
+      end
+    end
+    checkBreak();
+    if not success then
+      break;
+    end
+  end
+  local finalPos = {};
+  finalPos[0] = x_pos;
+  finalPos[1] = y_pos;
+  return finalPos;
+end
+
+-------------------------------------------------------------------------------
+-- plantHere(xyPlantFlax)
+--
+-- Plant a single flax bed, get the window, pin it, then stash it.
+-------------------------------------------------------------------------------
+
+function plantHere(xyPlantFlax, y_pos)
+  -- Plant
+  lsPrintln('planting ' .. xyPlantFlax[0] .. ',' .. xyPlantFlax[1]);
+  local bed = clickPlant(xyPlantFlax);
+  if not bed then
+    return false;
+  end
+
+  -- Bring up menu
+  lsPrintln('menu ' .. bed[0] .. ',' .. bed[1]);
+  if not openAndPin(bed[0]-100, bed[1], 3500) then
+    error_status = "No window came up after planting.";
+    return false;
+  end
+
+
+  -- Check for window size
+  checkWindowSize(bed[0], bed[1]);
+
+  -- Move window into corner
+  stashWindow(bed[0] + 5, bed[1], BOTTOM_RIGHT);
+
+  return true;
+end
+
+function clickPlant(xyPlantFlax)
+  local result = xyFlaxMenu;
+  local spot = getWaitSpot(xyFlaxMenu[0], xyFlaxMenu[1]);
+  safeClick(xyPlantFlax[0], xyPlantFlax[1], 0);
+
+  local plantSuccess = waitForChange(spot, 1500);
+  if not plantSuccess then
+    error_status = "No barley bed was placed when planting.";
+    result = nil;
+  end
+  return result;
+end
+
+-------------------------------------------------------------------------------
+-- dragWindows(loop_count)
+--
+-- Move flax windows into a grid on the screen.
+-------------------------------------------------------------------------------
+
+function dragWindows(loop_count)
+  statusScreen("(" .. loop_count .. "/" .. num_loops .. ")  " ..
+               "Dragging Windows into Grid" .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
+    arrangeStashed(nil, false, window_w, window_h);
+end
+
+-------------------------------------------------------------------------------
+-- walkHome(loop_count, finalPos)
+--
+-- Walk back to the origin (southwest corner) to start planting again.
+-------------------------------------------------------------------------------
+
+function walkHome(loop_count, finalPos)
+  -- Close all empty windows
+  closeEmptyAndErrorWindows();
+  -- remove any screens with the too far away text
+  statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Walking..." .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
+
+  walkTo(finalPos);
+end
+
+
+
+
+
+function waterBarley()
+  srReadScreen();
+  barleyWaterImage = findAllImages("barleyWater.png");
+    if #barleyWaterImage == 0 then
+      error("Could not find 'Water:' text in barley pinned menu (Top Left corner only)");
+    else
+		for i=#barleyWaterImage, 1, -1  do
+			checkBreak();
+			safeClick(barleyWaterImage[i][0]+192, barleyWaterImage[i][1]+3);
+			lsSleep(10);
+			safeClick(barleyWaterImage[i][0]+192, barleyWaterImage[i][1]+3);
+		end
+    end
+end
+
+
+function findWaterBar()
+  srReadScreen();
+  barleyWaterBar = srFindImageInRange("barleyWaterFull.png", 0, 0, window_w, window_h);
+
+  if barleyWaterBar then
+    safeClick(barleyWaterBar[0], barleyWaterBar[1]);
+    lsSleep(10);
+    safeClick(barleyWaterBar[0], barleyWaterBar[1]);
+  end
+end
+
+
+
+function harvestAll()
+  harvest = findAllImages("BarleyHarvest.png");
+
+    if #harvest == 0 then
+       error("No harvet images found");
+    else
+
+	for i=#harvest, 1, -1  do
+	  sleepWithStatus(100, "Harvesting " .. #harvest);
+	  safeClick(harvest[i][0]+5, harvest[i][1]+5);
+	end
+    end
+end
+
+
+function closeAllWindows(x, y, width, height)
+  if not x then
+    x = 0;
+  end
+  if not y then
+    y = 0;
+  end
+  if not width then
+    width = srGetWindowSize()[0];
+  end
+  if not height then
+    height = srGetWindowSize()[1];
+  end
+
+  local closeImages = {"ThisIs.png", "Ok.png", "UnPin.png"};
+  local closeRight = {1, 1, nil};
+  local found = true;
+
+  while found do
+    found = false;
+    for i=1,#closeImages do
+
+      local image = closeImages[i];
+      local right = closeRight[i];
+      srReadScreen();
+      local images = findAllImagesInRange(image, x, y, width, height);
+      while #images >= 1 do
+	done = true;
+	safeClick(images[#images][0], images[#images][1], right);
+	sleepWithStatus(click_delay, "Closing Windows");
+	srReadScreen();
+	images = findAllImagesInRange(image, x, y, width, height);
       end
     end
   end
 end
 
-function doRefillWater(qty)
-  debug("in refill")
-  local rb = srFindImage("draw_water.png");
-  if rb then
-    srClickMouseNoMove(rb[0]+5,rb[1]+5)
-    lsSleep(250);
-    srKeyEvent(qty);
-    srKeyEvent('\n');
-  end
 
+
+function clickAllText(textToFind)
+	local allTextReferences = findAllText(textToFind);
+	
+	for buttons=1, #allTextReferences do
+		srClickMouseNoMove(allTextReferences[buttons][0]+20, allTextReferences[buttons][1]+5, 1);
+	end
 end
 
 
-function debug(msg)
-  if 0 then
-    statusScreen(msg);
-    lsSleep(1000);
-  end 
-end
 
+
+function closeAllWindows2()
+srReadScreen();
+ UnPin = srFindImageInRange(0,0, size[0]-350, size[1]);
+
+    if #UnPin > 1 then
+		for i=#UnPin, 1, -1  do
+			checkBreak();
+			safeClick(UnPin[i][0], UnPin[i][1], 1);
+		end
+    end
+end
