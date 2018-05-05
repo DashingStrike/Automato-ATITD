@@ -1,7 +1,7 @@
- -- barley.lua v2.1.0 -- by Cegaiel (but based off flax_stable.lua; credits of flax_stable.lua to Jimbly KasumiGhia, Tallow, SkyFeather)
+-- barley.lua v2.1.1 -- by Cegaiel (but based off flax_stable.lua; credits of flax_stable.lua to Jimbly KasumiGhia, Tallow, SkyFeather)
 --
 -- Use Fertilizer will use 4 fertilizer per plant.  The yield will vary from 2-10. The numbers just depends on how many weeds occur before harvesting. 
--- If you are 'lucky' enough to not get any weeds on a plant, you will get the full 10. 
+-- If you are 'lucky' enough to not get any weeds on a plant, you will get the full 10. But with weeds, you will get 2-5 on average, usually 3-5.
 -- Once the final tick occurs, you will see some plants that change from 'Barley: Growing' to 'Barley: Harvest'. Those are the ones you get 10 barley from.
 -- If they still say 'Barley: Growing' then that means you got a weed. At this point, there is no point on continuing and harvest them all.
 -- No this macro is not written to use Weed Killer.  This is pretty much gamble. Either you will get the full 10 (no weeds) or you will get less. But 98% of the time you will get more than 2, for sure.
@@ -10,7 +10,7 @@
 
 dofile("common.inc");
 
-askText = "Barley v2.1.0 by Cegaiel (many credits included in script comments)\n\nTwo methods available: Use Fertilizer or Water Only. See comments for more info.\n\n'Right click pins/unpins a menu' must be ON.\n\n'Plant all crops where you stand' must be ON.\n\n'Right click pins/unpins a menu' must be ON.\n\nPin Barley Plant window in TOP-RIGHT. Automato: Slighty in TOP-RIGHT.";
+askText = "Barley v2.1.1 by Cegaiel (many credits included in script comments)\n\nTwo methods available: Use Fertilizer or Water Only. See comments for more info.\n\n'Right click pins/unpins a menu' must be ON.\n\n'Plant all crops where you stand' must be ON.\n\n'Right click pins/unpins a menu' must be ON.\n\nPin Barley Plant window in TOP-RIGHT. Automato: Slighty in TOP-RIGHT.";
 
 
 -- Global parameters set by prompt box.
@@ -336,12 +336,12 @@ function doit()
 		end
 	end
 
-  statusScreen("Watching top-left window for tick ...\n\nTicks since planted: " .. ticks .. "/" .. totalWater - 1 .. "\n\n[" .. waterUsed .. "/" .. totalWater*grid_w*grid_h .. "]  Jugs of Water Used "  .. "\n[" .. fertilizerUsed .. "/" .. totalFertilizer*grid_w*grid_h .. "]  Fertilizer Used\n\n[" .. loop_count .. "/" .. num_loops .. "]  Current Pass\n\nElapsed Time: " .. getElapsedTime(startTime) .. finish_up_message,nil, 0.7, 0.7);
+  statusScreen("Watching top-left window for tick ...\n\nTicks since planting: " .. ticks .. "/" .. totalWater - 1 .. "\n\n[" .. waterUsed .. "/" .. totalWater*goodPlantings .. "]  Jugs of Water Used "  .. "\n[" .. fertilizerUsed .. "/" .. totalFertilizer*goodPlantings .. "]  Fertilizer Used\n\n[" .. loop_count .. "/" .. num_loops .. "]  Current Pass\n\nElapsed Time: " .. getElapsedTime(startTime) .. finish_up_message,nil, 0.7, 0.7);
 
   lsSleep(100);
   end -- while
 
-  sleepWithStatus(1000, "PLANT READY FOR HARVEST!\n\nTicks since planted: " .. ticks .. "/" .. totalWater - 1 .. "\n\n[" .. waterUsed .. "/" .. totalWater*grid_w*grid_h .. "]  Jugs of Water Used "  .. "\n[" .. fertilizerUsed .. "/" .. totalFertilizer*grid_w*grid_h .. "] Fertilizer Used\n\n[" .. loop_count .. "/" .. num_loops .. "]  Current Pass\n\nElapsed Time: " .. getElapsedTime(startTime) .. finish_up_message,nil, 0.7, 0.7);
+  sleepWithStatus(1000, "PLANT READY FOR HARVEST!\n\nTicks since planting: " .. ticks .. "/" .. totalWater - 1 .. "\n\n[" .. waterUsed .. "/" .. totalWater*goodPlantings .. "]  Jugs of Water Used "  .. "\n[" .. fertilizerUsed .. "/" .. totalFertilizer*goodPlantings .. "] Fertilizer Used\n\n[" .. loop_count .. "/" .. num_loops .. "]  Current Pass\n\nElapsed Time: " .. getElapsedTime(startTime) .. finish_up_message,nil, 0.7, 0.7);
 
   harvestAll();
 
@@ -378,6 +378,7 @@ function plantAndPin(loop_count)
   local x_pos = 0;
   local y_pos = 0;
   local success = true;
+  goodPlantings = 0;
 
   for y=1, grid_h do
     for x=1, grid_w do
@@ -454,13 +455,13 @@ function plantHere(xyPlantFlax, y_pos)
     return false;
   end
 
+   goodPlantings = goodPlantings + 1; 
 
   -- Check for window size
   checkWindowSize(bed[0], bed[1]);
 
   -- Move window into corner
   stashWindow(bed[0] + 5, bed[1], BOTTOM_RIGHT);
-
   return true;
 end
 
