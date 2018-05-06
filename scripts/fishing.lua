@@ -144,9 +144,9 @@ function SetupLureGroup()
 	FirstLure="";
 	LastLure = "";
 
-		if not muteSoundEffects then
-		lsPlaySound("moneycounter.wav");
-		end
+--		if not muteSoundEffects then
+--		lsPlaySound("moneycounter.wav");
+--		end
 
 	lsDoFrame();
 	statusScreen("Indexing Lures ...",nil, 0.7, 0.7);
@@ -174,6 +174,10 @@ function SetupLureGroup()
 			--No Arrows on lure menu?
 			FirstLure= Lures[0];
 			LastLure=nil;
+		end
+
+		if not muteSoundEffects then
+		lsPlaySound("moneycounter.wav");
 		end
 	else
 		error("Didn\'t find Lures pinned window - Self Click->Skills, Fishing -> Use Lure, PIN THIS WINDOW!");
