@@ -1020,7 +1020,7 @@ function clickWaypointPixel(x, y, typeOfWaypoint)
     local rgbTol = 450;
     local hueTol = 450;
     local roughness = 20;
-    if(typeOfWaypoint == Ranyahn) then
+    if (typeOfWaypoint == Ranyahn) or (typeOfWaypoint == Hawthorn) then
         roughness = 100;
     end
     local foundSomething = false;
