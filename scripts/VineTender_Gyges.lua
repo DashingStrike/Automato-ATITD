@@ -51,6 +51,8 @@ vines = {};
 vinesUsed = {};
 vineImagesUsed = {};
 tendedCount = 0
+tol = 5000;
+
 
 -- ADDED BY GYGES
 	alsoTend = 1;

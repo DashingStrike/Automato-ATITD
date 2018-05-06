@@ -61,6 +61,7 @@ vines = {};
 vinesUsed = {};
 vineImagesUsed = {};
 tendedCount = 0;
+tol = 5000;
 
 function doit()
   askForWindow(askText);
