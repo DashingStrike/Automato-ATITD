@@ -1,20 +1,41 @@
 dofile("common.inc");
 
+xOffset = 0;
+yOffset = 0;
+pointingSpeed = 2000; --ms
+
 function doit()
-  askForWindow("Test to find text in regions (windows) such as Clock Window, Friends window and building windows. Press Shift over ATITD window.");
+  askForWindow("Test to find text in regions (windows) such building windows.\n\nPress Shift (while hovering ATITD) to continue.");
+
   while true do
     findStuff();
   end
 end
 
 function pointToLocation()
-  while 1 do
+	window = 1;
+ while 1 do
     if lsMouseIsDown(1) then
 	lsSleep(50);
 	-- Don't move mouse until we let go of mouse button
     else
 	lsSleep(100); -- wait a moment in case we moved mouse while clicking
-	srSetMousePos(findBlah[0],findBlah[1]);
+	if not tonumber(xOffset) then
+	  xOffset = 0;
+	end
+	if not tonumber(yOffset) then
+	  yOffset = 0;
+	end
+
+
+	for i=#findBlah, 1, -1 do
+		srSetMousePos(findBlah[i][0]+xOffset,findBlah[i][1]+yOffset);
+		sleepWithStatus(pointingSpeed, "Pointing to Window " .. window .. "/" .. #findBlah .. "\n\nX Offset: " 
+		.. xOffset .. "\nY Offset: " .. yOffset .. "\n\nMouse Location: " .. findBlah[i][0]+xOffset .. ", " .. 
+		findBlah[i][1]+yOffset, nil, 0.7, 0.7);
+		window = window + 1;
+	end
+
 	break;
 	end
   end
@@ -27,16 +48,26 @@ function findStuff()
   local text = "";
   local result = "";
   local pos = getMousePos();
-
   checkBreak();
   srReadScreen();
 
 
   lsPrint(10, y, z, scale, scale, 0xFFFFFFff, "Search Text (case sensitive):");
-  y = y + 30;
-  foo, text = lsEditBox("text", 10, y, z, 200, 30, scale, scale,
-                                   0x000000ff);
+  y = y + 20;
+  foo, text = lsEditBox("text", 10, y, z, 200, 25, scale, scale, 0x000000ff);
+
   y = y + 50;
+  lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "X offset:    +/-");
+  lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);  -- Shrink the text boxes and text down
+  is_done, xOffset = lsEditBox("xoffset", 130 , y+25, z, 50, 30, scale, scale, 0x000000ff, xOffset);
+  lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Shrink the text boxes and text down
+  y = y + 40;
+  lsPrint(5, y-10, z, scale, scale, 0xFFFFFFff, "Y offset:    +/-");
+  lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);  -- Shrink the text boxes and text down
+
+  is_done, yOffset = lsEditBox("yoffset", 130, y+25, z, 50, 30, scale, scale, 0x000000ff, yOffset);
+  lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Shrink the text boxes and text down
+  y = y + 30;
 
   local startPos = findCoords();
   if startPos then
@@ -44,53 +75,38 @@ function findStuff()
   else
     lsPrint(10, y, z, scale, scale, 0xFFFFFFff, "ATITD Clock Coordinates: Not Found");
   end
-
-  y = y + 30;
+  y = y + 20;
   lsPrint(10, y, z, scale, scale, 0xFFFFFFff, "Current Mouse Position: " .. pos[0] .. ", " .. pos[1]);
 
 
   if text ~= "" then
-    findBlah = findText(text);
-    findCount = #(findAllText(text));
+    findBlah = findAllText(text);
+    findCount = #findBlah;
   else
-    findBlah = nil;
+    findCount = 0;
   end
 
-  if findBlah and text ~= "" then
-    foundX = findBlah[0];
-    foundY = findBlah[1];
-    result = " FOUND (" .. findCount .. ")";
 
-    if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff,
-                    "Point") then
+  if findCount == 0 then
+    result = " Not Found";
+  else
+    result = " FOUND (" .. findCount .. ") Windows";
+    lsPrint(10, y+80, z, scale, scale, 0xFFFFFFff, "Click Point to move mouse to location(s).");
+
+    if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Point") then
       pointToLocation();
     end
-
-  elseif text ~= "" then
-    result = " Not Found"
   end
 
   y = y + 30;
 
   if text ~= "" then
-
     lsPrint(10, y, z, scale, scale, 0xFFFFFFff, "Searching for \"" .. text .. "\"");
-    y = y + 30;
+    y = y + 20;
     lsPrint(10, y, z, scale, scale, 0xFFFFFFff, "Results: " .. result);
-
   end
 
-
-  if findBlah then
-    y = y + 30;
-    lsPrint(10, y, z, scale, scale, 0xFFFFFFff, "Window Location: " .. foundX .. ", " .. foundY);
-    y = y + 30;
-    lsPrint(10, y, z, scale, scale, 0xFFFFFFff, "Click Point to move mouse to location.");
-  end
-
-
-    if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
-                    "End script") then
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
       error "Clicked End Script button";
     end
 
