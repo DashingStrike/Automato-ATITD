@@ -474,9 +474,9 @@ function dragWindows(loop_count)
                "Dragging Windows into Grid" .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
 
   if plantType == ONIONS then
-    arrangeStashed(nil, true, onion_window_w, onion_window_h, space_to_leave);
+    arrangeStashed(nil, false, onion_window_w, onion_window_h, space_to_leave);
   else
-    arrangeStashed(nil, true, window_w, window_h, space_to_leave);
+    arrangeStashed(nil, false, window_w, window_h, space_to_leave);
   end
 end
 
@@ -608,6 +608,7 @@ end
 function walkHome(loop_count, finalPos)
   -- Close all empty windows
   closeEmptyAndErrorWindows();
+  lsSleep(1000);
   -- remove any screens with the too far away text
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ") Walking..." .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
 
