@@ -1,12 +1,11 @@
--- modified by Silden 03-SEP-17
+	-- modified by Silden 03-SEP-17
+	-- Major revamp by Cegaiel 08-MAY-2018
 -- * Fixed UI Changes (twice in one tale!)
 -- * Added buttons to handle loading charcoal and materials
 -- * Added sound when all glass has been made
 
 
 dofile("common.inc"); -- To allow the findAllText function
---dofile("screen_reader_common.inc");
---dofile("ui_utils.inc");
 
 -- Initial variables
 window_w = 320;
@@ -31,6 +30,7 @@ item_name = {["GlassMakeSheet.png"] = "Sheet", ["GlassMakeRod.png"] = "Rod", ["G
 max_add_temp = 2290; -- Rare (0.5%) occurance of temperature too high at 2300
 -- minimum temperature in which we will start a new project, otherwise will reheat
 min_new_temp = 1750;
+
 
 tick_time = 3000;
 
@@ -98,10 +98,6 @@ function glassTick(window_pos, state)
 	state.status = "";
 	local pos;
 	local out_of_glass = nil;
-	if state.want_spike then
-		state.timer = state.timer - (tick_time / 1000);
-	end
-	
 	pos = srFindImageInRange("GlassTimeToStop.png", window_pos[0], window_pos[1], window_w, window_h, tol);
 	if pos then
 		out_of_glass = 1;
@@ -111,7 +107,6 @@ function glassTick(window_pos, state)
 		state.status = state.status .. " No temperature found, ignoring";
 		return state.status;
 	end
-	
 	
 
 	local temp = ocrNumber(pos[0] + temperature_width, pos[1]);
@@ -130,7 +125,7 @@ function glassTick(window_pos, state)
 	end
 	
 	-- Some kind of glass is being made
-	madeSomeGlass = true;
+	--madeSomeGlass = true;
 	
 	-- Monitor temperature
 	local last_frame_just_added = state.just_added;
@@ -144,6 +139,13 @@ function glassTick(window_pos, state)
 		if rose then
 			state.status = state.status .. " (Rose)";
 		end
+		if state.want_spike and rose then
+			state.spikeRose = state.spikeRose - 1;
+		end
+		if state.spiking and rose then
+			state.spikeTimer = state.spikeTimer - 1;
+		end
+
 		--  if just fell, and under max threshold, add 1 CC
 		if fell and (temp < max_add_temp) then
 			state.status = state.status .. " Fell,Adding";
@@ -154,26 +156,30 @@ function glassTick(window_pos, state)
 		--    item, add another and wait for spike or fall
 		if fell and (temp < min_new_temp) then
 			-- addCC(window_pos, state); -- done above
-			state.timer = 72;
+			state.spikeRose = 6; -- Want to add 2cc on 6th tick to cause spike
 			state.want_spike = 1;
-			state.status = state.status .. " WaitingToSpike";
 		end
 		
 		--if it's time to add for spike, add
-		if state.want_spike and state.timer <= 0 then
+		if state.want_spike and state.spikeRose <= 0 then
 			state.want_spike = nil;
 			state.spiking = 1;
-			state.timer = 0;
+			state.spikeTimer = 4;
 			addCC(window_pos, state);
+		end
+
+		if state.spiking and state.spikeTimer <= 0 then
+			state.status = state.status .. " (Temp-Spiked!)";
+			state.spiking = nil;
 		end
 	end
 
 	if state.want_spike then
-		state.status = state.status .. " (Wait to Spike: " .. state.timer .. ")";
+		state.status = state.status .. " (WaitingToSpike) (" .. state.spikeRose .. " ticks until Add 2cc)";
 	end
 
 	if state.spiking then
-		state.status = state.status .. " (Spiking)";
+		state.status = state.status .. " (WaitingOnSpike) (" .. state.spikeTimer .. " ticks until Spike)";
 	end
 	
 	state.last_temp = temp;
@@ -186,7 +192,8 @@ function glassTick(window_pos, state)
 	if not cooking then
 		state.status = state.status .. " NothingCooking";
 		if not stop_cooking then
-			if temp > 1600 and temp < 2400 then
+			--if temp > 1600 and temp < 2400 then
+			if temp > min_new_temp and temp < max_add_temp and not state.spiking then
 				local made_one=nil;
 				for item_index=1, #item_priority do
 					pos = srFindImageInRange(item_priority[item_index], window_pos[0], window_pos[1], window_w, window_h, tol);
@@ -205,9 +212,11 @@ function glassTick(window_pos, state)
 					end
 				end
 				if not made_one then
-					state.status = state.status .. " NothingToMake";
+					state.status = state.status .. " NothingToMake - Refreshing Window";
 					-- refresh window
-					clickAllText("Temperature");
+					thisIs = srFindImageInRange("ThisIs.png", window_pos[0], window_pos[1], window_w, window_h, tol);
+					--srSetMousePos(thisIs[0], thisIs[1]);
+					safeClick(thisIs[0], thisIs[1]);
 				end
 			else
 				state.status = state.status .. " (Temp out of range)";
@@ -291,6 +300,7 @@ function doit()
 			if lsButtonText(15, 45, z, 100, 0x00FFFFff, "START") then
 			  setPriority = false;
 			  lsDoFrame();
+			  statusScreen("Starting...");
 			  break;
 			end
 		end
@@ -368,6 +378,7 @@ function doit()
 				menuButtonSelected = 1;
 			end
 			
+
 			if lsButtonText(lsScreenX - 86, lsScreenY - 65, z, 22, 0xFFFF00ff, "M") then
 				menuButtonSelected = 2;
 			end
@@ -390,7 +401,7 @@ function doit()
 					stop_cooking = 1;
 				end
 			else
-				if lsButtonText(lsScreenX - 80, lsScreenY - 30, z, 100, 0x80ff80ff, "Cancel ...") then
+				if lsButtonText(lsScreenX - 80, lsScreenY - 30, z, 100, 0x80ff80ff, "Continue") then
 					stop_cooking = nil;
 				end
 			end
@@ -450,3 +461,4 @@ function clickAllText(textToFind)
 		srClickMouseNoMove(allTextReferences[buttons][0]+20, allTextReferences[buttons][1]+5);
 	end
 end
+
