@@ -203,12 +203,17 @@ function glassTick(window_pos, state)
 					end
 				end
 				if not made_one then
-					state.status = state.status .. " NothingToMake";
 					-- refresh window
 					srReadScreen();
+					lsSleep(100);
 					thisIs = srFindImageInRange("ThisIs.png", window_pos[0], window_pos[1], window_w, window_h, tol);
+					if not thisIs then 
+					  state.status = state.status .. " NothingToMake - Error Refreshing Window";
+					else
+					  state.status = state.status .. " NothingToMake - Refreshing Window";
 					--srSetMousePos(thisIs[0], thisIs[1]);
-					safeClick(thisIs[0], thisIs[1]);
+					  safeClick(thisIs[0], thisIs[1]);
+					end
 				end
 			else
 				state.status = state.status .. " (Temp out of range)";
