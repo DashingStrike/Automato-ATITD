@@ -3,7 +3,7 @@ dofile("ui_utils.inc");
 
 window_w = 200;
 window_h = 270;
-tol=0;
+tol=5000;
 taken=0;
 made=0;
 stop_cooking=0;
@@ -70,7 +70,7 @@ end
 
 function stoke(window_pos)
 	-- lsPrintln(window_pos[0] .. " " .. window_pos[1] .. " " .. window_w .. " " .. window_h);
-	local pos = srFindImageInRange("Stoke.png", window_pos[0], window_pos[1], window_w, window_h);
+	local pos = srFindImageInRange("Stoke.png", window_pos[0], window_pos[1], window_w, window_h, tol);
 	if not pos then
 		error 'Could not find Stoke button';
 	end
@@ -79,7 +79,7 @@ function stoke(window_pos)
 end
 
 function ClosePopups()
-	local OKpopup = srFindImage("OK-popup.png");
+	local OKpopup = srFindImage("OK-popup.png", tol);
 	if OKpopup then
 		srClickMouseNoMove(OKpopup[0]+5, OKpopup[1]+2);
 		lsSleep(100);
@@ -100,7 +100,7 @@ end;
 function process_vise(window_pos)
 	-- if we can take anything do that
 
-	local take = srFindImageInRange("Take.png", window_pos[0], window_pos[1], window_w, window_h);
+	local take = srFindImageInRange("Take.png", window_pos[0], window_pos[1], window_w, window_h, tol);
 	if take then
 		srClickMouseNoMove(take[0], take[1]);
 		lsSleep(200);
@@ -111,7 +111,7 @@ function process_vise(window_pos)
 
 	-- else if we can start a barrel do that
 	-- ClosePopups();
-	local makeabarrel = srFindImageInRange("Makeabarrel.png", window_pos[0], window_pos[1], window_w, window_h);
+	local makeabarrel = srFindImageInRange("Makeabarrel.png", window_pos[0], window_pos[1], window_w, window_h, tol);
 	if makeabarrel then
 		if (made>=num_barrels) or (taken >=num_barrels) or (stop_cooking>0) then
 			return nil;
@@ -127,9 +127,9 @@ function process_vise(window_pos)
 	--   
 	local FuelStatus = 0;
 	local cooldown = 0;
-	local pos = srFindImageInRange("Vise_bars.png", window_pos[0]-5, window_pos[1], window_w, window_h);
+	local pos = srFindImageInRange("Vise_bars.png", window_pos[0]-5, window_pos[1], window_w, window_h, tol);
 	if not pos then
-		error 'Cound not find Vise bars';
+		error 'Could not find Vise bars';
 	end;
 	local curFuel1 = FindBlue(pos[0]+bar1WoodOffX, pos[1]+fuelBarOffY);
 	local curFuel2 = FindBlue(pos[0]+bar2WoodOffX, pos[1]+fuelBarOffY);
@@ -189,7 +189,6 @@ function doit()
 	
 	local last_ret = {};
 	local should_continue = 1;
-
 	while should_continue > 0 do
 	
 		-- Tick
@@ -213,7 +212,6 @@ function doit()
 		local start_time = lsGetTimer();
 		while tick_time - (lsGetTimer() - start_time) > 0 do
 			time_left = tick_time - (lsGetTimer() - start_time);
-
 			lsPrint(10, 6, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
 			lsPrint(10, 18, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Alt+Shift to pause this script.");
 			lsPrint(10, 30, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting " .. time_left .. "ms...");
@@ -221,11 +219,11 @@ function doit()
 			if not (#vise_windows == #vise_windows2) then
 				lsPrintWrapped(10, 45, 5, lsScreenX-15, 1, 1, 0xFF7070ff, "Expected " .. #vise_windows .. " windows, found " .. #vise_windows2 .. ", not ticking.");		
 			elseif (made>=num_barrels) or (taken >= num_barrels) or (stop_cooking>0) then
-				lsPrint(10, 45, 5, 1.5, 1.5, 0x70FF70ff, "Finishing up.");
+				lsPrint(10, 45, 5, 0.8, 0.8, 0x70FF70ff, "Finishing up.");
 			elseif (taken > made) then
-				lsPrint(10, 45, 5, 1.5, 1.5, 0xFFFFFFff, taken .. "/" .. num_barrels .. " finished");
+				lsPrint(10, 45, 5, 0.8, 0.8, 0xFFFFFFff, taken .. "/" .. num_barrels .. " finished");
 			else
-				lsPrint(10, 45, 5, 1.5, 1.5, 0xFFFFFFff, made .. "/" .. num_barrels .. " started");
+				lsPrint(10, 45, 5, 0.8, 0.8, 0xFFFFFFff, made .. "/" .. num_barrels .. " started");
 			end
 			
 			for window_index=1, #vise_windows do
