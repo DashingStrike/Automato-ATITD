@@ -11,7 +11,7 @@ dofile("screen_reader_common.inc");
 dofile("ui_utils.inc");
 
 xyWindowSize = srGetWindowSize();
-delay_time = 100;
+delay_time = 250;
 directions1 = {"Eastern", "Northern", "Southern", "Western"};
 directions2 = {"Down", "Left", "Right", "Up"};
 tolerance = 6000;
@@ -221,8 +221,8 @@ function doit()
 			different = nil;
 			-- Refresh the window
 			if do_click_refresh then
+				lsSleep(delay_time);
 				srClickMouseNoMove(quarry[0], quarry[1], 0);
-				lsSleep(100);
 			end
 		else
 			-- Refresh quarry window
