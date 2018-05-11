@@ -377,7 +377,7 @@ function clickSequence()
   timesworked = timesworked + 1;
 
       if not muteSoundEffects then
-	  lsPlaySound("ding.wav");
+	  lsPlaySound("beepping.wav");
       end
 
     if autoWorkMine then
