@@ -1,8 +1,9 @@
 	-- modified by Silden 03-SEP-17
-	-- Major revamp by Cegaiel 08-MAY-2018
 -- * Fixed UI Changes (twice in one tale!)
 -- * Added buttons to handle loading charcoal and materials
 -- * Added sound when all glass has been made
+
+-- Major revamp by Cegaiel 08-MAY-2018
 
 
 dofile("common.inc"); -- To allow the findAllText function
@@ -14,6 +15,13 @@ temperature_width = 85; -- Width of the Temperature label
 tol = 6500;
 menuButtonSelected = 0;
 madeSomeGlass = false; -- Becomes true when you've started to make anything
+tick_time = 3000;
+
+writeLogs = false; -- Write out in GlassLogs.txt every time bench status updates 
+thisLog = "\n***************  New Session Started  ***************\n\n";
+this_tick = "";
+last_tick = "";
+showTicks = true;  -- Change to false to supress this status message (Ticks:#)
 
 -- It will make the first in the list if available, otherwise the next, etc
 -- This will let you make, e.g. Rods on your Soda Glass and Sheet Glass on your normal, by putting
@@ -28,11 +36,9 @@ item_name = {["GlassMakeSheet.png"] = "Sheet", ["GlassMakeRod.png"] = "Rod", ["G
   
 -- max temperature in which we will contine heating it, wait until it gets below this before adding
 max_add_temp = 2290; -- Rare (0.5%) occurance of temperature too high at 2300
-
 -- minimum temperature in which we will start a new project, otherwise will reheat
 min_new_temp = 1750;
 
-tick_time = 3000;
 
 function ocrNumber(x, y)
 	-- Finds the number at the given coordinate. 
@@ -123,7 +129,6 @@ function glassTick(window_pos, state)
 	  state.justStarted = 1;
 	end
 
-	showTicks = true;  -- Change to false to supress this status message
 	-- Show how many ticks this particular bench, after adding 2cc, before temp drops...
 	if state.benchTicksConfirmed and showTicks then
 	  state.status = state.status .. " Ticks:".. state.benchTicks;
@@ -133,7 +138,8 @@ function glassTick(window_pos, state)
 
 	cooking = srFindImageInRange("GlassCooking.png", window_pos[0], window_pos[1], window_w, window_h, tol);
 	
-	if (stop_cooking or out_of_glass) and not cooking then
+	--if (stop_cooking or out_of_glass) and not cooking then
+	if (stop_cooking or (out_of_glass and not maintainHeatNoCook)) and not cooking then
 		return nil;
 	end
 	
@@ -147,7 +153,7 @@ function glassTick(window_pos, state)
 		local rose = temp > state.last_temp;
 
 		if rose then
-			state.status = state.status .. " (Rose)";
+			state.status = state.status .. " (Rose:" .. math.floor(temp - state.last_temp) .. ")";
 				if not state.benchTicksConfirmed and state.benchTicksVerify and not state.want_spike and not state.spiking then
 			  	  state.benchTicks = state.benchTicks + 1;
 				end
@@ -167,15 +173,16 @@ function glassTick(window_pos, state)
 			  state.benchTicksVerify = nil;
 			  state.benchTicksConfirmed = 1;
 			end
+			state.spiking = nil;
 		end
 
 
 		if fell and not(temp < max_add_temp) then
-			state.status = state.status .. " (Fell)";
+			state.status = state.status .. " (Fell:" .. math.floor(state.last_temp - temp) .. ")";
 
 		--  if just fell, and under max threshold, add 2 CC
 		elseif fell and (temp < max_add_temp) then
-			state.status = state.status .. " (Fell,Adding)";
+			state.status = state.status .. " (Fell:" .. math.floor(state.last_temp - temp) .. ",Adding)";
 			addCC(window_pos, state);
 
 			if not state.benchTicksConfirmed then
@@ -185,8 +192,13 @@ function glassTick(window_pos, state)
 		end
 
 
+		if state.benchTicksConfirmed and not state.MinTempReachedOnce and temp > min_new_temp then
+		  state.MinTempReachedOnce = 1;
+		end
+
+
 		if (temp < min_new_temp) and not state.benchTicksConfirmed then
-		  state.status = state.status .. " (SpikingDisabled-WAIT!,VerifyingTicks)";
+		  state.status = state.status .. " (SpikingDisabled-WAIT!,VerifyingTicks,WaitingOnFell)";
 		end
 
 			
@@ -196,7 +208,6 @@ function glassTick(window_pos, state)
 			-- addCC(window_pos, state); -- done above
 			state.want_spike = 1;
 			state.spikeRose = state.benchTicks - 1;
-
 		end
 
 		
@@ -232,7 +243,8 @@ function glassTick(window_pos, state)
 		state.status = state.status .. " (NothingCooking)";
 		if not stop_cooking then
 			--if temp > 1600 and temp < 2400 then
-			if temp > min_new_temp and temp < max_add_temp and not state.spiking then
+			--if temp > min_new_temp and temp < max_add_temp and not state.spiking then
+			if (temp > 1600 and temp < 2400 and not maintainHeatNoCook and state.MinTempReachedOnce) or (temp > min_new_temp and temp < max_add_temp and not maintainHeatNoCook and not state.MinTempReachedOnce) then
 				local made_one=nil;
 				for item_index=1, #item_priority do
 					pos = srFindImageInRange(item_priority[item_index], window_pos[0], window_pos[1], window_w, window_h, tol);
@@ -258,6 +270,8 @@ function glassTick(window_pos, state)
 					--srSetMousePos(thisIs[0], thisIs[1]);
 					safeClick(thisIs[0], thisIs[1]);
 				end
+			elseif maintainHeatNoCook then
+				state.status = state.status .. " (Cooking Suspended)";
 			else
 				state.status = state.status .. " (Temp out of range)";
 			end
@@ -277,10 +291,6 @@ function allowReorder(x, y)
 	local z = 0
 	local scale=0.7;
 	local dy = 28;
-
-	if setPriority then
-	  y = 100;
-	end
 
 	lsPrint(x, y, z, scale, scale, 0xFFFFFFff, "Click an item to raise priority");
 	y=y+20;
@@ -334,17 +344,28 @@ function doit()
 	while setPriority do
 	  checkBreak();
 	  lsPrint(5, 10, z, 0.7, 0.7, 0xFFFFFFff, "Set priority below then click Start ...");
+	  lsPrintWrapped(5, 65, 10, lsScreenX - 10, 0.57, 0.57, 0xFFFFFFff, "Suspend Cooking: Prevent NEW projects from starting, but maintain heat levels. Toggle ON/OFF while macro runs. Doesn\'t affect project already in progress! Write Log: Record every bench change to Automato/Games/ATITD/GlassLogs.txt");
 	  lsSetCamera(0,0,lsScreenX*1.1,lsScreenY*1.1);
-	  allowReorder(10, 100+15*#glass_windows);
+	  allowReorder(10, 155);
 
 		if  setPriority then
-			if lsButtonText(15, 45, z, 100, 0x00FFFFff, "START") then
+			if lsButtonText(15, 35, z, 100, 0x00FFFFff, "START") then
 			  setPriority = false;
 			  lsDoFrame();
 			  statusScreen("Starting...");
 			  break;
 			end
 		end
+
+	  lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
+
+	if maintainHeatNoCook then
+	  maintainHeatNoCook = lsCheckBox(200, 250, 10, 0xFFFF00ff, " Suspend Cooking", maintainHeatNoCook);
+	else
+	  maintainHeatNoCook = lsCheckBox(200, 250, 10, 0xFFFFFFff, " Suspend Cooking", maintainHeatNoCook);
+	end
+
+	  writeLogs = lsCheckBox(200, 280, 10, 0xFFFFFFff, " Write Log File", writeLogs);
 
 	  lsDoFrame();
 	  lsSleep(100);
@@ -386,6 +407,8 @@ function doit()
 			lsPrint(10, 18, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Alt+Shift to pause this script.");
 				if stop_cooking then
 				  lsPrint(10, 32, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting (Finishing up) " .. time_left .. " ms ...");
+				elseif maintainHeatNoCook then
+				  lsPrint(10, 32, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting (No Cook,Maintain Heat) " .. time_left .. " ms ...");
 				else
 				  lsPrint(10, 32, 0, 0.7, 0.7, 0xFFFFFFff, "Waiting " .. time_left .. " ms ...");
 				end
@@ -405,15 +428,43 @@ function doit()
 			end
 			
 			  lsSetCamera(0,0,lsScreenX*1.1,lsScreenY*1.1);
+
 			for window_index=1, #glass_windows do
 				if last_ret[window_index] then
 					should_continue = 1;
 					lsPrint(10, 65 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - " .. last_ret[window_index]);
+						if writeLogs then
+						  thisLog = thisLog  ..  "#" .. window_index .. last_ret[window_index] .. "\n";
+						  this_tick = this_tick .. last_ret[window_index];
+						end
 				else
 					lsPrint(10, 65 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - COOL DOWN");
 				end
 			end
-			
+
+						if writeLogs then
+							if this_tick ~= last_tick then
+								if #glass_windows > 1 then
+								  thisLog = thisLog .. "\n";
+								end
+						  	  WriteGlassLogs(thisLog);
+							end
+						  last_tick = this_tick;
+						  this_tick = "";
+						  thisLog = "";
+						end
+
+
+			  lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
+			  if maintainHeatNoCook then
+			    maintainHeatNoCook = lsCheckBox(200, lsScreenY - 120, 10, 0xFFFF00ff, " Suspend Cooking", maintainHeatNoCook);
+			  else
+			    maintainHeatNoCook = lsCheckBox(200, lsScreenY - 120, 10, 0xFFFFFFff, " Suspend Cooking", maintainHeatNoCook);
+			  end
+			    writeLogs = lsCheckBox(200, lsScreenY - 90, 10, 0xFFFFFFff, " Write Log File", writeLogs);
+			  lsSetCamera(0,0,lsScreenX*1.1,lsScreenY*1.1);
+
+
 			-- New buttons to help add charcoal and melt materials
 			if lsButtonText(lsScreenX - 59, lsScreenY - 100, z, 60, 0x00FFFFff, "+2cc") then
 				menuButtonSelected = 1;
@@ -503,3 +554,8 @@ function clickAllText(textToFind)
 	end
 end
 
+function WriteGlassLogs(Text)
+	FileGlass = io.open("GlassLogs.txt","a+");
+	FileGlass:write(Text);
+	FileGlass:close();
+end
