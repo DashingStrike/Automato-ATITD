@@ -10,7 +10,7 @@ prompt_before_working = nil;
 dofile("common.inc");
 
 xyWindowSize = srGetWindowSize();
-delay_time = 150;
+delay_time = 250;
 lag_wait_after_click = 1500;
 
 directions1 = {"Eastern", "Northern", "Southern", "Western"};
@@ -85,7 +85,7 @@ function doit()
 	local different = nil;
 	
 	while 1 do
-		lsSleep(end_read_time);
+		lsSleep(delay_time);
 		srReadScreen();
 		-- Find Quarry window
 		local quarry = srFindImage("Quarry-ThisIsAStoneQuarry.png", 6000);
