@@ -7,11 +7,12 @@ do_click_refresh = 1;
 do_click_refresh_when_end_red = 1;
 prompt_before_working = nil;
 
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
+dofile("common.inc");
 
 xyWindowSize = srGetWindowSize();
-delay_time = 250;
+delay_time = 150;
+lag_wait_after_click = 1500;
+
 directions1 = {"Eastern", "Northern", "Southern", "Western"};
 directions2 = {"Down", "Left", "Right", "Up"};
 tolerance = 6000;
@@ -37,13 +38,20 @@ function doit()
 	end
 	local num_workers=0;
 	while ((not num_workers) or (num_workers < 2) or (num_workers > 5)) do
-		num_workers = promptNumber("How many workers (2-4)?", 4);
+		num_workers = promptNumber("How many Workers (2-4)?", 4);
 	end
 	local my_index = 0;
 	while ((not my_index) or (my_index < 1) or (my_index > num_workers)) do
-		my_index = promptNumber("Which index (1-" .. num_workers .. ")?", 0);
+		my_index = promptNumber("Which Worker # are you (1-" .. num_workers .. ")?", 1);
 	end
-	askForWindow("Quarrier #" .. my_index .. ", make sure the Skills window (END) is visible and quarry window is pinned.");
+	if promptOkay("Do you want an OK Prompt to appear (similar to this) when it\'s your turn?\n\nClicking No will have macro click for you, but lag might possibly cause premature clicking (if red endurance is lagging behind).\n\nClicking Yes will prompt you to click OK each time it\'s your turn, but lag proof.", nil, 0.7, 1, nil, 50) then
+	  prompt_before_working = 1;
+	  promptText = "Click after Prompt";
+	  else
+	  promptText = "Click without Prompt";
+	end
+
+	askForWindow("Quarrier #" .. my_index .. ", make sure the Skills window (END) is visible and quarry window is pinned.\n\nClicking Mode: " .. promptText);
 	local end_red;
 	-- Initialize span
 	local span_pixels = {};
@@ -77,7 +85,7 @@ function doit()
 	local different = nil;
 	
 	while 1 do
-		lsSleep(delay_time);
+		lsSleep(end_read_time);
 		srReadScreen();
 		-- Find Quarry window
 		local quarry = srFindImage("Quarry-ThisIsAStoneQuarry.png", 6000);
@@ -211,12 +219,14 @@ function doit()
 			log("Quarrying - " .. directions1[directions[index][1]] .. "-" .. directions2[directions[index][2]]);
 			-- Click my button!
 			if prompt_before_working then
-				if promptOkay("Going to click on " .. positions[index][0] .. "," .. positions[index][1] .. " = " .. directions1[directions[index][1]] .. "-" .. directions2[directions[index][2]]) then
+				if promptOkay("Click OK to click on " .. positions[index][0] .. "," .. positions[index][1] .. " = " .. directions1[directions[index][1]] .. "-" .. directions2[directions[index][2]], nil, 0.7, nil, 1) then
 					srClickMouseNoMove(positions[index][0]+5, positions[index][1]+1, 0);
 				end
 			else
 				-- just click
 				srClickMouseNoMove(positions[index][0]+5, positions[index][1]+1, 0);
+				lsSleep(lag_wait_after_click);
+
 			end
 			different = nil;
 			-- Refresh the window
