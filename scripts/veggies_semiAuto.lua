@@ -13,7 +13,7 @@
 -- Plant Veggies Closer together: This will plant your veggies in a small radius around your avatar.
 -- Auto Gather Water: If you are planting near a water source, it will refill your jugs prior to each planting. You can optionally pin a Rain Barrel window and it will draw water from the barrel.
 -- Pause/Wait for Trigger after Harvest: Due to current variations in lag and duck time, sometimes it takes a few moments before all your veggies disappear, even after you stop moving.
--- This will pause the macro until you press your hotkey, to be sure all veggies are off the screen. If you uncheck this box, then it plants in continuous mode. You can adjust the timer below (delayAfterHarvestPerPlant = 2500) 
+-- This will pause the macro until you press your hotkey, to be sure all veggies are off the screen. If you uncheck this box, then it plants in continuous mode. You can adjust the timer below (delayAfterHarvestPerPlant) 
 -- Let me Pin my windows manually: The macro does pin up all your plant windows manually and form a grid (but you have to Tap Shift (optionally Ctrl, Alt, click MouseWheel). If you feel you can do it faster, then thats what this option is for.
 -- 'Remember plant coords' between planting: Prior to v1.3.0 you had to tap Shift over each plant, every time you planted.  This option remembers the last positions and attempts to use the same coordinates every round.
 -- 'Remember plant coords' can be inconsistent, sometimes. I think if you move too far while watering/harvesting, it can throw off coords by a pixel or two, sometimes resulting in a right click to miss the plant.
@@ -53,7 +53,7 @@ pauseAfterHarvest = false;
 manualPin = false;
 saveCoords = true;
 
-delayAfterHarvestPerPlant = 2500;
+delayAfterHarvestPerPlant = 2250;
 grid_x = 240;
 grid_y = 100;
 
@@ -61,7 +61,7 @@ firstLoop = true;
 totalHarvests = 0;
 
 function doit()
-  askForWindow("This macro will assist you by planting seeds, watering/harvesting your pinned windows when you tap the hotkey. After seeds are planted, you will tap hotkey over each plant, it will then pin the windows for you and do first watering automatically. After first watering, you will then tap hotkey to water/harvest (after you see it grow).\n\nMust have 'Plant all crops where you stand' turned OFF! Right click pins/unpins Must be ON! One-Click: Auto-take Piles ON!\n\nMake sure plant seed menu window AND Automato is in the TOP-RIGHT corner of the screen.");
+  askForWindow("This macro will assist you by planting seeds, watering/harvesting your pinned windows when you tap the hotkey. After seeds are planted, you will tap hotkey over each plant, it will then pin the windows for you and do first watering automatically. After first watering, you will then tap hotkey to water (after you see it grow).\n\nMust have 'Plant all crops where you stand' turned OFF! Right click pins/unpins Must be ON! One-Click: Auto-take Piles ON!\n\nMake sure plant seed menu window AND Automato is in the TOP-RIGHT corner of the screen.");
 
   center = getCenterPos();
   size = srGetWindowSize();
@@ -83,6 +83,7 @@ function doit()
 	setCameraView(CARTOGRAPHER2CAM);
 	lsSleep(500);
 	repositionAvatar();
+	closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
 
   while 1 do
 	firstWater = 1;
@@ -168,7 +169,7 @@ function waterThese()
 
 
   if firstWater == 0 then
-    statusScreen("When ALL plants GROW:\n" .. key .. " to Water/Harvest plants\n\n[" .. tended .. "] Tendings -- All Plants Watered\n\nYou can " .. key .. " even if you are still watering (animations) last growth. Watering/Harvests will be queued!\n\n\nClick Abort button if something went wrong. This will close all veggie windows and start over.", nil, 0.7, 0.7);
+    statusScreen("When ALL plants GROW:\n" .. key .. " to Water plants\n\n[" .. tended .. "] Tendings -- All Plants Watered\n\nYou can " .. key .. " even if you are still watering (animations) last growth. Watering/Harvests will be queued!\n\n\nClick Abort button if something went wrong. This will close all veggie windows and start over.", nil, 0.7, 0.7);
   elseif firstWater == 1 and manualPin then
     statusScreen("After you pin your windows:\n\n" .. key .. " to water pinned plants", nil, 0.7, 0.7);
   end
@@ -564,7 +565,7 @@ function getPlantWindowPos()
     plantPos[1] = plantPos[1] + 10;
   end
   if not plantPos then
-    error 'Could not find plant window';
+    error("Could not find \'" .. seedName .. "\' seed in any pinned windows");
   end
   return plantPos;
 end
