@@ -1,4 +1,4 @@
---- Veggies SemiAuto v1.3.2 by Cegaiel
+--- Veggies SemiAuto v1.3.3 by Cegaiel
 -- Credits to the Author of veggies.lua (Submitted to Github by MHoroszowski on Sep 19, 2015) for his work as a starting point.
 
 -- Make sure Automato is not at the bottom right corner, as this is where the plant windows are stashed, prior to pinning.
@@ -49,7 +49,7 @@ harvestImage = "HarvestThese.png";
 thisIs = "This is";
 plantCloser = true;
 autoWater = true;
-pauseAfterHarvest = true;
+pauseAfterHarvest = false;
 manualPin = false;
 saveCoords = true;
 
@@ -141,8 +141,6 @@ function waterThese()
   elseif (dropdown_cur_value == 2) then
   was_shifted = lsControlHeld();
   key = "Tap Ctrl";
-
-
   elseif (dropdown_cur_value == 3) then
   was_shifted = lsAltHeld();
   key = "Tap Alt";
@@ -171,17 +169,14 @@ function waterThese()
 
   if firstWater == 0 then
     statusScreen("When ALL plants GROW:\n" .. key .. " to Water/Harvest plants\n\n[" .. tended .. "] Tendings -- All Plants Watered\n\nYou can " .. key .. " even if you are still watering (animations) last growth. Watering/Harvests will be queued!\n\n\nClick Abort button if something went wrong. This will close all veggie windows and start over.", nil, 0.7, 0.7);
-	refreshWindows();
   elseif firstWater == 1 and manualPin then
     statusScreen("After you pin your windows:\n\n" .. key .. " to water pinned plants", nil, 0.7, 0.7);
   end
 
-    if (is_shifted and not was_shifted) or (firstWater == 1 and not manualPin) then
-	checkBreak();
-	srReadScreen();
-	local waters = findAllImages(waterImage);
-	local harvest = findAllImages(harvestImage);
+  refreshWindows();
 
+    if (is_shifted and not was_shifted) or (firstWater == 1 and not manualPin) or harvestReady then
+	checkBreak();
 	if #waters == 0 and #harvest == 0 then
 	  message = "Could not find any pinned veggies!\n\nThis usually happens if you missed a plant when you " .. key .. ".\n\nHigh resolutions, such as 1920x1080 has such a small margin of where you clicked on veggie.\n\nIf avatar moves or body is facing a certain direction MIGHT be a factor...\n\n" .. key .. " to continue"
 	  displayError(message);
@@ -389,11 +384,19 @@ end
 
 function refreshWindows()
   srReadScreen();
-	tops = findAllText(thisIs);
-		for i=1,#tops do
-        	  safeClick(tops[i][0], tops[i][1]);
-		  --lsSleep(10);
-	       end
+  waters = findAllImages(waterImage);
+  harvest = findAllImages(harvestImage);
+  tops = findAllText(thisIs);
+	for i=1,#tops do
+      	  safeClick(tops[i][0], tops[i][1]);
+	  --lsSleep(10);
+       end
+
+  if #harvest >= 1 and #waters == 0 then
+    harvestReady = 1;
+  else
+    harvestReady = nil;
+  end
 end
 
 
@@ -618,26 +621,26 @@ end
 
 function pickUpSeeds()
   srSetMousePos(center[0],center[1]);
-  lsSleep(100);
+  lsSleep(75);
   srKeyEvent(string.char(27));  -- Send Esc Key to close the window
-  lsSleep(100);
+  lsSleep(75);
   srReadScreen();
   utility = findText("Utility");
-  lsSleep(100);
+  lsSleep(75);
 	if utility then
 	  srClickMouseNoMove(utility[0]+12,utility[1]+5);
-	  lsSleep(100);
+	  lsSleep(75);
   	else
 	  sleepWithStatus(1250, "Error: Could not find menu option 'Utility'\n\nWas part of the menu obscured behind Automato, perhaps?");
   	end
   srReadScreen();
 
   bags = findText("Make nearby");
-  lsSleep(100);
+  lsSleep(75);
 
 	if bags then
 	  srClickMouseNoMove(bags[0]+12,bags[1]+5);
-	  lsSleep(100);
+	  lsSleep(75);
 	else
 	  sleepWithStatus(1250, "Error: Could not find menu option 'Make nearby portables look like bags'\n\nWas part of the menu obscured behind Automato, perhaps?");
   end
