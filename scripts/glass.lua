@@ -272,7 +272,7 @@ function glassTick(window_pos, state)
 					else
 					  state.status = state.status .. " NothingToMake - Refreshing Window";
 					--srSetMousePos(thisIs[0], thisIs[1]);
-					  safeClick(thisIs[0], thisIs[1]);
+					  srClickMouseNoMove(thisIs[0], thisIs[1]);
 					end
 				end
 			elseif maintainHeatNoCook then
