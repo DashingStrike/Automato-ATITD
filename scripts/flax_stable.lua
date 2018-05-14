@@ -33,7 +33,7 @@ seeds_per_pass = 5;
 seeds_per_iter = 0;
 finish_up = 0;
 finish_up_message = "";
-
+waterGap = true;
 
 seedType = "Old";
 harvest = "Harvest this";
@@ -194,12 +194,13 @@ function promptFlaxNumbers()
       end
       y = y + 32;
     end
-    is_plant = lsCheckBox(120, y+5, z+10, 0xFFFFFFff, "Grow Flax", is_plant);
+    waterGap = CheckBox(120, y+5, z+10, 0xFFFFFFff, " Leave Gap for Water", waterGap, 0.7, 0.7);
+    is_plant = CheckBox(120, y+25, z+10, 0xFFFFFFff, " Grow Flax", is_plant, 0.7, 0.7);
     y = y + 36;
-    if lsButtonText(10, y-32, z, 100, 0xFFFFFFff, "Start!") then
+    if ButtonText(10, y-25, z, 100, 0xFFFFFFff, "Start!", 0.9, 0.9) then
       is_done = 1;
     end
-    y = y + 8;
+    y = y + 10
 
     if is_plant then
       -- Will plant and harvest flax
@@ -474,9 +475,9 @@ function dragWindows(loop_count)
                "Dragging Windows into Grid" .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
 
   if plantType == ONIONS then
-    arrangeStashed(nil, false, onion_window_w, onion_window_h, space_to_leave);
+    arrangeStashed(nil, waterGap, onion_window_w, onion_window_h, space_to_leave);
   else
-    arrangeStashed(nil, false, window_w, window_h, space_to_leave);
+    arrangeStashed(nil, waterGap, window_w, window_h, space_to_leave);
   end
 end
 
