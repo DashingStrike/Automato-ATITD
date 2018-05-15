@@ -35,8 +35,13 @@ item_name = {["GlassMakeSheet.png"] = "Sheet", ["GlassMakeRod.png"] = "Rod", ["G
 		["GlassMakeBlade.png"] = "Blade", ["GlassMakeFineRod.png"] = "Fine Rod", ["GlassMakeFinePipe.png"] = "Fine Pipe"};		
   
 -- max temperature in which we will contine heating it, wait until it gets below this before adding
+-- No longer used after ticks are verified, macro replaces this value with (2399 - state.HV).
+-- The below value is only used as an initial value while verifying ticks
 max_add_temp = 2290; -- Rare (0.5%) occurance of temperature too high at 2300
+
 -- minimum temperature in which we will start a new project, otherwise will reheat
+-- No longer used after ticks are verified, macro replaces this value with (1600 - state.HV + state.DV).
+-- The below value is only used as an initial value while verifying ticks
 min_new_temp = 1750;
 
 
@@ -97,7 +102,7 @@ function addCC(window_pos, state)
 	
 	state.just_added = 1;
 	srClickMouseNoMove(pos[0]+5, pos[1]+2);
-	state.status = state.status .. " Added 2 CC";
+	state.status = state.status .. " (Adding2CC)";
 end
 
 function glassTick(window_pos, state)
@@ -126,21 +131,19 @@ function glassTick(window_pos, state)
 
 	if not state.justStarted then -- set variable, once upon starting macro
 	  state.benchTicks = 0;
-	  state.justStarted = 1;
 	  state.DV = 0;
 	  state.HV = 0;
+	  state.lastSpike = 0;
+	  state.justStarted = 1;
 	end
 
 	-- Show how many ticks this particular bench, after adding 2cc, before temp drops...
-	if state.benchTicksConfirmed and showTicks then
-	  state.status = state.status .. " / Ticks:".. state.benchTicks .. " / DV:" .. state.DV .. " / HV:" .. state.HV .. " / Min/MaxTemp:" .. 1600 - state.HV + state.DV .. "-" .. 2399 - state.HV;
-	elseif showTicks then
-	  state.status = state.status .. " / ?Ticks:".. state.benchTicks .. " / DV:" .. state.DV .. " / HV:" .. state.HV .. " / Min/MaxTemp:" .. min_new_temp .. "-" .. max_add_temp .. "?";
+	if showTicks and not state.benchTicksConfirmed then
+	  state.status = state.status .. " Ticks:".. state.benchTicks .. "?";
 	end
 
 	cooking = srFindImageInRange("GlassCooking.png", window_pos[0], window_pos[1], window_w, window_h, tol);
-	
-	--if (stop_cooking or out_of_glass) and not cooking then
+
 	if (stop_cooking or (out_of_glass and not maintainHeatNoCook)) and not cooking then
 		return nil;
 	end
@@ -160,37 +163,38 @@ function glassTick(window_pos, state)
 			  	  state.benchTicks = state.benchTicks + 1;
 				  state.HV = state.HV + (temp - state.last_temp);
 				end
+
 				if not state.benchTicksConfirmed and state.benchTicksVerify and (state.want_spike or state.spiking) and temp - state.last_temp > 100 then
 			  	  state.benchTicks = 0;
 				  state.HV = 0;
 				end
-		end
 
-
-		if state.want_spike and rose then
-			state.spikeRose = state.spikeRose - 1;
+				if state.want_spike then
+				  state.spikeRose = state.spikeRose - 1;
+				end
 		end
 
 
 		if fell then
+			state.status = state.status .. " (Fell:" .. math.floor(state.last_temp - temp) .. ")";
+			state.spiking = nil;
+
+			    --  if just fell, and under max threshold, check if we should add 2 CC
+			if ( (temp < max_add_temp) and not state.benchTicksConfirmed ) or ( (temp < 2399 - state.HV) and state.benchTicksConfirmed ) then 
+			  addCC(window_pos, state);
+			end
+
+			if temp <= (1600 - state.HV + state.DV) and state.benchTicksConfirmed then
+			  state.want_spike = 1;
+			  state.spikeRose = state.benchTicks;
+			end
+
 			if not state.benchTicksConfirmed and state.benchTicksVerify and state.benchTicks >= 4 and state.benchTicks <= 8 then
 			  state.benchTicksVerify = nil;
 			  state.benchTicksConfirmed = 1;
 			  state.DV = state.last_temp - temp;
-			end
-			state.spiking = nil;
-		end
 
-
-		--  if just fell, and under max threshold, check if we should add 2 CC
-		if fell and (not (temp < max_add_temp) and not state.benchTicksConfirmed) or (not (temp < 2399 - state.HV) and state.benchTicksConfirmed) then
-			state.status = state.status .. " (Fell:" .. math.floor(state.last_temp - temp) .. ")";
-
-		elseif fell then
-			state.status = state.status .. " (Fell:" .. math.floor(state.last_temp - temp) .. ",Adding)";
-			addCC(window_pos, state);
-
-			if not state.benchTicksConfirmed then
+			elseif not state.benchTicksConfirmed then
 			  state.benchTicksVerify = 1;
 			  state.benchTicks = 0;
 			end
@@ -203,42 +207,36 @@ function glassTick(window_pos, state)
 
 
 		if not state.benchTicksConfirmed then
-		  state.status = state.status .. " (WAIT,VerifyingTicks,CookingDisabled,WaitingOnFell)";
+		  state.status = state.status .. " (WAIT,VerifyingTicks,CookingSpikingDisabled)";
 		end
 
-			
-		--  if just fell, and is under 1600+threshold, add one
-		--    item, add another and wait for spike or fall
-		if fell and temp <= (1600 - state.HV + state.DV) and state.benchTicksConfirmed then
-			-- addCC(window_pos, state); -- done above
-			state.want_spike = 1;
-			state.spikeRose = state.benchTicks;
-		end
-
-		
+	
 		--if it's time to add for spike, add
 		if state.want_spike and state.spikeRose <= 0 then
-			state.want_spike = nil;
-			state.spiking = 1;
-			addCC(window_pos, state);
+		  state.want_spike = nil;
+		  state.spiking = 1;
+		  addCC(window_pos, state);
 		end
 
 
-		if state.spiking and temp - state.last_temp > 100 then
-			state.status = state.status .. " (SpikeOccured!)";
-			state.spiking = nil;
+		if state.want_spike then
+		  state.status = state.status .. " (PreparingToSpike:" .. state.spikeRose .. ")";
+
+		elseif state.spiking and temp - state.last_temp > 100 then
+		  state.status = state.status .. " (SpikeOccured!)";
+		  state.spiking = nil;
+		  state.lastSpike = math.floor(temp - state.last_temp);
+
+		elseif state.spiking then
+		  state.status = state.status .. " (WaitingForSpike)";
 		end
+
 	end
 
-	if state.want_spike then
-		state.status = state.status .. " (PreparingToSpike:" .. state.spikeRose .. ")";
+	if state.benchTicksConfirmed and showTicks then
+	  state.status = state.status .. " <Ticks:".. state.benchTicks .. "|DV:" .. state.DV .. "|HV:" .. state.HV .. "|Min/MaxTemp:" .. 1600 - state.HV + state.DV .. "-" .. 2399 - state.HV .. "|LastSpike:" .. state.lastSpike .. ">";
 	end
 
-
-
-	if state.spiking then
-		state.status = state.status .. " (WaitingForSpike)";
-	end
 	
 	state.last_temp = temp;
 	if last_frame_just_added then
@@ -257,7 +255,6 @@ function glassTick(window_pos, state)
 
 		if not stop_cooking then
 			--if temp > 1600 and temp < 2400 then
-			--if temp > min_new_temp and temp < max_add_temp and not state.spiking then
 			if temp >= (1600 - state.HV + state.DV) and temp <= (2399 - state.HV) and not maintainHeatNoCook and state.MinTempReachedOnce then 
 				local made_one=nil;
 				for item_index=1, #item_priority do
