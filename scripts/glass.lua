@@ -21,7 +21,7 @@ writeLogs = false; -- Write out in GlassLogs.txt every time bench status updates
 thisLog = "\n***************  New Session Started  ***************\n\n";
 this_tick = "";
 last_tick = "";
-showTicks = true;  -- Change to false to supress this status message (Ticks:#)
+showTicks = true;  -- Change to false to supress this status message (Ticks:# / DV:value / HV:value / min/maxTemp:value-value)
 
 -- It will make the first in the list if available, otherwise the next, etc
 -- This will let you make, e.g. Rods on your Soda Glass and Sheet Glass on your normal, by putting
@@ -127,13 +127,15 @@ function glassTick(window_pos, state)
 	if not state.justStarted then -- set variable, once upon starting macro
 	  state.benchTicks = 0;
 	  state.justStarted = 1;
+	  state.DV = 0;
+	  state.HV = 0;
 	end
 
 	-- Show how many ticks this particular bench, after adding 2cc, before temp drops...
 	if state.benchTicksConfirmed and showTicks then
-	  state.status = state.status .. " Ticks:".. state.benchTicks;
+	  state.status = state.status .. " / Ticks:".. state.benchTicks .. " / DV:" .. state.DV .. " / HV:" .. state.HV .. " / Min/MaxTemp:" .. 1600 - state.HV + state.DV .. "-" .. 2399 - state.HV;
 	elseif showTicks then
-	  state.status = state.status .. " Ticks:".. state.benchTicks .. "?";
+	  state.status = state.status .. " / ?Ticks:".. state.benchTicks .. " / DV:" .. state.DV .. " / HV:" .. state.HV .. " / Min/MaxTemp:" .. min_new_temp .. "-" .. max_add_temp .. "?";
 	end
 
 	cooking = srFindImageInRange("GlassCooking.png", window_pos[0], window_pos[1], window_w, window_h, tol);
@@ -156,9 +158,11 @@ function glassTick(window_pos, state)
 			state.status = state.status .. " (Rose:" .. math.floor(temp - state.last_temp) .. ")";
 				if not state.benchTicksConfirmed and state.benchTicksVerify and not state.want_spike and not state.spiking then
 			  	  state.benchTicks = state.benchTicks + 1;
+				  state.HV = state.HV + (temp - state.last_temp);
 				end
 				if not state.benchTicksConfirmed and state.benchTicksVerify and (state.want_spike or state.spiking) and temp - state.last_temp > 100 then
 			  	  state.benchTicks = 0;
+				  state.HV = 0;
 				end
 		end
 
@@ -172,16 +176,17 @@ function glassTick(window_pos, state)
 			if not state.benchTicksConfirmed and state.benchTicksVerify and state.benchTicks >= 4 and state.benchTicks <= 8 then
 			  state.benchTicksVerify = nil;
 			  state.benchTicksConfirmed = 1;
+			  state.DV = state.last_temp - temp;
 			end
 			state.spiking = nil;
 		end
 
 
-		if fell and not(temp < max_add_temp) then
+		--  if just fell, and under max threshold, check if we should add 2 CC
+		if fell and (not (temp < max_add_temp) and not state.benchTicksConfirmed) or (not (temp < 2399 - state.HV) and state.benchTicksConfirmed) then
 			state.status = state.status .. " (Fell:" .. math.floor(state.last_temp - temp) .. ")";
 
-		--  if just fell, and under max threshold, add 2 CC
-		elseif fell and (temp < max_add_temp) then
+		elseif fell then
 			state.status = state.status .. " (Fell:" .. math.floor(state.last_temp - temp) .. ",Adding)";
 			addCC(window_pos, state);
 
@@ -192,22 +197,22 @@ function glassTick(window_pos, state)
 		end
 
 
-		if state.benchTicksConfirmed and not state.MinTempReachedOnce and temp > min_new_temp then
+		if state.benchTicksConfirmed and not state.MinTempReachedOnce and temp >= (1600 + state.DV) then
 		  state.MinTempReachedOnce = 1;
 		end
 
 
-		if (temp < min_new_temp) and not state.benchTicksConfirmed then
-		  state.status = state.status .. " (SpikingDisabled-WAIT!,VerifyingTicks,WaitingOnFell)";
+		if not state.benchTicksConfirmed then
+		  state.status = state.status .. " (WAIT,VerifyingTicks,CookingDisabled,WaitingOnFell)";
 		end
 
 			
 		--  if just fell, and is under 1600+threshold, add one
 		--    item, add another and wait for spike or fall
-		if fell and (temp < min_new_temp) and state.benchTicksConfirmed then
+		if fell and temp <= (1600 - state.HV + state.DV) and state.benchTicksConfirmed then
 			-- addCC(window_pos, state); -- done above
 			state.want_spike = 1;
-			state.spikeRose = state.benchTicks - 1;
+			state.spikeRose = state.benchTicks;
 		end
 
 		
@@ -218,6 +223,7 @@ function glassTick(window_pos, state)
 			addCC(window_pos, state);
 		end
 
+
 		if state.spiking and temp - state.last_temp > 100 then
 			state.status = state.status .. " (SpikeOccured!)";
 			state.spiking = nil;
@@ -225,8 +231,10 @@ function glassTick(window_pos, state)
 	end
 
 	if state.want_spike then
-		state.status = state.status .. " (WaitingToSpike:" .. state.spikeRose .. ")";
+		state.status = state.status .. " (PreparingToSpike:" .. state.spikeRose .. ")";
 	end
+
+
 
 	if state.spiking then
 		state.status = state.status .. " (WaitingForSpike)";
@@ -240,11 +248,17 @@ function glassTick(window_pos, state)
 	-- Monitor what we're making
 	
 	if not cooking then
-		state.status = state.status .. " (NothingCooking)";
+
+		if maintainHeatNoCook then
+		  state.status = state.status .. " (CookingSuspended)";
+		else
+		  state.status = state.status .. " (NothingCooking)";
+		end
+
 		if not stop_cooking then
 			--if temp > 1600 and temp < 2400 then
 			--if temp > min_new_temp and temp < max_add_temp and not state.spiking then
-			if (temp > 1600 and temp < 2400 and not maintainHeatNoCook and state.MinTempReachedOnce) or (temp > min_new_temp and temp < max_add_temp and not maintainHeatNoCook and not state.MinTempReachedOnce) then
+			if temp >= (1600 - state.HV + state.DV) and temp <= (2399 - state.HV) and not maintainHeatNoCook and state.MinTempReachedOnce then 
 				local made_one=nil;
 				for item_index=1, #item_priority do
 					pos = srFindImageInRange(item_priority[item_index], window_pos[0], window_pos[1], window_w, window_h, tol);
@@ -275,10 +289,6 @@ function glassTick(window_pos, state)
 					  srClickMouseNoMove(thisIs[0], thisIs[1]);
 					end
 				end
-			elseif maintainHeatNoCook then
-				state.status = state.status .. " (Cooking Suspended)";
-			else
-				state.status = state.status .. " (Temp out of range)";
 			end
 		end
 	else
@@ -349,7 +359,7 @@ function doit()
 	while setPriority do
 	  checkBreak();
 	  lsPrint(5, 10, z, 0.7, 0.7, 0xFFFFFFff, "Set priority below then click Start ...");
-	  lsPrintWrapped(5, 65, 10, lsScreenX - 10, 0.57, 0.57, 0xFFFFFFff, "Suspend Cooking: Prevent NEW projects from starting, but maintain heat levels. Toggle ON/OFF while macro runs. Doesn\'t affect project already in progress! Write Log: Record every bench change to Automato/Games/ATITD/GlassLogs.txt");
+	  lsPrintWrapped(5, 65, 10, lsScreenX - 10, 0.57, 0.57, 0xFFFFFFff, "Suspend Cooking: Prevent NEW projects from starting, but maintain heat levels. Toggle ON/OFF while macro runs. Doesn\'t affect project already in progress. Write Log: Record every bench change to Automato/Games/ATITD/GlassLogs.txt");
 	  lsSetCamera(0,0,lsScreenX*1.1,lsScreenY*1.1);
 	  allowReorder(10, 155);
 
@@ -370,8 +380,8 @@ function doit()
 	  maintainHeatNoCook = lsCheckBox(200, 250, 10, 0xFFFFFFff, " Suspend Cooking", maintainHeatNoCook);
 	end
 
-	  writeLogs = lsCheckBox(200, 280, 10, 0xFFFFFFff, " Write Log File", writeLogs);
-
+	  showTicks = lsCheckBox(200, 280, 10, 0xFFFFFFff, " Display Ticks/HV/DV", showTicks);
+	  writeLogs = lsCheckBox(200, 310, 10, 0xFFFFFFff, " Write Log File", writeLogs);
 	  lsDoFrame();
 	  lsSleep(100);
 	end
@@ -466,7 +476,8 @@ function doit()
 			  else
 			    maintainHeatNoCook = lsCheckBox(200, lsScreenY - 120, 10, 0xFFFFFFff, " Suspend Cooking", maintainHeatNoCook);
 			  end
-			    writeLogs = lsCheckBox(200, lsScreenY - 90, 10, 0xFFFFFFff, " Write Log File", writeLogs);
+			    showTicks = lsCheckBox(200, 260, 10, 0xFFFFFFff, " Display Ticks/HV/DV", showTicks);
+			    writeLogs = lsCheckBox(200, 290, 10, 0xFFFFFFff, " Write Log File", writeLogs);
 			  lsSetCamera(0,0,lsScreenX*1.1,lsScreenY*1.1);
 
 
