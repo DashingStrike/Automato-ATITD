@@ -791,7 +791,7 @@ function doit()
 					if not muteSoundEffects and castWait/1000 > 2.5 and castWait/1000 < 2.7 then 
 					  lsPlaySound("fishingreel.wav");
 					end
-						if (lastLineFound ~= lastLineParse) or OK or ( (lsGetTimer() - startTime) > 30000 ) then
+						if (lastLineFound ~= lastLineParse) or OK or ( (lsGetTimer() - startTime) > 20000 ) then
 						  lastCastWait = castWait;
 						  break;
 						end
