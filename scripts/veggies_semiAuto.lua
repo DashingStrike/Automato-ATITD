@@ -49,7 +49,6 @@ harvestImage = "HarvestThese.png";
 thisIs = "This is";
 plantCloser = true;
 autoWater = true;
-pauseAfterHarvest = false;
 manualPin = false;
 saveCoords = true;
 
@@ -121,14 +120,7 @@ function doit()
 	waterThese();
 	closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
 	closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
-
-
-	if pauseAfterHarvest then
-	  waitForShift();
-	else
-	  sleepWithStatus(delayAfterHarvestPerPlant*#tops, "Harvesting vegetables ...");
-	end
-
+	waitForShift();
   end
 end
 
@@ -317,8 +309,6 @@ function chooseMethod()
 	y = y + 105;
       lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
       autoWater = lsCheckBox(15, y, z, 0xffffffff, " Auto Gather Water", autoWater);
-	y = y + 25;
-      pauseAfterHarvest = lsCheckBox(15, y, z, 0xffffffff, " Pause/Wait for Trigger after Harvest", pauseAfterHarvest);
 	y = y + 25;
       saveCoords = lsCheckBox(15, y, z, 0xffffffff, " Remember plant coords between plantings", saveCoords);
 	y = y + 25;
@@ -664,7 +654,7 @@ function Stats()
 	  break;
 	end
     checkBreak();
-    statusScreen("Macro has been running: " .. getElapsedTime(thisSessionTimer) .. "\n\nTotal Harvests: " .. totalHarvests .. "\n\nLast Tending/Harvest Timer Report:\n\n" .. stats, nil, 0.7, 0.7);
+    statusScreen("Macro has been running: " .. getElapsedTime(thisSessionTimer) .. "\n\nTotal Harvests: " .. totalHarvests .. " - Total Waterings: " .. tended .. "\n\nLast Tending/Harvest Timer Report:\n\n" .. stats, nil, 0.7, 0.7);
     lsSleep(200);
   end
 end
