@@ -1,4 +1,4 @@
--- barley.lua v2.1.1 -- by Cegaiel (but based off flax_stable.lua; credits of flax_stable.lua to Jimbly KasumiGhia, Tallow, SkyFeather)
+-- barley.lua v2.1.2 -- by Cegaiel (but based off flax_stable.lua; credits of flax_stable.lua to Jimbly KasumiGhia, Tallow, SkyFeather)
 --
 -- Use Fertilizer will use 4 fertilizer per plant.  The yield will vary from 2-10. The numbers just depends on how many weeds occur before harvesting. 
 -- If you are 'lucky' enough to not get any weeds on a plant, you will get the full 10. But with weeds, you will get 2-5 on average, usually 3-5.
@@ -10,7 +10,7 @@
 
 dofile("common.inc");
 
-askText = "Barley v2.1.1 by Cegaiel (many credits included in script comments)\n\nTwo methods available: Use Fertilizer or Water Only. See comments for more info.\n\n'Right click pins/unpins a menu' must be ON.\n\n'Plant all crops where you stand' must be ON.\n\n'Right click pins/unpins a menu' must be ON.\n\nPin Barley Plant window in TOP-RIGHT. Automato: Slighty in TOP-RIGHT.";
+askText = "Barley v2.1.2 by Cegaiel (many credits included in script comments)\n\nTwo methods available: Use Fertilizer or Water Only. See comments for more info.\n\n'Right click pins/unpins a menu' must be ON.\n\n'Plant all crops where you stand' must be ON.\n\n'Right click pins/unpins a menu' must be ON.\n\nPin Barley Plant window in TOP-RIGHT. Automato: Slighty in TOP-RIGHT.";
 
 
 -- Global parameters set by prompt box.
@@ -23,7 +23,7 @@ seeds_per_iter = 0;
 finish_up = 0;
 finish_up_message = "";
 use_fert = true;
-waterGap = false;
+waterGap = true;
 
 seedType = "Barley";
 useable = "Useable";
@@ -169,13 +169,13 @@ function promptFlaxNumbers()
     end
 
     y = y + 55;
-      lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
+      lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
 	if use_fert then
     	  use_fert = lsCheckBox(10, y+10, z, 0xff8080ff, " Use Fertilizer (Uncheck for Water Only)", use_fert);
 	else
     	  use_fert = lsCheckBox(10, y+10, z, 0x8080ffff, " Use Water Only (Check for Fertilizer)", use_fert);
 	end
-    	  waterGap = lsCheckBox(10, y+35, z, 0xffffffff, " Use Water Gap", waterGap);
+    	  waterGap = lsCheckBox(10, y+40, z, 0xffffffff, " Leave Water Gap (Pin windows lower)", waterGap);
     	  lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 
 	if use_fert then
