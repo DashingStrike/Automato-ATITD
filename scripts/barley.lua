@@ -23,6 +23,7 @@ seeds_per_iter = 0;
 finish_up = 0;
 finish_up_message = "";
 use_fert = true;
+waterGap = false;
 
 seedType = "Barley";
 useable = "Useable";
@@ -174,17 +175,16 @@ function promptFlaxNumbers()
 	else
     	  use_fert = lsCheckBox(10, y+10, z, 0x8080ffff, " Use Water Only (Check for Fertilizer)", use_fert);
 	end
-      lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-
+    	  waterGap = lsCheckBox(10, y+35, z, 0xffffffff, " Use Water Gap", waterGap);
+    	  lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 
 	if use_fert then
-
-        lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
+        lsPrintWrapped(10, y+10, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
                      "Plant/Harvest a " .. grid_w .. "x" ..
                      grid_w .. " grid of " .. seedType .. " " .. num_loops ..
                      " times\n\nRequires:\n(" .. math.floor(grid_w * grid_w * num_loops) .. ") Barley\n(" .. math.floor(grid_w * grid_w * num_loops*totalWater) .. ") Water\n(" .. math.floor(grid_w * grid_w * num_loops*totalFertilizer) .. ") Fertilizer\n\nYields: 2-10 per plant (10 = no weeds)\n+10 x each Worship test passed");
 	else
-        lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
+        lsPrintWrapped(10, y+10, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
                      "Plant/Harvest a " .. grid_w .. "x" ..
                      grid_w .. " grid of " .. seedType .. " " .. num_loops ..
                      " times\n\nRequires:\n(" .. math.floor(grid_w * grid_w * num_loops) .. ") Barley\n(" .. math.floor(grid_w * grid_w * num_loops*4) .. ") Water\n\nYields: 2 per plant\n+10 x each Worship test passed");
@@ -226,7 +226,7 @@ function getPlantWindowPos()
     end
   end
   if not plantPos then
-    error 'Could not find plant window';
+    error 'Could not find \'Barley\' on plant window';
   end
   lastPlantPos = plantPos;
   return plantPos;
@@ -348,6 +348,7 @@ function doit()
   sleepWithStatus(7000, "Harvested " .. #harvest .. " plants!\n\nWaiting for windows to catch up!\n\nPreparing to close windows ...\n\nElapsed Time: " .. getElapsedTime(startTime) .. finish_up_message,nil, 0.7, 0.7);
   srReadScreen();
   clickAllText("This is"); -- Right click to close all windows in range
+  lsSleep(1000);
 
     walkHome(loop_count, startPos);
     drawWater();
@@ -487,7 +488,7 @@ end
 function dragWindows(loop_count)
   statusScreen("(" .. loop_count .. "/" .. num_loops .. ")  " ..
                "Dragging Windows into Grid" .. "\n\nElapsed Time: " .. getElapsedTime(startTime));
-    arrangeStashed(nil, false, window_w, window_h);
+    arrangeStashed(nil, waterGap, window_w, window_h);
 end
 
 -------------------------------------------------------------------------------
