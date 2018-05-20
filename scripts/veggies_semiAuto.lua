@@ -1,4 +1,4 @@
---- Veggies SemiAuto v1.4.0 by Cegaiel
+--- Veggies SemiAuto v1.4.1 by Cegaiel
 -- Credits to the Author of veggies.lua (Submitted to Github by MHoroszowski on Sep 19, 2015) for his work as a starting point.
 
 -- New for v1.4.0: Full Auto Mode implemented. Once you run this in semi-auto mode once or twice and are sure it's clicking everything ok, then
@@ -58,7 +58,7 @@ manualPin = false;
 saveCoords = true;
 
 delayAfterHarvestPerPlant = 3000;
-grid_x = 240;
+grid_x = 260; -- Watermelon seeds are widest window width, 260
 grid_y = 100;
 
 firstLoop = 1;
@@ -111,8 +111,10 @@ function doit()
 
 	main();
 
-	 if autoWater and not manualPin and saveCoords and not firstLoop then -- If using saveCoords mode, then take advantage of the 3 second water animation
-	   drawWater(); -- This has 3 second pause, so no point below delay
+	 if autoWater and not manualPin and saveCoords and not firstLoop then
+		if not drawWater() then -- Attempt to gather water. If water not found or player is already full of water, then add 3 seconds below, otherwise gather animation takes 3 seconds
+		  sleepWithStatus(3000,"Slight pause for 'Water These' to appear on plants, before we pin",nil, 0.7, 0.7);
+		end
 	 elseif not autoWater and not manualPin and saveCoords and not firstLoop then -- If we pin windows too quickly, then the 'Water These' option doesn't appear, right away. Wait a moment...
   	  sleepWithStatus(3000,"Slight pause for 'Water These' to appear on plants, before we pin",nil, 0.7, 0.7);
 	 end
@@ -132,7 +134,7 @@ function doit()
 	closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
 
 
-	if pauseAfterHarvest or abort then
+	if (pauseAfterHarvest and not fullAutoMode) or abort then
 	  waitForShift();
 	else
 	  sleepWithStatus(delayAfterHarvestPerPlant*#harvest, "Harvesting vegetables ...");
@@ -193,6 +195,8 @@ function waterThese()
 	checkBreak();
 	if #waters == 0 and #harvest == 0 then
 	  message = "Could not find any pinned veggies!\n\nThis usually happens if you missed a plant when you " .. key .. ".\n\nHigh resolutions, such as 1920x1080 has such a small margin of where you clicked on veggie.\n\nIf avatar moves or body is facing a certain direction MIGHT be a factor...\n\n" .. key .. " to continue"
+	  abort = 1;
+	  fullAutoMode = nil;
 	  displayError(message);
 	  break;
 	end
@@ -209,8 +213,10 @@ function waterThese()
 			totalHarvests = totalHarvests + 1;
 		  end
 
-			if #harvest < count and not pauseAfterHarvest then	-- If the # of harvests is < than number of plantings, then something went wrong. Don't break, force user to click abort or manually handle any issues.
+			if #harvest < count and (not pauseAfterHarvest or fullAutoMode) then	-- If the # of harvests is < than number of plantings, then something went wrong. Don't break, force user to click abort or manually handle any issues.
 			  abort = 1;
+			  fullAutoMode = nil;
+			  sleepWithStatus(3000, "Something went wrong, you harvested less plants than expected!\n\nAborting and disengaging Full Auto Mode\n\nVerify you don't have any seeds on ground.", nil, 0.7, 0.7);
 			end
 			  break;  -- Break the loop after Harvest found and clicked
 
@@ -709,7 +715,7 @@ function Stats()
 	end
 	if ButtonText(10, lsScreenY - 30, z, 175, 0x80ff80ff, "Engage Auto Mode!") then
 	  saveWaterTimer();
-	  sleepWithStatus(1500, "Engaging Auto Water Mode!\n\nAlso wrote times to veggie_semiAuto.txt");
+	  sleepWithStatus(1500, "Engaging Auto Water Mode!\n\nAlso wrote times to veggie_semiAuto.txt", nil, 0.7, 0.7);
 	  break;
 	end
 --	if lsButtonText(10, lsScreenY - 60, z, 100, 0xFFFFFFff, "Load File") then
@@ -730,7 +736,7 @@ end
 
 function saveWaterTimer()
 fullAutoMode = 1;
-pauseAfterHarvest = nil;
+--pauseAfterHarvest = nil;
   local file = io.open("veggie_semiAuto.txt", "w+");
     for i=1,#vegclickTimer do
 	checkBreak();
