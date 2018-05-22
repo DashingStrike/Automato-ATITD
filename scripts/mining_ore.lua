@@ -1,4 +1,4 @@
--- mining_ore.lua v2.1.1 -- by Cegaiel
+-- mining_ore.lua v2.1.2 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -14,7 +14,7 @@
 
 dofile("common.inc");
 
-info = "Ore Mining v2.1.1 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
+info = "Ore Mining v2.1.2 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -29,6 +29,7 @@ lastOreGathered = 0;
 miningTime = 0;
 autoWorkMine = true;
 timesworked = 0;
+miningTimeTotal = 0;
 dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
 dropdown_cur_value = 1;
 dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)", "Iron (7)", "Lead (9)", "Lithium (10)", "Magnesium (9)", "Platinum (12)", "Silver (10)", "Strontium (10)", "Tin (9)", "Tungsten (12)", "Zinc (10)"};
@@ -236,18 +237,23 @@ function getPoints()
     y = y + 20;
     lsPrint(10, y, z, 0.7, 0.7, 0xff8080ff, "Make sure chat is MINIMIZED!");
     y = y + 30;
-    lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Mine Type:  " .. ore);
+    lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Mine Type: " .. ore .. " / Worked: " .. timesworked .. " times");
     y = y + 20;
+
     miningTimeGUI = "N/A";
     if miningTime ~= 0 then
-      --miningTimeGUI = math.floor(miningTime/100)/10 .. " secs";
-      miningTimeGUI = (miningTime/100)/10 .. " secs";
+      miningTimeGUI = round((miningTime/100)/10,2) .. " secs";
     end
-    lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Worked:  " .. timesworked .. " times  Last: " .. miningTimeGUI);
+
+    avgMiningTimeGUI =  "N/A";
+    if miningTimeTotal ~= 0 then
+      avgMiningTimeGUI = round((miningTimeTotal/timesworked/100)/10,2) .. " secs";
+    end
+
+    lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Last: " .. miningTimeGUI .. " / Avg: " .. avgMiningTimeGUI);
     y = y + 20;
-    --lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal) .. "  (Last Round: " .. math.floor(oreGatheredLast) .. ")");
-    lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found:  " .. math.floor(oreGatheredTotal));
-    lsPrint(175, y, z, 0.7, 0.7, 0x40ffffff, " Last Round: " .. math.floor(oreGatheredLast));
+    lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal));
+    lsPrint(175, y, z, 0.7, 0.7, 0x40ffffff, " Last: " .. math.floor(oreGatheredLast));
     y = y + 20;
     lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Select " .. nodeleft .. " more nodes to automatically start!");
     y = y + 30;
@@ -353,15 +359,20 @@ function clickSequence()
 			y = y + 25;
 			lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Node Click Delay: " .. clickDelay .. " ms");
 			y = y + 32;
-			--lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. math.floor(setTime/100)/10 .. " secs");
-			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. (setTime/100)/10 .. " secs");
+			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. round((setTime/100)/10,2) .. " secs");
+			y = y + 16;
+			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Total Mines Worked: " .. timesworked .. " times");
+
+
+
 			y = y + 32;
-			--lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Time Elapsed: " .. math.floor(elapsedTime/100)/10 .. " secs");
-			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. (elapsedTime/100)/10 .. " secs");
+			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. round((elapsedTime/100)/10,2) .. " secs");
 			y = y + 16;
 			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
+			y = y + 16;
+			lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Average Time Elapsed: " .. avgMiningTimeGUI);
 			y = y + 32;
-			lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Ore Found this Round: " .. math.floor(oreGatheredLast));
+			lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Current Ore Found: " .. math.floor(oreGatheredLast));
 			y = y + 20;
 			lsPrint(10, y, 0, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal));
 			y = y + 32;
@@ -374,6 +385,7 @@ function clickSequence()
 	end
 
   miningTime = lsGetTimer() - startMiningTime;
+  miningTimeTotal =  miningTimeTotal + miningTime;
   timesworked = timesworked + 1;
 
       if not muteSoundEffects then
@@ -604,3 +616,9 @@ function promptDelays()
   end
   return count;
 end
+
+function round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
+end
+
