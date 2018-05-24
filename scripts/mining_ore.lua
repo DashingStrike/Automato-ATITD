@@ -1,4 +1,4 @@
--- mining_ore.lua v2.1.1 -- by Cegaiel
+-- mining_ore.lua v2.1.3 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -14,7 +14,7 @@
 
 dofile("common.inc");
 
-info = "Ore Mining v2.1.1 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
+info = "Ore Mining v2.1.3 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -29,6 +29,7 @@ lastOreGathered = 0;
 miningTime = 0;
 autoWorkMine = true;
 timesworked = 0;
+miningTimeTotal = 0;
 dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
 dropdown_cur_value = 1;
 dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)", "Iron (7)", "Lead (9)", "Lithium (10)", "Magnesium (9)", "Platinum (12)", "Silver (10)", "Strontium (10)", "Tin (9)", "Titanium (12)","Tungsten (12)", "Zinc (10)"};
@@ -39,7 +40,7 @@ cancelButton = 0;
 
 --Customizable
 muteSoundEffects = false;
-minPopSleepDelay = 100;  -- The minimum delay time used during findClosePopUp() function
+minPopSleepDelay = 150;  -- The minimum delay time used during findClosePopUp() function
 
 function doit()
     askForWindow(info);
@@ -239,18 +240,23 @@ function getPoints()
         y = y + 20;
         lsPrint(10, y, z, 0.7, 0.7, 0xff8080ff, "Make sure chat is MINIMIZED!");
         y = y + 30;
-        lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Mine Type:  " .. ore);
+        lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Mine Type: " .. ore .. " / Worked: " .. timesworked .. " times");
         y = y + 20;
         miningTimeGUI = "N/A";
+
         if miningTime ~= 0 then
-            --miningTimeGUI = math.floor(miningTime/100)/10 .. " secs";
-            miningTimeGUI = (miningTime/100)/10 .. " secs";
+          miningTimeGUI = round((miningTime/100)/10,2) .. " secs";
         end
-        lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Mine Worked:  " .. timesworked .. " times  Last: " .. miningTimeGUI);
+        avgMiningTimeGUI =  "N/A";
+
+        if miningTimeTotal ~= 0 then
+          avgMiningTimeGUI = round((miningTimeTotal/timesworked/100)/10,2) .. " secs";
+        end
+
+        lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Last: " .. miningTimeGUI .. " / Avg: " .. avgMiningTimeGUI);
         y = y + 20;
-        --lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal) .. "  (Last Round: " .. math.floor(oreGatheredLast) .. ")");
-        lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found:  " .. math.floor(oreGatheredTotal));
-        lsPrint(175, y, z, 0.7, 0.7, 0x40ffffff, " Last Round: " .. math.floor(oreGatheredLast));
+        lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal));
+        lsPrint(175, y, z, 0.7, 0.7, 0x40ffffff, " Last: " .. math.floor(oreGatheredLast));
         y = y + 20;
         lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Select " .. nodeleft .. " more nodes to automatically start!");
         y = y + 30;
@@ -356,15 +362,17 @@ function clickSequence()
                 y = y + 25;
                 lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Node Click Delay: " .. clickDelay .. " ms");
                 y = y + 32;
-                --lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. math.floor(setTime/100)/10 .. " secs");
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. (setTime/100)/10 .. " secs");
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. round((setTime/100)/10,2) .. " secs");
+                y = y + 16;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Total Mines Worked: " .. timesworked .. " times");
                 y = y + 32;
-                --lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Time Elapsed: " .. math.floor(elapsedTime/100)/10 .. " secs");
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. (elapsedTime/100)/10 .. " secs");
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. round((elapsedTime/100)/10,2) .. " secs");
                 y = y + 16;
                 lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
+                y = y + 16;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Average Time Elapsed: " .. avgMiningTimeGUI);
                 y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Ore Found this Round: " .. math.floor(oreGatheredLast));
+                lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Current Ore Found: " .. math.floor(oreGatheredLast));
                 y = y + 20;
                 lsPrint(10, y, 0, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal));
                 y = y + 32;
@@ -377,6 +385,7 @@ function clickSequence()
     end
 
     miningTime = lsGetTimer() - startMiningTime;
+    miningTimeTotal =  miningTimeTotal + miningTime;
     timesworked = timesworked + 1;
 
     if not muteSoundEffects then
@@ -448,19 +457,19 @@ function findClosePopUp()
 
         if OK then
             srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
-            lsSleep(clickDelay);
+            lsSleep(popSleepDelay);
             break;
         end
 
         --If we gathered new ore, add to tally and don't wait for popup.
         --Beware, ugly quick hack: In the rare chance you get the exact # of ore back to back, then that 5000ms countdown timer will also force the break.
-        if (lastOreGathered ~= oreGathered and not localSupportResult) or ( (lsGetTimer() - startTime) > 5000) then
+        if (lastOreGathered ~= oreGathered and oreFound) or ((lsGetTimer() - startTime) > 5000) then
             oreGatheredTotal = oreGatheredTotal + oreGathered;
             oreGatheredLast = oreGatheredLast + oreGathered;
             lsSleep(popSleepDelay);
             break;
         end
-
+    lsSleep(100);
     end
 end
 
@@ -500,7 +509,6 @@ end
 function chatRead()
     srReadScreen();
     local chatText = getChatText();
-    lsSleep(100);
     local onMain = checkIfMain(chatText);
 
     if not onMain then
@@ -515,26 +523,22 @@ function chatRead()
         srReadScreen();
         chatText = getChatText();
         onMain = checkIfMain(chatText);
-        sleepWithStatus(100, "Looking for Main chat screen ...\n\nIf main chat is showing, then try clicking Work Mine to clear this screen");
+        sleepWithStatus(100, "Looking for Main chat screen ...\n\nIf main chat is showing, then try clicking Work Mine to clear this screen", nil, 0.7, 0.7);
     end
 
     lastLine = chatText[#chatText][2];
     --Read last line of chat and strip the timer ie [01m]+space from it.
     lastLineParse = string.sub(lastLine,string.find(lastLine,"m]")+3,string.len(lastLine));
 
-    if string.sub(lastLineParse, 1, 21) == "Local support boosted" then
-        localSupportResult = true;
-        localSupportResultDebug = "True";
-        localSupportResultDebugColor = 0xff8080ff;
-    else
-        localSupportResult = false;
-        localSupportResultDebug = "False"
-        localSupportResultDebugColor = 0xffffffff;
-        oreGathered = string.match(lastLine, "(%d+) " .. ore);
-        if not oreGathered then
-            oreGathered = 0;
-        end
-    end
+	if string.sub(lastLineParse, 1, 13) == "Your workload" then
+	  oreFound = true; -- This to prevent it catching lines in chat, such as "You got some coal"  or "Local Support Boosted", etc; ignore those by setting to false below
+	  oreGathered = string.match(lastLine, "(%d+) " .. ore);
+		if not oreGathered then
+		  oreGathered = 0;
+		end
+	else
+	  oreFound = nil;
+	end
 end
 
 
@@ -580,12 +584,10 @@ function promptDelays()
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Pause between selecting each node.");
         y = y + 16;
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Raise value to run slower (try increments of 25)");
-
         y = y + 20;
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Total Ore Starting Value: Useful to keep track of");
         y = y + 16;
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "ore already in the mine. Set to value of ore in mine");
-
         y = y + 22;
         if lsButtonText(10, lsScreenY - 30, 0, 70, 0xFFFFFFff, "Next") then
             is_done = 1;
@@ -606,4 +608,9 @@ function promptDelays()
         lsSleep(50);
     end
     return count;
+end
+
+function round(num, numDecimalPlaces)
+  local mult = 10^(numDecimalPlaces or 0)
+  return math.floor(num * mult + 0.5) / mult
 end
