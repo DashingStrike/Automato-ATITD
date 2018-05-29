@@ -1454,17 +1454,17 @@ function stashAllButWood()
             safeClick(pos[0] + 10, pos[1] + 5);
             lsSleep(150);
             srReadScreen();
-            local pos = findText("Clay");
+            local pos = findText("Clay (");
             if(pos) then
                 stashItem(pos,true);
                 stashedSomething = true;
             else
-                pos = findText("Flint");
+                pos = findText("Flint (");
                 if(pos) then
                     stashItem(pos,true);
                     stashedSomething = true;
                 else
-                    pos = findText("Slate");
+                    pos = findText("Slate (");
                     if(pos) then
                         stashItem(pos,true);
                         stashedSomething = true;
@@ -1479,7 +1479,7 @@ function stashAllButWood()
                                 stashItem(pos,true);
                                 stashedSomething = true;
                             else
-                            		pos = findText("Wood");
+                            		pos = findText("Wood (");
                             		if(pos) then
                             				stashItem(pos,true);
                             				stashedSomething = true;
