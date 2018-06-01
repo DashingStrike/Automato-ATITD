@@ -1,4 +1,4 @@
--- mining_sand.lua v2.0.1 -- by Cegaiel
+-- mining_gems.lua v2.0.2 -- by Cegaiel
 --
 -- Works the sand mine, but requires a little thought and input from you ;)
 -- You must click on all Quintuple colors FIRST, all Quadruple colors NEXT, all Triple colors NEXT, all Paired colors NEXT, then ALL Single colored stones LAST.
@@ -23,7 +23,7 @@ dofile("common.inc");
 dofile("settings.inc");
 
 
-askText = "Sand Mining v2.0.1 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
+askText = "Sand Mining v2.0.2 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
 
 
 muteSoundEffects = true;
@@ -33,7 +33,7 @@ dropdown_cur_value = 1;
 dropdown_pattern_values = {"6 color (1 Pair) (*)", "5 color (2 Pair) (*)", "4 color (3 Pair) (*)", "5 color (Triple) (1)", "4 color (Triple+Pair) (3)", "4 color (Quadruple) (1)", "3 Color (Quad + Pair) (6)", "3 color (Quintuple) (2)", "7 Color (All Different) (*)"};
 dropdown_pattern_cur_value = 1;
 lastLineFound = "";
-debug = false;
+lastLineFound2 = "";
 
 allSets = {
 
@@ -416,14 +416,6 @@ function checkIfMain(chatText)
       if string.find(chatText[j][2], "^%*%*", 0) then
          return true;
       end
-	-- Below isn't needed unless we are going to use Chat_Types Array
-      --for k, v in pairs(Chat_Types) do
-         --if string.find(chatText[j][2], k, 0, true) then
-            --return true;
-         --end
-      --end
-
-
    end
    return false;
 end
@@ -432,7 +424,6 @@ end
 function chatRead()
    srReadScreen();
    local chatText = getChatText();
-   lsSleep(100);
    local onMain = checkIfMain(chatText);
 
    if not onMain then
@@ -449,26 +440,32 @@ function chatRead()
       onMain = checkIfMain(chatText);
       sleepWithStatus(100, "Looking for Main chat screen ...\n\nIf main chat is showing, then try clicking Work Mine to clear this screen");
    end
+
+   -- Verify chat window is showing minimum 2 lines
+   while #chatText < 2 do
+   	checkBreak();
+      srReadScreen();
+      chatText = getChatText();
+      sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of chat!\n\nCurrently we only see " .. #chatText .. " lines ...", nil, 0.7, 0.7);
+   end
    
-   lastLine = chatText[#chatText][2];
    --Read last line of chat and strip the timer ie [01m]+space from it.
+   lastLine = chatText[#chatText][2];
    lastLineParse = string.sub(lastLine,string.find(lastLine,"m]")+3,string.len(lastLine));
+   --Read next to last line of chat and strip the timer ie [01m]+space from it.
+   lastLine2 = chatText[#chatText-1][2];
+   lastLineParse2 = string.sub(lastLine2,string.find(lastLine2,"m]")+3,string.len(lastLine2));
 
    if string.sub(lastLineParse, 1, 21) == "Local support boosted" then
-	  localSupportResult = true;
-	  localSupportResultDebug = "True";
-	  localSupportResultDebugColor = 0xff8080ff;
-	else
-	  localSupportResult = false;
-	  localSupportResultDebug = "False"
-	  localSupportResultDebugColor = 0xffffffff;
-	end
+     lastLine = lastLine2;
+     lastLineParse = lastLineParse2;
+   end
 end
-
 
 function findClosePopUp()
 
   lastLineFound = lastLineParse;
+  lastLineFound2 = lastLineParse2;
   startTime = lsGetTimer();
 
     while 1 do
@@ -482,12 +479,8 @@ function findClosePopUp()
 	    break;
 	  end
 
-			-- Use to Debug before and after messages in main chat
-			if localSupportResult and debug then
-			  sleepWithStatus(1000, "lastLineFound:\n" .. lastLineFound .. "\n\nlastLineParse:\n" .. lastLineParse .. "\n\nlocalSupport: " .. localSupportResultDebug, localSupportResultDebugColor, 0.8, 0.8);  
-			end
 
-	  if ( lastLineFound ~= lastLineParse and not localSupportResult ) or ( (lsGetTimer() - startTime) > 5000 )  then
+	  if (lastLineFound2 ~= lastLineParse2) or (lastLineFound ~= lastLineParse) or ( (lsGetTimer() - startTime) > 5000 )  then
 	    break;
 	  end
 
@@ -565,12 +558,12 @@ function promptDelays()
     y = y + 35;
     lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Click Delay (ms):");
     is_done, clickDelay = lsEditBox("delay", 155, y, 0, 50, 30, 1.0, 1.0,
-                                     0x000000ff, 150);
+                                     0x000000ff, 100);
      clickDelay = tonumber(clickDelay);
        if not clickDelay then
          is_done = false;
          lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-         clickDelay = 200;
+         clickDelay = 100;
        end
 	y = y + 50;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Click Delay: Delay between most actions.");
