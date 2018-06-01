@@ -1,4 +1,4 @@
--- mining_gems.lua v2.0.2 -- by Cegaiel
+-- mining_gems.lua v2.0.3 -- by Cegaiel
 --
 -- Works the sand mine, but requires a little thought and input from you ;)
 -- You must click on all Quintuple colors FIRST, all Quadruple colors NEXT, all Triple colors NEXT, all Paired colors NEXT, then ALL Single colored stones LAST.
@@ -23,17 +23,31 @@ dofile("common.inc");
 dofile("settings.inc");
 
 
-askText = "Sand Mining v2.0.2 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
+askText = "Sand Mining v2.0.3 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
 
 
 muteSoundEffects = true;
 autoWorkMine = false;
 dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
 dropdown_cur_value = 1;
-dropdown_pattern_values = {"6 color (1 Pair) (*)", "5 color (2 Pair) (*)", "4 color (3 Pair) (*)", "5 color (Triple) (1)", "4 color (Triple+Pair) (3)", "4 color (Quadruple) (1)", "3 Color (Quad + Pair) (6)", "3 color (Quintuple) (2)", "7 Color (All Different) (*)"};
+dropdown_pattern_values = {"6 color (1 Pair) (*)", "5 color (2 Pair) (*)", "4 color (3 Pair) (*)", "5 color (Triple) (1)", "4 color (Triple+Pair) (3)", "4 color (Quadruple) (1)", "3 Color (Quad+Pair) (6)", "3 color (Quintuple) (2)", "7 Color (All Different) (*)"};
+
+gui = {
+[1] = "6 color (1 Pair) (*)",
+[2] = "5 color (2 Pair) (*)",
+[3] = "4 color (3 Pair) (*)",
+[4] = "5 color (Triple) (1)",
+[5] = "4 color (Triple+Pair) (3)",
+[6] = "4 color (Quadruple) (1)",
+[7] = "3 Color (Quad+Pair) (6)",
+[8] = "3 color (Quintuple) (2)",
+[9] = "7 Color (All Different) (*)"
+};
+
 dropdown_pattern_cur_value = 1;
 lastLineFound = "";
 lastLineFound2 = "";
+firstRun = 1;
 
 allSets = {
 
@@ -356,6 +370,7 @@ function getPoints()
 
   if #clickList > 0 then
     if lsButtonText(100, lsScreenY - 30, z, 75, 0xff8080ff, "Reset") then
+	lsDoFrame();
 	reset();
     end
   end
@@ -365,7 +380,7 @@ function getPoints()
       error "Clicked End script button";
     end
   lsDoFrame();
-  lsSleep(50);
+  lsSleep(100);
   end
 end
 
@@ -388,8 +403,8 @@ function workMine()
       lsSleep(clickDelay);
       --Send 'W' key over Mine to Work it (Get new nodes)
       srKeyEvent('W'); 
-      sleepWithStatus(1000, "Working mine (Fetching new nodes)");
-	findClosePopUp();
+	sleepWithStatus(1000, "Working mine (Fetching new nodes)");
+	findClosePopUp(1);
 end
 
 
@@ -398,16 +413,18 @@ function TakeGemWindowRefresh()
  -- First check to see if All Gems (From mine's Take menu) is pinned up, if so refresh it.
  findAllGems = findText("All Gems");
 	if findAllGems then 
+		if not autoWorkMine then
+	         sleepWithStatus(1000, "Refreshing pinned Gem menu ..."); -- Let pinned window catchup. If autowork mine, there is already a 1000 delay on workMine()
+		end
 	 safeClick(findAllGems[0],findAllGems[1]);
 	end
 --Now check to see if there is a Huge Gem and give a special alert.
-	 lsSleep(1000);
+	 lsSleep(150);
  findHugeGems = findText("Huge");
  if findHugeGems then
   lsPlaySound("applause.wav");
- sleepWithStatus(15000, "Congrats! You found a Huge Gem!\n\nYou should take it now!\n\nIf you already have a Huge Gem in inventory, then hide your inventory to stop this alert/applause.", 0x80ff80ff, 0.7, 0.7);
+ sleepWithStatus(15000, "Congrats! You found a Huge Gem!\n\nYou should take it now!", 0x80ff80ff, 0.7, 0.7);
  end
-
 end
 
 
@@ -442,7 +459,7 @@ function chatRead()
    end
 
    -- Verify chat window is showing minimum 2 lines
-   while #chatText < 2 do
+   while #chatText < 2 and not firstRun do
    	checkBreak();
       srReadScreen();
       chatText = getChatText();
@@ -462,7 +479,12 @@ function chatRead()
    end
 end
 
-function findClosePopUp()
+function findClosePopUp(noRead)
+
+   local skipRead = false;
+   if noRead then
+     skipRead = true;
+   end
 
   lastLineFound = lastLineParse;
   lastLineFound2 = lastLineParse2;
@@ -480,7 +502,7 @@ function findClosePopUp()
 	  end
 
 
-	  if (lastLineFound2 ~= lastLineParse2) or (lastLineFound ~= lastLineParse) or ( (lsGetTimer() - startTime) > 5000 )  then
+	  if (lastLineFound2 ~= lastLineParse2) or (lastLineFound ~= lastLineParse) or (skipRead == true) or ( (lsGetTimer() - startTime) > 5000 )  then
 	    break;
 	  end
 
@@ -494,8 +516,17 @@ function clickSequence()
 
   local startMiningTime = lsGetTimer();
   local worked = 1;
-
   local sets = allSets[dropdown_pattern_cur_value];
+  local pattern = "Unknown";
+
+   for k, v in pairs(gui) do
+     if k == dropdown_pattern_cur_value then
+       pattern = v;
+       break;
+     end
+   end
+
+
   for i = 1, #sets do
 	local currentSet = sets[i];
 	for j = 1, #currentSet do
@@ -515,6 +546,10 @@ function clickSequence()
   lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
   y = y +50
   lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "[" .. worked .. "/" .. #sets .. "]  " .. #currentSet .. " Nodes Worked: " .. table.concat(currentSet, ", "));
+
+  y = y + 40;
+  lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Pattern: " .. pattern);
+
   y = y + 40;
   lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Click Delay: " .. clickDelay .. " ms");
   y = y + 40;
@@ -526,19 +561,14 @@ function clickSequence()
   findClosePopUp();
   end
 	if autoWorkMine then
-	workMine();
-	else
-	    if workMineButtonLocSet then
-            srSetMousePos(workMineButtonLoc[0], workMineButtonLoc[1]); 
-	    end
+	  workMine();
+	elseif workMineButtonLocSet then
+        srSetMousePos(workMineButtonLoc[0], workMineButtonLoc[1]); 
 	end
 
   TakeGemWindowRefresh();
+  firstRun = nil;
   reset();
-
-    if workMineButtonLocSet and not autoWorkMine then
-     srSetMousePos(workMineButtonLoc[0], workMineButtonLoc[1]); 
-    end
 end
 
 function promptDelays()
@@ -558,12 +588,12 @@ function promptDelays()
     y = y + 35;
     lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Click Delay (ms):");
     is_done, clickDelay = lsEditBox("delay", 155, y, 0, 50, 30, 1.0, 1.0,
-                                     0x000000ff, 100);
+                                     0x000000ff, 150);
      clickDelay = tonumber(clickDelay);
        if not clickDelay then
          is_done = false;
          lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-         clickDelay = 100;
+         clickDelay = 150;
        end
 	y = y + 50;
       lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Click Delay: Delay between most actions.");
