@@ -344,25 +344,6 @@ end
 function ChatReadFish()
 	--Find the last line of chat
    local chatText = getChatText();
-   local onMain = checkIfMain(chatText);
-   if not onMain then
-      if not muteSoundEffects then
-         lsPlaySound("timer.wav");
-      end
-   end
-
-   -- Wait for Main chat screen and alert user if its not showing
-   while not onMain do
-   	checkBreak();
-      srReadScreen();
-      chatText = getChatText();
-      onMain = checkIfMain(chatText);
-      sleepWithStatus(500, "Looking for Main chat screen...\n\nMake sure main chat tab is showing and that the window is sized, wide enough, so that no lines wrap to next line.\n\nAlso if you main chat tab is minimized, you need to check Options, Interface Option, Minimized chat-channels are still visible.", nil, 0.7, 0.7);
-   end
-   
-   lastLine = chatText[#chatText][2];
-   lastLineParse = string.sub(lastLine,string.find(lastLine,"m]")+3,string.len(lastLine));
-   
    numCaught, fishType = string.match(lastLine, "(%d+) deben ([^.]+)%.");
    if fishType then
       GrandTotalCaught = GrandTotalCaught + 1
@@ -396,11 +377,25 @@ function findchat()
       srReadScreen();
       chatText = getChatText();
       onMain = checkIfMain(chatText);
-      onMain = checkIfMain(chatText);
       sleepWithStatus(500, "Looking for Main chat screen...\n\nMake sure main chat tab is showing and that the window is sized, wide enough, so that no lines wrap to next line.\n\nAlso if you main chat tab is minimized, you need to check Options, Interface Option, Minimized chat-channels are still visible.", nil, 0.7, 0.7);
    end
+
+   while #chatText < 2 do
+   	checkBreak();
+      srReadScreen();
+      chatText = getChatText();
+      sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of chat!\n\nCurrently we only see " .. #chatText .. " lines ...", nil, 0.7, 0.7);
+   end
+
+
+     --Read last line in chat
      lastLine = chatText[#chatText][2];
      lastLineParse = string.sub(lastLine,string.find(lastLine,"m]")+3,string.len(lastLine));
+
+     --Read next to last line in chat
+     lastLine2 = chatText[#chatText-1][2];
+     lastLineParse2 = string.sub(lastLine2,string.find(lastLine2,"m]")+3,string.len(lastLine2));
+
      gui_refresh();
 end
 
@@ -648,7 +643,7 @@ end
 
 function doit()
 
-  askForWindow("Fishing v2.0.5 (by Tutmault, revised by KasumiGhia, Cegaiel, and Skyfeather)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window! Ensure that your chat displays timestamps");
+  askForWindow("Fishing v2.0.6 (by Tutmault, revised by KasumiGhia, Cegaiel, and Skyfeather)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window! Ensure that your chat displays timestamps");
 
 ----------------------------------------
 --Variables Used By Program -- Don't Edit Unless you know what you're doing!
@@ -774,7 +769,8 @@ function doit()
 			checkBreak();
 			castWait = 0;
 			findchat();
-			lastLineFound = lastLineParse;
+			lastLineFound = lastLineParse; -- Record last line before casting
+			lastLineFound2 = lastLineParse2; -- Record next to last line before casting
 			srClickMouseNoMove(cast[0]+3,cast[1]+3);
 			startTime = lsGetTimer();
 			lsSleep(100);
@@ -791,7 +787,7 @@ function doit()
 					if not muteSoundEffects and castWait/1000 > 2.5 and castWait/1000 < 2.7 then 
 					  lsPlaySound("fishingreel.wav");
 					end
-						if (lastLineFound ~= lastLineParse) or OK or ( (lsGetTimer() - startTime) > 20000 ) then
+						if (lastLineFound2 ~= lastLineParse2) or (lastLineFound ~= lastLineParse) or OK or ( (lsGetTimer() - startTime) > 20000 ) then
 						  lastCastWait = castWait;
 						  break;
 						end
@@ -808,6 +804,19 @@ function doit()
 			oddFound = false;
 			strangeUnusualFound = false;
 
+
+
+   for k, v in pairs(Chat_Types) do
+       if string.find(lastLine, k, 0, true) then
+			if v == "overweight" then
+			   -- If last message was you are carrying too much, then use the previous line for parsing below.
+			  lastLine = lastLine2;
+			  lastLineParse = lastLineParse2;
+			end
+	end
+   end
+
+
    for k, v in pairs(Chat_Types) do
        if string.find(lastLine, k, 0, true) then
 
@@ -815,6 +824,7 @@ function doit()
 				castcount = castcount - 1;
 				GrandTotalCasts = GrandTotalCasts - 1;	
 			end
+
 
 			if v == "lostlure" then
 					if not muteSoundEffects then
