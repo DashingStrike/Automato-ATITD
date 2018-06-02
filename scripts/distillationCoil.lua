@@ -1,9 +1,7 @@
 --
 -- 
 --
-
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
+dofile("common.inc");
 
 per_click_delay = 20;
 
@@ -46,7 +44,7 @@ function clickAll(image_name, up)
 	-- Find buttons and click them!
 	srReadScreen();
 	xyWindowSize = srGetWindowSize();
-	local buttons = findAllImages(image_name, 2000);
+	local buttons = findAllImages(image_name);
 	
 	if #buttons == 0 then
 		statusScreen("Could not find " .. image_name);
@@ -73,12 +71,15 @@ recipe = "aaaawwwwannnwwawwannnwwawwannnwwawwannnwwawwannnwwawwannnwwwwannnwwaww
 
 keyDelay = 150;
 function doit()
+	status = "";
 	local num_rounds;
 	num_rounds = 1; -- promptNumber("How many coils?", 1);
 	askForWindowAndPixel("                        Pin up the 'Start Making' menu. Make sure your chat is minimized! Click in ATITD, hover your mouse over the glory hole and push shift.  Ensure your heater control is set to Pinpoint.");
+
 	for i = 1, num_rounds do
 		clickAll("DistillationCoil.png", true);
 		lsSleep(100);
+		statusScreen("Please be patient, the macro is sending keys to the glory hole",nil, 0.7, 0.7);
 		srSetMousePos(mouse_x, mouse_y);
 		for j = 1, string.len(recipe) do
 			--recipe time
@@ -86,21 +87,31 @@ function doit()
             if currKey == "w" then
                 lsSleep(998);
                 srKeyEvent("q");
+                status = status .. "q";
             elseif currKey == "d" then
                 lsSleep(249);
                 srKeyEvent("q");
+                status = status .. "q";
             elseif currKey == "p" then
                 lsSleep(125);
                 srKeyEvent("q");
+                status = status .. "q";
             elseif currKey == "i" then
                 lsSleep(75);
             else
                 srKeyEvent(currKey);
+                status = status .. currKey;
+
                 if currKey ~= "a" then
                     srKeyEvent("q");
+                	status = status .. "q";
                 end
             end
+
+            statusScreen("Please be patient, the macro is sending keys to the glory hole\n\n" .. status,nil, 0.7, 0.7);
             checkBreak();
+
+
             
 			--lsSleep(keyDelay);
 		end
