@@ -5,7 +5,7 @@
 
 dofile("common.inc");
 dofile("stats.inc");
-dofile("ui_utils.inc");
+dofile("screen_reader_common.inc");
 
 askText = singleLine([[
 Hackling Rake v1.0 (by tripps) --

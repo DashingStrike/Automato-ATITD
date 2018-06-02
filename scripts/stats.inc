@@ -1,9 +1,4 @@
-
-
-dofile("common.inc");
-dofile("screen_reader_common.inc");
-
-
+-- This file is included by hackling_auto.lua
 
 -------------------------------------------------------------------------------
 -- statState(stat)
@@ -34,7 +29,7 @@ function statState(stat)
 	while(ss_statPositions[stat][1] == nil) do
 		initializeStatState();
 		if(ss_statPositions[stat][1] == nil) then
-			if(not promptOkay("Unable to locate the stats.  Make sure they are visible and black.  Press OK to try again.")) then
+			if(not promptOkay("Unable to locate the stats in Skill window.\nMake sure they are visible and black.\nPress OK to try again.", nil, 0.7)) then
 				error("Unable to locate the stats.");
 			end
 		end
@@ -70,9 +65,9 @@ function initializeStatState()
 			else
 				ss_statPositions[stat] = bestPos;
 			end
-		else
-			ss_statPositions[stat][0] = nil;
-			ss_statPositions[stat][1] = nil;
+		--else
+			--ss_statPositions[stat][0] = nil;
+			--ss_statPositions[stat][1] = nil;
 		end
 	end
 end
