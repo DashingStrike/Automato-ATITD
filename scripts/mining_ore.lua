@@ -1,4 +1,4 @@
--- mining_ore.lua v2.1.3 -- by Cegaiel
+-- mining_ore.lua v2.1.4 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -14,7 +14,7 @@
 
 dofile("common.inc");
 
-info = "Ore Mining v2.1.3 by Cegaiel --\nUses Brute Force method.\nWill try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\').\n\nPress Shift over ATITD window.";
+info = "Ore Mining v2.1.4 by Cegaiel --\nMacro will try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refreshed after every round.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -25,7 +25,6 @@ info = "Ore Mining v2.1.3 by Cegaiel --\nUses Brute Force method.\nWill try ever
 oreGathered = 0;
 oreGatheredTotal = 0;
 oreGatheredLast = 0;
-lastOreGathered = 0;
 miningTime = 0;
 autoWorkMine = true;
 timesworked = 0;
@@ -35,6 +34,9 @@ dropdown_cur_value = 1;
 dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)", "Iron (7)", "Lead (9)", "Lithium (10)", "Magnesium (9)", "Platinum (12)", "Silver (10)", "Strontium (10)", "Tin (9)", "Titanium (12)","Tungsten (12)", "Zinc (10)"};
 dropdown_ore_cur_value = 1;
 cancelButton = 0;
+firstRun = 1;
+lastLineFound = "";
+lastLineFound2 = "";
 -- End Don't alter these ...
 
 
@@ -132,6 +134,7 @@ function getMineLoc()
         lsSleep(50);
     end
 end
+
 
 function fetchTotalCombos()
     TotalCombos = 0;
@@ -301,23 +304,10 @@ function getPoints()
 end
 
 
-function fetchTotalCombos()
-    TotalCombos = 0;
-    for i=1,#clickList do
-        for j=i+1,#clickList do
-            for k=j+1,#clickList do
-                TotalCombos = TotalCombos + 1;
-            end
-        end
-    end
-end
-
-
 function clickSequence()
     fetchTotalCombos();
     sleepWithStatus(150, "Starting... Don\'t move mouse!");
     oreGatheredLast = 0;
-    lastOreGathered = 0;
     oreGathered = 0;
     local worked = 1;
     local startMiningTime = lsGetTimer();
@@ -395,6 +385,8 @@ function clickSequence()
     if autoWorkMine then
         workMine();
     end
+    firstRun = nil;
+    TakeOreWindowRefresh();
     reset();
 end
 
@@ -427,10 +419,12 @@ function checkCloseWindows()
     end
 end
 
+
 function reset()
     getPoints();
     clickSequence();
 end
+
 
 function checkAbort()
     if lsShiftHeld() then
@@ -441,7 +435,9 @@ end
 
 
 function findClosePopUp()
-    lastOreGathered = oreGathered;
+    chatRead();
+    lastLineFound = lastLineParse;
+    lastLineFound2 = lastLineParse2;
     startTime = lsGetTimer();
 
     while 1 do
@@ -461,11 +457,14 @@ function findClosePopUp()
             break;
         end
 
-        --If we gathered new ore, add to tally and don't wait for popup.
-        --Beware, ugly quick hack: In the rare chance you get the exact # of ore back to back, then that 5000ms countdown timer will also force the break.
-        if (lastOreGathered ~= oreGathered and oreFound) or ((lsGetTimer() - startTime) > 5000) then
-            oreGatheredTotal = oreGatheredTotal + oreGathered;
-            oreGatheredLast = oreGatheredLast + oreGathered;
+        --If we gathered new ore, add to tally, we're not going to get a popup.
+	  if (lastLineFound2 ~= lastLineParse2) or (lastLineFound ~= lastLineParse) or skipRead or ( (lsGetTimer() - startTime) > 6000 )  then
+
+		if oreFound and ( (lsGetTimer() - startTime) <= 6000 ) then -- if it timed out, don't add ore to total, because we're not sure if we got any or not
+              oreGatheredTotal = oreGatheredTotal + oreGathered;
+              oreGatheredLast = oreGatheredLast + oreGathered;
+		end
+
             lsSleep(popSleepDelay);
             break;
         end
@@ -526,16 +525,33 @@ function chatRead()
         sleepWithStatus(100, "Looking for Main chat screen ...\n\nIf main chat is showing, then try clicking Work Mine to clear this screen", nil, 0.7, 0.7);
     end
 
-    lastLine = chatText[#chatText][2];
-    --Read last line of chat and strip the timer ie [01m]+space from it.
-    lastLineParse = string.sub(lastLine,string.find(lastLine,"m]")+3,string.len(lastLine));
+   -- Verify chat window is showing minimum 2 lines
+   while #chatText < 2 and not firstRun do
+   	checkBreak();
+      srReadScreen();
+      chatText = getChatText();
+      sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of chat!\n\nCurrently we only see " .. #chatText .. " lines ...", nil, 0.7, 0.7);
+   end
+
+
+   --Read last line of chat and strip the timer ie [01m]+space from it.
+   lastLine = chatText[#chatText][2];
+   lastLineParse = string.sub(lastLine,string.find(lastLine,"m]")+3,string.len(lastLine));
+   --Read next to last line of chat and strip the timer ie [01m]+space from it.
+   lastLine2 = chatText[#chatText-1][2];
+   lastLineParse2 = string.sub(lastLine2,string.find(lastLine2,"m]")+3,string.len(lastLine2));
+
+   if string.sub(lastLineParse, 1, 17) == "You got some coal" then
+     lastLine = lastLine2;
+     lastLineParse = lastLineParse2;
+     skipRead = true;
+   else
+     skipRead = nil;
+   end
 
 	if string.sub(lastLineParse, 1, 13) == "Your workload" then
-	  oreFound = true; -- This to prevent it catching lines in chat, such as "You got some coal"  or "Local Support Boosted", etc; ignore those by setting to false below
+	  oreFound = true;
 	  oreGathered = string.match(lastLine, "(%d+) " .. ore);
-		if not oreGathered then
-		  oreGathered = 0;
-		end
 	else
 	  oreFound = nil;
 	end
@@ -610,7 +626,19 @@ function promptDelays()
     return count;
 end
 
+
 function round(num, numDecimalPlaces)
   local mult = 10^(numDecimalPlaces or 0)
   return math.floor(num * mult + 0.5) / mult
+end
+
+
+function TakeOreWindowRefresh()
+ findAllOre = findText("All Ore");
+	if findAllOre then 
+		if not autoWorkMine then
+	         sleepWithStatus(1000, "Refreshing pinned Ore menu ..."); -- Let pinned window catchup. If autowork mine, there is already a 1000 delay on workMine()
+		end
+	 safeClick(findAllOre[0],findAllOre[1]);
+	end
 end
