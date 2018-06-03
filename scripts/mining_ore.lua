@@ -1,4 +1,4 @@
--- mining_ore.lua v2.1.4 -- by Cegaiel
+-- mining_ore.lua v2.2.0 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -11,10 +11,16 @@
 -- Previous versions, if lag was too high, it might try to click on the nodes while a popup box occured later (resulting in some nodes not getting highlighted properly).
 -- This means the macro now auto adjusts to lag. You no longer have to find the 'best value' for popup delay and hope for the best. This runs extremely smooth and accurately now.
 
+-- New in v2.2.0 - Now allows you to optionally try 4 stone combos first, then the regular 3 stone combos after.
+-- 4 stone combos don't produce ore very often, but when it does, its usually 100+
+-- Choosing 4 stone combos will double the time per round, as the nodes worked quantity will double
+-- ie Iron is 35 works for the normal 3 stone method.  But choosing 4 stone will cause it to be 70 (35 for 3 stone combos + 35 for 4 stone combos).
+
+
 
 dofile("common.inc");
 
-info = "Ore Mining v2.1.4 by Cegaiel --\nMacro will try every possible 3 node/stone combination. Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refreshed after every round.";
+info = "Ore Mining v2.2.0 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -37,6 +43,7 @@ cancelButton = 0;
 firstRun = 1;
 lastLineFound = "";
 lastLineFound2 = "";
+extraStones = false
 -- End Don't alter these ...
 
 
@@ -136,12 +143,25 @@ function getMineLoc()
 end
 
 
-function fetchTotalCombos()
+function fetchTotalCombos3()
     TotalCombos = 0;
     for i=1,#clickList do
         for j=i+1,#clickList do
             for k=j+1,#clickList do
                 TotalCombos = TotalCombos + 1;
+            end
+        end
+    end
+end
+
+function fetchTotalCombos4()
+--    TotalCombos = 0;
+    for i=1,#clickList do
+        for j=i+1,#clickList do
+            for k=j+1,#clickList do
+            	   for l=k+1,#clickList do
+                    TotalCombos = TotalCombos + 1;
+                end
             end
         end
     end
@@ -305,12 +325,93 @@ end
 
 
 function clickSequence()
-    fetchTotalCombos();
+    fetchTotalCombos3();
+  if extraStones then
+    fetchTotalCombos4();
+  end
+    chatRead();	
     sleepWithStatus(150, "Starting... Don\'t move mouse!");
     oreGatheredLast = 0;
     oreGathered = 0;
     local worked = 1;
     local startMiningTime = lsGetTimer();
+
+  if extraStones then -- Do 4 stone combos first, in addition to the regular 3 stone combos later, below
+
+    for i=1,#clickList do
+        for j=i+1,#clickList do
+            for k=j+1,#clickList do
+            	 for l=k+1,#clickList do
+
+                --checkCloseWindows();
+                -- 1st Node
+                checkBreak();
+                checkAbort();
+                local startSetTime = lsGetTimer();
+                srSetMousePos(clickList[i][1], clickList[i][2]);
+                lsSleep(clickDelay);
+                srKeyEvent('A');
+
+                -- 2nd Node
+                checkBreak();
+                checkAbort();
+                srSetMousePos(clickList[j][1], clickList[j][2]);
+                lsSleep(clickDelay);
+                srKeyEvent('A');
+
+                -- 3rd Node
+                checkBreak();
+                checkAbort();
+                srSetMousePos(clickList[k][1], clickList[k][2]);
+                lsSleep(clickDelay);
+                srKeyEvent('A');
+
+
+                 -- 4th Node
+                checkBreak();
+                checkAbort();
+                srSetMousePos(clickList[l][1], clickList[l][2]);
+                lsSleep(clickDelay);
+                srKeyEvent('S');
+                findClosePopUp();
+
+                worked = worked + 1
+                local elapsedTime = lsGetTimer() - startMiningTime;
+                local setTime = lsGetTimer() - startSetTime;
+
+                local y = 10;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
+                y = y +15
+                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Alt+Shift to pause this script.");
+                y = y +35
+                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "[" .. worked .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k .. ", " .. l);
+                y = y + 25;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Node Click Delay: " .. clickDelay .. " ms");
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. round((setTime/100)/10,2) .. " secs");
+                y = y + 16;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Total Mines Worked: " .. timesworked .. " times");
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. round((elapsedTime/100)/10,2) .. " secs");
+                y = y + 16;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
+                y = y + 16;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Average Time Elapsed: " .. avgMiningTimeGUI);
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Current Ore Found: " .. math.floor(oreGatheredLast));
+                y = y + 20;
+                lsPrint(10, y, 0, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal));
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffff80ff, "HOLD Shift to Abort and Return to Menu.");
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xff8080ff, "Don't touch mouse until finished!");
+                lsDoFrame();
+            	 end
+            end
+        end
+    end
+  end
+
 
     for i=1,#clickList do
         for j=i+1,#clickList do
@@ -373,6 +474,9 @@ function clickSequence()
             end
         end
     end
+
+
+
 
     miningTime = lsGetTimer() - startMiningTime;
     miningTimeTotal =  miningTimeTotal + miningTime;
@@ -575,8 +679,9 @@ function promptDelays()
         y = y + 50;
         lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
         dropdown_ore_cur_value = lsDropdown("ArrangerDropDown2", 10, y, 0, 200, dropdown_ore_cur_value, dropdown_ore_values);
-        lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-        y = y + 5;
+        y = y + 45;
+        extraStones = lsCheckBox(15, y, z, 0xffffffff, " Also do 4 stone combinations", extraStones);
+        y = y + 35;
         lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Node Click Delay (ms):");
         y = y + 22;
         is_done, clickDelay = lsEditBox("delay", 10, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 100);
@@ -596,7 +701,8 @@ function promptDelays()
             lsPrint(100, y+6, 20, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
             oreGatheredTotal = 0;
         end
-        y = y + 40;
+        lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+        y = y - 30;
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Pause between selecting each node.");
         y = y + 16;
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Raise value to run slower (try increments of 25)");
