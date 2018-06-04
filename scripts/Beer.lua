@@ -199,7 +199,7 @@ function AddIngredient(kettle, ing)
 					lsSleep(200)
 					srKeyEvent(ingredients[ing][2] .. "\n");
 					lsSleep(200);
-					while clickAll("OK1.png") == false do
+					while clickAll("OK-popup.png") == false do
 						lsSleep(50);
 					end
 				end
