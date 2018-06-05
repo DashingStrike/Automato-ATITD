@@ -202,10 +202,6 @@ function doMoves()
 				checkBreak();
 				
 				local GUI = "...\n \n[" .. currentMove .. "/" .. checkedBoxes .. "] " .. checkedMovesName[currentMove] .. "\n[" .. currentClick .. "/" .. perMoves .. "] Clicked\n \nNote: Avatar animation will not keep up with macro. This is OK, each move clicked will still be recognized by your partner.\n\nClick Skip to advance to next move on list (ie partner follows the move).";
-			
-				if skip == true then
-					GUI = "Skipping current move\n" .. GUI
-				end
 
 				if lsButtonText(10, lsScreenY - 30, z, 75, 0xffff80ff, "Menu") then
 					sleepWithStatus(1000, "Returning to Menu")
@@ -217,7 +213,8 @@ function doMoves()
 					-- breaking the loop will happen in AcroClick state
 					skip = true;
 				end
-			
+
+
 				-- handle do click state
 				if state == AcroState.AcroClick then
 					-- skip here to give AcroStart/End states time to complete
@@ -231,12 +228,12 @@ function doMoves()
 						srReadScreen();
 						srClickMouseNoMove(clickMove[0], clickMove[1]-1);
 						status = checkedMovesName[currentMove] .. " clicked";
-						statusScreen(status .. GUI);
+						statusScreen(status .. GUI, nil, 0.65, 0.65);
 						
 						state = AcroState.AcroStart
 					else
 						status = "BUTTON NOT FOUND!\nSkipping: " .. checkedMovesName[currentMove];
-						statusScreen(status .. GUI);
+						statusScreen(status .. GUI, nil, 0.65, 0.65);
 						skip = true;
 						break;
 					end
@@ -245,8 +242,8 @@ function doMoves()
 				
 				-- handle acro start state
 				if state == AcroState.AcroStart then
-					statusScreen("WAITING FOR ACRO TIMER TO START " .. acroStartTries .. "/" .. acroStartIttr .. GUI);
-					
+					statusScreen("WAITING FOR ACRO TIMER TO START " .. acroStartTries .. "/" .. acroStartIttr .. GUI, nil, 0.65, 0.65);
+		
 					img = waitForImage("acro.png", acroStartTimeout);
 					
 					if img ~= nil then
@@ -257,14 +254,29 @@ function doMoves()
 					
 					if acroStartTries == acroStartIttr then
 						acroStartTries = acroStartTries - 5;
-						statusScreen("The lag is pretty bad... are you sure you want to be acroing?  Trying 5 more times...");
+						statusScreen("The lag is pretty bad... are you sure you want to be acroing?  Trying 5 more times...", nil, 0.65, 0.65);
 						lsSleep(badLagMessageTimer);
 					end
+				end
+
+				if lsButtonText(10, lsScreenY - 30, z, 75, 0xffff80ff, "Menu") then
+					sleepWithStatus(1000, "Returning to Menu")
+					displayMoves();
+					break;
+				end
+				
+				if lsButtonText(100, lsScreenY - 30, z, 75, 0xff8080ff, "Skip") then
+					-- breaking the loop will happen in AcroClick state
+					skip = true;
 				end
 				
 				-- handle acro end state
 				if state == AcroState.AcroEnd then
-					statusScreen("WAITING FOR ACRO TIMER TO END " .. acroEndTries .. "/" .. acroEndIttr .. GUI);
+					if skip == true then
+					  statusScreen("Skip Queued ...\nWAITING FOR ACRO TIMER TO END " .. acroEndTries .. "/" .. acroEndIttr .. GUI, nil, 0.65, 0.65);
+					else
+					  statusScreen("WAITING FOR ACRO TIMER TO END " .. acroEndTries .. "/" .. acroEndIttr .. GUI, nil, 0.65, 0.65);
+					end
 					
 					img = waitForNoImage("acro.png", acroEndTimeout);
 					
@@ -277,13 +289,13 @@ function doMoves()
 					
 					if acroEndTries == acroEndIttr then
 						acroEndTries = acroEndTries - 5;
-						statusScreen("The lag is pretty bad... are you sure you want to be acroing?  Trying 5 more times...");
+						statusScreen("The lag is pretty bad... are you sure you want to be acroing?  Trying 5 more times...", nil, 0.65, 0.65);
 						lsSleep(badLagMessageTimer);
 					end
 					
 				end
 				
-				lsDoFrame();
+				--lsDoFrame();
 			end
 			
 		end -- currentClick
