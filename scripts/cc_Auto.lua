@@ -1,16 +1,18 @@
--- cc-auto.lua v1.0 -- by Tallow, based on Tak's cc program, updated by Manon on 5 jan 2018
+-- cc-auto.lua v1.0.2 -- by Tallow, based on Tak's cc program, updated by Manon on 5 jan 2018
+-- Update History: https://github.com/DashingStrike/Automato-ATITD/commits/master/scripts/cc_Auto.lua
+--
+-- v1.0.1 - 2015.12.13 by wzdhek
+-- v1.0.2 - 2018.03.16 by Manon120184
+-- v1.0.3 - 2018.03.17 by taralx
+-- v1.0.4 - 2018.05.06 by Cegaiel
+-- v1.0.5 - 2018.06.05 by Cegaiel
 --
 -- Automatically runs many charcoal hearths or ovens simultaneously.
 --
 
 dofile("cc_Assist.lua");
 
-askText = singleLine([[
-  CC Auto v1.0 (by Tallow, based on Tak's cc program, updated by Manon on 5 jan 2018) --
-  Automatically runs many charcoal hearths or ovens 
-  simultaneously. Make sure this window is in the TOP-RIGHT corner 
-  of the screen. 
-]]);
+askText = "CC Auto v1.0.5 (by Tallow, based on Tak's cc program; furthur tweaks by Manon, Tarral and Cegaiel)\n\nAutomatically runs many charcoal hearths or ovens simultaneously.\n\nMake sure this window is in the TOP-RIGHT corner of the screen.\n\nTap Shift (while hovering ATITD window) to continue.";
 
 BEGIN = 1;
 WOOD = 2;
@@ -87,8 +89,8 @@ function ccRun(pass, passCount)
   local vents = setupVents(ovens);
   local done = false;
   while not done do
-    sleepWithStatus(2000, "Waiting on next tick ...\n\n[" .. pass .. "/" .. passCount .. "] Passes\n\nTotals: [This Pass/All Passes]\n\n[".. woodAdded*#ovens*3 .. "/" .. 
-		woodAddedTotal*#ovens*3 .. "] Wood Used - Actual\n[" .. woodAdded.. "/" .. woodAddedTotal .. "] 'Add Wood' Button Clicked (x1)\n\n[" .. waterAdded*#ovens .. "/" .. waterAddedTotal*#ovens .. 
+    sleepWithStatus(2000, "Waiting on next tick ...\n\n[" .. pass .. "/" .. passCount .. "] Passes\n\nTotals: [This Pass/All Passes]\n\n[".. woodAdded*3 .. "/" .. 
+		woodAddedTotal*3 .. "] Wood Used - Actual\n[" .. woodAdded.. "/" .. woodAddedTotal .. "] 'Add Wood' Button Clicked (x1)\n\n[" .. waterAdded .. "/" .. waterAddedTotal .. 
 		"] Water Used\n             (Excluding cooldown water)\n\n\nElapsed Time: " .. getElapsedTime(startTime),nil, 0.7, 0.7);
     done = true;
   	srReadScreen();
