@@ -5,7 +5,7 @@ yOffset = 0;
 pointingSpeed = 2000; --ms
 
 function doit()
-  askForWindow("Test to find text in regions (windows) such building windows.\n\nPress Shift (while hovering ATITD) to continue.");
+  askForWindow("Test to find text in regions (windows) such building windows.\n\nEnter text value and optional offset. Mouse will point to location. Useful to finding where a macro is clicking.\n\nTo test image locations, use test_findImage_offset.lua\n\nPress Shift (while hovering ATITD) to continue.");
 
   while true do
     findStuff();

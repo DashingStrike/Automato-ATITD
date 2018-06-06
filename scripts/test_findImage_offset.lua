@@ -1,6 +1,6 @@
 dofile("common.inc");
 
-askText = "Enter a .png name and if found, you can have mouse point to location.\n\nYou can also enter x,y offsets and mouse will point to offset location.\n\nUseful to finding where a macro is clicking.";
+askText = "Enter a .png name and optional offset values. Mouse will point to location. Useful to finding where a macro is clicking.\n\nTo test ocr findText locations, use test_ocr_text.lua\n\nPress Shift (while hovering ATITD) to continue.";
 
 xOffset = 0;
 yOffset = 0;
