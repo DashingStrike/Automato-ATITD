@@ -1,4 +1,4 @@
--- mining_gems.lua v2.0.3 -- by Cegaiel
+-- mining_gems.lua v2.0.4 -- by Cegaiel
 --
 -- Works the sand mine, but requires a little thought and input from you ;)
 -- You must click on all Quintuple colors FIRST, all Quadruple colors NEXT, all Triple colors NEXT, all Paired colors NEXT, then ALL Single colored stones LAST.
@@ -23,7 +23,7 @@ dofile("common.inc");
 dofile("settings.inc");
 
 
-askText = "Sand Mining v2.0.3 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
+askText = "Sand Mining v2.0.4 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
 
 
 muteSoundEffects = true;
@@ -47,7 +47,6 @@ gui = {
 dropdown_pattern_cur_value = 1;
 lastLineFound = "";
 lastLineFound2 = "";
-firstRun = 1;
 
 allSets = {
 
@@ -459,11 +458,11 @@ function chatRead()
    end
 
    -- Verify chat window is showing minimum 2 lines
-   while #chatText < 2 and not firstRun do
+   while #chatText < 2  do
    	checkBreak();
       srReadScreen();
       chatText = getChatText();
-      sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of chat!\n\nCurrently we only see " .. #chatText .. " lines ...", nil, 0.7, 0.7);
+      sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of main chat!\n\nCurrently we only see " .. #chatText .. " lines ...\n\nYou can overcome this error by typing ANYTHING in main chat.", nil, 0.7, 0.7);
    end
    
    --Read last line of chat and strip the timer ie [01m]+space from it.
@@ -567,7 +566,6 @@ function clickSequence()
 	end
 
   TakeGemWindowRefresh();
-  firstRun = nil;
   reset();
 end
 

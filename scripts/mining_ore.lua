@@ -1,4 +1,4 @@
--- mining_ore.lua v2.2.1 -- by Cegaiel
+-- mining_ore.lua v2.2.2 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -20,7 +20,7 @@
 
 dofile("common.inc");
 
-info = "Ore Mining v2.2.1 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.";
+info = "Ore Mining v2.2.2 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -40,7 +40,6 @@ dropdown_cur_value = 1;
 dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)", "Iron (7)", "Lead (9)", "Lithium (10)", "Magnesium (9)", "Platinum (12)", "Silver (10)", "Strontium (10)", "Tin (9)", "Titanium (12)","Tungsten (12)", "Zinc (10)"};
 dropdown_ore_cur_value = 1;
 cancelButton = 0;
-firstRun = 1;
 lastLineFound = "";
 lastLineFound2 = "";
 extraStones = false
@@ -487,7 +486,6 @@ function clickSequence()
     if autoWorkMine then
         workMine();
     end
-    firstRun = nil;
     TakeOreWindowRefresh();
     reset();
 end
@@ -628,11 +626,11 @@ function chatRead()
     end
 
    -- Verify chat window is showing minimum 2 lines
-   while #chatText < 2 and not firstRun do
+   while #chatText < 2 do
    	checkBreak();
       srReadScreen();
       chatText = getChatText();
-      sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of chat!\n\nCurrently we only see " .. #chatText .. " lines ...", nil, 0.7, 0.7);
+      sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of main chat!\n\nCurrently we only see " .. #chatText .. " lines ...\n\nYou can overcome this error by typing ANYTHING in main chat.", nil, 0.7, 0.7);
    end
 
 
