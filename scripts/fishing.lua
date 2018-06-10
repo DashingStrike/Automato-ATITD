@@ -868,13 +868,22 @@ function doit()
                         -- All fish caught that displays in fishstats.txt
                         table.insert(gui_log_fish2, addlog);
                         FishType = Sfish;
-                    --if not muteSoundEffects then
-                    --if FishType == "Abdju" or FishType == "Chromis" or FishType == "Catfish" or FishType == "Carp" or FishType == "Perch" or FishType == "Phagrus" or FishType == "Tilapia" then
-                    --lsPlaySound("cheer.wav");
-                    --else
-                    --lsPlaySound("applause.wav");
-                    --end
-                    --end
+                        if SkipCommon == true and LockLure == false then
+                            --FishType = string.sub(Fish,string.find(Fish,",") + 1);
+
+                            if FishType == "Abdju" or FishType == "Chromis" or FishType == "Catfish" or FishType == "Carp" or FishType == "Perch" or FishType == "Phagrus" or FishType == "Tilapia" then
+                                --Skip it
+                                castcount=0;
+
+                            end
+                        end
+                        --if not muteSoundEffects then
+                        --if FishType == "Abdju" or FishType == "Chromis" or FishType == "Catfish" or FishType == "Carp" or FishType == "Perch" or FishType == "Phagrus" or FishType == "Tilapia" then
+                        --lsPlaySound("cheer.wav");
+                        --else
+                        --lsPlaySound("applause.wav");
+                        --end
+                        --end
                     end
 
                     --Add more if v == "something" then statements here if needed
@@ -882,17 +891,7 @@ function doit()
                 end
                 gui_refresh();
 
-                if SkipCommon == true and LockLure == false then
-                    --FishType = string.sub(Fish,string.find(Fish,",") + 1);
-                    FishType = Sfish;
-                    if FishType == "Abdju" or FishType == "Chromis" or FishType == "Catfish" or FishType == "Carp" or FishType == "Perch" or FishType == "Phagrus" or FishType == "Tilapia" then
-                        --Skip it
-                        castcount=0;
 
-                    end
-                end
-
-                gui_refresh();
             end
 
             if not caughtFish then
