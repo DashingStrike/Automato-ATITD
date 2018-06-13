@@ -2,8 +2,7 @@
 -- 
 --
 
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
+dofile("common.inc");
 
 per_click_delay = 20;
 
@@ -46,7 +45,7 @@ function clickAll(image_name, up)
 	-- Find buttons and click them!
 	srReadScreen();
 	xyWindowSize = srGetWindowSize();
-	local buttons = findAllImages(image_name, 2000);
+	local buttons = findAllImages(image_name);
 	
 	if #buttons == 0 then
 		statusScreen("Could not find " .. image_name);
@@ -73,22 +72,34 @@ recipe = "aaaaaaaaaaaaaaaaammmmmmmmmmmmmmmmmmmbmmbmmbmmbmmmqm"
 
 keyDelay = 150;
 function doit()
+	status = "";
 	local num_rounds;
 	num_rounds = promptNumber("How many thermos?", 1);
 	askForWindowAndPixel("                        Pin up the 'Start Making' menu. Make sure your chat is minimized! Click in ATITD, hover your mouse over the glory hole and push shift.  Ensure your heater control is set to Standard.");
 	for i = 1, num_rounds do
+		checkBreak();
 		clickAll("Thermometer.png", true);
 		lsSleep(100);
 		srSetMousePos(mouse_x, mouse_y);
+		statusScreen("Please be patient, the macro is sending keys to the glory hole",nil, 0.7, 0.7);
 		for j = 1, string.len(recipe) do
 			--recipe time
-			srKeyEvent(string.sub(recipe, j, j));
+            checkBreak();
+            local currKey = string.sub(recipe, j, j);
+            srKeyEvent(currKey);
+            status = status .. currKey;
 			lsSleep(keyDelay);
+
+            statusScreen("Please be patient, the macro is sending keys to the glory hole\n\n" .. status,nil, 0.7, 0.7);
+
 		end
-	--		lsSleep(400);
+		lsSleep(keyDelay);
 			srKeyEvent("u");
-		clickAll("Blank.png");
+		lsSleep(keyDelay);
+		clickAll("WindowEmpty.png");
 		lsSleep(keyDelay);
 		clickAll("Ok.png");
+		lsSleep(keyDelay);
 	end
+lsPlaySound("Complete.wav");
 end
