@@ -186,7 +186,14 @@ function glassTick(window_pos, state)
 
 			if temp <= (1600 - state.HV + state.DV) and state.benchTicksConfirmed then
 			  state.want_spike = 1;
-			  state.spikeRose = state.benchTicks;
+			  --state.spikeRose = state.benchTicks;
+				if state.benchTicks == 8 then
+				  state.spikeRose = state.benchTicks -3;
+				elseif state.benchTicks == 7 then
+				  state.spikeRose = state.benchTicks -2;
+				else -- add 2cc on last tick for 4,5,6 tick benches
+				  state.spikeRose = state.benchTicks;
+				end
 			end
 
 			if not state.benchTicksConfirmed and state.benchTicksVerify and state.benchTicks >= 4 and state.benchTicks <= 8 then
