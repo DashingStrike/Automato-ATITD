@@ -99,7 +99,7 @@ function runCrematories()
       tick();
       is_done = checkDone();
     end
-    sleepWithStatus(longWait*5, updateMessage("Waiting to take"));
+    sleepWithStatus(longWait*3, updateMessage("Waiting to take"));
   end
   takeAll();
   lsPlaySound("Complete.wav");
@@ -547,13 +547,15 @@ function loadAll()
       cremWin = cremWins[i]
       for i, v in ipairs(loads) do
          clickText(findText("Load the Crematory...", cremWin));
-         local t = waitForText("Wood", nil, nil, nil, REGION);
-         t = waitForText(v, nil, nil, t);
+         local t = waitForText("Wood", 250, nil, nil, REGION);
+         t = waitForText(v, 250, nil, t);
          clickText(t);
-         t = waitForText("Load how much", nil, nil, nil, REGION);
+         t = waitForText("Load how much", 250, nil, nil, REGION);
          safeClick(t.x + t.width/2, t.bottom - 50);
-         waitForNoText("Load how much");
+         --waitForNoText("Load how much");
+         waitForNoText("Load how much", 250);
       end
+         --sleepWithStatus(10000,"About to start!\n\nFinal chance to abort/verify crematory is loaded correctly?!", nil, 0.7, 0.7);
    end
 end
 
