@@ -71,12 +71,12 @@ recipe = "aaaawwwwannnwwawwannnwwawwannnwwawwannnwwawwannnwwawwannnwwwwannnwwaww
 
 keyDelay = 150;
 function doit()
-	status = "";
 	local num_rounds;
 	num_rounds = 1; -- promptNumber("How many coils?", 1);
 	askForWindowAndPixel("                        Pin up the 'Start Making' menu. Make sure your chat is minimized! Click in ATITD, hover your mouse over the glory hole and push shift.  Ensure your heater control is set to Pinpoint.");
 
 	for i = 1, num_rounds do
+		status = "";
 		clickAll("DistillationCoil.png", true);
 		lsSleep(100);
 		statusScreen("Please be patient, the macro is sending keys to the glory hole",nil, 0.7, 0.7);

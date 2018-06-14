@@ -72,11 +72,11 @@ recipe = "aaaaaaaaaaaaaaaaammmmmmmmmmmmmmmmmmmbmmbmmbmmbmmmqm"
 
 keyDelay = 150;
 function doit()
-	status = "";
 	local num_rounds;
 	num_rounds = promptNumber("How many thermos?", 1);
 	askForWindowAndPixel("                        Pin up the 'Start Making' menu. Make sure your chat is minimized! Click in ATITD, hover your mouse over the glory hole and push shift.  Ensure your heater control is set to Standard.");
 	for i = 1, num_rounds do
+		status = "";
 		checkBreak();
 		clickAll("Thermometer.png", true);
 		lsSleep(100);
