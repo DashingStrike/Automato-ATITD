@@ -100,6 +100,9 @@ function runCrematories()
       is_done = checkDone();
     end
     sleepWithStatus(longWait*3, updateMessage("Waiting to take"));
+    if finish_up then
+      break;
+    end
   end
   takeAll();
   lsPlaySound("Complete.wav");
@@ -191,10 +194,11 @@ function start()
       addWindow(posList[i]);
     end
   end
+  lsSleep(longWait*2);
   for i=1,#windows do
     if windows[i].fire then
       safeClick(windows[i].fire[1] + 5, windows[i].fire[2] + 5);
-      lsSleep(shortWait);
+      lsSleep(shortWait*2);
     end
   end
   sleepWithStatus(longWait, updateMessage("Finding my Chi"));
@@ -512,6 +516,7 @@ function promptLoad()
 
     if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Begin") then
         is_done = 1;
+        sleepWithStatus(1200, "Preparing to Start ...\nHands off the mouse!"); 
     end
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
                     "End script") then
@@ -527,6 +532,7 @@ end
 -------------------------------------------------------------------------------
 
 function loadAll()
+   statusScreen("Loading Crematory...");
    cremWins = findAllText("This is a Crematory", nil, REGION);
    lsPrintln("loading");
    loads = {};
@@ -546,14 +552,19 @@ function loadAll()
    for i=1, #cremWins do
       cremWin = cremWins[i]
       for i, v in ipairs(loads) do
+         checkBreak();
          clickText(findText("Load the Crematory...", cremWin));
+         lsSleep(shortWait*4);
          local t = waitForText("Wood", 250, nil, nil, REGION);
          t = waitForText(v, 250, nil, t);
          clickText(t);
+         lsSleep(shortWait*4);
          t = waitForText("Load how much", 250, nil, nil, REGION);
          safeClick(t.x + t.width/2, t.bottom - 50);
+         lsSleep(shortWait*4);
          --waitForNoText("Load how much");
          waitForNoText("Load how much", 250);
+         lsSleep(shortWait*4);
       end
          --sleepWithStatus(10000,"About to start!\n\nFinal chance to abort/verify crematory is loaded correctly?!", nil, 0.7, 0.7);
    end
@@ -589,6 +600,9 @@ function updateMessage(message)
       result = result .. "\n" .. status;
     end
   end
+  if finish_up then
+    result = result .. "\n\nFinishing Up ...\nClick Finish Up again to Cancel";
+  end
   return result;
 end
 
@@ -598,4 +612,56 @@ function getDir(sign, number)
     result = sign .. number
   end
   return result;
+end
+
+-------------------------------------------------------------------------------
+-- sleepWithStatus - Custom version to include finish up button
+-------------------------------------------------------------------------------
+
+local waitChars = {"-", "\\", "|", "/"};
+local waitFrame = 1;
+
+function sleepWithStatus(delay_time, message, color, scale)
+  if not color then
+    color = 0xffffffff;
+  end
+  if not delay_time then
+    error("Incorrect number of arguments for sleepWithStatus()");
+  end
+  if not scale then
+    scale = 0.8;
+  end
+  local start_time = lsGetTimer();
+  while delay_time > (lsGetTimer() - start_time) do
+    local frame = math.floor(waitFrame/5) % #waitChars + 1;
+    time_left = delay_time - (lsGetTimer() - start_time);
+    local waitMessage = "Waiting ";
+    if delay_time >= 1000 then
+      waitMessage = waitMessage .. time_left .. " ms ";
+    end
+    lsPrintWrapped(10, 50, 0, lsScreenX - 20, scale, scale, 0xd0d0d0ff,
+		   waitMessage .. waitChars[frame]);
+    statusScreen(message, color, nil, scale);
+    lsSleep(tick_delay);
+    waitFrame = waitFrame + 1;
+
+    if finish_up then
+      finish_up_color = 0xff8080ff;
+    else
+      finish_up_color = 0xFFFFFFff;
+    end
+
+    if tonumber(currentPass) < tonumber(passCount) then
+     if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, finish_up_color,
+                    "Finish Up") then
+	if finish_up then
+        finish_up = nil;
+	else
+        finish_up = 1;
+	end
+
+     end
+    end
+
+  end
 end
