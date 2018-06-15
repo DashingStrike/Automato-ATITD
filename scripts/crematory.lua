@@ -646,14 +646,17 @@ function sleepWithStatus(delay_time, message, color, scale)
     waitFrame = waitFrame + 1;
 
     if finish_up then
-      finish_up_color = 0xff8080ff;
+      finish_up_color = 0x80ff80ff;
+      finish_up_text = "Continue";
     else
       finish_up_color = 0xFFFFFFff;
+      finish_up_text = "Finish Up";
     end
 
     if tonumber(currentPass) < tonumber(passCount) then
      if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, finish_up_color,
-                    "Finish Up") then
+                    finish_up_text) then
+
 	if finish_up then
         finish_up = nil;
 	else
