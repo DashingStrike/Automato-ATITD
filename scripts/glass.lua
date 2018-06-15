@@ -262,7 +262,7 @@ function glassTick(window_pos, state)
 
 		if not stop_cooking then
 			--if temp > 1600 and temp < 2400 then
-			if temp >= (1600 - state.HV + state.DV) and temp <= (2399 - state.HV) and not maintainHeatNoCook and state.MinTempReachedOnce then 
+			if temp >= (1600 - state.HV + state.DV) and temp <= (2399 - state.HV) and not maintainHeatNoCook and state.MinTempReachedOnce and not (state.benchTicks == 4 and (state.spiking or state.want_spike)) then 
 				local made_one=nil;
 				for item_index=1, #item_priority do
 					pos = srFindImageInRange(item_priority[item_index], window_pos[0], window_pos[1], window_w, window_h, tol);
