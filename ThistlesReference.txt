@@ -16,7 +16,7 @@ In order to be most productive, I would also expect you to have access to:
 Download and install Automato from http://www.dashingstrike.com/Automato/  'Automato' is my macroing program, with some other fun tools (like the Thistle Recipe Generator) built in as well.  Currently this is on Windows only, but I can provide almost-portable source code for anyone who is interested in helping port it to Linux/MacOS, just ask.
 
 == Enter your requirements ==
-Open up 'config_thistle.txt' (in the Automato installation directory), and you will find a list of desired requirements.  You should remove the existing ones in there (they are probably whatever I was looking for when I last made a build), and replace them with your own.  You can have blocks of requirements with different labels to make the output easier to read, e.g.:
+Make a copy of 'config_thistle.txt' (in the Automato/games/ATITD/ directory) and call it config_thistle_local.txt.  Open it, and you will find a list of desired requirements.  You should remove the existing ones in there (they are probably whatever I was looking for when I last made a build), and replace them with your own.  You can have blocks of requirements with different labels to make the output easier to read, e.g.:
  desired "label:My farms"
  desired A+B+C+F+
  desired B-C+F+T~
@@ -25,7 +25,7 @@ Open up 'config_thistle.txt' (in the Automato installation directory), and you w
 
 == Generate no-void recipe(s) ==
 
-Near the top of thistle_config.txt there will be a bunch of lines indicating each of the rules and whether they are on or off.  Change all of these to "1" to enable the rules.  Then, launch 'Automato', and click 'Thistle Mode'.  This will churn away for a while, and after 40 ticks will have written out a history.txt file containing any recipes found (with no voids, it will find recipes for most requirements).
+Near the top of thistle_config_local.txt there will be a bunch of lines indicating each of the rules and whether they are on or off.  Change all of these to "1" to enable the rules.  Then, launch 'Automato', and click 'Thistle Mode'.  This will churn away for a while, and after 40 ticks will have written out a history.txt file containing any recipes found (with no voids, it will find recipes for most requirements).
 
 Open history.txt, and scroll down to the bottom, and find a requirement you're looking for, there will be a line like:
  Best for A+B+C+F+: 1000/17 (D)
