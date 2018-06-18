@@ -1,6 +1,11 @@
 -- treated boards  v1.0 by Dunagain
 -- helper for finding the k-values, can be used as a basis for a fully automated k-values finder
 
+-- Tweaked some values to work accurately on T8; along with some scaling and GUI tweaks. v1.0.1 by Cegaiel
+-- See: https://www.atitd.org/wiki/tale6/Wood_Treatment_Guide for more info and understanding what this macro does.
+-- Basically, every Wood Treatment Tanks are slightly different than others (K values).  One recipe might work on one tank, but not another.
+-- This macro helps determine what your tank values are, to help figure out recipes later on.
+
 posTank = {};
 posFlexibility = {} ;
 posCuttability = {} ;
@@ -34,7 +39,7 @@ treatedWater = {} ;
 dofile("common.inc");
 
 askText = singleLine([[
-  Treated Boards v1.0 by Dunagain --
+  Treated Boards v1.0.1 by Dunagain --
   Helps you making treated boards with a wood treatment tank
 ]]);
 
@@ -96,20 +101,20 @@ end
 
 function attributes()
 	local result = "";
-	if isRigid() then result = result .. "Rigid " end;
-	if isPliable() then result = result .. "Pliable " end;
-	if isHard() then result = result .. "Hard " end;
-	if isSoft() then result = result .. "Soft " end;
-	if isFireproof() then result = result .. "Fireproof " end;
-	if isVolatile() then result = result .. "Volatile " end;
-	if isRotproof() then result = result .. "Rotproof " end;
-	if isTermiteProne() then result = result .. "Termite-Prone " end;
-	if isTermiteResistant() then result = result .. "Termite-Resistant " end;
-	if isNonToxic() then result = result .. "Non-Toxic " end;
-	if isWhite() then result = result .. "White " end;
-	if isBlonde() then result = result .. "Blonde " end;
-	if isBlack() then result = result .. "Black " end;
-	if isGlossy() then result = result .. "Glossy" end;
+	if isRigid() then result = result .. "* Rigid\n" end;
+	if isPliable() then result = result .. "* Pliable\n" end;
+	if isHard() then result = result .. "* Hard\n" end;
+	if isSoft() then result = result .. "*Soft\n" end;
+	if isFireproof() then result = result .. "* Fireproof\n" end;
+	if isVolatile() then result = result .. "* Volatile\n" end;
+	if isRotproof() then result = result .. "* Rotproof\n" end;
+	if isTermiteProne() then result = result .. "* Termite-Prone\n" end;
+	if isTermiteResistant() then result = result .. "* Termite-Resistant\n" end;
+	if isNonToxic() then result = result .. "* Non-Toxic\n" end;
+	if isWhite() then result = result .. "* White\n" end;
+	if isBlonde() then result = result .. "* Blonde\n" end;
+	if isBlack() then result = result .. "* Black\n" end;
+	if isGlossy() then result = result .. "* Glossy" end;
 	return result;
 end
 
@@ -137,7 +142,7 @@ local result = 0;
 		xpos = xpos + 1;
 		pixel = srReadPixelFromBuffer(xpos, ypos) ;		
 	end
-	return result - 3 ;
+	return result;
 end
 
 function calcFlexibility()
@@ -175,14 +180,20 @@ end
 function calcPos()
     srReadScreen();
 	posTank = findImage("ThisIs.png");
-	posFlexibility = { posTank[0] + 109 , posTank[1] + 190  } ;
-	posCuttability = { posTank[0] + 109 , posTank[1] + 206  } ;
-	posFlammability = { posTank[0] + 109 , posTank[1] + 222  } ;
-	posWaterResist = { posTank[0] + 109 , posTank[1] + 238  } ;
-	posInsectTox = { posTank[0] + 109 , posTank[1] + 254  } ;
-	posHumanTox = { posTank[0] + 109 , posTank[1] + 270  } ;
-	posDarkness  = { posTank[0] + 109 , posTank[1] + 286  } ;
-	posGlossiness = { posTank[0] + 109 , posTank[1] + 302  } ;
+      while not posTank do
+        checkBreak();
+        srReadScreen();
+	  posTank = findImage("ThisIs.png");
+        sleepWithStatus(250,"Could not find Wood Treatment Tank window ...\n\nIs it pinned and 'This is' showing?",nil, 0.7, 0.7);
+      end
+	posFlexibility = { posTank[0] + 105 , posTank[1] + 190  } ;
+	posCuttability = { posTank[0] + 105 , posTank[1] + 206  } ;
+	posFlammability = { posTank[0] + 105 , posTank[1] + 222  } ;
+	posWaterResist = { posTank[0] + 105 , posTank[1] + 238  } ;
+	posInsectTox = { posTank[0] + 105 , posTank[1] + 254  } ;
+	posHumanTox = { posTank[0] + 105 , posTank[1] + 270  } ;
+	posDarkness  = { posTank[0] + 105 , posTank[1] + 286  } ;
+	posGlossiness = { posTank[0] + 105 , posTank[1] + 302  } ;
 end
 
 function doit()
@@ -193,7 +204,7 @@ function doit()
 	local estimation = 0
 	local start_time = lsGetTimer();
 	
-	askForWindow("Pin your Wood Treatment Tank window. Pin the Treat... window so it won't interfer with the reading of values. Then press shift to start the K-Values lookup.") ;
+	askForWindow("Wood Treatment Tank - K Values v1.0.1 by Dunagain\n\nPin your Wood Treatment Tank window.\n\nPin the Treat... window so it won't interfere with the reading of values.\n\nThen press shift to start the K-Values lookup.") ;
 	calcPos() ;
 	
 	
@@ -221,72 +232,75 @@ function doit()
 		local suggestion = "" ;
 		
 		if (startFlexibility < 6) then
-			suggestion = suggestion .. "\nRaise Flexibility with Ash to 69 or with Saltpeter to 61" ;
+			suggestion = suggestion .. "\n- Raise Flexibility with Ash to 69 or with Saltpeter to 61" ;
 		else 
 			if (startFlexibility > 60) then
-				suggestion = suggestion .. "\nLower Flexibility with Lime (to -3) or Lead (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Flexibility with Lime (to -3) or Lead (to 5)" ;
 			end
 		end
 		if (startCuttability < 6) then
-			suggestion = suggestion .. "\nRaise Cuttability with Saltpeter to 69 or with Potash to 61" ;
+			suggestion = suggestion .. "\n- Raise Cuttability with Saltpeter to 69 or with Potash to 61" ;
 		else 
 			if (startCuttability > 60) then
-				suggestion = suggestion .. "\nLower Cuttability with Sulfur (to -3) or Lead (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Cuttability with Sulfur (to -3) or Lead (to 5)" ;
 			end
 		end
 		if (startFlammability < 6) then
-			suggestion = suggestion .. "\nRaise Flammability with Petroleum to 69 or with Sulfur to 61" ;
+			suggestion = suggestion .. "\n- Raise Flammability with Petroleum to 69 or with Sulfur to 61" ;
 		else 
 			if (startFlammability > 60) then
-				suggestion = suggestion .. "\nLower Flammability with Ash (to -3) or Lime (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Flammability with Ash (to -3) or Lime (to 5)" ;
 			end
 		end
 		if (startWaterResist < 6) then
-			suggestion = suggestion .. "\nRaise Water Resist with Beeswax to 69 or with Petroleum to 61" ;
+			suggestion = suggestion .. "\n- Raise Water Resist with Beeswax to 69 or with Petroleum to 61" ;
 		else 
 			if (startWaterResist > 60) then
-				suggestion = suggestion .. "\nLower Water Resist with Water (to -3) or Potash (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Water Resist with Water (to -3) or Potash (to 5)" ;
 			end
 		end
 		if (startInsectTox < 6) then
-			suggestion = suggestion .. "\nRaise InsectTox with Lead to 69 or with Petroleum to 61" ;
+			suggestion = suggestion .. "\n- Raise InsectTox with Lead to 69 or with Petroleum to 61" ;
 		else 
 			if (startInsectTox > 60) then
-				suggestion = suggestion .. "\nLower InsectTox with Water (to -3) or Lime (to 5)" ;
+				suggestion = suggestion .. "\n- Lower InsectTox with Water (to -3) or Lime (to 5)" ;
 			end
 		end
 		if (startHumanTox < 6) then
-			suggestion = suggestion .. "\nRaise HumanTox with Sulfur to 69 or with Lead to 61" ;
+			suggestion = suggestion .. "\n- Raise HumanTox with Sulfur to 69 or with Lead to 61" ;
 		else 
 			if (startHumanTox > 60) then
-				suggestion = suggestion .. "\nLower HumanTox with Water (to -3) or Saltpeter (to 5)" ;
+				suggestion = suggestion .. "\n- Lower HumanTox with Water (to -3) or Saltpeter (to 5)" ;
 			end
 		end
 		if (startDarkness < 6) then
-			suggestion = suggestion .. "\nRaise Darkness with Lead to 69 or with Petroleum to 61" ;
+			suggestion = suggestion .. "\n- Raise Darkness with Lead to 69 or with Petroleum to 61" ;
 		else 
 			if (startDarkness > 60) then
-				suggestion = suggestion .. "\nLower Darkness with Lime (to -3) or Potash (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Darkness with Lime (to -3) or Potash (to 5)" ;
 			end
 		end
 		if (startGlossiness < 6) then
-			suggestion = suggestion .. "\nRaise Glossiness with Beeswax to 69 or with Oil to 61" ;
+			suggestion = suggestion .. "\n- Raise Glossiness with Beeswax to 69 or with Oil to 61" ;
 		else 
 			if (startGlossiness > 60) then
-				suggestion = suggestion .. "\nLower Glossiness with Ash (to -3) or Potash (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Glossiness with Ash (to -3) or Potash (to 5)" ;
 			end
 		end
 
+		if string.len(suggestion) == 0 then
+		  suggestion = "\nNo suggestion available in this state!";
+		end
 		
 		done = false;
 		while not done
 		do
-			lsPrintWrapped(10, 15, 5, lsScreenX-15, 0.8, 0.8, 0xFFFFFFFF,
-				"Press start before treating the boards! (Read the Wood Treatment Guide on wiki, the part about the K-Values, if you don't know what to do)\n" .. suggest .. suggestion) ;
+			lsPrintWrapped(10, 15, 5, lsScreenX-15, 0.7, 0.7, 0xFFFFFFFF,
+				"Press start before treating the boards! (Read the Wood Treatment Guide on wiki, the part about the K-Values, if you don't know what to do).\n\n" .. suggest .. suggestion) ;
 			checkBreak();
 			lsDoFrame();
 			lsSleep(25);
-			if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Start") then
+			if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0x80ff80ff, "Start") then
 				done = true;
 			end		
 		end
@@ -306,7 +320,8 @@ function doit()
 			darkness = calcDarkness();
 			glossiness = calcGlossiness();
 			
-			lsPrintWrapped(10, 45, 5, lsScreenX-15, 1, 1, 0xFFFFFFFF,
+			lsPrintWrapped(10, 45, 5, lsScreenX-15, 0.8, 0.8, 0xFFFFFFFF,
+				"Monitoring window for real-time changes!\n\n" ..
 				"Flexibility: " .. tostring(flexibility) .. "\n" ..
 				"Cuttability: " .. tostring(cuttability) .. "\n" ..
 				"Flammability: " .. tostring(flammability)  .. "\n" ..
@@ -314,12 +329,12 @@ function doit()
 				"Insect Toxicity: " .. tostring(insectTox)  .. "\n" ..
 				"Human Toxicity: " .. tostring(humanTox) .. "\n" ..
 				"Darkness: " .. tostring(darkness) .. "\n" ..
-				"Glossiness: " .. tostring(glossiness) .. "\n" ..
-			 attributes() .. "\n" .. trace) ;
+				"Glossiness: " .. tostring(glossiness) .. "\n\n" ..
+			 attributes() .. "\n\n" .. trace) ;
 			checkBreak();
 			lsDoFrame();
 			lsSleep(25);
-			if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Stop") then
+			if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xff8080ff, "Stop") then
 				done = true;
 			end		
 		end
@@ -339,41 +354,41 @@ function doit()
 		do
 			
 
-			lsPrintWrapped(10, 25, 5, lsScreenX-15, 1, 1, 0xFFFFFFFF,
+			lsPrintWrapped(10, 25, 5, lsScreenX-15, 0.8, 0.8, 0xFFFFFFFF,
 				"Select the property that you have been watching:" 
 			 ) ;
-			if lsButtonText(10, lsScreenY - 270, 0, 200, 0xFFFFFFff, "Flexibility") then
+			if ButtonText(10, lsScreenY - 270, 0, 200, 0xFFFFFFff, "Flexibility") then
 				kvalue = "Formula: (" .. math.abs(endFlexibility - startFlexibility) .. "*" .. math.abs(endFlexibility - startFlexibility) .. ") / " .. num_seconds .. ".0 / 2.0" .. "\nValue: " .. tostring(((endFlexibility - startFlexibility)*(endFlexibility - startFlexibility)/num_seconds)/2.0 )
 				done = true;
 			end		
-			if lsButtonText(10, lsScreenY - 240, 0, 200, 0xFFFFFFff, "Cuttability") then
+			if ButtonText(10, lsScreenY - 240, 0, 200, 0xFFFFFFff, "Cuttability") then
 				kvalue = "Formula: (" .. math.abs(endCuttability - startCuttability) .. "*" .. math.abs(endCuttability - startCuttability) .. ") / " .. num_seconds .. ".0 / 2.0" .. "\nValue: " .. tostring(((endCuttability - startCuttability)*(endCuttability - startCuttability)/num_seconds)/2.0 )
 				done = true;
 			end		
-			if lsButtonText(10, lsScreenY - 210, 0, 200, 0xFFFFFFff, "Flammability") then
+			if ButtonText(10, lsScreenY - 210, 0, 200, 0xFFFFFFff, "Flammability") then
 				kvalue = "Formula: (" .. math.abs(endFlammability - startFlammability) .. "*" .. math.abs(endFlammability - startFlammability) .. ") / " .. num_seconds .. ".0 / 2.0" .. "\nValue: " .. tostring(((endFlammability - startFlammability)*(endFlammability - startFlammability)/num_seconds)/2.0 )
 				done = true;
 			end		
-			if lsButtonText(10, lsScreenY - 180, 0, 200, 0xFFFFFFff, "Water Resist") then
+			if ButtonText(10, lsScreenY - 180, 0, 200, 0xFFFFFFff, "Water Resist") then
 				kvalue = "Formula: ("..  math.abs(endWaterResist - startWaterResist) .. "*" .. math.abs(endWaterResist - startWaterResist) .. ") / " .. num_seconds .. ".0 / 2.0" .. "\nValue: " .. tostring(((endWaterResist - startWaterResist)*(endWaterResist - startWaterResist)/num_seconds)/2.0 )
 				done = true;
 			end		
-			if lsButtonText(10, lsScreenY - 150, 0, 200, 0xFFFFFFff, "Insect Toxicity") then
+			if ButtonText(10, lsScreenY - 150, 0, 200, 0xFFFFFFff, "Insect Toxicity") then
 				kvalue = "Formula: (" .. math.abs(endInsectTox - startInsectTox) .. "*" .. math.abs(endInsectTox - startInsectTox) .. ") / " .. num_seconds .. ".0 / 2.0" .. "\nValue: " .. tostring(((endInsectTox - startInsectTox)*(endInsectTox - startInsectTox)/num_seconds)/2.0 )
 				done = true;
 			end		
-			if lsButtonText(10, lsScreenY - 120, 0, 200, 0xFFFFFFff, "Human Toxicity") then
+			if ButtonText(10, lsScreenY - 120, 0, 200, 0xFFFFFFff, "Human Toxicity") then
 				kvalue = "Formula: (" .. math.abs(endHumanTox - startHumanTox) .. "*" .. math.abs(endHumanTox - startHumanTox) .. ") / " .. num_seconds .. ".0 / 2.0" .. "\nValue: " .. tostring(((endHumanTox - startHumanTox)*(endHumanTox - startHumanTox)/num_seconds)/2.0 )
 				done = true;
 			end		
-			if lsButtonText(10, lsScreenY - 90, 0, 200, 0xFFFFFFff, "Darkness") then
+			if ButtonText(10, lsScreenY - 90, 0, 200, 0xFFFFFFff, "Darkness") then
 				kvalue = "Formula: (" .. math.abs(endDarkness - startDarkness) .. "*" .. math.abs(endDarkness - startDarkness) .. ") / " .. num_seconds .. ".0 / 2.0" .. "\nValue: " .. tostring(((endDarkness - startDarkness)*(endDarkness - startDarkness)/num_seconds)/2.0 )
 				done = true;
 			end		
-			if lsButtonText(10, lsScreenY - 60, 0, 200, 0xFFFFFFff, "Glossiness") then
+			if ButtonText(10, lsScreenY - 60, 0, 200, 0xFFFFFFff, "Glossiness") then
 				kvalue = "Formula: (" .. math.abs(endGlossiness - startGlossiness) .. "*" .. math.abs(endGlossiness - startGlossiness) .. ") / " .. num_seconds .. ".0 / 2.0" .. "\nValue: " .. tostring(((endGlossiness - startGlossiness)*(endGlossiness - startGlossiness)/num_seconds)/2.0 )
 				done = true;
-			end		
+			end
 			checkBreak();
 			lsDoFrame();
 			lsSleep(25);
