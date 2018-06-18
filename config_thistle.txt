@@ -1,6 +1,13 @@
 //
 // Config for thistle search program
 //
+// Note you can copy or rename this file to config_thistle_local.txt
+// New in Automato v2.27:
+// Thistle Mode now tries to load from "config_thistle_local.txt" first before trying config_thistle.txt
+// This will help prevent losing your settings by it being overwritten every time there is an update from github.
+//
+//
+//
 // Any text after // will be ignored
 
 num_ticks 40	// Leave at 40 unless testing things
@@ -56,72 +63,19 @@ rule_Nia_Thi 1
 // along with notes to myself on which ones I've done what with
 // Any line starting with "label:" will effectively label all those after it
 
-desired "label:Mine"
+desired "label:My Treatment Tank"
+//Comment or Uncomment below to include/exclude from Thistle Mode
 // desired B-F-N+P-
 // desired A+B-C+P~
 
-desired "label:fahli"
-desired C~F+N~T~
-//desired A-C+P+T-
-desired F-N~P+T+
 
-desired "label:RosieRazor"
-desired A+C-F~N+
-
-desired "label:blondie"
-desired C~F+N+P+
-desired F~N+P-T~
-desired A-C+F+P+
-desired A+B-F~N~
-desired B+C+N-P~
-
-
-desired "label:Hanid"
-desired F+N+P+T+
-desired A+C+P+T+
-desired B-C+N+T+
-desired A+F-P+T+
-desired A+B~C+P~
-desired A~F~N+T~
-
-
-// http://www.atitd.org/wiki/tale4/Guilds/Paradise_Plains/Thistles
-desired "label:PP 1-5"
-desired A-B+P~T+
-desired C+F-P~T~
-//desired A+N~P~T+
-//desired A+C+N~T+
-desired F~N+P~T+
-
-
-desired "label:PP 6-10"
+desired "label:Random Test"
 // desired A~F+N+T~
 // desired A+B+F~N-
-desired A-C+F+N+
+// desired A-C+F+N+
 desired A~B~N+P+
 desired F-N-P+T+
 
-desired "label:PP 11+"
-//desired A~B+C+N~
-desired B-C+N+T+
-desired A-B+C+N-
-
-desired "label:Zeb"
-desired A~B+F-N+
-desired A~B~F+P+
-desired A+C~F+N+
-
-// BlueGrass
-desired "label:BlueGrass"
-desired A+C~N+T+ // made a batch
-desired A+F~N+T~
-desired A+B-P-T~
-desired A+B+C+F~
-
-// desired "label:JT"
-// desired A~F+N+P+
-// desired C-F-P+T+
-// desired A~B-C+P~
 
 // // Not really needed, just there for feeding void testing
 // desired "label:Misc"
@@ -150,6 +104,11 @@ desired A+B+C+F~
 // Independent of the searching, this will also report if any of the desired list matches
 //  something in stock.  The existing ones in this file might be out of date, but if
 //  something matches what you need, you can contact Jimbly to see if it is still available.
+// There is a tool at https://atitd.sharpnetwork.net
+// Link is under Misc on main page titled "Convert Chest clipboard to Stock Data".
+// This will let you click Copy Clipboard on Warehouse or Chest and paste into a text box.
+// It will output the correct format for quick pasting into this file
+
 // Any line starting with "label:" will effectively label all those after it
 
 Stock "label:Jimbly"
@@ -174,299 +133,10 @@ Stock "45 A~B+C+F~N-P+T~"
 Stock "160 A~B+C-F-N~P-T~"
 Stock "130 A~B-C-F~N-P-T-"
 
+Stock "label:Warehouse in Resources compound"
+Stock "380 A~B+C+F~N-P+T-"
+Stock "45 A~B+C+F~N-P+T~"
 
-Stock "label:Egyptian Life"
-Stock "5 A+B+C+F-N-P-T~"
-Stock "5 A+B+C+F-N-P~T~"
-Stock "90 A+B+C+F~N-P-T+"
-Stock "10 A+B+C+F~N-P-T~"
-Stock "30 A+B+C+F~N-P~T+"
-Stock "5 A+B+C+F~N-P~T~"
-Stock "5 A+B+C-F~N+P~T~"
-Stock "5 A+B+C~F-N-P+T+"
-Stock "5 A+B~C+F+N~P~T+"
-Stock "5 A-B+C+F+N-P+T~"
-Stock "30 A-B+C+F~N-P+T-"
-Stock "685 A-B+C-F+N-P-T-"
-Stock "10 A-B+C-F+N-P-T~"
-Stock "10 A-B+C-F+N-P~T-"
-Stock "535 A-B+C-F-N-P-T+"
-Stock "95 A-B+C-F-N-P-T-"
-Stock "45 A-B+C-F-N-P~T+"
-Stock "15 A-B+C-F~N-P~T-"
-Stock "5 A-B+C-F~N-P~T~"
-Stock "5 A-B+C~F+N-P~T~"
-Stock "5 A-B+C~F-N~P+T~"
-Stock "30 A-B+C~F~N-P~T-"
-Stock "110 A-B-C+F+N-P-T-"
-Stock "65 A-B-C+F+N-P~T~"
-Stock "30 A-B-C+F~N-P~T-"
-Stock "5 A-B-C+F~N~P-T~"
-Stock "15 A-B-C+F~N~P~T~"
-Stock "5 A-B-C-F+N+P-T-"
-Stock "95 A-B-C-F+N-P+T-"
-Stock "85 A-B-C-F+N-P-T-"
-Stock "60 A-B-C-F+N-P-T~"
-Stock "5 A-B-C-F+N-P~T+"
-Stock "10 A-B-C-F-N-P+T-"
-Stock "1375 A-B-C-F-N-P-T-"
-Stock "170 A-B-C-F-N-P~T-"
-Stock "5 A-B-C-F-N~P-T~"
-Stock "5 A-B-C-F~N-P+T-"
-Stock "115 A-B-C-F~N-P-T-"
-Stock "70 A-B-C-F~N-P~T-"
-Stock "5 A-B-C-F~N~P+T-"
-Stock "25 A-B-C~F~N-P~T~"
-Stock "1 A-B~C+F+N+P+T-"
-Stock "95 A-B~C+F+N-P~T~"
-Stock "5 A-B~C+F~N+P~T-"
-Stock "5 A-B~C+F~N~P~T~"
-Stock "150 A-B~C-F+N-P-T-"
-Stock "5 A-B~C-F-N+P-T-"
-Stock "25 A-B~C-F-N-P+T-"
-Stock "495 A-B~C-F-N-P-T-"
-Stock "10 A-B~C-F-N-P~T-"
-Stock "10 A-B~C-F-N~P-T+"
-Stock "5 A-B~C-F-N~P-T~"
-Stock "5 A-B~C-F-N~P~T-"
-Stock "5 A-B~C-F~N-P+T-"
-Stock "35 A-B~C-F~N-P-T-"
-Stock "5 A-B~C-F~N-P~T+"
-Stock "80 A-B~C-F~N-P~T-"
-Stock "5 A-B~C~F+N-P~T-"
-Stock "5 A-B~C~F-N~P-T-"
-Stock "15 A-B~C~F-N~P~T-"
-Stock "5 A-B~C~F~N-P~T-"
-Stock "5 A-B~C~F~N~P~T~"
-Stock "20 A~B+C+F+N-P-T+"
-Stock "710 A~B+C+F+N-P-T-"
-Stock "5 A~B+C+F~N-P-T+"
-
-Stock "label:Paradise Plains"
-Stock "5 A+B+C+F-N-P~T-"
-Stock "35 A+B+C+F-N~P-T-"
-Stock "45 A+B+C+F-N~P-T~"
-Stock "15 A+B+C+F~N-P-T+"
-Stock "25 A+B+C+F~N~P-T~"
-Stock "15 A+B+C+F~N~P~T~"
-Stock "10 A+B+C-F+N+P-T~"
-Stock "5 A+B+C-F+N-P+T-"
-Stock "5 A+B+C-F+N~P-T+"
-Stock "5 A+B+C-F+N~P-T~"
-Stock "3 A+B+C-F-N+P-T-"
-Stock "5 A+B+C-F-N-P-T+"
-Stock "5 A+B+C-F-N~P+T~"
-Stock "10 A+B+C-F~N+P~T-"
-Stock "5 A+B+C-F~N~P+T-"
-Stock "5 A+B+C-F~N~P+T~"
-Stock "5 A+B+C~F+N+P~T~"
-Stock "5 A+B+C~F+N-P+T+"
-Stock "5 A+B+C~F+N-P+T~"
-Stock "10 A+B+C~F+N-P-T-"
-Stock "5 A+B+C~F+N-P~T-"
-Stock "15 A+B+C~F+N~P-T~"
-Stock "50 A+B+C~F+N~P~T~"
-Stock "10 A+B+C~F-N~P+T~"
-Stock "5 A+B+C~F~N-P~T-"
-Stock "35 A+B+C~F~N~P-T~"
-Stock "5 A+B+C~F~N~P~T~"
-Stock "4 A+B-C+F+N-P-T-"
-Stock "10 A+B-C+F+N~P~T+"
-Stock "5 A+B-C+F-N+P-T-"
-Stock "80 A+B-C+F-N-P+T~"
-Stock "5 A+B-C+F-N-P~T-"
-Stock "35 A+B-C+F~N-P+T-"
-Stock "40 A+B-C+F~N-P+T~"
-Stock "85 A+B-C-F+N-P-T-"
-Stock "20 A+B-C-F-N-P-T-"
-Stock "105 A+B-C-F~N-P+T-"
-Stock "10 A+B-C-F~N-P-T-"
-Stock "70 A+B-C~F+N-P+T~"
-Stock "20 A+B-C~F+N-P~T~"
-Stock "35 A+B-C~F+N~P+T~"
-Stock "5 A+B~C+F+N~P~T+"
-Stock "10 A+B~C+F-N~P-T~"
-Stock "115 A+B~C-F~N-P+T-"
-Stock "5 A+B~C-F~N~P-T-"
-Stock "20 A+B~C~F+N-P~T-"
-Stock "160 A+B~C~F~N+P-T+"
-Stock "5 A+B~C~F~N-P~T-"
-Stock "5 A+B~C~F~N~P~T~"
-Stock "5 A-B+C+F+N-P+T+"
-Stock "4 A-B+C+F+N-P+T-"
-Stock "15 A-B+C+F+N-P+T~"
-Stock "8 A-B+C+F+N-P-T-"
-Stock "25 A-B+C+F+N-P-T~"
-Stock "30 A-B+C+F+N-P~T-"
-Stock "15 A-B+C+F-N-P+T-"
-Stock "200 A-B+C+F-N-P-T-"
-Stock "100 A-B+C+F-N-P~T+"
-Stock "205 A-B+C+F-N-P~T-"
-Stock "100 A-B+C+F-N-P~T~"
-Stock "55 A-B+C+F~N-P+T-"
-Stock "20 A-B+C+F~N-P~T-"
-Stock "10 A-B+C+F~N~P-T~"
-Stock "20 A-B+C+F~N~P~T-"
-Stock "10 A-B+C-F+N+P+T-"
-Stock "5 A-B+C-F+N+P+T~"
-Stock "15 A-B+C-F+N+P-T-"
-Stock "5 A-B+C-F+N+P-T~"
-Stock "5 A-B+C-F+N+P~T-"
-Stock "10 A-B+C-F+N-P+T+"
-Stock "5 A-B+C-F+N-P+T-"
-Stock "20 A-B+C-F+N-P+T~"
-Stock "335 A-B+C-F+N-P-T-"
-Stock "35 A-B+C-F+N-P-T~"
-Stock "95 A-B+C-F+N-P~T-"
-Stock "110 A-B+C-F+N-P~T~"
-Stock "20 A-B+C-F+N~P-T+"
-Stock "5 A-B+C-F+N~P-T~"
-Stock "45 A-B+C-F+N~P~T-"
-Stock "5 A-B+C-F+N~P~T~"
-Stock "20 A-B+C-F-N-P+T-"
-Stock "55 A-B+C-F-N-P-T+"
-Stock "20 A-B+C-F~N+P-T~"
-Stock "5 A-B+C-F~N+P~T+"
-Stock "10 A-B+C-F~N+P~T-"
-Stock "5 A-B+C-F~N-P+T-"
-Stock "15 A-B+C-F~N-P+T~"
-Stock "50 A-B+C-F~N-P-T+"
-Stock "10 A-B+C-F~N-P~T-"
-Stock "5 A-B+C-F~N~P-T~"
-Stock "15 A-B+C~F+N-P+T+"
-Stock "15 A-B+C~F+N-P+T-"
-Stock "85 A-B+C~F+N-P-T-"
-Stock "45 A-B+C~F+N-P-T~"
-Stock "25 A-B+C~F+N-P~T-"
-Stock "75 A-B+C~F+N-P~T~"
-Stock "4 A-B+C~F+N~P-T-"
-Stock "45 A-B+C~F+N~P~T-"
-Stock "160 A-B+C~F-N-P+T-"
-Stock "5 A-B+C~F-N-P-T-"
-Stock "80 A-B+C~F-N-P~T-"
-Stock "50 A-B+C~F~N-P+T-"
-Stock "5 A-B+C~F~N-P+T~"
-Stock "160 A-B+C~F~N-P-T~"
-Stock "5 A-B+C~F~N-P~T-"
-Stock "60 A-B+C~F~N~P+T-"
-Stock "20 A-B+C~F~N~P~T-"
-Stock "5 A-B-C+F+N-P+T-"
-Stock "5 A-B-C+F+N-P-T-"
-Stock "5 A-B-C+F+N-P~T-"
-Stock "5 A-B-C+F~N-P~T-"
-Stock "5 A-B-C+F~N-P~T~"
-Stock "90 A-B-C-F+N+P-T-"
-Stock "35 A-B-C-F+N+P-T~"
-Stock "15 A-B-C-F+N-P-T-"
-Stock "5 A-B-C-F+N-P-T~"
-Stock "50 A-B-C-F+N-P~T+"
-Stock "5 A-B-C-F+N-P~T-"
-Stock "20 A-B-C-F+N~P-T-"
-Stock "5 A-B-C-F+N~P-T~"
-Stock "15 A-B-C-F-N-P+T-"
-Stock "1020 A-B-C-F-N-P-T-"
-Stock "100 A-B-C-F-N-P~T-"
-Stock "10 A-B-C-F-N~P-T-"
-Stock "10 A-B-C-F-N~P~T-"
-Stock "15 A-B-C-F~N-P+T-"
-Stock "5 A-B-C-F~N-P+T~"
-Stock "5 A-B-C-F~N-P-T+"
-Stock "185 A-B-C-F~N-P-T-"
-Stock "70 A-B-C-F~N-P~T-"
-Stock "5 A-B-C-F~N~P+T~"
-Stock "25 A-B-C-F~N~P-T~"
-Stock "5 A-B-C~F+N+P-T~"
-Stock "5 A-B-C~F+N-P-T~"
-Stock "95 A-B-C~F+N-P~T+"
-Stock "50 A-B-C~F+N~P-T-"
-Stock "125 A-B-C~F+N~P-T~"
-Stock "5 A-B-C~F-N~P-T+"
-Stock "155 A-B-C~F~N+P-T~"
-Stock "5 A-B-C~F~N-P+T+"
-Stock "5 A-B-C~F~N-P+T-"
-Stock "15 A-B-C~F~N-P~T~"
-Stock "25 A-B-C~F~N~P~T-"
-Stock "1 A-B~C+F+N+P+T-"
-Stock "550 A-B~C+F+N-P+T-"
-Stock "30 A-B~C+F+N-P-T-"
-Stock "5 A-B~C+F+N-P~T~"
-Stock "15 A-B~C+F~N-P+T-"
-Stock "10 A-B~C+F~N-P~T-"
-Stock "5 A-B~C-F+N+P-T-"
-Stock "85 A-B~C-F+N+P-T~"
-Stock "20 A-B~C-F+N-P+T-"
-Stock "40 A-B~C-F+N-P-T-"
-Stock "10 A-B~C-F+N-P-T~"
-Stock "5 A-B~C-F+N-P~T~"
-Stock "15 A-B~C-F+N~P-T-"
-Stock "15 A-B~C-F+N~P-T~"
-Stock "10 A-B~C-F-N-P+T-"
-Stock "50 A-B~C-F-N-P-T-"
-Stock "5 A-B~C-F-N-P~T-"
-Stock "5 A-B~C-F-N~P-T-"
-Stock "10 A-B~C-F~N+P-T~"
-Stock "5 A-B~C-F~N-P+T-"
-Stock "5 A-B~C-F~N~P-T~"
-Stock "5 A-B~C~F+N+P-T-"
-Stock "50 A-B~C~F+N-P+T+"
-Stock "5 A-B~C~F+N-P+T-"
-Stock "55 A-B~C~F+N-P-T-"
-Stock "20 A-B~C~F+N-P~T-"
-Stock "5 A-B~C~F+N~P-T-"
-Stock "10 A-B~C~F-N-P+T-"
-Stock "5 A~B+C+F+N-P+T-"
-Stock "55 A~B+C+F+N-P-T-"
-Stock "60 A~B+C+F+N-P-T~"
-Stock "90 A~B+C+F+N-P~T~"
-Stock "5 A~B+C+F-N+P+T~"
-Stock "60 A~B+C+F-N-P+T~"
-Stock "5 A~B+C+F-N-P-T-"
-Stock "20 A~B+C+F-N~P-T-"
-Stock "10 A~B+C+F-N~P~T-"
-Stock "35 A~B+C+F~N-P+T-"
-Stock "5 A~B+C+F~N-P~T-"
-Stock "50 A~B+C-F+N+P-T-"
-Stock "10 A~B+C-F+N+P-T~"
-Stock "5 A~B+C-F+N+P~T-"
-Stock "5 A~B+C-F+N-P+T-"
-Stock "8 A~B+C-F+N-P+T~"
-Stock "5 A~B+C-F+N-P~T-"
-Stock "5 A~B+C-F+N~P-T-"
-Stock "55 A~B+C-F-N+P-T-"
-Stock "5 A~B+C-F-N+P~T-"
-Stock "5 A~B+C-F-N~P~T-"
-Stock "45 A~B+C-F~N-P+T-"
-Stock "5 A~B+C-F~N~P+T-"
-Stock "20 A~B+C-F~N~P~T-"
-Stock "5 A~B+C-F~N~P~T~"
-Stock "5 A~B+C~F+N-P+T+"
-Stock "5 A~B+C~F+N-P+T-"
-Stock "5 A~B+C~F+N-P+T~"
-Stock "5 A~B+C~F+N-P~T+"
-Stock "5 A~B+C~F+N-P~T-"
-Stock "5 A~B+C~F+N-P~T~"
-Stock "5 A~B+C~F+N~P-T~"
-Stock "25 A~B+C~F~N-P+T-"
-Stock "5 A~B+C~F~N-P+T~"
-Stock "25 A~B+C~F~N-P~T-"
-Stock "5 A~B+C~F~N~P-T~"
-Stock "10 A~B-C+F-N+P-T-"
-Stock "5 A~B-C+F~N-P+T+"
-Stock "10 A~B-C-F+N-P-T-"
-Stock "5 A~B-C-F~N-P+T-"
-Stock "10 A~B-C-F~N-P-T-"
-Stock "30 A~B-C-F~N~P-T-"
-Stock "80 A~B-C~F+N~P-T+"
-Stock "70 A~B-C~F+N~P-T~"
-Stock "5 A~B~C+F+N-P-T-"
-Stock "5 A~B~C+F+N~P-T~"
-Stock "40 A~B~C-F+N+P-T-"
-Stock "5 A~B~C-F+N~P~T~"
-Stock "10 A~B~C-F-N+P~T-"
-Stock "20 A~B~C-F~N-P+T~"
-Stock "5 A~B~C-F~N-P-T-"
-Stock "45 A~B~C-F~N~P-T-"
-Stock "10 A~B~C~F+N-P+T~"
-Stock "5 A~B~C~F+N-P~T-"
-Stock "5 A~B~C~F~N-P+T~"
-Stock "5 A~B~C~F~N-P~T-"
+Stock "label:Chest near Thistle Gardens"
+Stock "380 A~B+C+F~N-P+T-"
+Stock "45 A~B+C+F~N-P+T~"
