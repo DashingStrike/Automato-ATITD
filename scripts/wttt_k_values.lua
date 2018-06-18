@@ -1,10 +1,16 @@
 -- treated boards  v1.0 by Dunagain
 -- helper for finding the k-values, can be used as a basis for a fully automated k-values finder
 
--- Tweaked some values to work accurately on T8; along with some scaling and GUI tweaks. v1.0.1 by Cegaiel
+--  v1.0.1 by Cegaiel
+-- Tweaked some values to work accurately on T8; along with some scaling and GUI tweaks.
 -- See: https://www.atitd.org/wiki/tale6/Wood_Treatment_Guide for more info and understanding what this macro does.
 -- Basically, every Wood Treatment Tanks are slightly different than others (K values).  One recipe might work on one tank, but not another.
 -- This macro helps determine what your tank values are, to help figure out recipes later on.
+
+-- v1.0.2 by Rhaom
+-- Apparently many values aren't really valid anymore since Tale 8. Bonemeal and Charcoal added T8.
+-- Rhaom did a lot of math and testing to get it super accuratate now. Should be working nice now ~Ceg
+--
 
 posTank = {};
 posFlexibility = {} ;
@@ -39,64 +45,64 @@ treatedWater = {} ;
 dofile("common.inc");
 
 askText = singleLine([[
-  Treated Boards v1.0.1 by Dunagain --
+  Treated Boards v1.0.2 by Dunagain -- Tweaked by Rhaom and Cegaiel for T8
   Helps you making treated boards with a wood treatment tank
 ]]);
 
 function isRigid()
-	return flexibility < 8 ;
+	return flexibility < 11 ;
 end
 
 function isPliable()
-	return flexibility > 57 ;
+	return flexibility > 60 ;
 end
 
 function isHard()
-	return cuttability < 8 ;
+	return cuttability < 11 ;
 end
 
 function isSoft()
-	return cuttability > 57 ;
+	return cuttability > 60 ;
 end
 
 function isFireproof()
-	return flammability < 8  ;
+	return flammability < 11 ;
 end
 
 function isVolatile()
-	return flammability > 57 ;
+	return flammability > 60 ;
 end
 
 function isRotproof()
-	return waterResist > 57 ;
+	return waterResist > 60 ;
 end
 
 function isTermiteProne()
-	return insectTox < 8 ;
+	return insectTox < 11 ;
 end
 
 function isTermiteResistant()
-	return insectTox > 57 ;
+	return insectTox > 60 ;
 end
 
 function isNonToxic()
-	return humanTox < 8 ;
+	return humanTox < 11 ;
 end
 
 function isWhite()
-	return darkness < 8 ;
+	return darkness < 11 ;
 end
 
 function isBlonde()
-	return (darkness > 7) and (darkness < 22) ;
+	return (darkness > 10) and (darkness < 26) ;
 end
 
 function isBlack()
-	return darkness > 57 ;
+	return darkness > 60 ;
 end
 
 function isGlossy()
-	return glossiness > 57 ;
+	return glossiness > 60 ;
 end
 
 function attributes()
@@ -186,14 +192,14 @@ function calcPos()
 	  posTank = findImage("ThisIs.png");
         sleepWithStatus(250,"Could not find Wood Treatment Tank window ...\n\nIs it pinned and 'This is' showing?",nil, 0.7, 0.7);
       end
-	posFlexibility = { posTank[0] + 105 , posTank[1] + 190  } ;
-	posCuttability = { posTank[0] + 105 , posTank[1] + 206  } ;
-	posFlammability = { posTank[0] + 105 , posTank[1] + 222  } ;
-	posWaterResist = { posTank[0] + 105 , posTank[1] + 238  } ;
-	posInsectTox = { posTank[0] + 105 , posTank[1] + 254  } ;
-	posHumanTox = { posTank[0] + 105 , posTank[1] + 270  } ;
-	posDarkness  = { posTank[0] + 105 , posTank[1] + 286  } ;
-	posGlossiness = { posTank[0] + 105 , posTank[1] + 302  } ;
+	posFlexibility = { posTank[0] + 104 , posTank[1] + 190  } ;
+	posCuttability = { posTank[0] + 104 , posTank[1] + 206  } ;
+	posFlammability = { posTank[0] + 104 , posTank[1] + 222  } ;
+	posWaterResist = { posTank[0] + 104 , posTank[1] + 238  } ;
+	posInsectTox = { posTank[0] + 104 , posTank[1] + 254  } ;
+	posHumanTox = { posTank[0] + 104 , posTank[1] + 270  } ;
+	posDarkness  = { posTank[0] + 104 , posTank[1] + 286  } ;
+	posGlossiness = { posTank[0] + 104 , posTank[1] + 302  } ;
 end
 
 function doit()
@@ -204,7 +210,7 @@ function doit()
 	local estimation = 0
 	local start_time = lsGetTimer();
 	
-	askForWindow("Wood Treatment Tank - K Values v1.0.1 by Dunagain\n\nPin your Wood Treatment Tank window.\n\nPin the Treat... window so it won't interfere with the reading of values.\n\nThen press shift to start the K-Values lookup.") ;
+	askForWindow("Wood Treatment Tank - K Values v1.0.2 by Dunagain  -- Tweaked by Rhaom and Cegaiel for T8.\n\nPin your Wood Treatment Tank window.\n\nPin the Treat... window so it won't interfere with the reading of values. The macro does NOT click on the menu, you just pin it for convenience.\n\nThen press shift to start the K-Values lookup.") ;
 	calcPos() ;
 	
 	
@@ -231,60 +237,60 @@ function doit()
 		local suggest = "From this position, I suggest that you try to:\n ";
 		local suggestion = "" ;
 		
-		if (startFlexibility < 6) then
-			suggestion = suggestion .. "\n- Raise Flexibility with Ash to 69 or with Saltpeter to 61" ;
+		if (startFlexibility < 11) then
+			suggestion = suggestion .. "\n- Raise Flexibility with Bonemeal to 72 or with Saltpeter to 64" ;
 		else 
 			if (startFlexibility > 60) then
-				suggestion = suggestion .. "\n- Lower Flexibility with Lime (to -3) or Lead (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Flexibility with Lime to 0 or Lead to 8" ;
 			end
 		end
-		if (startCuttability < 6) then
-			suggestion = suggestion .. "\n- Raise Cuttability with Saltpeter to 69 or with Potash to 61" ;
+		if (startCuttability < 11) then
+			suggestion = suggestion .. "\n- Raise Cuttability with Saltpeter to 72 or with Potash to 64" ;
 		else 
 			if (startCuttability > 60) then
-				suggestion = suggestion .. "\n- Lower Cuttability with Sulfur (to -3) or Lead (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Cuttability with Charcoal to 0 or Lead to 8" ;
 			end
 		end
-		if (startFlammability < 6) then
-			suggestion = suggestion .. "\n- Raise Flammability with Petroleum to 69 or with Sulfur to 61" ;
+		if (startFlammability < 11) then
+			suggestion = suggestion .. "\n- Raise Flammability with Petroleum to 72 or with Sulfur to 64" ;
 		else 
 			if (startFlammability > 60) then
-				suggestion = suggestion .. "\n- Lower Flammability with Ash (to -3) or Lime (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Flammability with Ash to 0 or Lime to 8" ;
 			end
 		end
-		if (startWaterResist < 6) then
-			suggestion = suggestion .. "\n- Raise Water Resist with Beeswax to 69 or with Petroleum to 61" ;
+		if (startWaterResist < 11) then
+			suggestion = suggestion .. "\n- Raise Water Resist with Beeswax to 72 or with Petroleum to 64" ;
 		else 
 			if (startWaterResist > 60) then
-				suggestion = suggestion .. "\n- Lower Water Resist with Water (to -3) or Potash (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Water Resist with Water to 0 or Potash to 8" ;
 			end
 		end
-		if (startInsectTox < 6) then
-			suggestion = suggestion .. "\n- Raise InsectTox with Lead to 69 or with Petroleum to 61" ;
+		if (startInsectTox < 11) then
+			suggestion = suggestion .. "\n- Raise InsectTox with Lead to 72 or with Petroleum to 64" ;
 		else 
 			if (startInsectTox > 60) then
-				suggestion = suggestion .. "\n- Lower InsectTox with Water (to -3) or Lime (to 5)" ;
+				suggestion = suggestion .. "\n- Lower InsectTox with Water to 0 or Lime to 8" ;
 			end
 		end
-		if (startHumanTox < 6) then
-			suggestion = suggestion .. "\n- Raise HumanTox with Sulfur to 69 or with Lead to 61" ;
+		if (startHumanTox < 11) then
+			suggestion = suggestion .. "\n- Raise HumanTox with Sulfur to 72 or with Lead to 64" ;
 		else 
 			if (startHumanTox > 60) then
-				suggestion = suggestion .. "\n- Lower HumanTox with Water (to -3) or Saltpeter (to 5)" ;
+				suggestion = suggestion .. "\n- Lower HumanTox with Bonemeal to 0 or Saltpeter to 8" ;
 			end
 		end
-		if (startDarkness < 6) then
-			suggestion = suggestion .. "\n- Raise Darkness with Lead to 69 or with Petroleum to 61" ;
+		if (startDarkness < 11) then
+			suggestion = suggestion .. "\n- Raise Darkness with Charcoal to 72 or with Lead to 64" ;
 		else 
 			if (startDarkness > 60) then
-				suggestion = suggestion .. "\n- Lower Darkness with Lime (to -3) or Potash (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Darkness with Lime to 0 or Potash to 8" ;
 			end
 		end
-		if (startGlossiness < 6) then
-			suggestion = suggestion .. "\n- Raise Glossiness with Beeswax to 69 or with Oil to 61" ;
+		if (startGlossiness < 11) then
+			suggestion = suggestion .. "\n- Raise Glossiness with Beeswax to 72" ;
 		else 
 			if (startGlossiness > 60) then
-				suggestion = suggestion .. "\n- Lower Glossiness with Ash (to -3) or Potash (to 5)" ;
+				suggestion = suggestion .. "\n- Lower Glossiness with Ash to 0 or Potash to 8" ;
 			end
 		end
 
