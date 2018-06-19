@@ -110,7 +110,7 @@ function attributes()
 	if isRigid() then result = result .. "* Rigid\n" end;
 	if isPliable() then result = result .. "* Pliable\n" end;
 	if isHard() then result = result .. "* Hard\n" end;
-	if isSoft() then result = result .. "*Soft\n" end;
+	if isSoft() then result = result .. "* Soft\n" end;
 	if isFireproof() then result = result .. "* Fireproof\n" end;
 	if isVolatile() then result = result .. "* Volatile\n" end;
 	if isRotproof() then result = result .. "* Rotproof\n" end;
