@@ -1,4 +1,4 @@
--- mining_ore.lua v2.2.2 -- by Cegaiel
+-- mining_ore.lua v2.2.3 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -16,11 +16,16 @@
 -- Choosing 4 stone combos will double the time per round, as the nodes worked quantity will double
 -- ie Iron is 35 works for the normal 3 stone method.  But choosing 4 stone will cause it to be 70 (35 for 3 stone combos + 35 for 4 stone combos).
 
+-- New in v2.2.3 Dual Monitor mode. This will use the srClickMouseNoMove method. Instead of moving mouse, hovering each node and sending a 'A' or 'S' key...
+-- Instead it will right click each mouse (without moving mouse and click on the menus. This allows you to do something on 2nd monitor without having mouse move.
+-- You will also be given a 3 second countdown (after selecting nodes) to get your mouse over to the 2nd monitor.
+-- It will then move mouse once to upper left corner then start popping up menus.
+-- BEWARE: You must uncheck Options, Interface Options: Right-Click opens a menu as pinned. Or else you will have tons of left-over pinned menus, that you need to close out!
 
 
 dofile("common.inc");
 
-info = "Ore Mining v2.2.2 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.";
+info = "Ore Mining v2.2.3 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -42,13 +47,16 @@ dropdown_ore_cur_value = 1;
 cancelButton = 0;
 lastLineFound = "";
 lastLineFound2 = "";
-extraStones = false
 -- End Don't alter these ...
 
 
 --Customizable
+extraStones = false
+noMouseMove = false;
 muteSoundEffects = false;
 minPopSleepDelay = 150;  -- The minimum delay time used during findClosePopUp() function
+
+
 
 function doit()
     askForWindow(info);
@@ -329,7 +337,11 @@ function clickSequence()
     fetchTotalCombos4();
   end
     chatRead();	
-    sleepWithStatus(150, "Starting... Don\'t move mouse!");
+    if noMouseMove then
+      sleepWithStatus(3000, "Starting... Now is your chance to move your mouse to second monitor!", nil, 0.7, 0.7);
+    else
+      sleepWithStatus(150, "Starting... Don\'t move mouse!");
+    end
     oreGatheredLast = 0;
     oreGathered = 0;
     local worked = 1;
@@ -343,6 +355,31 @@ function clickSequence()
                 checkBreak();
                 checkAbort();
                 local startSetTime = lsGetTimer();
+
+                if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
+                srSetMousePos(0,180); -- Move mouse to near top right corner (below icons), once, to hopefully make node popup menus appear there.
+                lsSleep(100);
+                srClickMouseNoMove(clickList[i][1], clickList[i][2], 1);
+                lsSleep(clickDelay);
+                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+
+                -- 2nd Node
+                checkBreak();
+                checkAbort();
+                srClickMouseNoMove(clickList[j][1], clickList[j][2], 1);
+                lsSleep(clickDelay);
+                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+                -- 3rd Node
+                checkBreak();
+                checkAbort();
+                srClickMouseNoMove(clickList[k][1], clickList[k][2], 1);
+                lsSleep(clickDelay);
+                clickAllText("[S]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+                else -- noMouseMove is false
+
                 srSetMousePos(clickList[i][1], clickList[i][2]);
                 lsSleep(clickDelay);
                 srKeyEvent('A');
@@ -360,6 +397,8 @@ function clickSequence()
                 srSetMousePos(clickList[k][1], clickList[k][2]);
                 lsSleep(clickDelay);
                 srKeyEvent('S');
+                end -- end noMouseMove check
+
                 findClosePopUp();
 
                 worked = worked + 1
@@ -675,8 +714,13 @@ function promptDelays()
         y = y + 50;
         lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
         dropdown_ore_cur_value = lsDropdown("ArrangerDropDown2", 10, y, 0, 200, dropdown_ore_cur_value, dropdown_ore_values);
-        y = y + 45;
+        y = y + 35;
         extraStones = lsCheckBox(15, y, z, 0xffffffff, " Also do 4 stone combinations", extraStones);
+
+
+        y = y + 20;
+        noMouseMove = lsCheckBox(15, y, z, 0xffffffff, " Dual Monitor (NoMouseMove) Mode", noMouseMove);
+
         y = y + 35;
         lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Node Click Delay (ms):");
         y = y + 22;
@@ -706,6 +750,24 @@ function promptDelays()
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Total Ore Starting Value: Useful to keep track of");
         y = y + 16;
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "ore already in the mine. Set to value of ore in mine");
+
+
+        y = y + 22;
+        lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Also do 4 stone combo: After running every 3");
+
+        y = y + 16;
+        lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "stone combo, run all 4 stone combos, too.");
+
+
+        y = y + 22;
+        lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Dual Monitor: Don\'t move mouse over nodes.");
+
+        y = y + 16;
+        lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "instead rightClick nodes and click menus.");
+        y = y + 16;
+        lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "This lets you move mouse on second monitor.");
+
+
         y = y + 22;
         if lsButtonText(10, lsScreenY - 30, 0, 70, 0xFFFFFFff, "Next") then
             is_done = 1;
@@ -744,3 +806,4 @@ function TakeOreWindowRefresh()
 	 safeClick(findAllOre[0],findAllOre[1]);
 	end
 end
+
