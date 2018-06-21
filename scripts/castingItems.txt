@@ -8,9 +8,9 @@ return
 		["time"] = 3,
 	}
 	,
-	["Bars"] = 
+	["Bars x5"] = 
 	{
-		["5 Aluminum"] = 
+		["Aluminum"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Aluminum",
@@ -19,7 +19,7 @@ return
 			["time"] = 9,
 		}
 		,
-		["5 Antimony"] = 
+		["Antimony"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Antimony",
@@ -27,7 +27,23 @@ return
 			["q"] = 30,
 		}
 		,
-		["5 Brass"] = 
+		["Apophisite"] = 
+		{
+			["masterOnly"] = true,
+			["metal"] = "Apophisite",
+			["prod"] = 5,
+			["q"] = 100,
+		}
+		,
+		["Auricupride"] = 
+		{
+			["masterOnly"] = true,
+			["metal"] = "Auricupride",
+			["prod"] = 5,
+			["q"] = 25,
+		}
+		,
+		["Brass"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Brass",
@@ -35,7 +51,7 @@ return
 			["q"] = 40,
 		}
 		,
-		["5 Bronze"] = 
+		["Bronze"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Bronze",
@@ -43,7 +59,7 @@ return
 			["q"] = 30,
 		}
 		,
-		["5 Copper"] = 
+		["Copper"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Copper",
@@ -51,7 +67,23 @@ return
 			["q"] = 35,
 		}
 		,
-		["5 Gold"] = 
+		["Corinthiacum"] = 
+		{
+			["masterOnly"] = true,
+			["metal"] = "Corinthiacum",
+			["prod"] = 5,
+			["q"] = 50,
+		}
+		,
+		["Electrum"] = 
+		{
+			["masterOnly"] = true,
+			["metal"] = "Electrum",
+			["prod"] = 5,
+			["q"] = 25,
+		}
+		,
+		["Gold"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Gold",
@@ -59,7 +91,15 @@ return
 			["q"] = 75,
 		}
 		,
-		["5 Iron"] = 
+		["Hepatizon"] = 
+		{
+			["masterOnly"] = true,
+			["metal"] = "Hepatizon",
+			["prod"] = 5,
+			["q"] = 50,
+		}
+		,
+		["Iron"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Iron",
@@ -67,7 +107,7 @@ return
 			["q"] = 10,
 		}
 		,
-		["5 Lead"] = 
+		["Lead"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Lead",
@@ -75,7 +115,7 @@ return
 			["q"] = 10,
 		}
 		,
-		["5 Lithium"] = 
+		["Lithium"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Lithium",
@@ -83,7 +123,7 @@ return
 			["q"] = 50,
 		}
 		,
-		["5 Magnesium"] = 
+		["Magnesium"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Magnesium",
@@ -91,7 +131,15 @@ return
 			["q"] = 25,
 		}
 		,
-		["5 Metal Blue"] = 
+		["Malardium"] = 
+		{
+			["masterOnly"] = true,
+			["metal"] = "Malardium",
+			["prod"] = 5,
+			["q"] = 20,
+		}
+		,
+		["Metal Blue"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Metal Blue",
@@ -99,7 +147,7 @@ return
 			["q"] = 25,
 		}
 		,
-		["5 Moon Steel"] = 
+		["Moon Steel"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Moon Steel",
@@ -107,7 +155,7 @@ return
 			["q"] = 30,
 		}
 		,
-		["5 Octec's Alloy"] = 
+		["Octec's Alloy"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Octec's Alloy",
@@ -115,7 +163,15 @@ return
 			["q"] = 40,
 		}
 		,
-		["5 Pewter"] = 
+		["Orichalcum"] = 
+		{
+			["masterOnly"] = true,
+			["metal"] = "Orichalcum",
+			["prod"] = 5,
+			["q"] = 100,
+		}
+		,
+		["Pewter"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Pewter",
@@ -123,7 +179,7 @@ return
 			["q"] = 50,
 		}
 		,
-		["5 Platinum"] = 
+		["Platinum"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Platinum",
@@ -132,7 +188,7 @@ return
 			["time"] = 3,
 		}
 		,
-		["5 Silver"] = 
+		["Silver"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Silver",
@@ -140,7 +196,15 @@ return
 			["q"] = 100,
 		}
 		,
-		["5 Steel"] = 
+		["Star"] = 
+		{
+			["masterOnly"] = true,
+			["metal"] = "Star",
+			["prod"] = 5,
+			["q"] = 50,
+		}
+		,
+		["Steel"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Steel",
@@ -148,7 +212,7 @@ return
 			["q"] = 25,
 		}
 		,
-		["5 Strontium"] = 
+		["Strontium"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Strontium",
@@ -156,7 +220,7 @@ return
 			["q"] = 25,
 		}
 		,
-		["5 Sun Steel"] = 
+		["Sun Steel"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Sun Steel",
@@ -164,7 +228,7 @@ return
 			["q"] = 25,
 		}
 		,
-		["5 Thoth's Metal"] = 
+		["Thoth's Metal"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Thoth's Metal",
@@ -172,7 +236,7 @@ return
 			["q"] = 50,
 		}
 		,
-		["5 Tin"] = 
+		["Tin"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Tin",
@@ -180,7 +244,7 @@ return
 			["q"] = 10,
 		}
 		,
-		["5 Titanium"] = 
+		["Titanium"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Titanium",
@@ -188,7 +252,7 @@ return
 			["q"] = 25,
 		}
 		,
-		["5 Tungsten"] = 
+		["Tungsten"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Tungsten",
@@ -196,7 +260,7 @@ return
 			["q"] = 25,
 		}
 		,
-		["5 Water Metal"] = 
+		["Water Metal"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Water Metal",
@@ -204,14 +268,17 @@ return
 			["q"] = 25,
 		}
 		,
-		["5 Zinc"] = 
+		["Zinc"] = 
 		{
 			["masterOnly"] = true,
 			["metal"] = "Zinc",
 			["prod"] = 5,
 			["q"] = 15,
 		}
-		,
+	}
+	,
+	["Bars x1"] = 
+	{
 		["Aluminum"] = 
 		{
 			["prod"] = 1,
@@ -223,6 +290,18 @@ return
 		{
 			["prod"] = 1,
 			["q"] = 6,
+		}
+		,
+		["Apophisite"] = 
+		{
+			["prod"] = 1,
+			["q"] = 20,
+		}
+		,
+		["Auricupride"] = 
+		{
+			["prod"] = 1,
+			["q"] = 5,
 		}
 		,
 		["Brass"] = 
@@ -243,10 +322,28 @@ return
 			["q"] = 7,
 		}
 		,
+		["Corinthiacum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 10,
+		}
+		,
+		["Electrum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 5,
+		}
+		,
 		["Gold"] = 
 		{
 			["prod"] = 1,
 			["q"] = 15,
+		}
+		,
+		["Hepatizon"] = 
+		{
+			["prod"] = 1,
+			["q"] = 10,
 		}
 		,
 		["Iron"] = 
@@ -273,6 +370,12 @@ return
 			["q"] = 5,
 		}
 		,
+		["Malardium"] = 
+		{
+			["prod"] = 1,
+			["q"] = 4,
+		}
+		,
 		["Metal Blue"] = 
 		{
 			["prod"] = 1,
@@ -289,6 +392,12 @@ return
 		{
 			["prod"] = 1,
 			["q"] = 8,
+		}
+		,
+		["Orichalcum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 20,
 		}
 		,
 		["Pewter"] = 
@@ -308,6 +417,12 @@ return
 		{
 			["prod"] = 1,
 			["q"] = 20,
+		}
+		,
+		["Star"] = 
+		{
+			["prod"] = 1,
+			["q"] = 10,
 		}
 		,
 		["Steel"] = 
@@ -363,7 +478,278 @@ return
 			["prod"] = 1,
 			["q"] = 3,
 		}
+	}
+	,
+	["Small Gear x1"] = 
+	{
+		["Aluminum"] = 
+		{
+			["metal"] = "Aluminum",
+			["prod"] = 1,
+			["q"] = 2,
+		}
 		,
+		["Antimony"] = 
+		{
+			["metal"] = "Antimony",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Brass"] = 
+		{
+			["metal"] = "Brass",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Bronze"] = 
+		{
+			["metal"] = "Bronze",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Copper"] = 
+		{
+			["metal"] = "Copper",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Gold"] = 
+		{
+			["metal"] = "Gold",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Iron"] = 
+		{
+			["metal"] = "Iron",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Lead"] = 
+		{
+			["metal"] = "Lead",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Lithium"] = 
+		{
+			["metal"] = "Lithium",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Magnesium"] = 
+		{
+			["metal"] = "Magnesium",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Pewter"] = 
+		{
+			["metal"] = "Pewter",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Platinum"] = 
+		{
+			["metal"] = "Platinum",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Silver"] = 
+		{
+			["metal"] = "Silver",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Steel"] = 
+		{
+			["metal"] = "Steel",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Strontium"] = 
+		{
+			["metal"] = "Strontium",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Tin"] = 
+		{
+			["metal"] = "Tin",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Titanium"] = 
+		{
+			["metal"] = "Titanium",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Tungsten"] = 
+		{
+			["metal"] = "Tungsten",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Zinc"] = 
+		{
+			["metal"] = "Zinc",
+			["prod"] = 1,
+			["q"] = 2,
+		}
+	}
+	,
+	["Small Gear x10"] = 
+	{
+		["Aluminum"] = 
+		{
+			["metal"] = "Aluminum",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Antimony"] = 
+		{
+			["metal"] = "Antimony",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Brass"] = 
+		{
+			["metal"] = "Brass",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Bronze"] = 
+		{
+			["metal"] = "Bronze",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Copper"] = 
+		{
+			["metal"] = "Copper",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Gold"] = 
+		{
+			["metal"] = "Gold",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Iron"] = 
+		{
+			["metal"] = "Iron",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Lead"] = 
+		{
+			["metal"] = "Lead",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Lithium"] = 
+		{
+			["metal"] = "Lithium",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Magnesium"] = 
+		{
+			["metal"] = "Magnesium",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Pewter"] = 
+		{
+			["metal"] = "Pewter",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Platinum"] = 
+		{
+			["metal"] = "Platinum",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Silver"] = 
+		{
+			["metal"] = "Silver",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Steel"] = 
+		{
+			["metal"] = "Steel",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Strontium"] = 
+		{
+			["metal"] = "Strontium",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Tin"] = 
+		{
+			["metal"] = "Tin",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Titanium"] = 
+		{
+			["metal"] = "Titanium",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Tungsten"] = 
+		{
+			["metal"] = "Tungsten",
+			["prod"] = 10,
+			["q"] = 20,
+		}
+		,
+		["Zinc"] = 
+		{
+			["metal"] = "Zinc",
+			["prod"] = 10,
+			["q"] = 20,
+		}
 	}
 	,
 	["Fuel"] = 
@@ -716,185 +1102,6 @@ return
 			{
 				["prod"] = 1,
 				["q"] = 15,
-			}
-			,
-		}
-		,
-		["Small Gear"] = 
-		{
-			["10 Aluminum"] = 
-			{
-				["metal"] = "Aluminum",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Antimony"] = 
-			{
-				["metal"] = "Antimony",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Brass"] = 
-			{
-				["metal"] = "Brass",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Bronze"] = 
-			{
-				["metal"] = "Bronze",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Copper"] = 
-			{
-				["metal"] = "Copper",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Gold"] = 
-			{
-				["metal"] = "Gold",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Iron"] = 
-			{
-				["metal"] = "Iron",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Lead"] = 
-			{
-				["metal"] = "Lead",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Lithium"] = 
-			{
-				["metal"] = "Lithium",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Magnesium"] = 
-			{
-				["metal"] = "Magnesium",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Metal Blue"] = 
-			{
-				["metal"] = "Metal Blue",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Moon Steel"] = 
-			{
-				["metal"] = "Moon Steel",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Octec's Alloy"] = 
-			{
-				["metal"] = "Octec's Alloy",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Pewter"] = 
-			{
-				["metal"] = "Pewter",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Platinum"] = 
-			{
-				["metal"] = "Platinum",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Silver"] = 
-			{
-				["metal"] = "Silver",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Steel"] = 
-			{
-				["metal"] = "Steel",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Strontium"] = 
-			{
-				["metal"] = "Strontium",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Sun Steel"] = 
-			{
-				["metal"] = "Sun Steel",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Thoth's Metal"] = 
-			{
-				["metal"] = "Thoth's Metal",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Tin"] = 
-			{
-				["metal"] = "Tin",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Titanium"] = 
-			{
-				["metal"] = "Titanium",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Tungsten"] = 
-			{
-				["metal"] = "Tungsten",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Water Metal"] = 
-			{
-				["metal"] = "Water Metal",
-				["prod"] = 10,
-				["q"] = 20,
-			}
-			,
-			["10 Zinc"] = 
-			{
-				["metal"] = "Zinc",
-				["prod"] = 10,
-				["q"] = 20,
 			}
 			,
 		}

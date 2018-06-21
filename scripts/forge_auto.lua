@@ -2,6 +2,8 @@ dofile("common.inc");
 dofile("serialize.inc");
 
 -- Some notes in this macro. You may pin any variety of student casting boxes, master casting boxes, and forges. The macro will prioritize making master only stuff in master boxes, but will then make student goods in them. SELECT HOW MANY OF AN ITEM YOU WANT TO MAKE, NOT HOW MANY ROUNDS TO DO. The macro does know, for instance, that each time you click to make nails it makes 12 nails. - Skyfeather
+debug = false;
+
 
 function pairsByKeys (t, f)
 	local a = {}
@@ -15,13 +17,6 @@ function pairsByKeys (t, f)
 		end
 	end
 	return iter
-end
-
-function scrollWindow(window)
-   local x = window.right - 18;
-   startY = window.y + 56;
-   stopY = window.bottom - 34;
-   return safeDrag(x, startY, x, stopY);
 end
 
 local scale;
@@ -154,7 +149,7 @@ function chooseItems(itemList, multiple)
       for i=1, #currentItem.parents do
          leafParentsString = leafParentsString .. currentItem.parents[i] .. "/";
       end
-      currentItem.num = promptNumber(string.format("How many %s%s would you like to make?",                                           leafParentsString, currentItem.name),nil,0.66);
+      currentItem.num = promptNumber(string.format("How many %s%s would you like to make?", leafParentsString, currentItem.name),nil,0.66);
       if multiple then
          if currentItem.num ~= 0 then
             table.insert(retList, currentItem);
@@ -167,7 +162,6 @@ function chooseItems(itemList, multiple)
 end
 
 local function makeItem(currentItem, window)
-
    local parents = currentItem[2];
    local name = currentItem[1];
    local t;
@@ -175,13 +169,24 @@ local function makeItem(currentItem, window)
    -- Start at 2 so that it skips the Forge... and Casting... objects
    lsPrintln("Making " .. name);
    if #parents >= 2 then
+
+   if parents[2] == "Bars x1" or parents[2] == "Bars x5" then
+      t = findText("Bars" .. "...", window);
+   elseif parents[2] == "Small Gear x1" or parents[2] == "Small Gear x10" then
+      t = findText("Gearwork" .. "...", window);
+      lsSleep(100);
+      clickText(t);
+   else
       t = findText(parents[2] .. "...", window);
+   end
+
       if t == nil then
          lsPrintln("Initial window error");
          return false;
       end
       clickText(t);
    end
+
    for i=3, #parents do
       t = waitForText(parents[i] .. "...", 1000);
       if t == nil then
@@ -193,17 +198,35 @@ local function makeItem(currentItem, window)
    local text;
    local lastParent = parents[#parents];
 
-   -- Check if we have to drag the menu to the bottom
-   if lastParent == "Small Gear" and name > "10 Pewter" then
-      local t = waitForText("Make 1 Aluminum Small Gear", nil, nil, nil, REGION);
-      scrollWindow(t);
-   end
-   if lastParent == "Bars" and name > "5 Copper" then
-      local t = waitForText("Make Aluminum Bars", nil, nil, nil, REGION);
-      scrollWindow(t);
+   if lastParent == "Small Gear x1" then
+     local t = waitForText("Small Gear");
+     clickText(t);
+     lsSleep(100);
+     local t = waitForText("Make 1...");
+     clickText(t);
+   elseif lastParent == "Small Gear x10" then
+      local t = waitForText("Small Gear");
+      clickText(t);
+      lsSleep(100);
+      local t = waitForText("Make 10...");
+      clickText(t);
+   elseif lastParent == "Bars x5" then
+      local t = waitForText("Make 5 sets");
+      clickText(t);
+   elseif lastParent == "Bars x1" then
+      local t = waitForText("Make 1 set");
+      clickText(t);
+end
+
+   -- Check if we have to click down arrow button (scrollable menu)
+   if (lastParent == "1 Bar" or lastParent == "5 Bars") and name > "Titanium" then
+      local t = waitForText("Aluminum Bars", nil, nil, nil, REGION);
+      downArrow(); -- Click the Down arrow button to scroll
    end
 
-   if lastParent == "Sheeting" or lastParent == "Wire" or lastParent == "Bars" then
+   if lastParent == "1 Bar" or lastParent == "5 Bars" then
+	text = name;
+   elseif lastParent == "Sheeting" or lastParent == "Wire" then
       text = string.format("Make %s %s", name, lastParent);
    elseif lastParent == "Pipes" or lastParent == "Foils" or lastParent == "Straps" then
       text = string.format("Make %s %s", name, string.sub(lastParent, 1, #lastParent-1));
@@ -490,9 +513,23 @@ function doit()
       end
       lsSleep(100);
       srReadScreen();
+	if not debug then
       closeEmptyAndErrorWindows();
+	end
       clickAllText("in the chamber");
       lsSleep(500);
       clickAllImages("ThisIs.png");
    end
+end
+
+
+
+function downArrow()
+  srReadScreen();
+  downPin = srFindImage("Fishing/Menu_DownArrow.png");
+  if downPin then
+  --srSetMousePos(downPin[0]+8,downPin[1]+5);
+  srClickMouseNoMove(downPin[0]+8,downPin[1]+5);
+  lsSleep(100);
+  end
 end
