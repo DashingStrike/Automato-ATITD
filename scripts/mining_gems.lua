@@ -1,4 +1,4 @@
--- mining_gems.lua v2.0.4 -- by Cegaiel
+-- mining_gems.lua v2.0.5 -- by Cegaiel
 --
 -- Works the sand mine, but requires a little thought and input from you ;)
 -- You must click on all Quintuple colors FIRST, all Quadruple colors NEXT, all Triple colors NEXT, all Paired colors NEXT, then ALL Single colored stones LAST.
@@ -23,14 +23,17 @@ dofile("common.inc");
 dofile("settings.inc");
 
 
-askText = "Sand Mining v2.0.4 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
+askText = "Sand Mining v2.0.5 by Cegaiel --\n\nMake sure chat is MINIMIZED and Main chat tab is visible!\n\nPress Shift over ATITD window.\n\nOptional: Pin the mine's Take... Gems... menu (\"All Gems\" will appear in pinned window).\n\nThis optionally pinned window will be refreshed every time the mine is worked. Also, if Huge Gem appears in any window, it will alert you with an applause sound.";
 
 
-muteSoundEffects = true;
+noMouseMove = false;
+minPopSleepDelay = 150;  -- The minimum delay time used during findClosePopUp() function
+muteSoundEffects = false;
 autoWorkMine = false;
 dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
 dropdown_cur_value = 1;
 dropdown_pattern_values = {"6 color (1 Pair) (*)", "5 color (2 Pair) (*)", "4 color (3 Pair) (*)", "5 color (Triple) (1)", "4 color (Triple+Pair) (3)", "4 color (Quadruple) (1)", "3 Color (Quad+Pair) (6)", "3 color (Quintuple) (2)", "7 Color (All Different) (*)"};
+
 
 gui = {
 [1] = "6 color (1 Pair) (*)",
@@ -421,7 +424,9 @@ function TakeGemWindowRefresh()
 	 lsSleep(150);
  findHugeGems = findText("Huge");
  if findHugeGems then
-  lsPlaySound("applause.wav");
+      if not muteSoundEffects then
+  	  lsPlaySound("applause.wav");
+      end
  sleepWithStatus(15000, "Congrats! You found a Huge Gem!\n\nYou should take it now!", 0x80ff80ff, 0.7, 0.7);
  end
 end
@@ -471,22 +476,18 @@ function chatRead()
    --Read next to last line of chat and strip the timer ie [01m]+space from it.
    lastLine2 = chatText[#chatText-1][2];
    lastLineParse2 = string.sub(lastLine2,string.find(lastLine2,"m]")+3,string.len(lastLine2));
-
-   if string.sub(lastLineParse, 1, 21) == "Local support boosted" then
-     lastLine = lastLine2;
-     lastLineParse = lastLineParse2;
-   end
 end
 
 function findClosePopUp(noRead)
+   chatRead();
 
    local skipRead = false;
    if noRead then
      skipRead = true;
    end
 
-  lastLineFound = lastLineParse;
-  lastLineFound2 = lastLineParse2;
+--  lastLineFound = lastLineParse;
+--  lastLineFound2 = lastLineParse2;
   startTime = lsGetTimer();
 
     while 1 do
@@ -494,24 +495,35 @@ function findClosePopUp(noRead)
 	chatRead();
 	OK = srFindImage("OK.png");
 
+        if clickDelay < minPopSleepDelay then
+            popSleepDelay = minPopSleepDelay;
+        else
+            popSleepDelay = clickDelay
+        end
+
 	  if OK then  
 	    srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
-	    lsSleep(clickDelay);
+	    lsSleep(popSleepDelay);
 	    break;
 	  end
 
 
 	  if (lastLineFound2 ~= lastLineParse2) or (lastLineFound ~= lastLineParse) or (skipRead == true) or ( (lsGetTimer() - startTime) > 5000 )  then
+          lsSleep(popSleepDelay);
 	    break;
 	  end
-
+    lsSleep(100);
     end
 end
 
 
 function clickSequence()
-  sleepWithStatus(250, "Starting...\n\nDon\'t touch mouse!");
-  chatRead();
+--  chatRead();
+    if noMouseMove then
+      sleepWithStatus(3000, "Starting... Now is your chance to move your mouse to second monitor!", nil, 0.7, 0.7);
+    else
+      sleepWithStatus(150, "Starting... Don\'t move mouse!");
+    end
 
   local startMiningTime = lsGetTimer();
   local worked = 1;
@@ -532,23 +544,50 @@ function clickSequence()
 		local currentIndex = currentSet[j];
 		checkBreak();
 		checkAbort();
+
+	if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
+                srSetMousePos(0,180); -- Move mouse to near top right corner (below icons), once, to hopefully make node popup menus appear there.
+                lsSleep(100);
+
+		if j == #currentSet then
+                srClickMouseNoMove(clickList[currentIndex][1], clickList[currentIndex][2]);
+                lsSleep(clickDelay);
+  chatRead();
+  lastLineFound = lastLineParse;
+  lastLineFound2 = lastLineParse2;
+
+                clickAllText("[S]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+		else
+                srClickMouseNoMove(clickList[currentIndex][1], clickList[currentIndex][2]);
+                lsSleep(clickDelay);
+                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+		end
+
+	else -- noMouseMove
+
 		srSetMousePos(clickList[currentIndex][1], clickList[currentIndex][2]);
 		lsSleep(clickDelay);
 		if j == #currentSet then
+  chatRead();
+  lastLineFound = lastLineParse;
+  lastLineFound2 = lastLineParse2;
+
+
 			srKeyEvent('S');
 		else
 			srKeyEvent('A');
 		end
+
+	end -- noMouseMove
 	end
 
   local y = 10;
   lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
   y = y +50
   lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "[" .. worked .. "/" .. #sets .. "]  " .. #currentSet .. " Nodes Worked: " .. table.concat(currentSet, ", "));
-
   y = y + 40;
   lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Pattern: " .. pattern);
-
   y = y + 40;
   lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Click Delay: " .. clickDelay .. " ms");
   y = y + 40;
@@ -583,7 +622,10 @@ function promptDelays()
     dropdown_cur_value = lsDropdown("ArrangerDropDown", 15, y, 0, 320, dropdown_cur_value, dropdown_values);
 	writeSetting("dropdown_cur_value",dropdown_cur_value);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-    y = y + 35;
+    y = y + 50;
+    lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
+        noMouseMove = lsCheckBox(15, y, z, 0xffffffff, " Dual Monitor (NoMouseMove) Mode", noMouseMove);
+    lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Click Delay (ms):");
     is_done, clickDelay = lsEditBox("delay", 155, y, 0, 50, 30, 1.0, 1.0,
                                      0x000000ff, 150);
