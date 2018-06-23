@@ -357,12 +357,11 @@ function clickSequence()
                 local startSetTime = lsGetTimer();
 
                 if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
-                srSetMousePos(0,180); -- Move mouse to near top right corner (below icons), once, to hopefully make node popup menus appear there.
-                lsSleep(100);
+                --srSetMousePos(0,180); -- Move mouse to near top right corner (below icons), once, to hopefully make node popup menus appear there.
+                --lsSleep(100);
                 srClickMouseNoMove(clickList[i][1], clickList[i][2], 1);
                 lsSleep(clickDelay);
                 clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
-
 
                 -- 2nd Node
                 checkBreak();

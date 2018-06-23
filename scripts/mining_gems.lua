@@ -546,8 +546,8 @@ function clickSequence()
 		checkAbort();
 
 	if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
-                srSetMousePos(0,180); -- Move mouse to near top right corner (below icons), once, to hopefully make node popup menus appear there.
-                lsSleep(100);
+                --srSetMousePos(0,180); -- Move mouse to near top right corner (below icons), once, to hopefully make node popup menus appear there.
+                --lsSleep(100);
 
 		if j == #currentSet then
                 srClickMouseNoMove(clickList[currentIndex][1], clickList[currentIndex][2]);
