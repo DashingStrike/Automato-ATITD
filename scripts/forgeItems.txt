@@ -214,6 +214,18 @@ return
 			["time"] = 6,
 		}
 		,
+		["Apophisite"] = 
+		{
+			["prod"] = 1,
+			["q"] = 4,
+		}
+		,
+		["Auricupride"] = 
+		{
+			["prod"] = 1,
+			["q"] = 1,
+		}
+		,
 		["Brass"] = 
 		{
 			["prod"] = 1,
@@ -235,11 +247,29 @@ return
 			["time"] = 1,
 		}
 		,
+		["Corinthiacum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 9,
+		}
+		,
+		["Electrum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
 		["Gold"] = 
 		{
 			["prod"] = 4,
 			["q"] = 1,
 			["time"] = 10,
+		}
+		,
+		["Hepatizon"] = 
+		{
+			["prod"] = 1,
+			["q"] = 6,
 		}
 		,
 		["Iron"] = 
@@ -270,6 +300,12 @@ return
 			["time"] = 10,
 		}
 		,
+		["Malardium"] = 
+		{
+			["prod"] = 1,
+			["q"] = 20,
+		}
+		,
 		["Metal Blue"] = 
 		{
 			["prod"] = 1,
@@ -289,6 +325,12 @@ return
 			["prod"] = 8,
 			["q"] = 2,
 			["time"] = 20,
+		}
+		,
+		["Orichalcum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 6,
 		}
 		,
 		["Pewter"] = 
@@ -312,6 +354,12 @@ return
 			["time"] = 2,
 		}
 		,
+		["Star Metal"] = 
+		{
+			["prod"] = 1,
+			["q"] = 8,
+		}
+		,
 		["Steel"] = 
 		{
 			["prod"] = 6,
@@ -330,14 +378,14 @@ return
 		{
 			["prod"] = 1,
 			["q"] = 8,
-         ["time"] = 20,
+			["time"] = 20,
 		}
 		,
 		["Thoth's Metal"] = 
 		{
 			["prod"] = 1,
 			["q"] = 6,
-         ["time"] = 10,
+			["time"] = 10,
 		}
 		,
 		["Tin"] = 
@@ -396,6 +444,18 @@ return
 			["q"] = 5,
 		}
 		,
+		["Apophisite"] = 
+		{
+			["prod"] = 1,
+			["q"] = 4,
+		}
+		,
+		["Auricupride"] = 
+		{
+			["prod"] = 1,
+			["q"] = 1,
+		}
+		,
 		["Brass"] = 
 		{
 			["prod"] = 1,
@@ -414,7 +474,25 @@ return
 			["q"] = 3,
 		}
 		,
+		["Corinthiacum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 8,
+		}
+		,
+		["Electrum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
 		["Gold"] = 
+		{
+			["prod"] = 1,
+			["q"] = 6,
+		}
+		,
+		["Hepatizon"] = 
 		{
 			["prod"] = 1,
 			["q"] = 6,
@@ -444,6 +522,12 @@ return
 			["q"] = 4,
 		}
 		,
+		["Malardium"] = 
+		{
+			["prod"] = 1,
+			["q"] = 16,
+		}
+		,
 		["Metal Blue"] = 
 		{
 			["prod"] = 1,
@@ -462,6 +546,12 @@ return
 			["q"] = 1,
 		}
 		,
+		["Orichalcum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 11,
+		}
+		,
 		["Pewter"] = 
 		{
 			["prod"] = 1,
@@ -478,6 +568,12 @@ return
 		{
 			["prod"] = 1,
 			["q"] = 3,
+		}
+		,
+		["Star Metal"] = 
+		{
+			["prod"] = 1,
+			["q"] = 6,
 		}
 		,
 		["Steel"] = 
@@ -511,6 +607,12 @@ return
 		}
 		,
 		["Titanium"] = 
+		{
+			["prod"] = 1,
+			["q"] = 8,
+		}
+		,
+		["Tungsten"] = 
 		{
 			["prod"] = 1,
 			["q"] = 8,
@@ -590,6 +692,18 @@ return
 			["time"] = 5,
 		}
 		,
+		["Apophisite"] = 
+		{
+			["prod"] = 1,
+			["q"] = 12,
+		}
+		,
+		["Auricupride"] = 
+		{
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
 		["Brass"] = 
 		{
 			["prod"] = 20,
@@ -611,11 +725,29 @@ return
 			["time"] = 5,
 		}
 		,
+		["Corinthiacum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 2,
+		}
+		,
+		["Electrum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 1,
+		}
+		,
 		["Gold"] = 
 		{
 			["prod"] = 10,
 			["q"] = 1,
 			["time"] = 10,
+		}
+		,
+		["Hepatizon"] = 
+		{
+			["prod"] = 1,
+			["q"] = 1,
 		}
 		,
 		["Iron"] = 
@@ -646,6 +778,12 @@ return
 			["time"] = 1,
 		}
 		,
+		["Malardium"] = 
+		{
+			["prod"] = 1,
+			["q"] = 6,
+		}
+		,
 		["Metal Blue"] = 
 		{
 			["prod"] = 12,
@@ -664,6 +802,12 @@ return
 		{
 			["prod"] = 16,
 			["q"] = 3,
+		}
+		,
+		["Orichalcum"] = 
+		{
+			["prod"] = 1,
+			["q"] = 1,
 		}
 		,
 		["Pewter"] = 
@@ -685,6 +829,12 @@ return
 			["prod"] = 5,
 			["q"] = 1,
 			["time"] = 5,
+		}
+		,
+		["Star Metal"] = 
+		{
+			["prod"] = 1,
+			["q"] = 2,
 		}
 		,
 		["Steel"] = 

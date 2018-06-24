@@ -2,7 +2,7 @@ dofile("common.inc");
 dofile("serialize.inc");
 
 -- Some notes in this macro. You may pin any variety of student casting boxes, master casting boxes, and forges. The macro will prioritize making master only stuff in master boxes, but will then make student goods in them. SELECT HOW MANY OF AN ITEM YOU WANT TO MAKE, NOT HOW MANY ROUNDS TO DO. The macro does know, for instance, that each time you click to make nails it makes 12 nails. - Skyfeather
-debug = false;
+debug = false; -- This simply prevents the popup box (that tells you what materials you need) from closing, so you can view what it needs. No materials in inventory
 
 
 function pairsByKeys (t, f)
@@ -221,6 +221,10 @@ end
    -- Check if we have to click down arrow button (scrollable menu)
    if (lastParent == "1 Bar" or lastParent == "5 Bars") and name > "Titanium" then
       local t = waitForText("Aluminum Bars", nil, nil, nil, REGION);
+      downArrow(); -- Click the Down arrow button to scroll
+   end
+   if (lastParent == "Sheeting" or lastParent == "Straps" or lastParent == "Wire")  and name > "Titanium" then
+      local t = waitForText("Make Aluminum", nil, nil, nil, REGION);
       downArrow(); -- Click the Down arrow button to scroll
    end
 
