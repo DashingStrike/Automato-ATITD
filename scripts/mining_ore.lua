@@ -1,4 +1,4 @@
--- mining_ore.lua v2.2.3 -- by Cegaiel
+-- mining_ore.lua v2.2.4 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -25,7 +25,7 @@
 
 dofile("common.inc");
 
-info = "Ore Mining v2.2.3 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
+info = "Ore Mining v2.2.4 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -264,6 +264,10 @@ function getPoints()
         local y = 60;
         lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
         autoWorkMine = lsCheckBox(15, y, z, 0xffffffff, " Auto 'Work Mine'", autoWorkMine);
+        y = y + 20
+        extraStones = lsCheckBox(15, y, z, 0xffffffff, " Also do 4 stone combinations", extraStones);
+        y = y + 20
+        noMouseMove = lsCheckBox(15, y, z, 0xffffffff, " Dual Monitor (NoMouseMove) Mode", noMouseMove);
         lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
         y = y + 10
         lsPrint(10, y, z, 0.7, 0.7, 0xc0c0ffff, "Hover and " .. key .. " over each node.");
@@ -714,13 +718,6 @@ function promptDelays()
         lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
         dropdown_ore_cur_value = lsDropdown("ArrangerDropDown2", 10, y, 0, 200, dropdown_ore_cur_value, dropdown_ore_values);
         y = y + 35;
-        extraStones = lsCheckBox(15, y, z, 0xffffffff, " Also do 4 stone combinations", extraStones);
-
-
-        y = y + 20;
-        noMouseMove = lsCheckBox(15, y, z, 0xffffffff, " Dual Monitor (NoMouseMove) Mode", noMouseMove);
-
-        y = y + 35;
         lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Node Click Delay (ms):");
         y = y + 22;
         is_done, clickDelay = lsEditBox("delay", 10, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 100);
@@ -741,7 +738,7 @@ function promptDelays()
             oreGatheredTotal = 0;
         end
         lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-        y = y - 30;
+        y = y - 15;
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Node Delay: Pause between selecting each node.");
         y = y + 16;
         lsPrint(10, y, 0, 0.6, 0.6, 0xffffffff, "Raise value to run slower (try increments of 25)");
