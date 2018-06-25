@@ -446,6 +446,42 @@ function clickSequence()
         for j=i+1,#clickList do
             for k=j+1,#clickList do
             	 for l=k+1,#clickList do
+                --checkCloseWindows();
+                -- 1st Node
+                checkBreak();
+                checkAbort();
+                local startSetTime = lsGetTimer();
+
+                if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
+
+                srClickMouseNoMove(clickList[i][1], clickList[i][2], 1);
+                lsSleep(clickDelay);
+                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+                -- 2nd Node
+                checkBreak();
+                checkAbort();
+                srClickMouseNoMove(clickList[j][1], clickList[j][2]);
+                lsSleep(clickDelay);
+                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+                -- 3rd Node
+                checkBreak();
+                checkAbort();
+                srClickMouseNoMove(clickList[k][1], clickList[k][2]);
+                lsSleep(clickDelay);
+                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+
+                 -- 4th Node
+                checkBreak();
+                checkAbort();
+                srClickMouseNoMove(clickList[l][1], clickList[l][2]);
+                lsSleep(clickDelay);
+                clickAllText("[S]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+
+                else -- noMouseMove is false
 
                 --checkCloseWindows();
                 -- 1st Node
@@ -477,6 +513,10 @@ function clickSequence()
                 srSetMousePos(clickList[l][1], clickList[l][2]);
                 lsSleep(clickDelay);
                 srKeyEvent('S');
+
+                end -- end noMouseMove check
+
+
                 findClosePopUp();
 
                 worked = worked + 1
@@ -534,10 +574,16 @@ end
 
 
 function workMine()
-    srSetMousePos(mineX, mineY);
-    lsSleep(clickDelay);
-    --Send 'W' key over Mine to Work it (Get new nodes)
-    srKeyEvent('W');
+    if noMouseMove then
+      srClickMouseNoMove(mineX, mineY);
+      lsSleep(clickDelay);
+      clickAllText("Work this Mine", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+    else
+      srSetMousePos(mineX, mineY);
+      lsSleep(clickDelay);
+      --Send 'W' key over Mine to Work it (Get new nodes)
+      srKeyEvent('W');
+    end
     sleepWithStatus(1000, "Working mine (Fetching new nodes)");
     findClosePopUpOld();
 end

@@ -402,10 +402,16 @@ end
 function workMine()
 	workMineButtonLoc = getMousePos(); 
 	workMineButtonLocSet = true;
+    if noMouseMove then
+      srClickMouseNoMove(mineX, mineY);
+      lsSleep(clickDelay);
+      clickAllText("Work this Mine", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+    else
       srSetMousePos(mineX, mineY);
       lsSleep(clickDelay);
       --Send 'W' key over Mine to Work it (Get new nodes)
       srKeyEvent('W'); 
+    end
 	sleepWithStatus(1000, "Working mine (Fetching new nodes)");
 	findClosePopUp(1);
 end
