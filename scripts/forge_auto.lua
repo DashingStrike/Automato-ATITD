@@ -2,7 +2,7 @@ dofile("common.inc");
 dofile("serialize.inc");
 
 -- Some notes in this macro. You may pin any variety of student casting boxes, master casting boxes, and forges. The macro will prioritize making master only stuff in master boxes, but will then make student goods in them. SELECT HOW MANY OF AN ITEM YOU WANT TO MAKE, NOT HOW MANY ROUNDS TO DO. The macro does know, for instance, that each time you click to make nails it makes 12 nails. - Skyfeather
-debug = true; -- This simply prevents the popup box (that tells you what materials you need) from closing, so you can view what it needs. No materials in inventory
+debug = false; -- This simply prevents the popup box (that tells you what materials you need) from closing, so you can view what it needs. No materials in inventory
 
 
 function pairsByKeys (t, f)
@@ -25,8 +25,7 @@ forgeInfo = {};
 initialText = "Forge Macro 0.9 by Skyfeather. Pin all Forges & Casting Boxes. Macro will start forges if needed. Forge & casting box windows should not overlap while cooling items.\n----------------------------\nMaterials Required:\n";
 
 textLookup = {};
-textLookup["Nails - Iron"] = "batch of Nails";
-textLookup["Nails - Silver"] = "batch of Silver Nails";
+textLookup["Nails"] = "batch of Nails";
 textLookup["Pinch Roller"] = "Make a Pinch Roller";
 textLookup["Extrusion Plate"] = "Make an Extrusion Plate";
 textLookup["10 Bearings"] = "Make a set of 10 Bearings";
