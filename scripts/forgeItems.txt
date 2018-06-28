@@ -163,10 +163,18 @@ return
 		,
 	}
 	,
-	["Nails"] = 
+	["Nails - Iron"] = 
 	{
 		["metal"] = "Iron",
 		["prod"] = 12,
+		["q"] = 1,
+		["time"] = 1,
+	}
+	,
+	["Nails - Silver"] = 
+	{
+		["metal"] = "Silver",
+		["prod"] = 10,
 		["q"] = 1,
 		["time"] = 1,
 	}

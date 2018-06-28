@@ -25,7 +25,8 @@ forgeInfo = {};
 initialText = "Forge Macro 0.9 by Skyfeather. Pin all Forges & Casting Boxes. Macro will start forges if needed. Forge & casting box windows should not overlap while cooling items.\n----------------------------\nMaterials Required:\n";
 
 textLookup = {};
-textLookup["Nails"] = "batch of Nails";
+textLookup["Nails - Iron"] = "batch of Nails";
+textLookup["Nails - Silver"] = "batch of Silver Nails";
 textLookup["Pinch Roller"] = "Make a Pinch Roller";
 textLookup["Extrusion Plate"] = "Make an Extrusion Plate";
 textLookup["10 Bearings"] = "Make a set of 10 Bearings";
