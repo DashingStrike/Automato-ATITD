@@ -173,6 +173,8 @@ local function makeItem(currentItem, window)
 
    if parents[2] == "Bars x1" or parents[2] == "Bars x5" then
       t = findText("Bars" .. "...", window);
+      lsSleep(100);
+      clickText(t);
    elseif parents[2] == "Small Gear x1" or parents[2] == "Small Gear x10" then
       t = findText("Gearwork" .. "...", window);
       lsSleep(100);
