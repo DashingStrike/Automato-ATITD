@@ -147,7 +147,7 @@ function kettleTick(kettle)
 		pos = srFindImageInRange("BeerSealButton.png", kettle.x, kettle.y, kettle.width, kettle.height);
 		if pos == nil then
 			srReadScreen();
-			pos = srFindImageInRange("BrewTime.png", kettle.x, kettle.y, kettle.width, kettle.height);
+			pos = srFindImageInRange("BeerTime.png", kettle.x, kettle.y, kettle.width, kettle.height);
 			local time = ocrNumber(pos[0] + 47, pos[1], SMALL_SET);
 			for i=1, #ingredients do
 				if kettle.lasting < i then
@@ -164,7 +164,7 @@ function kettleTick(kettle)
 	end
 	if kettle.stage == STAGE_FERMENTING then
 		srReadScreen();
-		pos = srFindImageInRange("BrewTime.png", kettle.x, kettle.y, kettle.width, kettle.height);
+		pos = srFindImageInRange("BeerTime.png", kettle.x, kettle.y, kettle.width, kettle.height);
 		local time = ocrNumber(pos[0] + 47, pos[1], SMALL_SET);
 		if time <= sealTime then
 			pos = srFindImageInRange("BeerSealButton.png", kettle.x, kettle.y, kettle.width, kettle.height);
