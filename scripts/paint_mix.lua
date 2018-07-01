@@ -1,5 +1,5 @@
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
+--dofile("screen_reader_common.inc");
+--dofile("ui_utils.inc");
 dofile("common.inc");
 
 COLOR_NAMES = {};
@@ -17,9 +17,11 @@ BLACK = 0x000000ff;
 WHITE = 0xFFFFFFff;
 
 recipes = {};
+filename = "paint_recipes.txt"
+exampleRecipes = "Barn Red : Clay 3 RedSand 9 Silver 4 - #example\nBeet : Cabbage 8 Clay 2 - #example\nBoysenberry : Cabbage 4 Clay 6 - #example\nBrown : Carrot 2 RedSand 8 - #example\nBurgundy Red : RedSand 8 Silver 2 - #example\nBurnt Umber : Clay 3 RedSand 7 - #example"
 
 function doit()
-    recipes = loadRecipes("paint_recipes.txt");
+    recipes = loadRecipes(filename);
     askForWindow("Open the paint window. Take any paint away so to start with 'Black'.");
     while 1 do
         checkBreak();
@@ -69,7 +71,7 @@ function getUserParams()
         
         if not got_user_params then
             lsScrollAreaBegin("scroll_area", X_PADDING, current_y, X_PADDING, lsScreenX - X_PADDING, 70);
-            config.color_index         = lsDropdown("color_name", X_PADDING, current_y, X_PADDING, lsScreenX - X_PADDING, config.color_index, COLOR_NAMES);
+            config.color_index         = lsDropdown("color_name", X_PADDING, current_y, X_PADDING, lsScreenX - 50, config.color_index, COLOR_NAMES);
             lsScrollAreaEnd(#COLOR_NAMES * 25);
             config.color_name = COLOR_NAMES[config.color_index];
             current_y = 80;
@@ -80,8 +82,8 @@ function getUserParams()
             end
             if config.paint_amount then
                 drawWrappedText("This will mix " .. config.paint_amount .. " debens of " ..
-                         config.color_name .. " paint, with a total cost of:", 0xD0D0D0ff, X_PADDING, current_y);
-                current_y = current_y + 30;
+                         config.color_name .. " paint, with a total cost of:", 0xD0D0D0ff, X_PADDING, current_y+10);
+                current_y = current_y + 40;
                 for i=1, #recipes[config.color_index].ingredient do
                     drawWrappedText(math.ceil(recipes[config.color_index].amount[i] * config.paint_amount / 10) .. " " ..
                              recipes[config.color_index].ingredient[i], 0xD0D0D0ff, X_PADDING, current_y);
@@ -192,6 +194,7 @@ function setLine(tree, line, lineNo)
 end
 
 function loadRecipes(filename)
+    checkRecipesFound(filename);
     local result = {};
     local file = io.open(filename, "a+");
     io.close(file);
@@ -201,4 +204,16 @@ function loadRecipes(filename)
         lineNo = lineNo + 1;
     end
     return result;
+end
+
+function checkRecipesFound(filename)
+  local file = io.open(filename, "a+");
+  local lineCounter = 0;
+  for line in io.lines(filename) do
+    lineCounter = lineCounter + 1;
+  end
+  if lineCounter == 0 then
+    file:write(exampleRecipes);
+  end
+  io.close(file);
 end
