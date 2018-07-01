@@ -12,6 +12,7 @@ askText = singleLine([[
 ]]);
 
 wmText = "Tap Ctrl on Crematories to open and pin.\nTap Alt to open, pin and stash.";
+debug = false; -- Change to true to get an extra 10s delay before starting crematory (after loading)
 
 OPP = 0;
 SAME_UP = 1;
@@ -91,9 +92,23 @@ function runCrematories()
       srReadScreen();
       iter = iter + 1;
     end
+    refreshWindows()
     takeAll();
     loadAll();
+
+  while foundOK do
+    sleepWithStatus(5000, "ERROR:\n\nMacro found a popup, which suggests a problem loading.\n\nRemoving items from crematory and reloading", nil, 0.7, 0.7);
+    refreshWindows()
+    takeAll();
+    loadAll();
+  end
+
+	if debug then
+	  sleepWithStatus(10000,"DEBUG: About to start!\n\nFinal chance to abort/verify crematory is loaded correctly?!", nil, 0.7, 0.7);
+	end
+
     start();
+
     local is_done = false;
     while not is_done do
       tick();
@@ -516,7 +531,7 @@ function promptLoad()
 
     if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Begin") then
         is_done = 1;
-        sleepWithStatus(1200, "Preparing to Start ...\nHands off the mouse!"); 
+        sleepWithStatus(1200, "Preparing to Start ...\n\nHands off the mouse!"); 
     end
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
                     "End script") then
@@ -554,19 +569,35 @@ function loadAll()
       for i, v in ipairs(loads) do
          checkBreak();
          clickText(findText("Load the Crematory...", cremWin));
-         lsSleep(shortWait*4);
-         local t = waitForText("Wood", 250, nil, nil, REGION);
-         t = waitForText(v, 250, nil, t);
+         lsSleep(500);
+         local t = waitForText("Wood", nil, nil, nil, REGION);
+         lsSleep(shortWait*2);
+         t = waitForText(v, nil, nil, t);
+         lsSleep(shortWait*2);
          clickText(t);
-         lsSleep(shortWait*4);
-         t = waitForText("Load how much", 250, nil, nil, REGION);
+         lsSleep(shortWait*2);
+         t = waitForText("Load how much", nil, nil, nil, REGION);
+         lsSleep(shortWait*2);
          safeClick(t.x + t.width/2, t.bottom - 50);
-         lsSleep(shortWait*4);
-         --waitForNoText("Load how much");
-         waitForNoText("Load how much", 250);
-         lsSleep(shortWait*4);
+         lsSleep(shortWait*2);
+         waitForNoText("Load how much");
+         sleepWithStatus(500,"Loaded: " .. v);
       end
-         --sleepWithStatus(10000,"About to start!\n\nFinal chance to abort/verify crematory is loaded correctly?!", nil, 0.7, 0.7);
+
+	foundOK = nil;
+
+	while 1 do
+	  srReadScreen();
+	  OK = srFindImage("OK.png");
+		if OK then
+		  foundOK = true;
+		  srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
+		else	
+		  break;
+		end
+	  lsSleep(tick_delay);
+	end
+
    end
 end
 
@@ -667,4 +698,14 @@ function sleepWithStatus(delay_time, message, color, scale)
     end
 
   end
+end
+
+
+function refreshWindows()
+  srReadScreen();
+  local tops = findAllText("This is");
+	for i=1,#tops do
+	  safeClick(tops[i][0], tops[i][1]);
+	end
+  lsSleep(250);
 end
