@@ -213,7 +213,12 @@ function start()
   for i=1,#windows do
     if windows[i].fire then
       safeClick(windows[i].fire[1] + 5, windows[i].fire[2] + 5);
-      lsSleep(shortWait*2);
+      lsSleep(shortWait*4);
+    end
+    srReadScreen();
+    OK = srFindImage("OK.png");
+    if OK then
+	error('Popup detected while firing crematory.\n\nThat suggests No Wood in inventory');
     end
   end
   sleepWithStatus(longWait, updateMessage("Finding my Chi"));
