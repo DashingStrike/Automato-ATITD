@@ -1,6 +1,6 @@
 --
 -- To run:
---  Copy a recipe from the output of the Thistle Mode
+--  Copy a recipe from the output of the Thistle Mode (history.txt)
 --  Update expected_gardens equal to the number you have opened and pinned
 --    Gardens must all have their buttons visible, can overlap as long as the
 --    row with "asc" is visible regardlesss of which window was clicked last
@@ -8,58 +8,58 @@
 --    99 if daylight and open lid, 33 if daylight and closed lid)
 --
 
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
 dofile("common.inc");
+dofile("settings.inc");
 
 
-
-
+dropdown_values = {"Night - Canopy Ignored (0)", "Day - Canopy Closed (33)", "Day - Canopy Open (99)"};
+dropdown_cur_value = 1;
 per_click_delay = 0;
 
-local expected_gardens = 2;
-local last_sun = 0;
+	--local expected_gardens = 2; -- You no longer need to alter this setting. Instead you choose number in config()
+	--local last_sun = 0; -- You no longer need to alter this setting. Instead, you choose this from pulldown menu in config()
+
 
 instructions = {
+0,0,2,0,0,
 0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,0,0,0,
-0,0,0,0,0,
-1,0,0,0,0,
-2,0,1,2,0,
-1,0,0,0,0,
-1,0,0,2,0,
-0,0,1,1,0,
-0,0,4,0,0,
-2,0,0,0,0,
-0,0,1,1,0,
-1,0,0,1,0,
-2,0,1,0,0,
-0,0,0,1,0,
-0,0,1,0,0,
-1,0,0,0,0,
-0,0,0,1,0,
-2,0,1,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-2,0,2,1,0,
-0,0,0,0,0,
-0,0,0,0,0,
-2,0,2,1,0,
-1,0,0,0,0,
 0,0,0,2,0,
-1,0,1,0,0,
-0,0,1,0,0,
-0,0,0,1,0,
-0,0,1,0,0,
-0,0,0,1,0,
-1,0,1,0,0,
-1,0,0,1,0,
 0,0,0,0,0,
-1,0,1,2,0,
+0,0,0,1,0,
+0,0,1,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,1,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,2,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,2,0,0,
+0,0,1,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
+0,0,0,0,0,
+0,0,0,1,0,
 0,0,0,0,0,
 0,0,0,0,0,
 };
@@ -220,8 +220,8 @@ function waitForMonChange(message)
 			different = nil;
 		end 
 		
-		lsPrintWrapped(10, 5, 0, lsScreenX - 20, 1, 1, 0xFFFFFFff, message);
-		lsPrintWrapped(10, 60, 0, lsScreenX - 20, 1, 1, 0xFFFFFFff, "Waiting for change...");
+		lsPrintWrapped(10, 5, 0, lsScreenX - 20, 0.8, 0.8, 0xFFFFFFff, message);
+		lsPrintWrapped(10, 60, 0, lsScreenX - 20, 0.8, 0.8, 0xFFFFFFff, "Waiting for change...");
 		if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
 			error "Clicked End Script button";
 		end
@@ -234,10 +234,19 @@ function waitForMonChange(message)
 			skip_next = 1;
 		end
 
-		if lsButtonText(40, lsScreenY - 120, z, 200, 0xFFFFFFff, "Finish up") then
-			finish_up = 1;
-		end
+		if finish_up then
+			if lsButtonText(40, lsScreenY - 120, z, 200, 0x40ff40ff, "Cancel Finish Up") then
+				finish_up = nil;
+			end
+
+		else
+
+			if lsButtonText(40, lsScreenY - 120, z, 200, 0xFFFFFFff, "Finish up") then
+				finish_up = 1;
+			end
 		
+		end
+
 		-- display mon pixels
 		for x=1, mon_w do
 			for y=1, mon_h do
@@ -268,63 +277,39 @@ function test()
 	error 'done';
 end
 
-function refillWater()
-	lsSleep(100);
-	srReadScreen();
-	FindWater = srFindImage("iconWaterJugSmall.png");
-
-	if FindWater then
-	statusScreen("Refilling water...");
-	srClickMouseNoMove(FindWater[0]+3,FindWater[1]-5, right_click);
-	lsSleep(500);
-
-
-		srReadScreen();
-		FindMaxButton = srFindImage("Maxbutton.png", 5000);
-
-		if FindMaxButton then
-		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
-		lsSleep(500);
-		end
-	end
-end
-
-function refillWaterBarrel()
-	lsSleep(100);
-	srReadScreen();
-	FindWater = findText("Draw Water");
-
-	if FindWater then
-	statusScreen("Refilling water...");
-	srClickMouseNoMove(FindWater[0]+30,FindWater[1]+5, right_click);
-	lsSleep(500);
-
-
-		srReadScreen();
-		FindMaxButton = srFindImage("Maxbutton.png", 5000);
-
-		if FindMaxButton then
-		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
-		lsSleep(500);
-		end
-	end
-end
-
-
 
 function doit()
-	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe. Note the windows must be pinned  CASCADED. Use window_manager.lua or window_arranger.lua to arrange the windows correctly. thistle_new can handle up to about  32 gardens by using the cascade method (shuffles windows back and forth). Use thistle_custom.lua if you are only running a  few gardens. Macro will always look for water icon to refill jugs. You can optionally pin the Water Barrel menu to refill jugs.");
+	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe. Note the windows must be pinned  CASCADED. Use included Window Manager and choose \'Form Cascade\' to arrange the windows correctly. Check \'Water Gap\' so that water icon isn\'t covered. Optionally, you can pin a rain barrel (water gap not required) to refill your jugs. Water is refilled after each tick, so you only need same amount of jugs as gardens.\n\nCan handle up to about 32 gardens by using the cascade method (shuffles windows back and forth). Use thistle_custom.lua if you are only running a few gardens.");
+
+	windowManager("Thistle Garden Setup", nil, true, true);
+	config();
+	if dropdown_cur_value == 1 then
+	  last_sun = 0;
+	elseif dropdown_cur_value == 2 then
+	  last_sun = 33;
+	elseif dropdown_cur_value == 3 then
+	  last_sun = 99;
+	end
 	
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';
 	end
+	unpinOnExit(main);
+end
 
-	refillWater();
-	refillWaterBarrel();
+
+function main()
+	drawWater(1);
 
 	srReadScreen();	
 	window_locs = findAllImages("ThisIs.png");
+	rainBarrel = findText("Rain Barrel");
+
+	-- Pinning a rain barrel will cause an error to expected_gardens (since it looks for 'This is'). Add 1 to expected_gardens if Rain Barrel menu found.
+	if rainBarrel then
+	  expected_gardens = expected_gardens + 1;
+	end
+
 	if not (#window_locs == expected_gardens) then
 		error ("Did not find expected number of thistle gardens (found " .. #window_locs .. " expected " ..  expected_gardens .. ")");
 	end
@@ -359,8 +344,7 @@ function doit()
 		-- lsSleep(2000);
 		--waitForMonChange("Getting initial image...");
 		for i=0, 39 do
-			refillWater();
-			refillWaterBarrel();
+			drawWater(1);
 
 			local to_click = {};
 			if (i == 0) then
@@ -378,9 +362,9 @@ function doit()
 			if #to_click > 0 then
 				clickAllComplex(to_click, ("(" .. loops .. "/" .. num_loops .. ") " .. i .. ":"));
 			end
-			waitForMonChange("(" .. loops .. "/" .. num_loops .. ") Tick " .. i .. " done.");
+			waitForMonChange("(" .. loops .. "/" .. num_loops .. ") Tick " .. i .. "/40 done");
 			if (i == 0) then -- first one immediately finds a change
-				waitForMonChange("(" .. loops .. "/" .. num_loops .. ") Tick " .. i .. " done.");
+				waitForMonChange("(" .. loops .. "/" .. num_loops .. ") Tick " .. i .. "/40 done");
 			end
 			if finish_up then
 				num_loops = loops;
@@ -391,12 +375,61 @@ function doit()
 		clickAllComplex({"Harvest.png"});
 		lsSleep(500);
 		
-		refillWater();
-		refillWaterBarrel();
+		drawWater(1);
 		
 		if finish_up then
 			break;
 		end
 	end
 	lsPlaySound("Complete.wav");
+end
+
+
+
+function config()
+  local is_done = false;
+  local count = 1;
+  while not is_done do
+    checkBreak();
+    local y = 10;
+    lsPrint(12, y, 0, 0.7, 0.7, 0xffffffff,
+            "Last Sun (Current Canopy Postion):");
+    y = y + 35;
+    lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
+	dropdown_cur_value = readSetting("dropdown_cur_value",dropdown_cur_value);
+    dropdown_cur_value = lsDropdown("ArrangerDropDown", 15, y, 0, 320, dropdown_cur_value, dropdown_values);
+	writeSetting("dropdown_cur_value",dropdown_cur_value);
+    lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+    y = y + 50;
+    lsPrint(15, y+5, 0, 0.8, 0.8, 0xffffffff, "How many passes?");
+    is_done, num_loops = lsEditBox("num_loops", 190, y, 0, 50, 30, 1.0, 1.0,
+                                     0x000000ff, 1);
+     num_loops = tonumber(num_loops);
+       if not num_loops then
+         is_done = false;
+         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+         num_loops = 1;
+       end
+    y = y + 35;
+    lsPrint(15, y+5, 0, 0.8, 0.8, 0xffffffff, "How many gardens?");
+    is_done, expected_gardens = lsEditBox("expected_gardens", 190, y, 0, 50, 30, 1.0, 1.0,
+                                     0x000000ff, 2);
+     expected_gardens = tonumber(expected_gardens);
+       if not expected_gardens then
+         is_done = false;
+         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+         expected_gardens = 2;
+       end
+
+    if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Start") then
+        is_done = 1;
+    end
+
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
+                    "End script") then
+      error(quitMessage);
+    end
+  lsDoFrame();
+  lsSleep(50);
+  end
 end
