@@ -6,11 +6,11 @@ COLOR_NAMES = {};
 
 INGREDIENT_NAMES = {
 "Cabbage","Carrot","Clay","DeadTongue","ToadSkin","EarthLight","RedSand",
-"Lead","Silver","Iron","Copper","Sulfur","potash","Lime","Saltpeter"};
+"Lead","Silver","Iron","Copper","Sulfur","Potash","Lime","Saltpeter"};
 
 BUTTON_INDEX = {
 ["Cabbage"]=1,["Carrot"]=2,["Clay"]=3,["DeadTongue"]=4,["ToadSkin"]=5,["EarthLight"]=6,["RedSand"]=7,
-["Lead"]=8,["Silver"]=9,["Iron"]=10,["Copper"]=11,["Sulfur"]=12,["potash"]=13,["Lime"]=14,["Saltpeter"]=15};
+["Lead"]=8,["Silver"]=9,["Iron"]=10,["Copper"]=11,["Sulfur"]=12,["Potash"]=13,["Lime"]=14,["Saltpeter"]=15};
 
 RED = 0xFF2020ff;
 BLACK = 0x000000ff;
@@ -96,6 +96,8 @@ function getUserParams()
         
         if drawBottomButton(110, "Exit Script") then
             error "Script exited by user";
+
+
         end
         
         lsDoFrame();
