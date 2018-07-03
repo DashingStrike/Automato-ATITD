@@ -1,68 +1,13 @@
---
--- To run:
---  Copy a recipe from the output of the Thistle Mode (history.txt)
---  Update expected_gardens equal to the number you have opened and pinned
---    Gardens must all have their buttons visible, can overlap as long as the
---    row with "asc" is visible regardlesss of which window was clicked last
---  Update "last sun" to be what it is now (0 if night,
---    99 if daylight and open lid, 33 if daylight and closed lid)
---
-
 dofile("common.inc");
 dofile("settings.inc");
 
 
 dropdown_values = {"Night - Canopy Ignored (0)", "Day - Canopy Closed (33)", "Day - Canopy Open (99)"};
-dropdown_cur_value = 1;
 per_click_delay = 0;
 
 	--local expected_gardens = 2; -- You no longer need to alter this setting. Instead you choose number in config()
 	--local last_sun = 0; -- You no longer need to alter this setting. Instead, you choose this from pulldown menu in config()
-
-
-instructions = {
-0,0,2,0,0,
-0,0,0,1,0,
-0,0,0,2,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,1,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,1,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,2,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,2,0,0,
-0,0,1,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,1,0,
-0,0,0,0,0,
-0,0,0,0,0,
-};
+	--instructions = {}; -- You no longer need to copy your recipe here. Instead you Add a Silk Farm in menu. Then add recipe to the farmName.txt that is created in Automato/Games/ATITD folder.
 
 
 local window_locs = {};
@@ -282,7 +227,7 @@ function doit()
 	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe. Note the windows must be pinned  CASCADED. Use included Window Manager and choose \'Form Cascade\' to arrange the windows correctly. Check \'Water Gap\' so that water icon isn\'t covered. Optionally, you can pin a rain barrel (water gap not required) to refill your jugs. Water is refilled after each tick, so you only need same amount of jugs as gardens.\n\nCan handle up to about 32 gardens by using the cascade method (shuffles windows back and forth). Use thistle_custom.lua if you are only running a few gardens.");
 
 	windowManager("Thistle Garden Setup", nil, true, true);
-	config();
+	thistleConfig();
 	if dropdown_cur_value == 1 then
 	  last_sun = 0;
 	elseif dropdown_cur_value == 2 then
@@ -292,13 +237,14 @@ function doit()
 	end
 	
 	if not ( #instructions == 41*5) then
-		error 'Invalid instruction length';
+		error("Invalid instruction length: " .. loadedFile .. "\nDid you add a valid recipe to the file?");
 	end
 	unpinOnExit(main);
 end
 
 
 function main()
+
 	drawWater(1);
 
 	srReadScreen();	
@@ -385,7 +331,6 @@ function main()
 end
 
 
-
 function config()
   local is_done = false;
   local count = 1;
@@ -421,9 +366,11 @@ function config()
          expected_gardens = 2;
        end
 
+
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Start") then
         is_done = 1;
     end
+
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
                     "End script") then
@@ -432,4 +379,127 @@ function config()
   lsDoFrame();
   lsSleep(50);
   end
+end
+
+
+function thistleConfig()
+  local add;
+  local y = 0;
+  local z = 0;
+  message = "";
+
+  while not is_done do
+  checkBreak();
+
+
+  if not add then
+	if lsButtonText(lsScreenX/2 - 60, 10, 0, 140, 0xffffffff, "Add Silk Farm") then
+	  add = 1;
+	end
+
+  else
+	if lsButtonText(10, y+70, 0, 100, 0xffffffff, "Cancel") then
+	  add = nil;
+	end
+
+	if string.len(farmName) > 0 then
+	  if lsButtonText(140, y+70, 0, 100, 0xffffffff, "Save") then
+	    addSilkFarm();
+	    add = nil;
+	  end
+	end
+  end
+
+  if add then
+	lsPrint(10, y+10, 0, 0.8, 0.8, 0xffffffff, "Silk Farm Name:");
+	is_done, farmName = lsEditBox("farmName", 10, y+30, 0, 230, 30, 0.8, 0.8, 0x000000ff);
+  end
+
+  lsPrintWrapped(10, y+210, z, lsScreenX - 20, 0.7, 0.7, 0xffff40ff, message); 
+
+  parseSilkFarm();
+
+  if #farms > 0 then
+    dropdown_cur_value = readSetting("dropdown_cur_value",dropdown_cur_value);
+    dropdown_cur_value = lsDropdown("ArrangerDropDown", 15, y+130, 0, lsScreenX - 50, dropdown_cur_value, farms);
+    writeSetting("dropdown_cur_value",dropdown_cur_value);
+
+	  if lsButtonText(15, y+165, 0, 100, 0xffffffff, "Delete") then
+	    deleteSilkFarms(dropdown_cur_value);
+	  end
+
+	  if lsButtonText(lsScreenX - 135, y+165, 0, 100, 0xffffffff, "Load") then
+	    loadSilkFarms(farms[dropdown_cur_value]);
+	    config();
+	    break;
+	  end
+  end
+
+  if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
+    error "Clicked End Script button";
+  end
+
+  lsDoFrame();
+  lsSleep(20);
+  end -- end while
+end
+
+
+-----------------------------------------------------------------
+-- parse, load, add, delete functions
+-----------------------------------------------------------------
+
+function parseSilkFarm()
+  farms = {};
+  local file = io.open("SilkFarms.txt", "a+");
+  io.close(file);
+  for line in io.lines("SilkFarms.txt") do
+    farms[#farms + 1] = line
+  end
+  return farms;
+end
+
+
+function loadSilkFarms(value)
+  value = string.gsub(value, "%s+", "_");
+  value = "SilkFarm_" .. value .. ".txt";
+  dofile(value);
+  loadedFile = value;
+end
+
+
+function addSilkFarm()
+  fileName = string.gsub(farmName, "%s+", "_");
+  local file = io.open("SilkFarms.txt", "a+");
+  file:write(farmName .. "\n")
+  io.close(file);
+  file = io.open("SilkFarm_" .. fileName .. ".txt", "w+");
+  file:write("instructions = {\n\n};")
+  io.close(file);
+  message = "Folder: Automato/Games/ATITD/\nAdded: \"" .. string.upper(farmName) .. "\" to SilkFarms.txt\n\nCreated: SilkFarm_" .. fileName .. ".txt\nYou can add your recipe to this file.";
+end
+
+
+function deleteSilkFarms(num)
+  local farms = {};
+  local lineNumber = 0;
+  local output = "";
+  local file = io.open("SilkFarms.txt", "r");
+  io.close(file);
+  for line in io.lines("SilkFarms.txt") do
+    lineNumber = lineNumber + 1;
+	if num ~= lineNumber then
+	  table.insert(farms, line);
+	else
+	  farmName = line;
+	  fileName = string.gsub(farmName, "%s+", "_");
+	end
+  end
+  for i = 1, #farms,1 do
+    output = output .. farms[i] .. "\n";
+  end
+  file = io.open("SilkFarms.txt", "w+");
+  file:write(output)
+  io.close(file);
+  message = "Folder: Automato/Games/ATITD/\nDeleted: \"" .. string.upper(farmName) .. "\" from SilkFarms.txt\n\nLeftover File: SilkFarm_" .. fileName .. ".txt\nYou can delete this file if you wish.";
 end
