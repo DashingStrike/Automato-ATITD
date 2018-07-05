@@ -186,14 +186,7 @@ function glassTick(window_pos, state)
 
 			if temp <= (1600 - state.HV + state.DV) and state.benchTicksConfirmed then
 			  state.want_spike = 1;
-			  --state.spikeRose = state.benchTicks;
-				if state.benchTicks == 8 then
-				  state.spikeRose = state.benchTicks -3;
-				elseif state.benchTicks == 7 then
-				  state.spikeRose = state.benchTicks -2;
-				else -- add 2cc on last tick for 4,5,6 tick benches
-				  state.spikeRose = state.benchTicks;
-				end
+			  state.spikeRose = state.benchTicks;
 			end
 
 			if not state.benchTicksConfirmed and state.benchTicksVerify and state.benchTicks >= 4 and state.benchTicks <= 8 then
@@ -214,7 +207,7 @@ function glassTick(window_pos, state)
 
 
 		if not state.benchTicksConfirmed then
-		  state.status = state.status .. " (WAIT,VerifyingTicks,CookingSpikingDisabled)";
+		  state.status = state.status .. " (WAIT,VerifyingTicks,Cooking+SpikingDisabled)";
 		end
 
 	
@@ -240,6 +233,13 @@ function glassTick(window_pos, state)
 
 	end
 
+		    -- Calculate if this bench will spike beyond 2400 and prevent cooking during spiking.
+		if state.lastSpike > 0 and (1600 - state.HV + state.DV + state.lastSpike) <= 2399 then
+		  cookDuringSpike = true; -- This bench will not overheat from a spike and allowed to cook during spiking
+		else
+		  cookDuringSpike = nil; 
+		end
+
 	if state.benchTicksConfirmed and showTicks then
 	  state.status = state.status .. " <Ticks:".. state.benchTicks .. "|DV:" .. state.DV .. "|HV:" .. state.HV .. "|Min/MaxTemp:" .. 1600 - state.HV + state.DV .. "-" .. 2399 - state.HV .. "|LastSpike:" .. state.lastSpike .. ">";
 	end
@@ -256,13 +256,17 @@ function glassTick(window_pos, state)
 
 		if maintainHeatNoCook then
 		  state.status = state.status .. " (CookingSuspended)";
+		elseif state.lastSpike == 0 and (state.spiking or state.want_spike) then
+		  state.status = state.status .. " (LastSpikeUnknown-CookingPausedWhileSpiking)";
+		elseif not cookDuringSpike and (state.spiking or state.want_spike) then
+		  state.status = state.status .. " (SpikeWillOverHeat-CookingPausedWhileSpiking)";
 		else
 		  state.status = state.status .. " (NothingCooking)";
 		end
 
 		if not stop_cooking then
 			--if temp > 1600 and temp < 2400 then
-			if temp >= (1600 - state.HV + state.DV) and temp <= (2399 - state.HV) and not maintainHeatNoCook and state.MinTempReachedOnce and not (state.benchTicks == 4 and (state.spiking or state.want_spike)) then 
+			if temp >= (1600 - state.HV + state.DV) and temp <= (2399 - state.HV) and not maintainHeatNoCook and state.MinTempReachedOnce and not ( (state.spiking or state.want_spike) and not cookDuringSpike ) then  
 				local made_one=nil;
 				for item_index=1, #item_priority do
 					pos = srFindImageInRange(item_priority[item_index], window_pos[0], window_pos[1], window_w, window_h, tol);
