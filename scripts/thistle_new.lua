@@ -2,7 +2,7 @@ dofile("common.inc");
 dofile("settings.inc");
 
 
-dropdown_values = {"Night - Canopy Ignored (0)", "Day - Canopy Closed (33)", "Day - Canopy Open (99)"};
+dropdown_values_canopy = {"Night - Canopy Ignored (0)", "Day - Canopy Closed (33)", "Day - Canopy Open (99)"};
 per_click_delay = 0;
 
 	--local expected_gardens = 2; -- You no longer need to alter this setting. Instead you choose number in config()
@@ -341,9 +341,9 @@ function config()
             "Last Sun (Current Canopy Postion):");
     y = y + 35;
     lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
-	dropdown_cur_value = readSetting("dropdown_cur_value",dropdown_cur_value);
-    dropdown_cur_value = lsDropdown("ArrangerDropDown", 15, y, 0, 320, dropdown_cur_value, dropdown_values);
-	writeSetting("dropdown_cur_value",dropdown_cur_value);
+    dropdown_cur_value = readSetting("dropdown_cur_value",dropdown_cur_value);
+    dropdown_cur_value_canopy = lsDropdown("ArrangerDropDown", 15, y, 0, 320, dropdown_cur_value_canopy, dropdown_values_canopy);
+    writeSetting("dropdown_cur_value_canopy",dropdown_cur_value_canopy);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     y = y + 50;
     lsPrint(15, y+5, 0, 0.8, 0.8, 0xffffffff, "How many passes?");
@@ -352,7 +352,7 @@ function config()
      num_loops = tonumber(num_loops);
        if not num_loops then
          is_done = false;
-         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+         lsPrint(15, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
          num_loops = 1;
        end
     y = y + 35;
@@ -362,22 +362,27 @@ function config()
      expected_gardens = tonumber(expected_gardens);
        if not expected_gardens then
          is_done = false;
-         lsPrint(10, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+         lsPrint(15, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
          expected_gardens = 2;
        end
 
+    lsPrintWrapped(10, 190, z, lsScreenX - 20, 0.65, 0.65, 0x40ffffff, "Current Farm: " .. loadedFarm .. "\nRecipe File: " .. convertFarmName2FileName(loadedFarm) ..
+    "\n\nWe are ready to start making thistles, with this farm\'s recipe! Click Start button to proceed ..."); 
+
+    if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
+	thistleConfig();
+    end
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Start") then
         is_done = 1;
     end
-
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
                     "End script") then
       error(quitMessage);
     end
   lsDoFrame();
-  lsSleep(50);
+  lsSleep(10);
   end
 end
 
@@ -387,6 +392,7 @@ function thistleConfig()
   local y = 0;
   local z = 0;
   message = "";
+  local foundRecipe;
 
   while not is_done do
   checkBreak();
@@ -403,8 +409,8 @@ function thistleConfig()
 	end
 
 	if string.len(farmName) > 0 then
-	  if lsButtonText(140, y+70, 0, 100, 0xffffffff, "Save") then
-	    addSilkFarm();
+	  if lsButtonText(140, y+70, 0, 100, 0xffffffff, "Create/Save") then
+	    addSilkFarm(farmName);
 	    add = nil;
 	  end
 	end
@@ -415,24 +421,50 @@ function thistleConfig()
 	is_done, farmName = lsEditBox("farmName", 10, y+30, 0, 230, 30, 0.8, 0.8, 0x000000ff);
   end
 
-  lsPrintWrapped(10, y+210, z, lsScreenX - 20, 0.7, 0.7, 0xffff40ff, message); 
+  lsPrintWrapped(10, y+200, z, lsScreenX - 20, 0.65, 0.65, 0xffff40ff, message); 
 
   parseSilkFarm();
 
   if #farms > 0 then
+    lsSetCamera(0,0,lsScreenX/0.9, lsScreenY/0.9);
     dropdown_cur_value = readSetting("dropdown_cur_value",dropdown_cur_value);
-    dropdown_cur_value = lsDropdown("ArrangerDropDown", 15, y+130, 0, lsScreenX - 50, dropdown_cur_value, farms);
+    dropdown_cur_value = lsDropdown("ArrangerDropDown", 15, y+145, 0, lsScreenX - 20, dropdown_cur_value, farms);
     writeSetting("dropdown_cur_value",dropdown_cur_value);
+    lsSetCamera(0,0,lsScreenX,lsScreenY);
 
-	  if lsButtonText(15, y+165, 0, 100, 0xffffffff, "Delete") then
-	    deleteSilkFarms(dropdown_cur_value);
+    lsPrintWrapped(15, 95, z, lsScreenX - 20, 0.65, 0.65, 0x40ffffff, "Silk Farm " .. dropdown_cur_value .. "/" .. #farms .. " selected"); 
+
+
+    if checkRecipeValid(farms[dropdown_cur_value]) then
+	foundRecipe = false;
+    lsPrintWrapped(15, 110, z, lsScreenX - 20, 0.65, 0.65, 0xff4040ff, "Invalid Recipe - You need to Edit"); 
+    else
+      foundRecipe = true;
+	lsPrintWrapped(15, 110, z, lsScreenX - 20, 0.65, 0.65, 0x40ff40ff, "Recipe Found"); 
+    end
+
+    if lsButtonText(15, y+165, 0, 110, 0xffffffff, "Delete Farm") then
+      message = "";
+		if promptOkay("Are you sure want to Delete?\n\nSilk Farm: " .. farms[dropdown_cur_value], nil, 0.7, true) then
+		  deleteSilkFarms(dropdown_cur_value);
+		end
+    end
+
+	  if lsButtonText(lsScreenX - 145, y+165, 0, 110, 0xFFFFFFff, "Edit Recipe") then
+	    promptRecipe(farms[dropdown_cur_value]);
 	  end
 
-	  if lsButtonText(lsScreenX - 135, y+165, 0, 100, 0xffffffff, "Load") then
+    if foundRecipe then
+	  if lsButtonText(10, lsScreenY - 30, 0, 120, 0x40ff40ff, "Load Farm") then
 	    loadSilkFarms(farms[dropdown_cur_value]);
 	    config();
 	    break;
 	  end
+    end
+  end
+
+  if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Check Voids") then
+    voids();
   end
 
   if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
@@ -440,14 +472,20 @@ function thistleConfig()
   end
 
   lsDoFrame();
-  lsSleep(20);
+  lsSleep(10);
   end -- end while
 end
 
 
 -----------------------------------------------------------------
--- parse, load, add, delete functions
+-- file/parsing/socket functions
 -----------------------------------------------------------------
+
+function convertFarmName2FileName(farm)
+  local fileName = string.gsub(farm, "%W", "");
+  fileName = "SilkFarm_" .. fileName .. ".txt";
+  return fileName;
+end
 
 function parseSilkFarm()
   farms = {};
@@ -459,26 +497,31 @@ function parseSilkFarm()
   return farms;
 end
 
-
-function loadSilkFarms(value)
-  value = string.gsub(value, "%s+", "_");
-  value = "SilkFarm_" .. value .. ".txt";
-  dofile(value);
-  loadedFile = value;
+function loadSilkFarms(farm)
+  local fileName = convertFarmName2FileName(farm);
+  loadedFarm = farm;
+  loadedFile = fileName;
+  dofile(fileName);
 end
 
-
-function addSilkFarm()
-  fileName = string.gsub(farmName, "%s+", "_");
+function addSilkFarm(farm)
+  local fileName = convertFarmName2FileName(farm);
   local file = io.open("SilkFarms.txt", "a+");
   file:write(farmName .. "\n")
   io.close(file);
-  file = io.open("SilkFarm_" .. fileName .. ".txt", "w+");
+  file = io.open(fileName, "w+");
   file:write("instructions = {\n\n};")
   io.close(file);
-  message = "Folder: Automato/Games/ATITD/\nAdded: \"" .. string.upper(farmName) .. "\" to SilkFarms.txt\n\nCreated: SilkFarm_" .. fileName .. ".txt\nYou can add your recipe to this file.";
+  message = "Folder: Automato/Games/ATITD/\nAdded Farm: \"" .. string.upper(farm) .. "\" to SilkFarms.txt\n\nCreated: " .. fileName .. "\n\nYou can manually edit this file to add recipe or use the 'Edit Recipe' button.";
 end
 
+function editSilkFarm(farm)
+  local fileName = convertFarmName2FileName(farm);
+  file = io.open(fileName, "w+");
+  file:write("instructions = {\n" .. recipe .. "\n};")
+  io.close(file);
+  message = "Folder: Automato/Games/ATITD/\nFarm: " .. string.upper(farm) .. "\nFile: " .. fileName .. "\n\nYour recipe has been successfully saved to this file!";
+end
 
 function deleteSilkFarms(num)
   local farms = {};
@@ -492,7 +535,7 @@ function deleteSilkFarms(num)
 	  table.insert(farms, line);
 	else
 	  farmName = line;
-	  fileName = string.gsub(farmName, "%s+", "_");
+	  fileName = convertFarmName2FileName(farmName);
 	end
   end
   for i = 1, #farms,1 do
@@ -501,5 +544,257 @@ function deleteSilkFarms(num)
   file = io.open("SilkFarms.txt", "w+");
   file:write(output)
   io.close(file);
-  message = "Folder: Automato/Games/ATITD/\nDeleted: \"" .. string.upper(farmName) .. "\" from SilkFarms.txt\n\nLeftover File: SilkFarm_" .. fileName .. ".txt\nYou can delete this file if you wish.";
+  message = "Folder: Automato/Games/ATITD/\nDeleted Farm: \"" .. string.upper(farmName) .. "\" from SilkFarms.txt\n\nLeftover File: " .. fileName .. "\nYou can delete this file if you wish.";
+end
+
+function parseRecipeLeft(recipe)
+  local recipes = explode(",",singleLine(recipe)); 
+  local lineNumber = 0;
+  local output = " ";
+  for i = 1, #recipes,1 do
+    if i >= 1 and i <= 21*5 then
+      lineNumber = lineNumber + 1
+      output = output .. recipes[i] .. ",";
+        if lineNumber == 5 then
+          output = output .. "\n";
+          lineNumber = 0;
+        end
+    end
+  end
+  return output;
+end
+
+function parseRecipeRight(recipe)
+  local recipes = explode(",",singleLine(recipe)); 
+  local lineNumber = 0;
+  local output = "";
+  for i = 1, #recipes,1 do
+    if i >= 106 then
+    lineNumber = lineNumber + 1
+      output = output .. recipes[i];
+        if i <= 205 then
+         output = output .. ",";
+        end
+          if lineNumber == 5 then
+            output = output .. "\n";
+            lineNumber = 0;
+          end
+    end
+  end
+  return output;
+end
+
+function checkRecipeValid(farm)
+  local fetchRecipe = {};
+  local fileName = convertFarmName2FileName(farm);
+  local badList = false;
+  local lineNumber = 0;
+  local recipe = "";
+  local foundRecipe = false;
+
+  for line in io.lines(fileName) do
+    lineNumber = lineNumber + 1;
+	if lineNumber > 1 and lineNumber < 43 then
+	  table.insert(fetchRecipe, line);
+	end
+  end
+
+  if lineNumber > 40 then
+    foundRecipe = true;
+    for i = 1, #fetchRecipe,1 do
+      recipe = recipe .. fetchRecipe[i] .. "\n";
+    end
+  else
+   recipe = "";
+  end
+    --local list = csplit(singleLine(recipe), ",");
+    local list = explode(",",singleLine(recipe)); 
+    if list[#list] == "" then
+      table.remove(list);
+    end
+    for i=1,#list do
+      list[i] = tonumber(list[i]);
+      if not list[i] then
+	badList = true;
+      end
+    end
+    if #list ~= 41*5 then
+      badList = true;
+    end
+    return badList;
+end
+
+function fetchVoids()
+  -- Fetch voids from Cegaiel's site
+  http = require "socket.http"
+  result, statuscode, content = http.request("http://automato.sharpnetwork.net/listvoids.asp")
+  if statuscode ~= 200 then
+    result = "Status Code: " .. statuscode .. "\n\nThere was a problem contacting 'Cegaiel\'s ATITD Tools' server.\n\nTry again later!";
+  else
+    result = string.gsub(result, "|", "\n");
+    result = string.gsub(result, "&nbsp;", " ");
+  end
+  while 1 do
+    statusScreen(result, nil, 0.65,0.65);
+    if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Back") then
+	thistleConfig();
+    end
+    lsSleep(10);
+  end
+end
+
+function voids()
+  while 1 do
+    checkBreak();
+--    statusScreen("Fetch voids from Cegaiel\'s ATITD Tools page\n\n", nil, 0.65, 0.65);
+    lsPrintWrapped(10, 10, 0, lsScreenX - 20, 0.7, 0.7, 0xFFFFFFff,
+      "You are about to fetch a web page from Cegaiel\'s ATITD Tools page.\n\n" ..
+      "Note: You will be prompted to 'Allow Network Access'.\n\nThis is a standard prompt, by Automato, whenever you attempt to use the http.socket. " ..
+      "Nothing to be alarmed about.\n\nJust click Yes to continue, when prompted.\n\nClick 'Fetch Voids' button to query server.");
+
+
+    if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
+      thistleConfig();
+    end
+    if lsButtonText(10, lsScreenY - 30, 0, 120, 0xFFFFFFFF, "Fetch Voids") then
+      fetchVoids();
+    end
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
+                    "End script") then
+      error(quitMessage);
+    end
+  lsDoFrame();
+  lsSleep(10);
+  end
+end
+
+-------------------------------------------------------------------------------
+-- promptRecipe()
+--
+-- Most of this function "borrowed" from thistle.lua - Thanks Tallow!
+-------------------------------------------------------------------------------
+
+function promptRecipe(farm)
+  local fileName = convertFarmName2FileName(farm);
+  local is_done = false;
+  local lineNumber = 0;
+  local foundRecipe = false;
+  local pasted = false;
+  local fetchRecipe = {};
+  recipe = "";
+
+  for line in io.lines(fileName) do
+    lineNumber = lineNumber + 1;
+	if lineNumber > 1 and lineNumber < 43 then
+	  table.insert(fetchRecipe, line);
+	end
+  end
+
+  if lineNumber > 40 then
+    foundRecipe = true;
+    for i = 1, #fetchRecipe,1 do
+      recipe = recipe .. fetchRecipe[i] .. "\n";
+    end
+  else
+   recipe = "";
+  end
+
+  while not is_done do
+
+    checkBreak();
+    lsPrint(10, 10, 0, 0.9, 0.9, 0xffffffff,
+            "Paste Recipe");
+    local y = 60;
+    lsPrint(10, y, 0, 0.6, 0.6, 0x40ffffff,
+            "Editing: " .. farm .. " (" .. fileName .. ")");
+
+    y = y + 20;
+
+    if lsButtonText(100, lsScreenY - 30, 0, 80, 0xffffffff, "Paste") then
+	pasted = true;
+      recipe = lsClipboardGet();
+    end
+
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
+                    "End script") then
+      error(quit_message);
+    end
+
+    if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
+      thistleConfig();
+    end
+
+    local badList = false;
+    --local list = csplit(singleLine(recipe), ",");
+    local list = explode(",",singleLine(recipe)); 
+    if list[#list] == "" then
+      table.remove(list);
+    end
+    for i=1,#list do
+      list[i] = tonumber(list[i]);
+      if not list[i] then
+	badList = true;
+      end
+    end
+    if #list ~= 41*5 then
+      badList = true;
+    end
+
+    if pasted and not badList then
+      lsPrint(140, 13, 10, 0.7, 0.7, 0x80ff80ff, "PASTED RECIPE");
+      lsPrintWrapped(10, 30, z, lsScreenX - 20, 0.6, 0.6, 0xffff40ff, "Click 'Save' button to write this to file."); 
+    end
+
+
+    if foundRecipe and not pasted and not badList then
+      lsPrint(140, 13, 10, 0.7, 0.7, 0x40ff40ff, "LOADED RECIPE");
+      lsPrintWrapped(10, 30, z, lsScreenX - 20, 0.6, 0.6, 0xffff40ff, "Copy your recipe, from history.txt to Clipboard (Ctrl+C), then click 'Paste' and 'Save' button."); 
+    end
+
+    if badList then
+      is_done = false;
+      lsPrint(140, 13, 10, 0.7, 0.7, 0xFF2020ff, "INVALID RECIPE");
+	lsPrintWrapped(10, 30, z, lsScreenX - 20, 0.6, 0.6, 0xffff40ff, "Copy your recipe, from history.txt to Clipboard (Ctrl+C), then click 'Paste' and 'Save' button."); 
+    elseif lsButtonText(10, lsScreenY - 30, 0, 80, 0xFFFFFFff, "Save") then
+      editSilkFarm(farm)
+      is_done = true;
+    end
+    instructions = list;
+--    lsPrintWrapped(10, y, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff,
+--		   string.sub(recipe, 0, math.floor(string.len(recipe)/2)));
+--    lsPrintWrapped(100, y, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff,
+--		   string.sub(recipe, math.floor(string.len(recipe)/2)));
+
+-- Fix: Last line on column 1 is split and 2nd half occurs on top of column 2:
+-- This fix can likely be solved more efficiently, but this is what I came up with for now, Ceg.
+    lsPrintWrapped(10, y, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff,
+		   parseRecipeLeft(recipe));
+    lsPrintWrapped(100, y, 0, lsScreenX - 20, 0.5, 0.5, 0xFFFFFFff,
+		   parseRecipeRight(recipe));
+
+    lsSleep(10);
+    lsDoFrame();
+  end
+end
+
+--------------
+-- Added in an explode function (delimiter, string) to deal with broken csplit.
+function explode(d,p)
+   local t, ll
+   t={}
+   ll=0
+   if(#p == 1) then
+      return {p}
+   end
+   while true do
+      l = string.find(p, d, ll, true) -- find the next d in the string
+      if l ~= nil then -- if "not not" found then..
+         table.insert(t, string.sub(p,ll,l-1)) -- Save it in our array.
+         ll = l + 1 -- save just after where we found it for searching next time.
+      else
+         table.insert(t, string.sub(p,ll)) -- Save what's left in our array.
+         break -- Break at end, as it should be, according to the lua manual.
+      end
+   end
+   return t
 end
