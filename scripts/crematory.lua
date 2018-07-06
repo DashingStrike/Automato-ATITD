@@ -271,7 +271,7 @@ end
 
 function checkDone()
    local allFound = true;
-   cremWins = findAllText("This is a Crematory", nil, REGION);
+   cremWins = findAllText("This is", nil, REGION);
    for i = 1, #cremWins do
       safeClick(cremWins[i].x + 5, cremWins[i].y + 5);
    end
@@ -479,7 +479,7 @@ end
 
 function takeAll()
   srReadScreen();
-  local wins = findAllText("This is a Crematory", nil, REGION);
+  local wins = findAllText("This is", nil, REGION);
   for i, win in ipairs(wins) do
     local t = findText("Take...", win);
     if t then
@@ -553,7 +553,7 @@ end
 
 function loadAll()
    statusScreen("Loading Crematory...");
-   cremWins = findAllText("This is a Crematory", nil, REGION);
+   cremWins = findAllText("This is", nil, REGION);
    lsPrintln("loading");
    loads = {};
    if load_flax then
