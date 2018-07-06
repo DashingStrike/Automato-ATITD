@@ -437,12 +437,12 @@ function thistleConfig()
 
 
   else
-	if lsButtonText(10, y+70, 0, 100, 0xffffffff, "Cancel") then
+	if lsButtonText(10, y+65, 0, 100, 0xffffffff, "Cancel") then
 	  add = nil;
 	end
 
 	if string.len(farmName) > 0 then
-	  if lsButtonText(140, y+70, 0, 100, 0xffffffff, "Create/Save") then
+	  if lsButtonText(140, y+65, 0, 100, 0xffffffff, "Create/Save") then
 	    addSilkFarm(farmName);
 	    add = nil;
 	  end
@@ -451,7 +451,7 @@ function thistleConfig()
 
   if add then
 	lsPrint(10, y+10, 0, 0.8, 0.8, 0xffffffff, "Silk Farm Name:");
-	is_done, farmName = lsEditBox("farmName", 10, y+30, 0, 230, 30, 0.8, 0.8, 0x000000ff);
+	is_done, farmName = lsEditBox("farmName", 10, y+30, 0, 230, 25, 0.8, 0.8, 0x000000ff);
   end
 
   lsPrintWrapped(10, y+200, z, lsScreenX - 20, 0.65, 0.65, 0xffff40ff, message); 
@@ -496,12 +496,18 @@ function thistleConfig()
     end
   end
 
-  if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Check Voids") then
-    voids();
-  end
-
   if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
     error "Clicked End Script button";
+  end
+
+  if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Check Voids") then
+    if socketHttpFirstRun then -- If we already fetched Voids once, then the "Allow Network Access' prompt won't appear again, so skip message
+      lsButtonText(lsScreenX - 110, lsScreenY - 60, 10, 100, 0xffffc0ff, "Querying!");
+      lsDoFrame();
+      fetchVoids();
+    else
+      fetchVoidsWarning();
+    end
   end
 
   lsDoFrame();
@@ -697,25 +703,26 @@ function fetchVoids()
   while 1 do
     statusScreen(result, nil, 0.65,0.65);
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Back") then
+	socketHttpFirstRun = 1;
 	thistleConfig();
     end
     lsSleep(10);
   end
 end
 
-function voids()
+function fetchVoidsWarning()
   while 1 do
     checkBreak();
     lsPrintWrapped(10, 10, 0, lsScreenX - 20, 0.7, 0.7, 0xFFFFFFff,
       "You are about to fetch a web page from Cegaiel\'s ATITD Tools page.\n\n" ..
       "Note: You will be prompted to 'Allow Network Access'.\n\nThis is a standard prompt, by Automato, whenever you attempt to use the http.socket. " ..
-      "Nothing to be alarmed about.\n\nJust click Yes to continue, when prompted.\n\nClick 'Fetch Voids' button to query server.");
+      "Nothing to be alarmed about.\n\nJust click Yes to continue, when prompted. You won\'t receive this notice anymore unless you restart macro.\n\nClick 'Check Voids' button, again, to query server.");
 
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
       thistleConfig();
     end
-    if lsButtonText(10, lsScreenY - 30, 0, 120, 0xFFFFFFFF, "Fetch Voids") then
+    if lsButtonText(10, lsScreenY - 30, 0, 120, 0xFFFFFFFF, "Check Voids") then
       fetchVoids();
     end
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
