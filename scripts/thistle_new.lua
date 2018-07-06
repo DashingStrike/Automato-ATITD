@@ -179,6 +179,19 @@ function waitForMonChange(message)
 			skip_next = 1;
 		end
 
+		if abort then
+			if lsButtonText(40, lsScreenY - 150, z, 200, 0xff4040ff, "Cancel Abort") then
+				abort = nil;
+			end
+
+		else
+
+			if lsButtonText(40, lsScreenY - 150, z, 200, 0xFFFFFFff, "Abort Crops") then
+				abort = 1;
+			end
+		
+		end
+
 		if finish_up then
 			if lsButtonText(40, lsScreenY - 120, z, 200, 0x40ff40ff, "Cancel Finish Up") then
 				finish_up = nil;
@@ -226,7 +239,8 @@ end
 function doit()
 	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe. Note the windows must be pinned  CASCADED. Use included Window Manager and choose \'Form Cascade\' to arrange the windows correctly. Check \'Water Gap\' so that water icon isn\'t covered. Optionally, you can pin a rain barrel (water gap not required) to refill your jugs. Water is refilled after each tick, so you only need same amount of jugs as gardens.\n\nCan handle up to about 32 gardens by using the cascade method (shuffles windows back and forth). Use thistle_custom.lua if you are only running a few gardens.");
 
-	windowManager("Thistle Garden Setup", nil, true, true);
+	--windowManager("Thistle Garden Setup", nil, true, true);
+  while 1 do
 	thistleConfig();
 	if dropdown_cur_value == 1 then
 	  last_sun = 0;
@@ -239,7 +253,8 @@ function doit()
 	if not ( #instructions == 41*5) then
 		error("Invalid instruction length: " .. loadedFile .. "\nDid you add a valid recipe to the file?");
 	end
-	unpinOnExit(main);
+      main();
+  end
 end
 
 
@@ -315,15 +330,27 @@ function main()
 			if finish_up then
 				num_loops = loops;
 			end			
+			if abort then
+				num_loops = loops;
+				to_click[1] = "ThistleAbort.png";
+				clickAllComplex(to_click, ("Aborting Crops ..."));
+				closeAbortWindows();
+				break;
+			end			
 		end
 
 		lsSleep(3000);
-		clickAllComplex({"Harvest.png"});
+		if abort then
+		  clickAllComplex({"ThisIs.png"});  -- Refresh windows after abort, so that 'Plant a Crop' appears
+		else
+		  clickAllComplex({"Harvest.png"});
+		end
 		lsSleep(500);
 		
 		drawWater(1);
 		
-		if finish_up then
+		if finish_up or abort then
+			abort = nil;
 			break;
 		end
 	end
@@ -403,6 +430,12 @@ function thistleConfig()
 	  add = 1;
 	end
 
+	if lsButtonText(lsScreenX/2 - 60, 50, 0, 140, 0xffffffff, "Window Manager") then
+	  windowManager("Thistle Garden Setup", nil, true, true);
+	end
+
+
+
   else
 	if lsButtonText(10, y+70, 0, 100, 0xffffffff, "Cancel") then
 	  add = nil;
@@ -445,7 +478,7 @@ function thistleConfig()
 
     if lsButtonText(15, y+165, 0, 110, 0xffffffff, "Delete Farm") then
       message = "";
-		if promptOkay("Are you sure want to Delete?\n\nSilk Farm: " .. farms[dropdown_cur_value], nil, 0.7, true) then
+		if promptOkay("Are you sure want to Delete?\n\nSilk Farm: " .. farms[dropdown_cur_value], 0xff8080ff, 0.7, true) then
 		  deleteSilkFarms(dropdown_cur_value);
 		end
     end
@@ -476,13 +509,33 @@ function thistleConfig()
   end -- end while
 end
 
+function closeAbortWindows()
+  while 1 do
+	checkBreak();
+	lsSleep(50);
+	srReadScreen();
+	local pos = srFindImage("yes3.png");
+		if (pos) then
+		  safeClick(pos[0] + 1, pos[1] + 1);
+               lsSleep(10);
+		end
+	local pos2 = srFindImage("OK.png");
+		if (pos2) then
+		  safeClick(pos2[0] + 1, pos2[1] + 1);
+               lsSleep(10);
+		end
+	if not pos and not pos2 then
+        break;
+	end
+  end
+end
 
 -----------------------------------------------------------------
 -- file/parsing/socket functions
 -----------------------------------------------------------------
 
 function convertFarmName2FileName(farm)
-  local fileName = string.gsub(farm, "%W", "");
+  local fileName = string.gsub(farm, "%W", ""); -- strip all punctuation, spaces, special characters, leaving only letters/numbers
   fileName = "SilkFarm_" .. fileName .. ".txt";
   return fileName;
 end
@@ -512,7 +565,9 @@ function addSilkFarm(farm)
   file = io.open(fileName, "w+");
   file:write("instructions = {\n\n};")
   io.close(file);
-  message = "Folder: Automato/Games/ATITD/\nAdded Farm: \"" .. string.upper(farm) .. "\" to SilkFarms.txt\n\nCreated: " .. fileName .. "\n\nYou can manually edit this file to add recipe or use the 'Edit Recipe' button.";
+  parseSilkFarm(); -- Refresh #farms and force pulldown menu to last entry.
+  writeSetting("dropdown_cur_value",#farms);
+  message = "Folder: Automato/Games/ATITD/\nAdded Farm: \"" .. string.upper(farm) .. "\" to SilkFarms.txt\n\nCreated: " .. fileName .. "\nYou can manually edit this file to add recipe or use the 'Edit Recipe' button.";
 end
 
 function editSilkFarm(farm)
@@ -544,6 +599,8 @@ function deleteSilkFarms(num)
   file = io.open("SilkFarms.txt", "w+");
   file:write(output)
   io.close(file);
+  file = io.open(fileName, "w+"); -- zero out the file so we noticed it needs deleted from Automato folder
+  io.close(file);
   message = "Folder: Automato/Games/ATITD/\nDeleted Farm: \"" .. string.upper(farmName) .. "\" from SilkFarms.txt\n\nLeftover File: " .. fileName .. "\nYou can delete this file if you wish.";
 end
 
@@ -561,6 +618,9 @@ function parseRecipeLeft(recipe)
         end
     end
   end
+	if string.len(output) <= 2 then
+	  output = ""; -- There's some weird stand-alone comma that appears when no recipe loaded or pasted yet. This simply gets rid of it off gui.
+	end
   return output;
 end
 
@@ -646,7 +706,6 @@ end
 function voids()
   while 1 do
     checkBreak();
---    statusScreen("Fetch voids from Cegaiel\'s ATITD Tools page\n\n", nil, 0.65, 0.65);
     lsPrintWrapped(10, 10, 0, lsScreenX - 20, 0.7, 0.7, 0xFFFFFFff,
       "You are about to fetch a web page from Cegaiel\'s ATITD Tools page.\n\n" ..
       "Note: You will be prompted to 'Allow Network Access'.\n\nThis is a standard prompt, by Automato, whenever you attempt to use the http.socket. " ..
