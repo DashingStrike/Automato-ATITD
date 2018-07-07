@@ -1,4 +1,4 @@
--- mining_ore.lua v2.2.5 -- by Cegaiel
+-- mining_ore.lua v2.2.4 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -24,9 +24,8 @@
 
 
 dofile("common.inc");
-dofile("settings.inc");
 
-info = "Ore Mining v2.2.5 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
+info = "Ore Mining v2.2.4 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -41,8 +40,10 @@ miningTime = 0;
 autoWorkMine = true;
 timesworked = 0;
 miningTimeTotal = 0;
-dropdown_key_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
+dropdown_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
+dropdown_cur_value = 1;
 dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)", "Iron (7)", "Lead (9)", "Lithium (10)", "Magnesium (9)", "Platinum (12)", "Silver (10)", "Strontium (10)", "Tin (9)", "Titanium (12)","Tungsten (12)", "Zinc (10)"};
+dropdown_ore_cur_value = 1;
 cancelButton = 0;
 lastLineFound = "";
 lastLineFound2 = "";
@@ -50,9 +51,9 @@ lastLineFound2 = "";
 
 
 --Customizable
-extraStones = false; -- written to Settings.mining_ore.lua.txt
-noMouseMove = false; -- written to Settings.mining_ore.lua.txt
-muteSoundEffects = false; -- written to Settings.mining_ore.lua.txt
+extraStones = false
+noMouseMove = false;
+muteSoundEffects = false;
 minPopSleepDelay = 150;  -- The minimum delay time used during findClosePopUp() function
 
 
@@ -77,16 +78,16 @@ end
 function getMineLoc()
     mineList = {};
     local was_shifted = lsShiftHeld();
-    if (dropdown_cur_value_key == 1) then
+    if (dropdown_cur_value == 1) then
         was_shifted = lsShiftHeld();
         key = "tap Shift";
-    elseif (dropdown_cur_value_key == 2) then
+    elseif (dropdown_cur_value == 2) then
         was_shifted = lsControlHeld();
         key = "tap Ctrl";
-    elseif (dropdown_cur_value_key == 3) then
+    elseif (dropdown_cur_value == 3) then
         was_shifted = lsAltHeld();
         key = "tap Alt";
-    elseif (dropdown_cur_value_key == 4) then
+    elseif (dropdown_cur_value == 4) then
         was_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
         key = "click MWheel ";
     end
@@ -99,13 +100,13 @@ function getMineLoc()
         mx, my = srMousePos();
         local is_shifted = lsShiftHeld();
 
-        if (dropdown_cur_value_key == 1) then
+        if (dropdown_cur_value == 1) then
             is_shifted = lsShiftHeld();
-        elseif (dropdown_cur_value_key == 2) then
+        elseif (dropdown_cur_value == 2) then
             is_shifted = lsControlHeld();
-        elseif (dropdown_cur_value_key == 3) then
+        elseif (dropdown_cur_value == 3) then
             is_shifted = lsAltHeld();
-        elseif (dropdown_cur_value_key == 4) then
+        elseif (dropdown_cur_value == 4) then
             is_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
         end
 
@@ -225,13 +226,13 @@ function getPoints()
 
     local nodeleft = stonecount;
     local was_shifted = lsShiftHeld();
-    if (dropdown_cur_value_key == 1) then
+    if (dropdown_cur_value == 1) then
         was_shifted = lsShiftHeld();
-    elseif (dropdown_cur_value_key == 2) then
+    elseif (dropdown_cur_value == 2) then
         was_shifted = lsControlHeld();
-    elseif (dropdown_cur_value_key == 3) then
+    elseif (dropdown_cur_value == 3) then
         was_shifted = lsAltHeld();
-    elseif (dropdown_cur_value_key == 4) then
+    elseif (dropdown_cur_value == 4) then
         was_shifted = lsMouseIsDown(2); --Button 3, which is middle mouse or mouse wheel
     end
 
@@ -242,13 +243,13 @@ function getPoints()
     while not is_done do
         nx, ny = srMousePos();
         local is_shifted = lsShiftHeld();
-        if (dropdown_cur_value_key == 1) then
+        if (dropdown_cur_value == 1) then
             is_shifted = lsShiftHeld();
-        elseif (dropdown_cur_value_key == 2) then
+        elseif (dropdown_cur_value == 2) then
             is_shifted = lsControlHeld();
-        elseif (dropdown_cur_value_key == 3) then
+        elseif (dropdown_cur_value == 3) then
             is_shifted = lsAltHeld();
-        elseif (dropdown_cur_value_key == 4) then
+        elseif (dropdown_cur_value == 4) then
             is_shifted = lsMouseIsDown(2);
         end
 
@@ -262,17 +263,11 @@ function getPoints()
             "Set Node Locations (" .. #clickList .. "/" .. stonecount .. ")");
         local y = 60;
         lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
-        autoWorkMine = readSetting("autoWorkMine",autoWorkMine);
         autoWorkMine = lsCheckBox(15, y, z, 0xffffffff, " Auto 'Work Mine'", autoWorkMine);
-        writeSetting("autoWorkMine",autoWorkMine);
         y = y + 20
-        extraStones = readSetting("extraStones",extraStones);
         extraStones = lsCheckBox(15, y, z, 0xffffffff, " Also do 4 stone combinations", extraStones);
-        writeSetting("extraStones",extraStones);
         y = y + 20
-        noMouseMove = readSetting("noMouseMove",noMouseMove);
         noMouseMove = lsCheckBox(15, y, z, 0xffffffff, " Dual Monitor (NoMouseMove) Mode", noMouseMove);
-        writeSetting("noMouseMove",noMouseMove);
         lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
         y = y + 10
         lsPrint(10, y, z, 0.7, 0.7, 0xc0c0ffff, "Hover and " .. key .. " over each node.");
@@ -335,7 +330,7 @@ function getPoints()
             error "Clicked End Script button";
         end
         lsDoFrame();
-        lsSleep(10);
+        lsSleep(50);
     end
 end
 
@@ -761,22 +756,17 @@ function promptDelays()
             "Key or Mouse to Select Nodes:");
         y = y + 35;
         lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
-        dropdown_cur_value_key = readSetting("dropdown_cur_value_key",dropdown_cur_value_key);
-        dropdown_cur_value_key = lsDropdown("thisKey", 15, y, 0, 320, dropdown_cur_value_key, dropdown_key_values);
-        writeSetting("dropdown_cur_value_key",dropdown_cur_value_key);
+        dropdown_cur_value = lsDropdown("ArrangerDropDown", 10, y, 0, 200, dropdown_cur_value, dropdown_values);
         lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
         y = y + 20;
         lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "How many Nodes?");
         y = y + 50;
         lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
-        dropdown_ore_cur_value = readSetting("dropdown_ore_cur_value",dropdown_ore_cur_value);
-        dropdown_ore_cur_value = lsDropdown("thisOre", 15, y, 0, 320, dropdown_ore_cur_value, dropdown_ore_values);
-        writeSetting("dropdown_ore_cur_value",dropdown_ore_cur_value);
+        dropdown_ore_cur_value = lsDropdown("ArrangerDropDown2", 10, y, 0, 200, dropdown_ore_cur_value, dropdown_ore_values);
         y = y + 35;
         lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Node Click Delay (ms):");
         y = y + 22;
         is_done, clickDelay = lsEditBox("delay", 10, y, 0, 50, 30, 1.0, 1.0, 0x000000ff, 100);
-        writeSetting("clickDelay",clickDelay);
         clickDelay = tonumber(clickDelay);
         if not clickDelay then
             is_done = false;
@@ -837,7 +827,7 @@ function promptDelays()
             error(quitMessage);
         end
         lsDoFrame();
-        lsSleep(10);
+        lsSleep(50);
     end
     return count;
 end
