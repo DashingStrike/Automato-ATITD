@@ -242,14 +242,14 @@ function doit()
 	--windowManager("Thistle Garden Setup", nil, true, true);
   while 1 do
 	thistleConfig();
-	if dropdown_cur_value == 1 then
+	if dropdown_cur_value_canopy == 1 then
 	  last_sun = 0;
-	elseif dropdown_cur_value == 2 then
+	elseif dropdown_cur_value_canopy == 2 then
 	  last_sun = 33;
-	elseif dropdown_cur_value == 3 then
+	elseif dropdown_cur_value_canopy == 3 then
 	  last_sun = 99;
 	end
-	
+
 	if not ( #instructions == 41*5) then
 		error("Invalid instruction length: " .. loadedFile .. "\nDid you add a valid recipe to the file?");
 	end
@@ -259,6 +259,8 @@ end
 
 
 function main()
+	finish_up = nil;
+	abort = nil;
 
 	drawWater(1);
 
@@ -368,8 +370,8 @@ function config()
             "Last Sun (Current Canopy Postion):");
     y = y + 35;
     lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);
-    dropdown_cur_value = readSetting("dropdown_cur_value",dropdown_cur_value);
-    dropdown_cur_value_canopy = lsDropdown("ArrangerDropDown", 15, y, 0, 320, dropdown_cur_value_canopy, dropdown_values_canopy);
+    dropdown_cur_value_canopy = readSetting("dropdown_cur_value_canopy",dropdown_cur_value_canopy);
+    dropdown_cur_value_canopy = lsDropdown("thisCanopy", 15, y, 0, 320, dropdown_cur_value_canopy, dropdown_values_canopy);
     writeSetting("dropdown_cur_value_canopy",dropdown_cur_value_canopy);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     y = y + 50;
@@ -460,15 +462,15 @@ function thistleConfig()
 
   if #farms > 0 then
     lsSetCamera(0,0,lsScreenX/0.9, lsScreenY/0.9);
-    dropdown_cur_value = readSetting("dropdown_cur_value",dropdown_cur_value);
-    dropdown_cur_value = lsDropdown("ArrangerDropDown", 15, y+145, 0, lsScreenX - 20, dropdown_cur_value, farms);
-    writeSetting("dropdown_cur_value",dropdown_cur_value);
+    dropdown_cur_value_farm = readSetting("dropdown_cur_value_farm",dropdown_cur_value_farm);
+    dropdown_cur_value_farm = lsDropdown("thisFarm", 15, y+145, 0, lsScreenX - 20, dropdown_cur_value_farm, farms);
+    writeSetting("dropdown_cur_value_farm",dropdown_cur_value_farm);
     lsSetCamera(0,0,lsScreenX,lsScreenY);
 
-    lsPrintWrapped(15, 95, z, lsScreenX - 20, 0.65, 0.65, 0x40ffffff, "Silk Farm " .. dropdown_cur_value .. "/" .. #farms .. " selected"); 
+    lsPrintWrapped(15, 95, z, lsScreenX - 20, 0.65, 0.65, 0x40ffffff, "Silk Farm " .. dropdown_cur_value_farm .. "/" .. #farms .. " selected"); 
 
 
-    if checkRecipeValid(farms[dropdown_cur_value]) then
+    if checkRecipeValid(farms[dropdown_cur_value_farm]) then
 	foundRecipe = false;
     lsPrintWrapped(15, 110, z, lsScreenX - 20, 0.65, 0.65, 0xff4040ff, "Invalid Recipe - You need to Edit"); 
     else
@@ -478,18 +480,18 @@ function thistleConfig()
 
     if lsButtonText(15, y+165, 0, 110, 0xffffffff, "Delete Farm") then
       message = "";
-		if promptOkay("Are you sure want to Delete?\n\nSilk Farm: " .. farms[dropdown_cur_value], 0xff8080ff, 0.7, true) then
-		  deleteSilkFarms(dropdown_cur_value);
+		if promptOkay("Are you sure want to Delete?\n\nSilk Farm: " .. farms[dropdown_cur_value_farm], 0xff8080ff, 0.7, true) then
+		  deleteSilkFarms(dropdown_cur_value_farm);
 		end
     end
 
 	  if lsButtonText(lsScreenX - 145, y+165, 0, 110, 0xFFFFFFff, "Edit Recipe") then
-	    promptRecipe(farms[dropdown_cur_value]);
+	    promptRecipe(farms[dropdown_cur_value_farm]);
 	  end
 
     if foundRecipe then
 	  if lsButtonText(10, lsScreenY - 30, 0, 120, 0x40ff40ff, "Load Farm") then
-	    loadSilkFarms(farms[dropdown_cur_value]);
+	    loadSilkFarms(farms[dropdown_cur_value_farm]);
 	    config();
 	    break;
 	  end
@@ -572,7 +574,7 @@ function addSilkFarm(farm)
   file:write("instructions = {\n\n};")
   io.close(file);
   parseSilkFarm(); -- Refresh #farms and force pulldown menu to last entry.
-  writeSetting("dropdown_cur_value",#farms);
+  writeSetting("dropdown_cur_value_farm",#farms);
   message = "Folder: Automato/Games/ATITD/\nAdded Farm: \"" .. string.upper(farm) .. "\" to SilkFarms.txt\n\nCreated: " .. fileName .. "\nYou can manually edit this file to add recipe or use the 'Edit Recipe' button.";
 end
 
@@ -607,6 +609,9 @@ function deleteSilkFarms(num)
   io.close(file);
   file = io.open(fileName, "w+"); -- zero out the file so we noticed it needs deleted from Automato folder
   io.close(file);
+  num = num - 1;  -- Force pull down menu to the previous farm, after delete
+  if num < 1 then num = 1; end
+  writeSetting("dropdown_cur_value_farm", num);
   message = "Folder: Automato/Games/ATITD/\nDeleted Farm: \"" .. string.upper(farmName) .. "\" from SilkFarms.txt\n\nLeftover File: " .. fileName .. "\nYou can delete this file if you wish.";
 end
 
