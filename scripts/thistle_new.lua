@@ -4,13 +4,11 @@ dofile("settings.inc");
 
 dropdown_values_canopy = {"Night - Canopy Ignored (0)", "Day - Canopy Closed (33)", "Day - Canopy Open (99)"};
 per_click_delay = 0;
+expected_gardens = 2; -- You no longer need to alter this setting. Instead you choose value in macro
+--local last_sun = 0; -- You no longer need to alter this setting. You can set when macro starts.
+--instructions = {}; -- You no longer need to copy your recipe here. You will paste this while macro runs (Edit Recipe).
 
-	--local expected_gardens = 2; -- You no longer need to alter this setting. Instead you choose number in config()
-	--local last_sun = 0; -- You no longer need to alter this setting. Instead, you choose this from pulldown menu in config()
-	--instructions = {}; -- You no longer need to copy your recipe here. Instead you Add a Silk Farm in menu. Then add recipe to the farmName.txt that is created in Automato/Games/ATITD folder.
-
-
-local window_locs = {};
+window_locs = {};
 
 function setWaitSpot(x0, y0)
 	setWaitSpot_x = x0;
@@ -67,6 +65,11 @@ function clickAllComplex(image_names, message)
 	end
 	-- Find buttons and click them!
 	srReadScreen();
+	window_locs = findAllImages("ThisIs.png");
+	if #window_locs == 0 then
+	  sleepWithStatus(1000, "No windows found");
+	  thistleConfig();
+	end
 	local dpos = {};
 	for i=1, #image_names do
 		local pos = srFindImageInRange(image_names[i],
@@ -195,6 +198,7 @@ function waitForMonChange(message)
 		if finish_up then
 			if lsButtonText(40, lsScreenY - 120, z, 200, 0x40ff40ff, "Cancel Finish Up") then
 				finish_up = nil;
+				cancel_finish_up = 1;
 			end
 
 		else
@@ -289,7 +293,6 @@ function main()
 	-- test();
 	
 	for loops=1, num_loops do
-		
 		-- clickAll("ThisIs.png", 1);
 		-- lsSleep(100);
 		
@@ -330,10 +333,13 @@ function main()
 				waitForMonChange("(" .. loops .. "/" .. num_loops .. ") Tick " .. i .. "/40 done");
 			end
 			if finish_up then
+				last_num_loops = num_loops;
 				num_loops = loops;
+			elseif cancel_finish_up then
+				num_loops = last_num_loops;
+				cancel_finish = nil;
 			end			
 			if abort then
-				num_loops = loops;
 				to_click[1] = "ThistleAbort.png";
 				clickAllComplex(to_click, ("Aborting Crops ..."));
 				closeAbortWindows();
@@ -341,18 +347,17 @@ function main()
 			end			
 		end
 
-		lsSleep(3000);
 		if abort then
 		  clickAllComplex({"ThisIs.png"});  -- Refresh windows after abort, so that 'Plant a Crop' appears
 		else
+		lsSleep(3000);
 		  clickAllComplex({"Harvest.png"});
 		end
 		lsSleep(500);
 		
 		drawWater(1);
 		
-		if finish_up or abort then
-			abort = nil;
+		if abort then
 			break;
 		end
 	end
@@ -386,15 +391,16 @@ function config()
        end
     y = y + 35;
     lsPrint(15, y+5, 0, 0.8, 0.8, 0xffffffff, "How many gardens?");
+    expected_gardens = readSetting("expected_gardens",expected_gardens);
     is_done, expected_gardens = lsEditBox("expected_gardens", 190, y, 0, 50, 30, 1.0, 1.0,
-                                     0x000000ff, 2);
+                                     0x000000ff, expected_gardens);
      expected_gardens = tonumber(expected_gardens);
        if not expected_gardens then
          is_done = false;
          lsPrint(15, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-         expected_gardens = 2;
+         expected_gardens = 1;
        end
-
+    writeSetting("expected_gardens",expected_gardens);
     lsPrintWrapped(10, 190, z, lsScreenX - 20, 0.65, 0.65, 0x40ffffff, "Current Farm: " .. loadedFarm .. "\nRecipe File: " .. convertFarmName2FileName(loadedFarm) ..
     "\n\nWe are ready to start making thistles, with this farm\'s recipe! Click Start button to proceed ..."); 
 
@@ -432,13 +438,12 @@ function thistleConfig()
 	  add = 1;
 	end
 
-	if lsButtonText(lsScreenX/2 - 60, 50, 0, 140, 0xffffffff, "Window Manager") then
-	  windowManager("Thistle Garden Setup", nil, true, true);
+	if lsButtonText(lsScreenX/2 - 60, 40, 0, 140, 0xffffffff, "Misc Stuff") then
+	  miscButtons();
 	end
 
-
-
   else
+
 	if lsButtonText(10, y+65, 0, 100, 0xffffffff, "Cancel") then
 	  add = nil;
 	end
@@ -449,6 +454,7 @@ function thistleConfig()
 	    add = nil;
 	  end
 	end
+
   end
 
   if add then
@@ -519,8 +525,8 @@ end
 
 function closeAbortWindows()
   while 1 do
+      sleepWithStatus(50,"Closing Popup windows ...")
 	checkBreak();
-	lsSleep(50);
 	srReadScreen();
 	local pos = srFindImage("yes3.png");
 		if (pos) then
@@ -535,6 +541,44 @@ function closeAbortWindows()
 	if not pos and not pos2 then
         break;
 	end
+  end
+end
+
+function miscButtons()
+  while 1 do
+  checkBreak();
+
+  if lsButtonText(lsScreenX/2 - 60, 10, 0, 140, 0xffffffff, "Window Manager") then
+    windowManager("Thistle Garden Setup", nil, true, true);
+  end
+
+  if lsButtonText(lsScreenX/2 - 60, 80, z, 140, 0xFFFFFFff, "Abort Crops") then
+    if promptOkay("This is only used if you currently have crops planted and wish to abort them (if something went wrong).\n\nYou don\'t get thistles back when you abort!\n\nAre you sure want to Abort Crops?", 0xff8080ff, 0.7, true) then
+      closeAbortWindows(); 
+	clickAllComplex({"ThistleAbort.png"}, "Aborting");
+	closeAbortWindows();
+	clickAllComplex({"Harvest.png"}, "Refreshing");  -- Refresh windows after abort, so that 'Plant a Crop' appears
+    end	
+  end
+
+  if lsButtonText(lsScreenX/2 - 60, 110, z, 140, 0xFFFFFFff, "Harvest Crops") then
+    if promptOkay("This is only used if you currently have crops planted and are ready for harvest. Likely something went wrong in macro.\n\nAre you sure you want to Harvest Crops?", 0xff8080ff, 0.7, true) then
+      closeAbortWindows();
+      clickAllComplex({"Harvest.png"}, "Harvesting");
+      clickAllComplex({"ThisIs.png"}, "Refreshing");  -- Refresh windows after abort, so that 'Plant a Crop' appears
+    end	
+  end
+
+  if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Back") then
+    thistleConfig();
+  end
+
+  if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
+    error "Clicked End Script button";
+  end
+
+  lsDoFrame();
+  lsSleep(10);
   end
 end
 
