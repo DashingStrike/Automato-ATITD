@@ -1,6 +1,5 @@
---dofile("screen_reader_common.inc");
---dofile("ui_utils.inc");
 dofile("common.inc");
+dofile("settings.inc");
 
 COLOR_NAMES = {};
 
@@ -71,7 +70,9 @@ function getUserParams()
         
         if not got_user_params then
             lsScrollAreaBegin("scroll_area", X_PADDING, current_y, X_PADDING, lsScreenX - X_PADDING, 70);
+            config.color_index = readSetting("color_name",config.color_index);
             config.color_index         = lsDropdown("color_name", X_PADDING, current_y, X_PADDING, lsScreenX - 50, config.color_index, COLOR_NAMES);
+            writeSetting("color_name",config.color_index);
             lsScrollAreaEnd(#COLOR_NAMES * 25);
             config.color_name = COLOR_NAMES[config.color_index];
             current_y = 80;
