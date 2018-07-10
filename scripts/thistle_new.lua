@@ -405,7 +405,8 @@ function config()
     "\n\nWe are ready to start making thistles, with this farm\'s recipe! Click Start button to proceed ..."); 
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
-	thistleConfig();
+--	thistleConfig();
+	break;
     end
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Start") then
@@ -570,7 +571,8 @@ function miscButtons()
   end
 
   if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Back") then
-    thistleConfig();
+--    thistleConfig();
+	break;
   end
 
   if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
@@ -753,14 +755,15 @@ function fetchVoids()
     statusScreen(result, nil, 0.65,0.65);
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Back") then
 	socketHttpFirstRun = 1;
-	thistleConfig();
+--	thistleConfig();
+	break;
     end
     lsSleep(10);
   end
 end
 
 function fetchVoidsWarning()
-  while 1 do
+  while 1 and not socketHttpFirstRun do
     checkBreak();
     lsPrintWrapped(10, 10, 0, lsScreenX - 20, 0.7, 0.7, 0xFFFFFFff,
       "You are about to fetch a web page from Cegaiel\'s ATITD Tools page.\n\n" ..
@@ -769,7 +772,8 @@ function fetchVoidsWarning()
 
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
-      thistleConfig();
+--      thistleConfig();
+	break;
     end
     if lsButtonText(10, lsScreenY - 30, 0, 120, 0xFFFFFFFF, "Check Voids") then
       fetchVoids();
@@ -836,7 +840,8 @@ function promptRecipe(farm)
     end
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
-      thistleConfig();
+--      thistleConfig();
+	break;
     end
 
     local badList = false;
