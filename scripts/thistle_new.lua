@@ -241,7 +241,7 @@ end
 
 
 function doit()
-	askForWindow("Pin any number of thistle gardens, edit thistle_new with recipe. Note the windows must be pinned  CASCADED. Use included Window Manager and choose \'Form Cascade\' to arrange the windows correctly. Check \'Water Gap\' so that water icon isn\'t covered. Optionally, you can pin a rain barrel (water gap not required) to refill your jugs. Water is refilled after each tick, so you only need same amount of jugs as gardens.\n\nCan handle up to about 32 gardens by using the cascade method (shuffles windows back and forth). Use thistle_custom.lua if you are only running a few gardens.");
+	askForWindow("Pin any number of thistle gardens. Must be CASCADED.\n\nUse Window Manager button and choose \'Form Cascade\' to arrange the windows correctly. Check \'Water Gap\' so that water icon isn\'t covered. Optionally, you can pin a rain barrel (water gap not required) to refill your jugs. Water is refilled after each tick, so you won\'t need many jugs (#gardens x 2 should be enough).\n\nCan handle up to about 32 gardens by using the cascade method (shuffles windows back and forth).");
 
 	--windowManager("Thistle Garden Setup", nil, true, true);
   while 1 do
@@ -405,12 +405,12 @@ function config()
     "\n\nWe are ready to start making thistles, with this farm\'s recipe! Click Start button to proceed ..."); 
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
---	thistleConfig();
-	break;
+        break;
     end
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Start") then
         is_done = 1;
+        start = 1;
     end
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
@@ -429,10 +429,16 @@ function thistleConfig()
   local z = 0;
   message = "";
   local foundRecipe;
+  local is_done = false;
+
 
   while not is_done do
   checkBreak();
 
+  if start then
+    start = nil;
+    break;
+  end
 
   if not add then
 	if lsButtonText(lsScreenX/2 - 60, 10, 0, 140, 0xffffffff, "Add Silk Farm") then
@@ -500,7 +506,6 @@ function thistleConfig()
 	  if lsButtonText(10, lsScreenY - 30, 0, 120, 0x40ff40ff, "Load Farm") then
 	    loadSilkFarms(farms[dropdown_cur_value_farm]);
 	    config();
-	    break;
 	  end
     end
   end
@@ -571,8 +576,7 @@ function miscButtons()
   end
 
   if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Back") then
---    thistleConfig();
-	break;
+        break;
   end
 
   if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff, "End script") then
@@ -755,7 +759,6 @@ function fetchVoids()
     statusScreen(result, nil, 0.65,0.65);
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Back") then
 	socketHttpFirstRun = 1;
---	thistleConfig();
 	break;
     end
     lsSleep(10);
@@ -772,8 +775,7 @@ function fetchVoidsWarning()
 
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
---      thistleConfig();
-	break;
+        break;
     end
     if lsButtonText(10, lsScreenY - 30, 0, 120, 0xFFFFFFFF, "Check Voids") then
       fetchVoids();
@@ -840,8 +842,7 @@ function promptRecipe(farm)
     end
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
---      thistleConfig();
-	break;
+        break;
     end
 
     local badList = false;
