@@ -144,10 +144,6 @@ function SetupLureGroup()
     FirstLure="";
     LastLure = "";
 
-    --		if not muteSoundEffects then
-    --		lsPlaySound("moneycounter.wav");
-    --		end
-
     lsDoFrame();
     statusScreen("Indexing Lures ...",nil, 0.7, 0.7);
     checkBreak()
@@ -166,19 +162,21 @@ function SetupLureGroup()
                 srClickMouseNoMove(UpArrow[0]+5,UpArrow[1]+5);
                 lsSleep(200);
                 srReadScreen();
+                FirstLure = FindLureNameFirst();
+                LastLure=FindLureNameLast();
             end
 
-            LastLure= Lures[lureCounter-1];
-            FirstLure= Lures[0];
         else
             --No Arrows on lure menu?
-            FirstLure= Lures[0];
+            FirstLure = FindLureNameFirst();
             LastLure=nil;
         end
 
         if not muteSoundEffects then
             lsPlaySound("moneycounter.wav");
         end
+
+
     else
         error("Didn\'t find Lures pinned window - Self Click->Skills, Fishing -> Use Lure, PIN THIS WINDOW!");
     end
@@ -189,7 +187,7 @@ function SetupLureGroup()
         ChangeLureMenu = LastLure;
 
         FirstLurLoc = findText(FirstLure);
-        LastLurLoc = findText(Lures[lureCounter-1]);
+        LastLurLoc = findText(LastLure);
 
         lureCounter = 0;
         for i = 1, #Lures,1 do
@@ -197,7 +195,8 @@ function SetupLureGroup()
             if test then
                 --Add Lure
                 lureCounter = lureCounter + 1;
-                statusScreen("Indexing Lures [" .. lureCounter .. "] ...",nil, 0.7, 0.7);
+                statusScreen("Indexing Lures [" .. lureCounter .. "]\n" .. Lures[i],nil, 0.7, 0.7);
+                lsSleep(100);
                 table.insert(TLures,Lures[i]);
                 if Lures[i] == LastLure then
                     --End of Menu, Use Down Arrow
@@ -219,6 +218,7 @@ function SetupLureGroup()
         UpArrow = srFindImageInRange("Fishing/Menu_UpArrow.png",FindPin[0]-10,FindPin[1],50,50);
         if UpArrow then
             srClickMouseNoMove(UpArrow[0]+5,UpArrow[1]+5);
+            lsSleep(200);
         end
 
     else
@@ -229,6 +229,7 @@ function SetupLureGroup()
             if test then
                 lureCounter = lureCounter + 1;
                 statusScreen("Indexing Lures [" .. lureCounter .. "]\n" .. Lures[i],nil, 0.7, 0.7);
+                lsSleep(100);
                 table.insert(TLures,Lures[i]);
             end
         end
@@ -238,8 +239,8 @@ function SetupLureGroup()
 end
 
 
-function FindLureName()
-    for i = 1, #Lures, 1 do
+function FindLureNameFirst()
+    for i = 1, #Lures, 1 do -- start from first line
         Lure = findText(Lures[i]);
         if Lure then
             return Lures[i]
@@ -247,6 +248,14 @@ function FindLureName()
     end
 end
 
+function FindLureNameLast()
+    for i = #Lures, 1, -1 do -- start from last line
+        Lure = findText(Lures[i]);
+        if Lure then
+            return Lures[i]
+        end
+    end
+end
 
 function UseLure()
     checkBreak();

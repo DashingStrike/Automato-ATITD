@@ -6,6 +6,7 @@
 -- Lures: Lure Name (Use Lure Menu)
 -- Chat_Types: Unique messages to perform a specific routine
 
+-- The {Lures} list should be in alphabetical order for proper operation
 
 Lures = {
 "Ash Centipede",
@@ -56,7 +57,7 @@ Lures = {
 "White Mealybug",
 "White Sawfly",
 "Woodmoth",
-"Wolly Aphid",
+"Woolly Aphid",
 };
 
 
