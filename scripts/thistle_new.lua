@@ -265,9 +265,6 @@ end
 function main()
 	finish_up = nil;
 	abort = nil;
-
-	drawWater(1);
-
 	srReadScreen();	
 	window_locs = findAllImages("ThisIs.png");
 	rainBarrel = findText("Rain Barrel");
@@ -296,7 +293,7 @@ function main()
 		-- clickAll("ThisIs.png", 1);
 		-- lsSleep(100);
 		
-		srReadScreen();
+		-- srReadScreen();
 		
 		-- clickAllComplex({"Harvest.png"}, 1);
 		-- error 'done';
@@ -356,6 +353,7 @@ function main()
 		lsSleep(500);
 		
 		drawWater(1);
+		lsSleep(200);
 		
 		if abort then
 			break;
