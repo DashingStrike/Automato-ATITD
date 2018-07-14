@@ -48,9 +48,9 @@ function clickAll(image_name, up)
 	local buttons = findAllImages(image_name);
 	
 	if #buttons == 0 then
-		statusScreen("Could not find " .. image_name, nil, 0.7, 0.7);
+		statusScreen("Could not find " .. image_name);
 	else
-		statusScreen("Clicking " .. #buttons .. "button(s)...", nil, 0.7, 0.7);
+		statusScreen("Clicking " .. #buttons .. "button(s)...");
 		if up then
 			for i=#buttons, 1, -1  do
 				srClickMouseNoMove(buttons[i][0]+2, buttons[i][1]+2);
@@ -62,7 +62,7 @@ function clickAll(image_name, up)
 				lsSleep(per_click_delay);
 			end
 		end
-		statusScreen("Done clicking (" .. #buttons .. " clicks).", nil, 0.7, 0.7);
+		statusScreen("Done clicking (" .. #buttons .. " clicks).");
 		lsSleep(150);
 	end
 end
@@ -75,23 +75,22 @@ function doit()
 	local num_rounds;
 	num_rounds = promptNumber("How many thermos?", 1);
 	askForWindowAndPixel("                        Pin up the 'Start Making' menu. Make sure your chat is minimized! Click in ATITD, hover your mouse over the glory hole and push shift.  Ensure your heater control is set to Standard.");
-	sleepWithStatus(5000, "Preparing to start macro!\n\nDon\'t touch mouse, EVER, while running!\n\nAre you sure chat is minimized?\n\nNow is your chance to Abort if not...", nil, 0.7, 0.7);
 	for i = 1, num_rounds do
 		status = "";
 		checkBreak();
 		clickAll("Thermometer.png", true);
 		lsSleep(100);
 		srSetMousePos(mouse_x, mouse_y);
+		statusScreen("Please be patient, the macro is sending keys to the glory hole",nil, 0.7, 0.7);
 		for j = 1, string.len(recipe) do
 			--recipe time
             checkBreak();
             local currKey = string.sub(recipe, j, j);
-            srSetMousePos(mouse_x, mouse_y);
             srKeyEvent(currKey);
             status = status .. currKey;
 			lsSleep(keyDelay);
 
-            statusScreen("[" .. i .. "/" .. num_rounds .. "] Thermometer(s)\n\nPlease be patient; Don\'t touch mouse!\n\nSending keystrokes to the glory hole...\n\n" .. status,nil, 0.7, 0.7);
+            statusScreen("Please be patient, the macro is sending keys to the glory hole\n\n" .. status,nil, 0.7, 0.7);
 
 		end
 		lsSleep(keyDelay);
