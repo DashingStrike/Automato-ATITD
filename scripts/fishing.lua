@@ -196,7 +196,7 @@ function SetupLureGroup()
                 --Add Lure
                 lureCounter = lureCounter + 1;
                 statusScreen("Indexing Lures [" .. lureCounter .. "]\n" .. Lures[i],nil, 0.7, 0.7);
-                lsSleep(100);
+                lsSleep(50);
                 table.insert(TLures,Lures[i]);
                 if Lures[i] == LastLure then
                     --End of Menu, Use Down Arrow
@@ -229,7 +229,7 @@ function SetupLureGroup()
             if test then
                 lureCounter = lureCounter + 1;
                 statusScreen("Indexing Lures [" .. lureCounter .. "]\n" .. Lures[i],nil, 0.7, 0.7);
-                lsSleep(100);
+                lsSleep(50);
                 table.insert(TLures,Lures[i]);
             end
         end
@@ -776,6 +776,7 @@ function doit()
 
             --Cast
             checkBreak();
+            ignoreChat = nil;
             castWait = 0;
             findchat();
             lastLineFound = lastLineParse; -- Record last line before casting
@@ -796,7 +797,18 @@ function doit()
                 if not muteSoundEffects and castWait/1000 > 2.5 and castWait/1000 < 2.7 then
                     lsPlaySound("fishingreel.wav");
                 end
-                if (lastLineFound2 ~= lastLineParse2) or (lastLineFound ~= lastLineParse) or OK or ( (lsGetTimer() - startTime) > 20000 ) then
+
+
+            for k, v in pairs(Chat_Types) do
+                if string.find(lastLine, k, 0, true) then
+                    if (v == "alreadyfishing" or v == "isis1" or v == "isis2" or v == "isis3" or v == "isis4") then
+                        -- If we get a message regarding already fishing or a message from examining test of isis pieces, then ignore
+                        ignoreChat = 1
+                    end
+                end
+            end
+
+                if  ( (lastLineFound2 ~= lastLineParse2 or lastLineFound ~= lastLineParse) and not ignoreChat  ) or ( (lsGetTimer() - startTime) > 18000 ) then
                     lastCastWait = castWait;
                     break;
                 end
@@ -829,7 +841,7 @@ function doit()
             for k, v in pairs(Chat_Types) do
                 if string.find(lastLine, k, 0, true) then
 
-                    if v == "alreadyfishing" or OK then
+                    if v == "alreadyfishing" then
                         castcount = castcount - 1;
                         GrandTotalCasts = GrandTotalCasts - 1;
                     end

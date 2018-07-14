@@ -71,6 +71,10 @@ Chat_Types = {
 ["unusual fish"] = "unusual",
 ["lost your lure"] = "lostlure",
 ["Using a"] = "lure",
+["boat is damaged"] = "isis1",
+["rare artifact"] = "isis2",
+["fragment shines"] = "isis3",
+["uneasy feeling"] = "isis4",
 };
 
 
