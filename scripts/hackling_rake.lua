@@ -20,7 +20,7 @@ num_loops = 0;
 per_rake = 10;
 
 function promptRakeNumbers()
-	scale = 0.8;
+	scale = 1.0;
 	
 	local z = 0;
 	local is_done = nil;
@@ -42,12 +42,11 @@ function promptRakeNumbers()
 			0x000000ff, 1);
 		if not tonumber(num_flax) then
 			is_done = nil;
-			lsPrint(5, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+			lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
 			num_flax = 1;
 		end
-		y = y + 50;
-		improved_rake = CheckBox(10, y, z, 0xFFFFFFff, " Improved Rake", improved_rake);
-		lsSetCamera(0,0,lsScreenX/1.0,lsScreenY/1.0);
+		y = y + 32;
+		improved_rake = lsCheckBox(10, y, z, 0xFFFFFFff, "Improved Rake", improved_rake);
 		
 		if improved_rake then
 			per_rake = 30;
@@ -61,7 +60,7 @@ function promptRakeNumbers()
 			end
 		y = y + 32;
 
-		if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Next") then
+		if lsButtonText(170, y+32, z, 100, 0xFFFFFFff, "OK") then
 			is_done = 1;
 		end
 
@@ -96,11 +95,11 @@ function doit()
 	local tow = 0;
 	local lint = 0;
 	local clean = 0;
-	local startTime = lsGetTimer();
 
 	
 	while num_loops do
 		checkBreak();
+		lsSleep(250);
 		srReadScreen();
 		stats_black2 = nil;
 		stats_black3 = nil;
@@ -140,18 +139,20 @@ function doit()
 		end
 		
 		if not stats_black and not stats_black2 and not stats_black3 then
-			sleepWithStatus(100, "Next Step: " .. step .. "/4 - " .. task_text .. "\n\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. num_loops*per_rake .. "\n2) Tow Seperated: " .. tow .. "/" .. num_loops*per_rake .. "\n3) Lint Refined: " .. lint .. "/" .. num_loops*per_rake .. "\n4) Cleanings: " .. clean .. "/" .. num_loops .. "\n----------------------------------------------\n\nFlax Processed: " .. (loop_count-1)*per_rake .. "\nFlax Remaining: " .. math.floor(num_flax - ((loop_count-1)*per_rake)) .. "\n\nElapsed Time: " .. getElapsedTime(startTime) .. "\n" .. warning, nil, 0.7, 0.7);
+			sleepWithStatus(1200, "Next Step: " .. step .. "/4 - " .. task_text .. "\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. num_loops*per_rake .. "\n2) Tow Seperated: " .. tow .. "/" .. num_loops*per_rake .. "\n3) Lint Refined: " .. lint .. "/" .. num_loops*per_rake .. "\n4) Cleanings: " .. clean .. "/" .. num_loops .. "\n----------------------------------------------\nFlax Processed: " .. (loop_count-1)*per_rake .. "\nFlax Remaining: " .. num_flax - ((loop_count-1)*per_rake) .. "\n" .. warning);
 		elseif loop_count > num_loops then
 			num_loops = nil;
 		else
 			
 			srReadScreen();
+			lsSleep(50);
 			clickAllText("This Is");
-			lsSleep(100);
+			lsSleep(200);
 		
 			srReadScreen();
+			lsSleep(50);
 			clickAllText(task);
-			lsSleep(100);
+			lsSleep(200);
 			if step == 1 then
 				straw = straw + per_rake;
 			elseif step == 2 then
@@ -165,17 +166,26 @@ function doit()
 				loop_count= loop_count +1;
 			end
 			step = step + 1;
-			statusScreen("Timer Expired - Clicking window(s)\n\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. num_loops*per_rake .. "\n2) Tow Seperated: " .. tow .. "/" .. num_loops*per_rake .. "\n3) Lint Refined: " .. lint .. "/" .. num_loops*per_rake .. "\n4) Cleanings: " .. clean .. "/" .. num_loops .. "\n----------------------------------------------\n\nFlax Processed: " .. (loop_count-1)*per_rake .. "\nFlax Remaining: " .. math.floor(num_flax - ((loop_count-1)*per_rake)) .. "\n\nElapsed Time: " .. getElapsedTime(startTime) .. "\n" .. warning, nil, 0.7, 0.7);
+			sleepWithStatus(300, "Refreshing screen");
 			
 			srReadScreen();
+			lsSleep(50);
 			clickAllText("This Is");
-			lsSleep(100);
+			lsSleep(200);
 		end
 
 end
 
-		lsPlaySound("Complete.wav");
-		lsMessageBox("Elapsed Time:", getElapsedTime(startTime));
+		while num_loops == nil do
+--We're done now, but keep Window open so player can review stats (in case they were afk).
+		statusScreen("ALL DONE!\n----------------------------------------------\n1) Straw Removed: " .. straw .."/" .. clean*10 .. "\n2) Tow Seperated: " .. tow .. "/" .. clean*10 .. "\n3) Lint Refined: " .. lint .. "/" .. clean*10 .. "\n4) Cleanings: " .. clean .. "/" .. clean .. "\n----------------------------------------------\nFlax Processed: " .. (loop_count-1)*10 .. "\nFlax Remaining: " .. num_flax - ((loop_count-1)*10) .. "\n\nYou may End Script now...");
+
+
+		checkBreak();
+		lsSleep(500);
+		end
+
+
 end
 
 
