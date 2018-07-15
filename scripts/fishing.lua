@@ -393,7 +393,7 @@ function findchat()
         checkBreak();
         srReadScreen();
         chatText = getChatText();
-        sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of chat!\n\nCurrently we only see " .. #chatText .. " lines ...", nil, 0.7, 0.7);
+        sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of chat!\n\nCurrently we only see " .. #chatText .. " lines ...\n\nYou can also type something in main chat to bypass this error!", nil, 0.7, 0.7);
     end
 
 
@@ -705,6 +705,9 @@ function doit()
         srReadScreen();
         cast = srFindImage("fishicon.png");
         OK = srFindImage("OK.png");
+        if ignoreOK then
+          OK = nil;  -- We got a popup box while examining isis ship pieces recently, prevent potential reindexing lures (No lure found, refreshing.. Below)
+        end
         lsSleep(100)
 
         if not cast then
@@ -740,7 +743,7 @@ function doit()
 
             if OK then
                 srClickMouseNoMove(OK[0]+5,OK[1]+3);  -- Close the popup OK button
-                sleepWithStatus(500,"No " .. QCurrentLure .. " lure found!\nRefreshed lure list ...")
+                sleepWithStatus(1500,"No " .. QCurrentLure .. " lure found!\nRefreshing lure list ...", nil, 0.7, 0.7)
                 PlayersLures = SetupLureGroup();
                 if QCurrentLureIndex  > #PlayersLures or QCurrentLureIndex == 1 then
                     QCurrentLureIndex = 2;
@@ -776,21 +779,20 @@ function doit()
 
             --Cast
             checkBreak();
-            ignoreChat = nil;
             castWait = 0;
             findchat();
             lastLineFound = lastLineParse; -- Record last line before casting
             lastLineFound2 = lastLineParse2; -- Record next to last line before casting
             srClickMouseNoMove(cast[0]+3,cast[1]+3);
             startTime = lsGetTimer();
-            lsSleep(100);
+            ignoreOK = nil;
 
 
             while 1 do
                 findchat();
                 OK = srFindImage("OK.png");
+                skipOkOnce = nil; -- Helps prevent premature break, from OK box while checking Isis ship debris
                 lsSleep(100);
-                checkBreak();
                 castWait = (lsGetTimer() - startTime);
                 gui_refresh();
 
@@ -798,21 +800,25 @@ function doit()
                     lsPlaySound("fishingreel.wav");
                 end
 
-
-            for k, v in pairs(Chat_Types) do
-                if string.find(lastLine, k, 0, true) then
-                    if (v == "alreadyfishing" or v == "isis1" or v == "isis2" or v == "isis3" or v == "isis4") then
-                        -- If we get a message regarding already fishing or a message from examining test of isis pieces, then ignore
-                        ignoreChat = 1
-                    end
+                for k, v in pairs(Ignore_List) do
+                  if string.find(lastLine, k, 0, true) then
+                        -- If we get a message in chat regarding already fishing or a message from examining test of isis ship pieces, then ignore
+                        -- This causes a short OK popup "Examining Relic", but then closes by itself. We don't want to confuse this for a popup from missing lure; ignore
+                        lastLineFound = lastLineParse; -- Re-Record last line (with new message)
+                        lastLineFound2 = lastLineParse2; -- Re-Record next to last line (with new message)
+                        ignoreOK = 1;
+                  end
                 end
-            end
 
-                if  ( (lastLineFound2 ~= lastLineParse2 or lastLineFound ~= lastLineParse) and not ignoreChat  ) or ( (lsGetTimer() - startTime) > 18000 ) then
+                if OK then
+                  skipOkOnce = 1; -- Prevents a premature break below from OK box while Examining Isis ship pieces, until next loop. Give a chance for ignoreOK to get recognized
+                end
+
+                if (lastLineFound2 ~= lastLineParse2 or lastLineFound ~= lastLineParse) or (OK and not ignoreOK and not skipOkOnce) or ( (lsGetTimer() - startTime) > 18000 ) then
                     lastCastWait = castWait;
                     break;
                 end
-            end
+            end -- end while 1 do
 
             castcount = castcount + 1;
             GrandTotalCasts = GrandTotalCasts + 1;
@@ -834,18 +840,11 @@ function doit()
                         lastLine = lastLine2;
                         lastLineParse = lastLineParse2;
                     end
-                end
-            end
 
-
-            for k, v in pairs(Chat_Types) do
-                if string.find(lastLine, k, 0, true) then
-
-                    if v == "alreadyfishing" then
+                    if v == "alreadyfishing" or (OK and not ignoreOK) then
                         castcount = castcount - 1;
                         GrandTotalCasts = GrandTotalCasts - 1;
                     end
-
 
                     if v == "lostlure" then
                         if not muteSoundEffects then

@@ -70,11 +70,15 @@ Chat_Types = {
 ["strange fish"] = "strange",
 ["unusual fish"] = "unusual",
 ["lost your lure"] = "lostlure",
-["Using a"] = "lure",
+};
+
+
+Ignore_List = {
 ["boat is damaged"] = "isis1",
 ["rare artifact"] = "isis2",
 ["fragment shines"] = "isis3",
 ["uneasy feeling"] = "isis4",
+["You are already fishing"] = "alreadyfishing",
 };
 
 
