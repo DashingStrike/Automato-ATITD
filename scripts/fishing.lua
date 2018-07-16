@@ -38,11 +38,13 @@
 
 dofile("common.inc");
 dofile("Fishing_Func.inc");
+dofile("settings.inc");
 
 
 SNum = 0;
 Sfish = "";
 muteSoundEffects = false;
+TotalCasts = 5;
 
 -- Additional reporting in the log file
 -- Choose true or false.
@@ -65,15 +67,15 @@ function setOptions()
 
         lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);  -- Shrink the text boxes and text down
         lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Casts per Lure?");
-        is_done, TotalCasts = lsEditBox("totalcasts", 140, y, 0, 40, 25, 1.0, 1.0, 0x000000ff, 5);
+        TotalCasts = readSetting("TotalCasts",TotalCasts);
+        is_done, TotalCasts = lsEditBox("totalcasts", 140, y, 0, 40, 25, 1.0, 1.0, 0x000000ff, TotalCasts);
         TotalCasts = tonumber(TotalCasts);
         if not TotalCasts then
             is_done = false;
             lsPrint(190, y+2, 10, 0.7, 0.7, 0xFF2020ff, "<- MUST BE A NUMBER");
             TotalCasts = 5;
         end
-
-
+        writeSetting("TotalCasts",TotalCasts);
         lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
         y = y + 25;
         lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Casts per Lure?  # Casts before switching lures.");
@@ -91,10 +93,14 @@ function setOptions()
         lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);  -- Shrink the check boxes and text down
         y = y + 80;
 
+        muteSoundEffects = readSetting("muteSoundEffects",muteSoundEffects);
         muteSoundEffects = lsCheckBox(10, y, 10, 0xFFFFFFff, " Mute Sound Effects", muteSoundEffects);
+        writeSetting("muteSoundEffects",muteSoundEffects);
 
         y = y + 25;
+        SkipCommon = readSetting("SkipCommon",SkipCommon);
         SkipCommon = lsCheckBox(10, y, 10, 0xFFFFFFff, " Skip Common Fish", SkipCommon);
+        writeSetting("SkipCommon",SkipCommon);
         y = y + 30;
         lsPrintWrapped(10, y, 0, lsScreenX + 82, 0.7, 0.7, 0xffff80ff, "If Common Fish Caught, immediately switch to next lure:");
         y = y + 18
@@ -102,16 +108,22 @@ function setOptions()
         y = y + 40;
         lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.8, 0.8, 0x80ff80ff, "Log entries recorded to FishLog.txt in Automato/games/ATITD folder.");
         y = y + 45;
+        LogFails = readSetting("LogFails",LogFails);
         LogFails = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Failed Catches (Log Everything)", LogFails);
+        writeSetting("LogFails",LogFails);
 
         if LogFails then
             LogStrangeUnusual = false;
             LogOdd = false;
         else
             y = y + 25;
+            LogStrangeUnusual = readSetting("LogStrangeUnusual",LogStrangeUnusual);
             LogStrangeUnusual = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Strange & Unusual Fish Seen ...", LogStrangeUnusual);
+            writeSetting("LogStrangeUnusual",LogStrangeUnusual);
             y = y + 25;
+            LogOdd = readSetting("LogOdd",LogOdd);
             LogOdd = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Odd Fish Seen ...", LogOdd);
+            writeSetting("LogOdd",LogOdd);
             lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
 
             y = y + 25;
@@ -393,8 +405,9 @@ function findchat()
         checkBreak();
         srReadScreen();
         chatText = getChatText();
-        sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of chat!\n\nCurrently we only see " .. #chatText .. " lines ...\n\nYou can also type something in main chat to bypass this error!", nil, 0.7, 0.7);
+        sleepWithStatus(500, "Error: We must be able to read at least the last 2 lines of chat!\n\nCurrently we only see " .. #chatText .. " lines ...\n\nYou can also type something in main chat or manually fish, once or twice, to bypass this error!", nil, 0.7, 0.7);
     end
+
 
 
     --Read last line in chat
@@ -791,6 +804,7 @@ function doit()
             while 1 do
                 findchat();
                 OK = srFindImage("OK.png");
+                noWriteLog = nil;
                 skipOkOnce = nil; -- Helps prevent premature break, from OK box while checking Isis ship debris
                 lsSleep(100);
                 checkBreak();
@@ -801,13 +815,14 @@ function doit()
                     lsPlaySound("fishingreel.wav");
                 end
 
-                for k, v in pairs(Ignore_List) do
+                for k, v in pairs(Isis_List) do
                   if string.find(lastLine, k, 0, true) then
-                        -- If we get a message in chat regarding already fishing or a message from examining test of isis ship pieces, then ignore
+                        -- If we get a message in chat from examining test of isis ship pieces, then ignore message and ignore popup box
                         -- This causes a short OK popup "Examining Relic", but then closes by itself. We don't want to confuse this for a popup from missing lure; ignore
                         lastLineFound = lastLineParse; -- Re-Record last line (with new message)
                         lastLineFound2 = lastLineParse2; -- Re-Record next to last line (with new message)
                         ignoreOK = 1;
+                        noWriteLog = 1;
                   end
                 end
 
@@ -815,7 +830,17 @@ function doit()
                   skipOkOnce = 1; -- Prevents a premature break below from OK box while Examining Isis ship pieces, until next loop. Give a chance for ignoreOK to get recognized
                 end
 
-                if (lastLineFound2 ~= lastLineParse2 or lastLineFound ~= lastLineParse) or (OK and not ignoreOK and not skipOkOnce) or ( (lsGetTimer() - startTime) > 18000 ) then
+                for k, v in pairs(Ignore_List) do
+                  if string.find(lastLine, k, 0, true) or not string.find(lastLine, "^%*%*", 0) then
+                        -- If we get a message defined in Ignore_List (already fishing, item is from a forge, or no ** (player is speaking in main chat), then ignore
+                        lastLineFound = lastLineParse; -- Re-Record last line (with new message)
+                        lastLineFound2 = lastLineParse2; -- Re-Record next to last line (with new message)
+                        noWriteLog = 1;
+                  end
+                end
+
+
+                if (lastLineFound2 ~= lastLineParse2 or lastLineFound ~= lastLineParse) or (OK and not ignoreOK and not skipOkOnce) or ( (lsGetTimer() - startTime) > 20000 ) then
                     lastCastWait = castWait;
                     break;
                 end
@@ -919,7 +944,7 @@ function doit()
                 GrandTotalFailed = GrandTotalFailed + 1;
             end
 
-            if v == "lure" or v == "alreadyfishing" then
+            if v == "lure" or v == "alreadyfishing" or noWriteLog or not string.find(lastLine, "^%*%*", 0) then
             -- Do nothing
             elseif LogFails or caughtFish or oddFound or strangeUnusualFound then
                 WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. lastLineParse .. "\n");

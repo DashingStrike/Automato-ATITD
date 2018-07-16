@@ -73,12 +73,19 @@ Chat_Types = {
 };
 
 
-Ignore_List = {
+Isis_List = {
 ["boat is damaged"] = "isis1",
 ["rare artifact"] = "isis2",
 ["fragment shines"] = "isis3",
 ["uneasy feeling"] = "isis4",
+};
+
+
+Ignore_List = {
 ["You are already fishing"] = "alreadyfishing",
+["is ready"] = "forgecb",
+["fillet a fish"] = "fillet",
+["move"] = "move",
 };
 
 
