@@ -377,7 +377,7 @@ function config()
     dropdown_cur_value_canopy = lsDropdown("thisCanopy", 15, y, 0, 320, dropdown_cur_value_canopy, dropdown_values_canopy);
     writeSetting("dropdown_cur_value_canopy",dropdown_cur_value_canopy);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-    y = y + 50;
+    y = y + 30;
     lsPrint(15, y+5, 0, 0.8, 0.8, 0xffffffff, "How many passes?");
     is_done, num_loops = lsEditBox("num_loops", 190, y, 0, 50, 30, 1.0, 1.0,
                                      0x000000ff, 1);
@@ -399,7 +399,9 @@ function config()
          expected_gardens = 1;
        end
     writeSetting("expected_gardens",expected_gardens);
-    lsPrintWrapped(10, 190, z, lsScreenX - 20, 0.65, 0.65, 0x40ffffff, "Current Farm: " .. loadedFarm .. "\nRecipe File: " .. convertFarmName2FileName(loadedFarm) ..
+
+    lsPrintWrapped(10, 153, z, lsScreenX - 20, 0.65, 0.65, 0xffff80FF, "Real Time Required:      " .. convertTime(410000*num_loops) .. "\nEgypt Time Required:    " .. convertTime(410000*3* num_loops) .. "\nThistle Yield Expected:  " .. (5*num_loops*expected_gardens));
+    lsPrintWrapped(10, 210, z, lsScreenX - 20, 0.65, 0.65, 0x40ffffff, "Current Farm: " .. loadedFarm .. "\nRecipe File: " .. convertFarmName2FileName(loadedFarm) ..
     "\n\nWe are ready to start making thistles, with this farm\'s recipe! Click Start button to proceed ..."); 
 
     if lsButtonText(lsScreenX - 110, lsScreenY - 60, 0, 100, 0xFFFFFFff, "Back") then
@@ -916,4 +918,16 @@ function explode(d,p)
       end
    end
    return t
+end
+
+function convertTime(ms)
+	local duration = math.floor(ms / 1000);
+	local hours = math.floor(duration / 60 / 60);
+	local minutes = math.floor((duration - hours * 60 * 60) / 60);
+	local seconds = duration - hours * 60 * 60 - minutes * 60;
+      if hours > 0 then
+	  return string.format("%02dh %02dm %02ds",hours,minutes,seconds);
+      else
+	  return string.format("%02dm %02ds",minutes,seconds);
+      end
 end
