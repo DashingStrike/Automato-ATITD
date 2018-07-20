@@ -243,7 +243,7 @@ function doit()
 		end
 		lsShowScreengrab(0xFFFFFF80);
 		displayMines(trait);
-		lsScrollAreaBegin("ResultsScroll", 0, 100, -10, lsScreenX - 50, lsScreenY - 50)
+		lsScrollAreaBegin("ResultsScroll", 0, 100, 0, lsScreenX - 50, lsScreenY - 50)
 		for i=1, #sets do
 			lsPrint(0, (i-1)*20, 3, 1, 1, 0xFFFFFFff, set_to_string(sets[i]));
 		end	
