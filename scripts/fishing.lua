@@ -665,7 +665,7 @@ end
 
 function doit()
 
-    askForWindow("Fishing v2.0.6 (by Tutmault, revised by KasumiGhia, Cegaiel, and Skyfeather)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nPin up Lures Menu (Self, Skills, Fishing, Use Lures). No other pinned menus can exist! History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window! Ensure that your chat displays timestamps");
+    askForWindow("Fishing v2.0.6 (by Tutmault, revised by KasumiGhia, Cegaiel, and Skyfeather)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nRequired: Pin Lures Menu (Self, Skills, Fishing, Use Lures). History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nOptional: Pin Fillet Menu (Self, Skills, Fishing, Fillet). 'All Fish' will be clicked after each caught fish (empty windows are refreshed).\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window! Ensure that your chat displays timestamps");
 
     ----------------------------------------
     --Variables Used By Program -- Don't Edit Unless you know what you're doing!
@@ -930,6 +930,8 @@ function doit()
                         --lsPlaySound("applause.wav");
                         --end
                         --end
+
+                        filletFish();  -- Search for "All Fish" pinned up. If so, fillet.
                     end
 
                     --Add more if v == "something" then statements here if needed
@@ -963,4 +965,22 @@ end
 function round(num, numDecimalPlaces)
     local mult = 10^(numDecimalPlaces or 0)
     return math.floor(num * mult + 0.5) / mult
+end
+
+
+function filletFish()
+  -- Pin your Skills, Fishing, Fillet menu, and we will fillet fish every catch (so they don't go rotten). You need to have at least 1 whole fish in inventory for this menu to appear!
+  srReadScreen();
+  emptyWindow = srFindImage("WindowEmpty.png");
+  fillet = findText("All Fish");
+
+  if emptyWindow then
+    --refresh any empty windows; just in case a previous fillet All Fish caused window to become empty
+    clickAllImages("WindowEmpty.png", 5, 5, nil, nil);
+    lsSleep(150);
+  end
+
+  if fillet then
+    clickAllText("All Fish");
+  end
 end
