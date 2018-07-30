@@ -480,12 +480,12 @@ function doit()
 
 			  lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
 			  if maintainHeatNoCook then
-			    maintainHeatNoCook = lsCheckBox(200, lsScreenY - 120, 10, 0xFFFF00ff, " Suspend Cooking", maintainHeatNoCook);
+			    maintainHeatNoCook = lsCheckBox(200, 250, 10, 0xFFFF00ff, " Suspend Cooking", maintainHeatNoCook);
 			  else
-			    maintainHeatNoCook = lsCheckBox(200, lsScreenY - 120, 10, 0xFFFFFFff, " Suspend Cooking", maintainHeatNoCook);
+			    maintainHeatNoCook = lsCheckBox(200, 250, 10, 0xFFFFFFff, " Suspend Cooking", maintainHeatNoCook);
 			  end
-			    showTicks = lsCheckBox(200, 260, 10, 0xFFFFFFff, " Display Ticks/HV/DV", showTicks);
-			    writeLogs = lsCheckBox(200, 290, 10, 0xFFFFFFff, " Write Log File", writeLogs);
+			    showTicks = lsCheckBox(200, 280, 10, 0xFFFFFFff, " Display Ticks/HV/DV", showTicks);
+			    writeLogs = lsCheckBox(200, 310, 10, 0xFFFFFFff, " Write Log File", writeLogs);
 			  lsSetCamera(0,0,lsScreenX*1.1,lsScreenY*1.1);
 
 
