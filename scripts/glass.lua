@@ -260,6 +260,8 @@ function glassTick(window_pos, state)
 		  state.status = state.status .. " (LastSpikeUnknown-CookingPausedWhileSpiking)";
 		elseif not cookDuringSpike and (state.spiking or state.want_spike) then
 		  state.status = state.status .. " (SpikeWillOverHeat-CookingPausedWhileSpiking)";
+		elseif temp >= (1600 - state.HV + state.DV) and temp <= (2399 - state.HV) then
+		  state.status = state.status .. " (TempOutOfRange)";
 		else
 		  state.status = state.status .. " (NothingCooking)";
 		end
