@@ -4,7 +4,8 @@
 dofile("common.inc");
 
 per_click_delay = 20;
-
+min_quality = 3500;
+autoUnload = true;
 
 up = nil;
 right_click = nil;
@@ -76,51 +77,81 @@ function doit()
 	local num_rounds;
 	local keystrokes;
 	num_rounds = 1; -- promptNumber("How many coils?", 1);
-	askForWindowAndPixel("                        Pin up the 'Start Making' menu. Make sure your chat is minimized! Click in ATITD, hover your mouse over the glory hole and push shift.  Ensure your heater control is set to Pinpoint.");
+	askForWindowAndPixel("\n\nPin up the 'Start Making' menu.\n\nMake sure your chat is minimized!\nMinimized chat-channels are still visible (Options, Chat-related, CHECKED)\n\nClick in ATITD, HOVER your mouse OVER the glory hole, THEN press Shift key.\n\nEnsure your heater control is set to Pinpoint.");
+	config();
+	clickAll("WindowEmpty.png"); -- Refresh any empty windows
+	lsSleep(100);
+	srReadScreen();
+	coil = srFindImage("DistillationCoil.png")
+	if not coil then
+	  error('No match on screen for DistillationCoil.png\nDo you have Start Making menu pinned?');
+	end
 	sleepWithStatus(5000, "Preparing to start macro!\n\nDon\'t touch mouse, EVER, while running!\n\nAre you sure chat is minimized?\n\nNow is your chance to Abort if not...", nil, 0.7, 0.7);
+
 	for i = 1, num_rounds do
+		abort = nil;
+		quality = 0;
 		keystrokes = 0;
 		status = "";
 		checkBreak();
+		clickAll("WindowEmpty.png"); -- Refresh any empty windows
+		clickAll("Ok.png"); -- Close any previous popups
 		clickAll("DistillationCoil.png", true);
-		lsSleep(100);
+		lsSleep(60);
+		srSetMousePos(mouse_x, mouse_y);
+		lsSleep(60);
+		srKeyEvent("q");
+		lsSleep(75);
+
 		for j = 1, string.len(recipe) do
 			--recipe time
-            local currKey = string.sub(recipe, j, j);
-            srSetMousePos(mouse_x, mouse_y);
-            if currKey == "w" then
-                lsSleep(998);
-                srKeyEvent("q");
-                --status = status .. "q";
-            elseif currKey == "d" then
-                lsSleep(249);
-                srKeyEvent("q");
-                --status = status .. "q";
-            elseif currKey == "p" then
-                lsSleep(125);
-                srKeyEvent("q");
-                --status = status .. "q";
-            elseif currKey == "i" then
-                lsSleep(75);
-            else
-                srKeyEvent(currKey);
-                status = status .. currKey;
-                keystrokes = keystrokes + 1;
-                if currKey ~= "a" then
-                    srKeyEvent("q");
-                	--status = status .. "q";
-                end
-            end
+	            local currKey = string.sub(recipe, j, j);
+	            srSetMousePos(mouse_x, mouse_y);
+	            if currKey == "w" then
+	                lsSleep(998);
+	                srKeyEvent("q");
+	                --status = status .. "q";
+	            elseif currKey == "d" then
+	                lsSleep(249);
+	                srKeyEvent("q");
+	                --status = status .. "q";
+	            elseif currKey == "p" then
+	                lsSleep(125);
+	                srKeyEvent("q");
+	                --status = status .. "q";
+	            elseif currKey == "i" then
+	                lsSleep(75);
+	            else
+	                srKeyEvent(currKey);
+	                status = status .. currKey;
+	                keystrokes = keystrokes + 1;
+	                if currKey ~= "a" then
+	                    srKeyEvent("q");
+	                	--status = status .. "q";
+	                end
+	            end
 
-		statusScreen("[" .. keystrokes .. "/" .. recipeLen .. "] Keystrokes remaining\n\nPlease be patient; Don\'t touch mouse!\n\nSending keystrokes to the glory hole...\n\n" .. status, nil, 0.7, 0.7);
+	            chatRead();
 
-            
-			--lsSleep(keyDelay);
+	            if lsShiftHeld() or abort then
+	              if autoUnload then
+	                unLoad();
+	              end
+	            break;
+	            end
+
+	            statusScreen("[" .. keystrokes .. "/" .. recipeLen .. "] Keystrokes remaining\n\nPlease be patient; Don\'t touch mouse!\n\nSending keystrokes to the glory hole...\n\nNote: You can don\'t have to wait until macro is finished. If you see a good quality appear in main chat, then hold Shift Key to Unload and exit early!\n\n" .. status .. "\n\nQuality: " .. quality, nil, 0.7, 0.7);
+
 		end
 
-		while 1 do
+
+		while not autoUnload do
 		  checkBreak();
-		  sleepWithStatus(100,"Distillation Coil is done, however you need to manually [U]nload it.\n\nThis gives you an opportunity to keep checking quality or furthur fine tuning.", nil, 0.7, 0.7);
+		  sleepWithStatus(100,"Distillation Coil is done, however you need to manually [U]nload it.\n\nHold Shift key to Unload\n\nThis gives you an opportunity to keep checking quality or furthur fine tuning.", nil, 0.7, 0.7);
+		  if lsShiftHeld() then
+		    unLoad();
+		    break;
+		  end
 		end
 
 
@@ -130,4 +161,65 @@ function doit()
 	--	lsSleep(keyDelay);
 	--	clickAll("Ok.png");
 	end
+end
+
+
+function chatRead()
+    srReadScreen();
+    local chatText = getChatText();
+   --Read last line of chat and strip the timer ie [01m]+space from it.
+   lastLine = chatText[#chatText][2];
+   lastLineParse = string.sub(lastLine,string.find(lastLine,"m]")+3,string.len(lastLine));
+   if string.match(lastLineParse, "Quality") then
+     quality = string.match(lastLineParse, "(%d+)");
+     quality = tonumber(quality);
+      if quality >= min_quality then
+         abort = 1;
+      end
+   end
+end
+
+
+function config()
+    local is_done = false;
+    local count = 1;
+    while not is_done do
+        checkBreak();
+        local y = 10;
+        autoUnload = CheckBox(15, y, z, 0xffffffff, " Auto 'Unload' coil", autoUnload, 0.7, 0.7);
+
+        y = y + 35;
+
+        lsPrintWrapped(10, y, 0, lsScreenX - 20, 0.65, 0.65, 0xFFFFFFff,
+            "If macro detects quality = or > " .. min_quality .. " then it will abort early and stop at this quality.\n\nIf Auto Unload is checked, then it will also Unload the item.\n\nIf unchecked, then you will manually need to Hold Shift to unload. This will allow you to try to manually attempt to adjust the project furthur.");
+
+        y = y + 175;
+        lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Min Quality:");
+        is_done, min_quality = lsEditBox("min_quality", 125, y-3, 0, 70, 30, 1.0, 1.0,
+                                     0x000000ff, min_quality);
+        min_quality = tonumber(min_quality);
+        if not min_quality then
+          is_done = false;
+          lsPrint(10, y+32, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+          min_quality = 3500;
+        end
+
+        if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff,
+            "Start") then
+            is_done = 1;
+        end
+        if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
+            "End script") then
+            error('End Script button clicked');
+        end
+        lsDoFrame();
+        lsSleep(10);
+    end
+end
+
+function unLoad();
+  srSetMousePos(mouse_x, mouse_y);
+  lsSleep(60);
+  srKeyEvent("u");
+  lsSleep(60);
 end
