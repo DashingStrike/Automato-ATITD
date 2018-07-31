@@ -75,7 +75,12 @@ function doit()
 	local num_rounds;
 	local keystrokes;
 	num_rounds = promptNumber("How many thermos?", 1);
-	askForWindowAndPixel("                        Pin up the 'Start Making' menu. Make sure your chat is minimized! Click in ATITD, hover your mouse over the glory hole and push shift.  Ensure your heater control is set to Standard.");
+	askForWindowAndPixel("\n\nPin up the 'Start Making' menu.\n\nMake sure your chat is minimized!\n\nClick in ATITD, hover your mouse over the glory hole and press Shift key.\n\nEnsure your heater control is set to Standard.");
+	srReadScreen();
+	thermos = srFindImage("Thermometer.png")
+	if not thermos then
+	  error('No match on screen for Thermometer.png\nDo you have Start Making menu pinned?');
+	end
 	sleepWithStatus(5000, "Preparing to start macro!\n\nDon\'t touch mouse, EVER, while running!\n\nAre you sure chat is minimized?\n\nNow is your chance to Abort if not...", nil, 0.7, 0.7);
 	for i = 1, num_rounds do
 		keystrokes = 0;
