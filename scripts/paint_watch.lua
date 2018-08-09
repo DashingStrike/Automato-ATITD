@@ -7,7 +7,7 @@
 --Clay           | 128, 96, 32    | 4      | Y | bulk    | 20
 --DeadTongue     | 112, 64, 64    | 500    | N | normal  | 4
 --ToadSkin       | 48, 96, 48     | 500    | N | normal  | 4
---FalconBait     | 128, 240, 224  | 10000  | N | normal  | 4
+--EarthLight     | 128, 240, 224  | 10000  | N | normal  | 4
 --RedSand        | 144, 16, 24    | 10     | Y | bulk    | 20
 --Lead           | 80, 80, 96     | 50     | Y | normal  | 6
 --Silver         | 16, 16, 32     | 50     | N | normal  | 6
@@ -31,7 +31,7 @@ dofile("ui_utils.inc");
 dofile("common.inc");
 
 button_names = {
-"CabbageJ","Carrot","Clay","DeadTongue","ToadSkin","FalconBait","RedSand",
+"CabbageJ","Carrot","Clay","DeadTongue","ToadSkin","EarthLight","RedSand",
 "Lead","SilverP","Iron","Copper","C:Sulfur","C:potash","C:Lime","C:Saltpeter"}; 
 
 per_paint_delay_time = 1000;
@@ -199,6 +199,6 @@ function doit()
         end
 
         lsDoFrame();
-        lsSleep(10);
+        lsSleep(per_read_delay_time);
     end
 end
