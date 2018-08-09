@@ -4,11 +4,11 @@ dofile("settings.inc");
 COLOR_NAMES = {};
 
 INGREDIENT_NAMES = {
-"Cabbage","Carrot","Clay","DeadTongue","ToadSkin","EarthLight","RedSand",
+"Cabbage","Carrot","Clay","DeadTongue","ToadSkin","FalconBait","RedSand",
 "Lead","Silver","Iron","Copper","Sulfur","Potash","Lime","Saltpeter"};
 
 BUTTON_INDEX = {
-["Cabbage"]=1,["Carrot"]=2,["Clay"]=3,["DeadTongue"]=4,["ToadSkin"]=5,["EarthLight"]=6,["RedSand"]=7,
+["Cabbage"]=1,["Carrot"]=2,["Clay"]=3,["DeadTongue"]=4,["ToadSkin"]=5,["FalconBait"]=6,["RedSand"]=7,
 ["Lead"]=8,["Silver"]=9,["Iron"]=10,["Copper"]=11,["Sulfur"]=12,["Potash"]=13,["Lime"]=14,["Saltpeter"]=15};
 
 RED = 0xFF2020ff;
