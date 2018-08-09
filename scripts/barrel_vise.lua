@@ -250,4 +250,5 @@ function doit()
 		checkBreak();
 		-- error 'done';
 	end
+	lsPlaySound("Complete.wav");
 end
