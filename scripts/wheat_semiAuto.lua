@@ -227,6 +227,8 @@ lastPlantPos = null;
 function getPlantWindowPos()
   srReadScreen();
   local plantPos = findText(seedType);
+
+
   if plantPos then
     plantPos[0] = plantPos[0] + 20;
     plantPos[1] = plantPos[1] + 10;
@@ -280,8 +282,6 @@ function doit()
   if doMonitor then
     tendWheat();
   else
-    stashAllWindows(BOTTOM_RIGHT);
-    lsSleep(1000);
     setCameraView(CARTOGRAPHER2CAM);
     lsSleep(500);
     plantAndPin();
@@ -475,8 +475,6 @@ function tendWheat()
 
 
 	if ButtonText(10, lsScreenY - 30, z, 150, 0xFFFFFFff, "Plant New Grid", 0.8, 0.8) then
-	  stashAllWindows(BOTTOM_RIGHT);
-	  lsSleep(1000);
 	  setCameraView(CARTOGRAPHER2CAM);
 	  lsSleep(500);
 	  plantAndPin();
