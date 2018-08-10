@@ -11,6 +11,7 @@ dofile("common.inc");
 
 askText = "Helps running one or more Grain Ovens.\n\nThose buttons are tiny and difficult to click them all on multiple ovens.\n\nClick buttons on GUI Interface and it will click the same buttons on all of your ovens with one click.\n\nPin all grain oven windows. Be sure none overlap and no other windows partially cover the windows. Don\'t pin to close to the center where popups can occur.";
 
+windowManager("Grain Oven Setup");
 
 button_names = {
 "+ RW",
@@ -201,7 +202,8 @@ function doit()
 
 			if ButtonText(lsScreenX - 90, lsScreenY - 30, 0, 100, 0xFFFFFFff,
 		                    "End Script") then
-			error "Clicked End script button";
+				quit = 1;
+				unpinManager();
 			end
 
 			lsDoFrame();
@@ -342,8 +344,11 @@ function doit()
 			clickButtons();
 		end
 
-
-		end  --end for	
+		if quit == 1 then
+		  lsPlaySound("Complete.wav");
+		  break;
+		end
+		end  --end for
 end
 
 
