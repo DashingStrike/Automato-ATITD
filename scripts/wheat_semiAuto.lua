@@ -187,25 +187,28 @@ function promptFlaxNumbers()
     grid_w = tonumber(grid_w);
     grid_h = grid_w;
     y = y + 55;
+    if not config then
     lsPrintWrapped(5, y, z, lsScreenX - 10, 0.7, 0.7, 0xFFFFFFff, "Click 'Plant' button to Plant grid, pin windows and monitor. Note any leftover windows that died will be closed. Alive plant windows will NOT be closed.");
     y = y + 75;
+
+      if ButtonText(10, lsScreenY - 60, z, 100, 0xFFFFFFff, "Plant", 0.8, 0.8) then
+        is_done = 1;
+      end
+    end
     lsPrintWrapped(5, y, z, lsScreenX - 10, 0.7, 0.7, 0xFFFFFFff, "Click 'Monitor ' button to water/harvest existing pinned windows.");
     y = y + 36;
-    if ButtonText(10, lsScreenY - 60, z, 100, 0xFFFFFFff, "Plant", 0.8, 0.8) then
-      is_done = 1;
-    end
-
     if ButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Monitor", 0.8, 0.8) then
 	lsDoFrame();
       is_done = 1;
 	doMonitor = 1;
+	config = nil;
 	statusScreen("Initiating Monitor ...");
 	break;
     end
     y = y + 10
 
     if is_done and (not grid_w) then
-      error 'Canceled';
+      error 'Cancelled';
     end
 		
     if ButtonText(lsScreenX - 90, lsScreenY - 30, z, 100, 0xFFFFFFff,
@@ -227,8 +230,6 @@ lastPlantPos = null;
 function getPlantWindowPos()
   srReadScreen();
   local plantPos = findText(seedType);
-
-
   if plantPos then
     plantPos[0] = plantPos[0] + 20;
     plantPos[1] = plantPos[1] + 10;
@@ -282,6 +283,9 @@ function doit()
   if doMonitor then
     tendWheat();
   else
+    closeStashedWindows()
+    stashAllWindows(BOTTOM_RIGHT);
+    lsSleep(1000);
     setCameraView(CARTOGRAPHER2CAM);
     lsSleep(500);
     plantAndPin();
@@ -298,7 +302,6 @@ end
 
 function plantAndPin()
 
-  closeStashedWindows()
   local xyPlantFlax = getPlantWindowPos();
 		
   -- for spiral
@@ -475,6 +478,9 @@ function tendWheat()
 
 
 	if ButtonText(10, lsScreenY - 30, z, 150, 0xFFFFFFff, "Plant New Grid", 0.8, 0.8) then
+	  closeStashedWindows()
+	  stashAllWindows(BOTTOM_RIGHT);
+	  lsSleep(1000);
 	  setCameraView(CARTOGRAPHER2CAM);
 	  lsSleep(500);
 	  plantAndPin();
@@ -487,6 +493,7 @@ function tendWheat()
 	end
 
 	if ButtonText(lsScreenX-155, lsScreenY - 30, z, 90, 0xFFFFFFff, "Config", 0.8, 0.8) then
+	  config = 1;
 	  promptFlaxNumbers();
 	end
 
