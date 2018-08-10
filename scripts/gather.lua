@@ -180,7 +180,7 @@ WaypointTypes[Trilobellia] = "Trilobellia";
 
 WaypointColors = {};
 WaypointColors[Bonfire] = 1060316671;
-WaypointColors[Warehouse] = 1599225343;
+WaypointColors[Warehouse] = 2691905791;
 WaypointColors[MenuClick] = 0;
 WaypointColors[ToweringPalm] = 1585197055;
 WaypointColors[RoyalPalm] = 137495039;
@@ -871,6 +871,8 @@ function fillJugs()
     if(pos) then
         safeClick(pos[0],pos[1]);
         lsSleep(1000);
+
+
         srReadScreen();
         clickMax();
 		emptyJugs = 0;
