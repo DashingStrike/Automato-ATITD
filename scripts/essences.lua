@@ -510,7 +510,7 @@ function clickAll(image_name, up)
 	local buttons = findAllImages(image_name, nil, 1000);
 	
 	if #buttons ~= 0 then
-		statusScreen("Clicking " .. #buttons .. "button(s)...");
+		statusScreen("Clicking " .. #buttons .. " button(s)...");
 		if up then
 			for i=#buttons, 1, -1  do
 				srClickMouseNoMove(buttons[i][0]+2, buttons[i][1]+1, true);
@@ -599,7 +599,7 @@ function labTick(essWin, state)
 		return;
 	end
 	
-	while clickAll("OKb.png") == false do
+	while clickAll("OK.png") == false do
 		lsSleep(50);
 	end
 	
@@ -616,7 +616,7 @@ function labTick(essWin, state)
 		lsSleep(per_click_delay);
 		clickText(waitForText("Alcohol Lamp."));
 		lsSleep(per_click_delay);
-		clickText(waitForText("Fill Alcohol Lamp"));
+		clickText(waitForText("Fill Alcohol Lamp"), nil, 20, 4);
 		lsSleep(per_click_delay);
 		
 		--click on the spirit itself
