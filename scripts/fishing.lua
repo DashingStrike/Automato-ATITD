@@ -145,7 +145,7 @@ function setOptions()
             "End script") then
             error(quitMessage);
         end
-        lsSleep(100);
+        lsSleep(10);
     end
     return count;
 end
@@ -362,22 +362,22 @@ function checkIfMain(chatText)
     return false;
 end
 
-function ChatReadFish()
+function ChatReadFish(value)
     --Find the last line of chat
     local chatText = getChatText();
-    numCaught, fishType = string.match(lastLine, "(%d+) deben ([^.]+)%.");
+    if value then
+      numCaught, fishType = string.match(lastLine2, "(%d+) deben ([^.]+)%."); -- Read next to last line of main chat
+    else
+      numCaught, fishType = string.match(lastLine, "(%d+) deben ([^.]+)%."); -- Read last line of main chat
+    end
     if fishType then
         GrandTotalCaught = GrandTotalCaught + 1
         Sfish = string.gsub(fishType, "%W", "");
         SNum = numCaught
         GrandTotaldb = GrandTotaldb + SNum
     end
-
     return("[" .. CurrentLure .. " (" .. LureType .. ")] "  .. Sfish .. " (" .. SNum .. "db)");
-
 end
-
-
 
 function findchat()
     --Find the last line of chat
@@ -804,7 +804,9 @@ function doit()
             while 1 do
                 findchat();
                 OK = srFindImage("OK.png");
+                writeLastTwoLines = nil;
                 noWriteLog = nil;
+                overweight = nil;
                 skipOkOnce = nil; -- Helps prevent premature break, from OK box while checking Isis ship debris
                 lsSleep(100);
                 checkBreak();
@@ -862,9 +864,16 @@ function doit()
             for k, v in pairs(Chat_Types) do
                 if string.find(lastLine, k, 0, true) then
                     if v == "overweight" then
-                        -- If last message was you are carrying too much, then use the previous line for parsing below.
-                        lastLine = lastLine2;
-                        lastLineParse = lastLineParse2;
+                        if string.match(lastLine2, "(%d+) deben ([^.]+)%.") then
+                          caughtFish = true;  -- This will force it to parse the next to last line, instead of last line for any caught fish
+                        end
+                    end
+
+                    if v == "achievement" then
+                        -- If last message was 'You have achieved: Caught a blah blah', then caughtFish = true, parse the next to last line for fish caught
+                        --  Also set bool to record both lines in log
+                        writeLastTwoLines = 1;
+                        caughtFish = true;  -- This will force it to parse the next to last line, instead of last line for any caught fish
                     end
 
                     if v == "alreadyfishing" or (OK and not ignoreOK) then
@@ -905,9 +914,23 @@ function doit()
                         end
                     end
 
-                    if v == "caught" then
-                        caughtFish = true;
-                        Fish = ChatReadFish();
+                    if v == "caught" or caughtFish then
+
+                        if v == "caught" then
+                          caughtFish = true;
+                          Fish = ChatReadFish(); -- Parse last line of main chat
+                        else
+                          Fish = ChatReadFish(1); -- Parse next to last line of main chat
+
+                            if not fishType then
+                              caughtFish = nil;
+                            else
+                              overweight=1;
+                            end
+
+                        end
+
+                        if caughtFish then
                         --Last 10 fish caught that displays on GUI
                         addlog = Time .. " | " .. Sfish .. " (" .. SNum .. "db) | " .. CurrentLure
                         table.insert(gui_log_fish, 1, addlog);
@@ -932,14 +955,14 @@ function doit()
                         --end
 
                         filletFish();  -- Search for "All Fish" pinned up. If so, fillet.
+                        end
                     end
+
 
                     --Add more if v == "something" then statements here if needed
 
                 end
                 gui_refresh();
-
-
             end
 
             if not caughtFish then
@@ -948,6 +971,11 @@ function doit()
 
             if v == "lure" or v == "alreadyfishing" or noWriteLog or not string.find(lastLine, "^%*%*", 0) then
             -- Do nothing
+            elseif overweight then
+                WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. lastLineParse2 .. "\n");
+            elseif writeLastTwoLines then
+                WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. lastLineParse2 .. "\n");
+                WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. lastLineParse .. "\n");
             elseif LogFails or caughtFish or oddFound or strangeUnusualFound then
                 WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. lastLineParse .. "\n");
             end
