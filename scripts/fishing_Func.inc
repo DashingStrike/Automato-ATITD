@@ -64,7 +64,6 @@ Lures = {
 Chat_Types = {
 ["deben"] = "caught",
 ["You are carrying"] = "overweight",
-["You have achieved"] = "achievement",
 ["You are already fishing"] = "alreadyfishing",
 ["Using a"] = "lure",
 ["odd fish"] = "odd",
