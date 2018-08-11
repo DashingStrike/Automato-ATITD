@@ -804,6 +804,7 @@ function doit()
             while 1 do
                 findchat();
                 OK = srFindImage("OK.png");
+                writeLastTwoLines = nil;
                 noWriteLog = nil;
                 skipOkOnce = nil; -- Helps prevent premature break, from OK box while checking Isis ship debris
                 lsSleep(100);
@@ -865,6 +866,14 @@ function doit()
                         -- If last message was you are carrying too much, then use the previous line for parsing below.
                         lastLine = lastLine2;
                         lastLineParse = lastLineParse2;
+                    end
+
+                    if v == "achievement" then
+                        -- If last message was 'You have achieved: Caught a blah blah', then use the previous line for parsing below.
+                        --  Also set bool to record both lines in log
+                        lastLine = lastLine2;
+                        lastLineParse = lastLineParse2;
+                        writeLastTwoLines = 1;
                     end
 
                     if v == "alreadyfishing" or (OK and not ignoreOK) then
@@ -948,6 +957,9 @@ function doit()
 
             if v == "lure" or v == "alreadyfishing" or noWriteLog or not string.find(lastLine, "^%*%*", 0) then
             -- Do nothing
+            elseif writeLastTwoLines then
+                WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. lastLineParse2 .. "\n");
+                WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. lastLineParse .. "\n");
             elseif LogFails or caughtFish or oddFound or strangeUnusualFound then
                 WriteFishLog("[" .. Date .. ", " .. Time .. "] [" .. Coordinates .. "] [" .. CurrentLure .. " (" .. LureType .. ")] " .. lastLineParse .. "\n");
             end
