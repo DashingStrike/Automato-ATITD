@@ -1199,6 +1199,13 @@ return
 			["q"] = 14,
 		}
 		,
+		["Copper Pot"] = 
+		{
+			["metal"] = "Copper",
+			["prod"] = 1,
+			["q"] = 20,
+		}
+		,
 		["Iron Pot"] = 
 		{
 			["masterOnly"] = true,
@@ -1207,7 +1214,7 @@ return
 			["q"] = 20,
 		}
 		,
-		["Iron cookpot"] = 
+		["Iron Cookpot"] = 
 		{
 			["metal"] = "Iron",
 			["prod"] = 1,

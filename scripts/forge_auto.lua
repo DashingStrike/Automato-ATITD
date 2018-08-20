@@ -239,8 +239,6 @@ end
       text = string.format("Make %s %s", name, string.sub(lastParent, 1, #lastParent-1));
    elseif lastParent == "Large Gear" or lastParent == "Medium Gear" or lastParent == "Small Gear" then
       text = string.format("Make %s %s", name, lastParent);
-   elseif lastParent == "Pots" then
-      text = "Make " .. name;
    elseif lastParent == "Steam Mechanics" then
       text = "Make a " .. name;
    elseif lastParent == "Tools" then
