@@ -11,7 +11,6 @@ dofile("common.inc");
 
 askText = "Helps running one or more Grain Ovens.\n\nThose buttons are tiny and difficult to click them all on multiple ovens.\n\nClick buttons on GUI Interface and it will click the same buttons on all of your ovens with one click.\n\nPin all grain oven windows. Be sure none overlap and no other windows partially cover the windows. Don\'t pin to close to the center where popups can occur.";
 
-windowManager("Grain Oven Setup");
 
 button_names = {
 "+ RW",
@@ -49,6 +48,7 @@ button_names = {
 
 function doit()
 	askForWindow(askText);
+	windowManager("Grain Oven Setup");
 
 		while 1 do
 		checkBreak();
