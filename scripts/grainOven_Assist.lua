@@ -48,7 +48,7 @@ button_names = {
 
 function doit()
 	askForWindow(askText);
-	windowManager("Grain Oven Setup");
+	windowManager("Grain Oven Setup", nil, nil, nil, nil, nil, nil, nil, 5);
 
 		while 1 do
 		checkBreak();
