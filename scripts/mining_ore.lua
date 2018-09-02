@@ -1,4 +1,4 @@
--- mining_ore.lua v2.2.5 -- by Cegaiel
+-- mining_ore.lua v2.2.6 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -26,7 +26,7 @@
 dofile("common.inc");
 dofile("settings.inc");
 
-info = "Ore Mining v2.2.5 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
+info = "Ore Mining v2.2.6 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
 
 -- These arrays aren't in use currently.
 --Chat_Types = {
@@ -360,6 +360,8 @@ function clickSequence()
         for j=i+1,#clickList do
             for k=j+1,#clickList do
                 --checkCloseWindows();
+                findClosePopUpOld(); --Extra precaution to check for remaining popup before working the nodes
+
                 -- 1st Node
                 checkBreak();
                 checkAbort();
@@ -452,6 +454,8 @@ function clickSequence()
             for k=j+1,#clickList do
             	 for l=k+1,#clickList do
                 --checkCloseWindows();
+                findClosePopUpOld(); --Extra precaution to check for remaining popup before working the nodes
+
                 -- 1st Node
                 checkBreak();
                 checkAbort();
@@ -489,6 +493,8 @@ function clickSequence()
                 else -- noMouseMove is false
 
                 --checkCloseWindows();
+                findClosePopUpOld(); --Extra precaution to check for remaining popup before working the nodes
+
                 -- 1st Node
                 checkBreak();
                 checkAbort();
