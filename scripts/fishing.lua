@@ -160,16 +160,22 @@ function SetupLureGroup()
     statusScreen("Indexing Lures ...",nil, 0.7, 0.7);
     checkBreak()
     srReadScreen();
+
     FindPin = srFindImage("UnPin.png");
     if FindPin then
+
         --Click the pinup to refresh the lures window (in case a lure was lost earlier, it would still be showing on menu).
-        srClickMouseNoMove(FindPin[0]-8,FindPin[1]);
+        --srClickMouseNoMove(FindPin[0]-8,FindPin[1]);
+        -- clickAllImages(image_name, offsetX, offsetY, rightClick, tol)
+        clickAllImages("UnPin.png",-8,0);
         lsSleep(100);
         srReadScreen();
         -- Push Up arrow, just in case its current at bottom of list
-        DownPin = srFindImageInRange("Fishing/Menu_DownArrow.png",FindPin[0]-10,FindPin[1],50,500);
+        --DownPin = srFindImageInRange("Fishing/Menu_DownArrow.png",FindPin[0]-10,FindPin[1],50,500);
+        DownPin = srFindImage("Fishing/Menu_DownArrow.png");
         if DownPin then
-            UpArrow = srFindImageInRange("Fishing/Menu_UpArrow.png",FindPin[0]-10,FindPin[1],50,50);
+            --UpArrow = srFindImageInRange("Fishing/Menu_UpArrow.png",FindPin[0]-10,FindPin[1],50,50);
+            UpArrow = srFindImage("Fishing/Menu_UpArrow.png");
             if UpArrow then
                 srClickMouseNoMove(UpArrow[0]+5,UpArrow[1]+5);
                 lsSleep(200);
@@ -227,7 +233,8 @@ function SetupLureGroup()
         end
 
         --Reset Lure Menu
-        UpArrow = srFindImageInRange("Fishing/Menu_UpArrow.png",FindPin[0]-10,FindPin[1],50,50);
+        --UpArrow = srFindImageInRange("Fishing/Menu_UpArrow.png",FindPin[0]-10,FindPin[1],50,50);
+        UpArrow = srFindImage("Fishing/Menu_UpArrow.png");
         if UpArrow then
             srClickMouseNoMove(UpArrow[0]+5,UpArrow[1]+5);
             lsSleep(200);
@@ -665,7 +672,7 @@ end
 
 function doit()
 
-    askForWindow("Fishing v2.0.6 (by Tutmault, revised by KasumiGhia, Cegaiel, and Skyfeather)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nRequired: Pin Lures Menu (Self, Skills, Fishing, Use Lures). History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nOptional: Pin Fillet Menu (Self, Skills, Fishing, Fillet). 'All Fish' will be clicked after each caught fish (empty windows are refreshed).\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window! Ensure that your chat displays timestamps");
+    askForWindow("Fishing v2.0.7 (by Tutmault, revised by KasumiGhia, Cegaiel, and Skyfeather)\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nRequired: Pin Lures Menu (Self, Skills, Fishing, Use Lures). History will be recorded in FishLog.txt and stats in FishStats.txt.\n\nOptional: Pin Fillet Menu (Self, Skills, Fishing, Fillet). 'All Fish' will be clicked after each caught fish (empty windows are refreshed).\n\nSelf, Options, Interface Options (Menu:) \"Display available fishing lures in submenus\" MUST BE CHECKED! Egypt Clock /clockloc must be showing and unobstructed. Move clock window slightly if any problems.\n\nMost problems can be fixed by adjusting main chat window! Ensure that your chat displays timestamps");
 
     ----------------------------------------
     --Variables Used By Program -- Don't Edit Unless you know what you're doing!
