@@ -224,8 +224,8 @@ function SetupLureGroup()
                         srClickMouseNoMove(arrow[0]+5,arrow[1]+5);
                         lsSleep(200);
                         srReadScreen();
-                    else
-                        error("no arrow found");
+                    --else
+                        --error("no arrow found");
                     end
                 end
                 LastLureMenu = Lures[i];
