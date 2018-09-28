@@ -59,7 +59,7 @@ function doit()
 
     lsSetCaptureWindow();
 
-    askForWindow("Open the paint window. Take any paint away so to start with 'Black'.");
+    askForWindow("Open the paint window. Take any paint away so to start with 'Black'.\n\nNote you want to keep a supply of Red Sand (if you\'re testing reactions).\n\nClicking the 'Reset' button will convert your Pigment Lab 'back to Black' color, again, but it requires Red Sand to do so. It\'s Magic!");
 
 
     srReadScreen();
