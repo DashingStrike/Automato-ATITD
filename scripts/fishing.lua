@@ -54,6 +54,7 @@ SkipCommon = false; --Skips to next lure if fish caught is a common (Choose True
 LogFails = false;  	-- Do you want to add Failed Catches to log file? 'Failed to catch anything' or 'No fish bit'. Note the log will still add an entry if you lost lure.
 LogStrangeUnusual = false; 	-- Do you want to add Strange and Unusual fish to the log file? Note the log will still add an entry if you lost lure.
 LogOdd = false; 	-- Do you want to add Odd fish to the log file? Note the log will still add an entry if you lost lure.
+AutoFillet = true; -- Do you want to auto-fillet fish if menu is pinned?
 
 
 function setOptions()
@@ -92,6 +93,11 @@ function setOptions()
 
         lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);  -- Shrink the check boxes and text down
         y = y + 80;
+
+        AutoFillet = readSetting("AutoFillet",AutoFillet);
+        AutoFillet = lsCheckBox(10, y, 10, 0xFFFFFFff, " Automatically Fillet Fish", AutoFillet);
+        writeSetting("AutoFillet",AutoFillet);
+        y = y + 25;
 
         muteSoundEffects = readSetting("muteSoundEffects",muteSoundEffects);
         muteSoundEffects = lsCheckBox(10, y, 10, 0xFFFFFFff, " Mute Sound Effects", muteSoundEffects);
@@ -1004,18 +1010,20 @@ end
 
 
 function filletFish()
-  -- Pin your Skills, Fishing, Fillet menu, and we will fillet fish every catch (so they don't go rotten). You need to have at least 1 whole fish in inventory for this menu to appear!
-  srReadScreen();
-  emptyWindow = srFindImage("WindowEmpty.png");
-  fillet = findText("All Fish");
+    if AutoFillet then
+        -- Pin your Skills, Fishing, Fillet menu, and we will fillet fish every catch (so they don't go rotten). You need to have at least 1 whole fish in inventory for this menu to appear!
+        srReadScreen();
+        emptyWindow = srFindImage("WindowEmpty.png");
+        fillet = findText("All Fish");
 
-  if emptyWindow then
-    --refresh any empty windows; just in case a previous fillet All Fish caused window to become empty
-    clickAllImages("WindowEmpty.png", 5, 5, nil, nil);
-    lsSleep(150);
-  end
-
-  if fillet then
-    clickAllText("All Fish");
-  end
+        if emptyWindow then
+            --refresh any empty windows; just in case a previous fillet All Fish caused window to become empty
+            clickAllImages("WindowEmpty.png", 5, 5, nil, nil);
+            lsSleep(150);
+        end
+        
+        if fillet then
+            clickAllText("All Fish");
+        end
+    end
 end
