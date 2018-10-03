@@ -35,7 +35,6 @@ function doit()
   local lastClickTime = lsGetTimer();
 
   while 1 do
-
       if clickQty > 0 and (clickQty == clickCount) then
 	  lsPlaySound("Complete.wav");
         lsMessageBox(clickCount .. " clicks executed in ", elapsedTime, 1);
@@ -79,6 +78,7 @@ function doit()
     message = message .. clickCount .. " clicks so far.\n\n" .. warning;
     end
     sleepWithStatus(250, message, color);
+    closePopUp();
   end
 end
 
@@ -113,4 +113,12 @@ function askQty()
   lsSleep(50);
   end
   return count;
+end
+
+function closePopUp()
+  srReadScreen()
+  local ok = srFindImage("OK.png")
+  if ok then
+    srClickMouseNoMove(ok[0]+5,ok[1],1);
+  end
 end
