@@ -14,6 +14,7 @@ askText = singleLine([[
 clickList = {};
 clickDelay = 150;
 is_stats = true;
+passDelay = 0;
 
 function getPoints()
   local was_shifted = lsShiftHeld();
@@ -33,8 +34,8 @@ function getPoints()
     lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
 	    "Adding Points (" .. #clickList .. ")");
     local y = 60;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Tap shift to add a point.");
-    y = y + 30;
+    lsPrintWrapped(5, y, z, lsScreenX - 20, 0.7, 0.7, 0xFFFFFFff, "Hover mouse over a point (to click) and Tap Shift to add point.");
+    y = y + 50;
     local start = math.max(1, #clickList - 20);
     local index = 0;
     for i=start,#clickList do
@@ -60,33 +61,45 @@ end
 function promptRun()
   local is_done = false;
   local count = 1;
+  local scale = 0.8;
   while not is_done do
     checkBreak();
-    lsPrint(10, 10, 0, 1.0, 1.0, 0xffffffff,
+    lsPrint(10, 10, 0, scale, scale, 0xffffffff,
             "Configure Sequence");
     local y = 60;
-    lsPrint(5, y, 0, 1.0, 1.0, 0xffffffff, "Passes:");
-    is_done, count = lsEditBox("passes", 120, y, 0, 50, 30, 1.0, 1.0,
+    lsPrint(5, y, 0, scale, scale, 0xffffffff, "Passes:");
+    is_done, count = lsEditBox("passes", 140, y, 0, 50, 30, scale, scale,
                                0x000000ff, 1);
     count = tonumber(count);
     if not count then
       is_done = false;
-      lsPrint(10, y+18, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+      lsPrint(10, y+30, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
       count = 1;
     end
-
+    y = y + 48
+    lsPrint(5, y, 0, scale, scale, 0xffffffff, "Pass Delay (ms):");
+    is_done, passDelay = lsEditBox("passDelay", 140, y, 0, 100, 30, scale, scale,
+                               0x000000ff, passDelay);
+    passDelay = tonumber(passDelay);
+    if not passDelay then
+      is_done = false;
+      lsPrint(10, y+30, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+      passDelay = 0;
+    end
     y = y + 48;
-    is_stats = lsCheckBox(10, y, 10, 0xffffffff, "Wait for Stats", is_stats);
+    lsPrintWrapped(5, y, z, lsScreenX - 20, 0.65, 0.65, 0xFFFFFFff, "Pass Delay: How long to wait, after each click sequence, before moving onto the next pass.");
+    y = y + 55;
+    is_stats = CheckBox(10, y, 10, 0xffffffff, " Wait for Stats", is_stats);
     y = y + 32;
     if not is_stats then
-      lsPrint(5, y, 0, 1.0, 1.0, 0xffffffff, "Delay (ms):");
-      is_done, clickDelay = lsEditBox("delay", 120, y, 0, 50, 30, 1.0, 1.0,
+      lsPrint(5, y, 0, scale, scale, 0xffffffff, "Click Delay (ms):");
+      is_done, clickDelay = lsEditBox("delay", 140, y, 0, 50, 30, scale, scale,
                                       0x000000ff, 100);
       clickDelay = tonumber(clickDelay);
       if not clickDelay then
         is_done = false;
-        lsPrint(10, y+18, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-        clickDelay = 100;
+        lsPrint(10, y+30, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        clickDelay = 150;
       end
     end
 
@@ -105,21 +118,27 @@ function promptRun()
 end
 
 function clickSequence(count)
+  message = "";
   for i=1,count do
     for j=1,#clickList do
       checkBreak();
       safeClick(clickList[j][1], clickList[j][2]);
 
-      local message = "Pass " .. i .. "/" .. count .. " -- ";
+
+      message = "Pass " .. i .. "/" .. count .. " -- ";
       message = message .. "Clicked " .. j .. "/" .. #clickList .. "\n";
       if is_stats then
 	sleepWithStatus(500, message .. "Waiting between clicks");
         waitForStats(message .. "Waiting For Stats");
       else
-        sleepWithStatus(clickDelay, message .. "Waiting Fixed Delay");
+        sleepWithStatus(clickDelay, message .. "Waiting Click Delay");
       end
     end
+		if passDelay > 0 and i < count then
+	        sleepWithStatus(passDelay, message .. "Waiting on Pass Delay");
+		end
   end
+  lsPlaySound("Complete.wav");
 end
 
 function doit()
