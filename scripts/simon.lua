@@ -1,15 +1,16 @@
 -- simon.lua v1.1 -- by Tallow
+-- simon.lua v1.12 -- Tweaked by Cegaiel - Add Pass Delay box, various GUI tweaks.
+--   Added read/writeSettings routine to save configuration to file (Settings.simon.lua.txt)
+--   Next button hidden until at least one point added. Displays in realtime, the coordinates clicked. Do Right clicks, so we don't accidentally run on a misclick.
 --
 -- Set up a list of points to click on request. Useful for paint or
 -- ad-hoc macros.
 --
 
 dofile("common.inc");
+dofile("settings.inc");
 
-askText = singleLine([[
-  Simon v1.1 (by Tallow) --
-  Sets up a list of points and then click on them in sequence.
-]]);
+askText = "Simon v1.12\n\nv1.1 - by Tallow\nv1.12 - Tweaked by Cegaiel\n\nSets up a list of points and then clicks on them in sequence.\n\nCan optionally add a timer to wait between each pass (ie project takes a few minutes to complete).\n\nOr will watch Stats Timer (red/black) for clicking.";
 
 clickList = {};
 clickDelay = 150;
@@ -46,9 +47,12 @@ function getPoints()
       index = index + 1;
     end
 
-    if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Next") then
-        is_done = 1;
+    if #clickList > 0 then -- Don't show Next button until at least one point is added
+      if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Next") then
+          is_done = 1;
+      end
     end
+
     if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
                     "End script") then
       error "Clicked End Script button";
@@ -68,17 +72,39 @@ function promptRun()
             "Configure Sequence");
     local y = 60;
     lsPrint(5, y, 0, scale, scale, 0xffffffff, "Passes:");
+    count = readSetting("count",count);
     is_done, count = lsEditBox("passes", 140, y, 0, 50, 30, scale, scale,
-                               0x000000ff, 1);
+                               0x000000ff, count);
     count = tonumber(count);
     if not count then
       is_done = false;
       lsPrint(10, y+30, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
       count = 1;
     end
+    writeSetting("count",count);
+    y = y + 55;
+    is_stats = readSetting("is_stats",is_stats);
+    lsPrint(136, y+2, 0, 0.6, 0.6, 0xffffffff, "(I\'m Tired - Red/Black Stats)");
+    is_stats = CheckBox(10, y, 10, 0xffffffff, " Wait for Stats", is_stats);
+    writeSetting("is_stats",is_stats);
+    y = y + 32;
+    if not is_stats then
+      lsPrint(5, y, 0, scale, scale, 0xffffffff, "Click Delay (ms):");
+      clickDelay = readSetting("clickDelay",clickDelay);
+      is_done, clickDelay = lsEditBox("delay", 140, y, 0, 50, 30, scale, scale,
+                                      0x000000ff, clickDelay);
+      clickDelay = tonumber(clickDelay);
+      if not clickDelay then
+        is_done = false;
+        lsPrint(10, y+30, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        clickDelay = 150;
+      end
+      writeSetting("clickDelay",clickDelay);
+
     y = y + 48
-    lsPrint(5, y, 0, scale, scale, 0xffffffff, "Pass Delay (ms):");
-    is_done, passDelay = lsEditBox("passDelay", 140, y, 0, 100, 30, scale, scale,
+    lsPrint(5, y, 0, scale, scale, 0xffffffff, "Pass Delay (s):");
+    passDelay = readSetting("passDelay",passDelay);
+    is_done, passDelay = lsEditBox("passDelay", 140, y, 0, 50, 30, scale, scale,
                                0x000000ff, passDelay);
     passDelay = tonumber(passDelay);
     if not passDelay then
@@ -86,21 +112,10 @@ function promptRun()
       lsPrint(10, y+30, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
       passDelay = 0;
     end
+    lsPrint(200, y+6, 0, 0.6, 0.6, 0xffffffff, math.floor(passDelay*1000) .. " (ms)");
+    writeSetting("passDelay",passDelay);
     y = y + 48;
     lsPrintWrapped(5, y, z, lsScreenX - 20, 0.65, 0.65, 0xFFFFFFff, "Pass Delay: How long to wait, after each click sequence, before moving onto the next pass.");
-    y = y + 55;
-    is_stats = CheckBox(10, y, 10, 0xffffffff, " Wait for Stats", is_stats);
-    y = y + 32;
-    if not is_stats then
-      lsPrint(5, y, 0, scale, scale, 0xffffffff, "Click Delay (ms):");
-      is_done, clickDelay = lsEditBox("delay", 140, y, 0, 50, 30, scale, scale,
-                                      0x000000ff, 100);
-      clickDelay = tonumber(clickDelay);
-      if not clickDelay then
-        is_done = false;
-        lsPrint(10, y+30, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
-        clickDelay = 150;
-      end
     end
 
     if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Begin") then
@@ -120,22 +135,25 @@ end
 function clickSequence(count)
   message = "";
   for i=1,count do
+clickedPoints = "";
+
     for j=1,#clickList do
       checkBreak();
-      safeClick(clickList[j][1], clickList[j][2]);
-
-
+      safeClick(clickList[j][1], clickList[j][2], 1);
+      clickedPoints = clickedPoints .. "Clicked " .. j .. "/" .. #clickList .. "  (" .. clickList[j][1] .. ", " .. clickList[j][2] .. ")\n";
       message = "Pass " .. i .. "/" .. count .. " -- ";
-      message = message .. "Clicked " .. j .. "/" .. #clickList .. "\n";
+      message = message .. "Clicked " .. j .. "/" .. #clickList .. "\n\n"  .. clickedPoints;
       if is_stats then
-	sleepWithStatus(500, message .. "Waiting between clicks");
+	sleepWithStatus(150, message .. "\nWaiting between clicks", nil, 0.67, 0.67);
+	  closePopUp(); -- Check for lag/premature click that might've caused a popup box (You're too tired, wait xx more seconds)
         waitForStats(message .. "Waiting For Stats");
       else
-        sleepWithStatus(clickDelay, message .. "Waiting Click Delay");
+        sleepWithStatus(clickDelay, message .. "\nWaiting Click Delay", nil, 0.67, 0.67);
       end
     end
-		if passDelay > 0 and i < count then
-	        sleepWithStatus(passDelay, message .. "Waiting on Pass Delay");
+		--if passDelay > 0 and not is_stats and (i < count) then  --Uncomment so you don't have to wait the full passDelay countdown on last pass; script exits on last pass immediately .
+		if passDelay > 0 and not is_stats then -- No need for passDelay timer if it's 0 or we're using Wait for Stats option
+	        sleepWithStatus(math.floor(passDelay*1000), message .. "\nWaiting on Pass Delay: " .. passDelay .. "s  (" .. math.floor(passDelay*1000) .. " ms)" , nil, 0.67, 0.67);
 		end
   end
   lsPlaySound("Complete.wav");
@@ -175,4 +193,12 @@ function findStats()
     stats = srFindImage("AllStats-Black3.png");
   end
   return stats;
+end
+
+function closePopUp()
+  srReadScreen()
+  local ok = srFindImage("OK.png")
+  if ok then
+    srClickMouseNoMove(ok[0]+5,ok[1],1);
+  end
 end
