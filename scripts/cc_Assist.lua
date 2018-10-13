@@ -30,35 +30,35 @@ buttons = {
     buttonPos = makePoint(10, 166),
     buttonSize = 130,
     image = "cc_Wood.png",
-    offset = makePoint(20-4, 30-2)
+    offset = makePoint(4, 18)
   },
   {
     name = "Water",
     buttonPos = makePoint(150, 166),
     buttonSize = 130,
     image = "cc_Water.png",
-    offset = makePoint(20-10, 30-10)
+    offset = makePoint(4, 18)
   },
   {
     name = "Closed",
     buttonPos = makePoint(10, 215),
     buttonSize = 80,
     image = "cc_Vent.png",
-    offset = makePoint(20-9, 30-2)
+    offset = makePoint(18, 22)
   },
   {
     name = "Open",
     buttonPos = makePoint(105, 215),
     buttonSize = 80,
     image = "cc_Vent.png",
-    offset = makePoint(40-9, 30-2)
+    offset = makePoint(34, 22)
   },
   {
     name = "Full",
     buttonPos = makePoint(200, 215),
     buttonSize = 80,
     image = "cc_Vent.png",
-    offset = makePoint(65-9, 30-2)
+    offset = makePoint(52, 22)
   }
 };
 
