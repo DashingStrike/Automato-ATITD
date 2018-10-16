@@ -16,6 +16,7 @@ clickList = {};
 clickDelay = 150;
 is_stats = true;
 passDelay = 0;
+refresh = true;
 
 function getPoints()
   local was_shifted = lsShiftHeld();
@@ -82,7 +83,12 @@ function promptRun()
       count = 1;
     end
     writeSetting("count",count);
-    y = y + 55;
+    y = y + 45;
+    refresh = readSetting("refresh",refresh);
+    lsPrint(165, y+2, 0, 0.6, 0.6, 0xffffffff, "(after each pass)");
+    refresh = CheckBox(10, y, 10, 0xffffffff, " Refresh Windows", refresh);
+    writeSetting("refresh",refresh);
+    y = y + 32;
     is_stats = readSetting("is_stats",is_stats);
     lsPrint(136, y+2, 0, 0.6, 0.6, 0xffffffff, "(I\'m Tired - Red/Black Stats)");
     is_stats = CheckBox(10, y, 10, 0xffffffff, " Wait for Stats", is_stats);
@@ -135,11 +141,12 @@ end
 function clickSequence(count)
   message = "";
   for i=1,count do
-clickedPoints = "";
+  clickedPoints = "";
+  refreshWindows()
 
     for j=1,#clickList do
       checkBreak();
-      safeClick(clickList[j][1], clickList[j][2], 1);
+      safeClick(clickList[j][1], clickList[j][2]);
       clickedPoints = clickedPoints .. "Clicked " .. j .. "/" .. #clickList .. "  (" .. clickList[j][1] .. ", " .. clickList[j][2] .. ")\n";
       message = "Pass " .. i .. "/" .. count .. " -- ";
       message = message .. "Clicked " .. j .. "/" .. #clickList .. "\n\n"  .. clickedPoints;
@@ -201,4 +208,15 @@ function closePopUp()
   if ok then
     srClickMouseNoMove(ok[0]+5,ok[1],1);
   end
+end
+
+function refreshWindows()
+  srReadScreen();
+  pinWindows = findAllImages("UnPin.png");
+	for i=1, #pinWindows do
+	  checkBreak();
+	  safeClick(pinWindows[i][0] - 7, pinWindows[i][1]);
+	  lsSleep(100);
+  	end
+  lsSleep(1000);
 end
