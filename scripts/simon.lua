@@ -142,7 +142,10 @@ function clickSequence(count)
   message = "";
   for i=1,count do
   clickedPoints = "";
-  refreshWindows()
+
+  if i > 1 then
+    refreshWindows()
+  end
 
     for j=1,#clickList do
       checkBreak();
