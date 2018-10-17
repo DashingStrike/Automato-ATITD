@@ -50,22 +50,31 @@ function refillWater()
 	end
 end
 
+function closeEmptyWindows()
+        srReadScreen();
+        emptyWindow = srFindImage("WindowEmpty.png");
+        if emptyWindow then
+		--clickAllImages(image_name, offsetX, offsetY, rightClick, tol)
+            clickAllImages("WindowEmpty.png", 50, 20, 1);
+            lsSleep(100);
+        end
+end
 
 function tendWheat()
 
   while 1 do
 
-	srReadScreen();
-
     -- Click pin ups to refresh the window
    local windowcount = clickAllImages("ThisIs.png");
+   lsSleep(100);
+   closeEmptyWindows();
 
 		if windowcount == 0 then
-		error 'Did not find any pinned windows'
+		--error 'Did not find any pinned windows'
 		end
 
 
-    sleepWithStatus(300, "Searching " .. windowcount .. " windows for Harvest");
+	 sleepWithStatus(300, "Searching " .. windowcount .. " windows for Harvest");
 
 
 	--Search for Harvest windows. Havest and Water will exist at same time in window, so we always search for Harvest first.
@@ -97,13 +106,10 @@ function tendWheat()
 
 	end		 
 
-
-	srReadScreen();
-
+    srReadScreen();
     -- Refresh windows again
     local windowcount = clickAllImages("ThisIs.png");
-
-   sleepWithStatus(300, "Searching " .. windowcount .. " windows for Water");
+    sleepWithStatus(300, "Searching " .. windowcount .. " windows for Water");
 
 
 	-- Search for Water windows.
@@ -129,8 +135,45 @@ function tendWheat()
 	if water_count >= 40 then
 	refillWater();
 	end
+    sleepWithStatus(3000, "----------------------------------------------\nIf you want to plant more wheat Press Alt+Shift to Pause\n\nOR Use Win Manager button to Pause + Arrange Grids\n----------------------------------------------\nWaterings SINCE Jugs Refill: " .. water_count .. "\nWaterings UNTIL Jugs Refill: " .. refill_jugs .. "\n----------------------------------------------\nTotal Waterings: " .. total_waterings .. "\nTotal Harvests: " .. total_harvests);
 
-    sleepWithStatus(3000, "----------------------------------------------\nIf you want to plant more wheat Press Alt+Shift to Pause\n----------------------------------------------\nWaterings SINCE Jugs Refill: " .. water_count .. "\nWaterings UNTIL Jugs Refill: " .. refill_jugs .. "\n----------------------------------------------\nTotal Waterings: " .. total_waterings .. "\nTotal Harvests: " .. total_harvests);
   end
   return quit_message;
+end
+
+     -- This will override the sleepWithStatus, in common/common_ui.inc so we can add a custom button "Window Manager"
+function sleepWithStatusPause(delay_time, message, color, scale)
+  sleepWithStatus(delay_time, message, color, scale);
+end
+
+local waitChars = {"-", "\\", "|", "/"};
+local waitFrame = 1;
+
+function sleepWithStatus(delay_time, message, color, scale)
+  if not color then
+    color = 0xffffffff;
+  end
+  if not delay_time then
+    error("Incorrect number of arguments for sleepWithStatus()");
+  end
+  if not scale then
+    scale = 0.8;
+  end
+  local start_time = lsGetTimer();
+  while delay_time > (lsGetTimer() - start_time) do
+    local frame = math.floor(waitFrame/5) % #waitChars + 1;
+    time_left = delay_time - (lsGetTimer() - start_time);
+    local waitMessage = "Waiting ";
+    if delay_time >= 1000 then
+      waitMessage = waitMessage .. time_left .. " ms ";
+    end
+    lsPrintWrapped(10, 50, 0, lsScreenX - 20, scale, scale, 0xd0d0d0ff,
+		   waitMessage .. waitChars[frame]);
+  if lsButtonText(10, lsScreenY - 30, 0, 125, 0x80D080ff, "Win Manager") then
+    windowManager("Wheat Setup", nil, false, true, nil, nil, nil, nil, nil, nil, true);
+  end
+    statusScreen(message, color, nil, scale);
+    lsSleep(tick_delay);
+    waitFrame = waitFrame + 1;
+  end
 end
