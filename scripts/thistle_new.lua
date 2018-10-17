@@ -243,7 +243,6 @@ end
 function doit()
 	askForWindow("Pin any number of thistle gardens. Must be CASCADED.\n\nUse Window Manager button and choose \'Form Cascade\' to arrange the windows correctly. Check \'Water Gap\' so that water icon isn\'t covered. Optionally, you can pin a rain barrel (water gap not required) to refill your jugs. Water is refilled after each tick, so you won\'t need many jugs (#gardens x 2 should be enough).\n\nCan handle up to about 32 gardens by using the cascade method (shuffles windows back and forth).");
 
-	--windowManager("Thistle Garden Setup", nil, true, true);
   while 1 do
 	thistleConfig();
 	if dropdown_cur_value_canopy == 1 then
@@ -555,7 +554,8 @@ function miscButtons()
   checkBreak();
 
   if lsButtonText(lsScreenX/2 - 60, 10, 0, 140, 0xffffffff, "Window Manager") then
-    windowManager("Thistle Garden Setup", nil, true, true);
+    --function windowManager(title, message, allowCascade, allowWaterGap, varWidth, varHeight, sizeRight, offsetWidth, offsetHeight, default_focus, default_waterGap)
+    windowManager("Thistle Garden Setup", nil, true, true, nil, nil, nil, nil, nil, nil, true);
   end
 
   if lsButtonText(lsScreenX/2 - 60, 80, z, 140, 0xFFFFFFff, "Abort Crops") then
