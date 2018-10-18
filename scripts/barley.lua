@@ -1,4 +1,4 @@
--- barley.lua v2.1.2 -- by Cegaiel (but based off flax_stable.lua; credits of flax_stable.lua to Jimbly KasumiGhia, Tallow, SkyFeather)
+-- barley.lua v2.1.3 -- by Cegaiel (but based off flax_stable.lua; credits of flax_stable.lua to Jimbly KasumiGhia, Tallow, SkyFeather)
 --
 -- Use Fertilizer will use 4 fertilizer per plant.  The yield will vary from 2-10. The numbers just depends on how many weeds occur before harvesting. 
 -- If you are 'lucky' enough to not get any weeds on a plant, you will get the full 10. But with weeds, you will get 2-5 on average, usually 3-5.
@@ -9,8 +9,9 @@
 -- Use Water Only will use 4 waters per plant and harvest. You will get a guaranteed 2 barley per plant, regardless if weeds occur or not.
 
 dofile("common.inc");
+dofile("settings.inc");
 
-askText = "Barley v2.1.2 by Cegaiel (many credits included in script comments)\n\nTwo methods available: Use Fertilizer or Water Only. See comments for more info.\n\n'Right click pins/unpins a menu' must be ON.\n\n'Plant all crops where you stand' must be ON.\n\n'Right click pins/unpins a menu' must be ON.\n\nPin Barley Plant window in TOP-RIGHT. Automato: Slighty in TOP-RIGHT.";
+askText = "Barley v2.1.3 by Cegaiel (many credits included in script comments)\n\nTwo methods available: Use Fertilizer or Water Only. See comments for more info.\n\n'Right click pins/unpins a menu' must be ON.\n\n'Plant all crops where you stand' must be ON.\n\n'Right click pins/unpins a menu' must be ON.\n\nPin Barley Plant window in TOP-RIGHT. Automato: Slighty in TOP-RIGHT.";
 
 
 -- Global parameters set by prompt box.
@@ -123,6 +124,7 @@ function promptFlaxNumbers()
     -- lsEditBox returns two different things (a state and a value)
     local y = 40;
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
+    num_loops = readSetting("num_loops",num_loops);
     is_done, num_loops = lsEditBox("passes", 120, y, z, 50, 30, scale, scale,
                                    0x000000ff, num_loops);
     if not tonumber(num_loops) then
@@ -130,8 +132,10 @@ function promptFlaxNumbers()
       lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
       num_loops = 1;
     end
+    writeSetting("num_loops",num_loops);
     y = y + 32;
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Grid size:");
+    grid_w = readSetting("grid_w",grid_w);
     is_done, grid_w = lsEditBox("grid", 120, y, z, 50, 30, scale, scale,
                                 0x000000ff, grid_w);
     if not tonumber(grid_w) then
@@ -140,6 +144,7 @@ function promptFlaxNumbers()
       grid_w = 1;
       grid_h = 1;
     end
+    writeSetting("grid_w",grid_w);
     grid_w = tonumber(grid_w);
     grid_h = grid_w;
     y = y + 32;
@@ -170,12 +175,16 @@ function promptFlaxNumbers()
 
     y = y + 55;
       lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
+      use_fert = readSetting("use_fert",use_fert);
 	if use_fert then
     	  use_fert = lsCheckBox(10, y+10, z, 0xff8080ff, " Use Fertilizer (Uncheck for Water Only)", use_fert);
 	else
     	  use_fert = lsCheckBox(10, y+10, z, 0x8080ffff, " Use Water Only (Check for Fertilizer)", use_fert);
 	end
+      writeSetting("use_fert",use_fert);
+      waterGap = readSetting("waterGap",waterGap);
     	  waterGap = lsCheckBox(10, y+40, z, 0xffffffff, " Leave Water Gap (Pin windows lower)", waterGap);
+      writeSetting("waterGap",waterGap);
     	  lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 
 	if use_fert then
