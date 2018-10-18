@@ -85,7 +85,7 @@ function promptRun()
     writeSetting("count",count);
     y = y + 45;
     refresh = readSetting("refresh",refresh);
-    lsPrint(165, y+2, 0, 0.6, 0.6, 0xffffffff, "(after each pass)");
+    lsPrint(165, y+2, 0, 0.6, 0.6, 0xffffffff, "(each pass)");
     refresh = CheckBox(10, y, 10, 0xffffffff, " Refresh Windows", refresh);
     writeSetting("refresh",refresh);
     y = y + 32;
@@ -143,8 +143,8 @@ function clickSequence(count)
   for i=1,count do
   clickedPoints = "";
 
-  if i > 1 then
-    refreshWindows()
+  if refresh then
+    refreshWindows();
   end
 
     for j=1,#clickList do
@@ -214,12 +214,13 @@ function closePopUp()
 end
 
 function refreshWindows()
+  statusScreen("Refreshing Windows ...", nil, 0.7, 0.7);
   srReadScreen();
-  pinWindows = findAllImages("UnPin.png");
+  pinWindows = findAllImages("This.png");
 	for i=1, #pinWindows do
 	  checkBreak();
-	  safeClick(pinWindows[i][0] - 7, pinWindows[i][1]);
+	  safeClick(pinWindows[i][0], pinWindows[i][1]);
 	  lsSleep(100);
   	end
-  lsSleep(1000);
+  lsSleep(500);
 end
