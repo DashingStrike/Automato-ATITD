@@ -5,6 +5,7 @@
 --
 
 dofile("common.inc");
+dofile("settings.inc");
 
 askText = singleLine([[
   Crematory v1.2 (by Tallow) --
@@ -497,38 +498,69 @@ end
 -------------------------------------------------------------------------------
 
 function promptLoad()
-  scale = 1.0;
+  scale = 0.8;
   local z = 0;
   local is_done = nil;
   while not is_done do
     checkBreak("disallow pause");
-    lsPrint(10, 10, z, scale, scale, 0xFFFFFFff, "Configure");
+    lsPrint(10, 10, z, scale, scale, 0xFFFFFFff, "Configure Crematory");
     local y = 60;
 
-    lsPrint(5, y, z, scale, scale, 0xffffffff, "Passes:");
+    passCount = readSetting("passCount",passCount);
+    lsPrint(15, y, z, scale, scale, 0xffffffff, "Passes:");
     is_done, passCount = lsEditBox("passes", 110, y, z, 50, 30, scale, scale,
-                                   0x000000ff, 5);
+                                   0x000000ff, passCount);
     if not tonumber(passCount) then
       is_done = false;
-      lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+      lsPrint(10, y+30, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
       passCount = 1;
     end
+    writeSetting("passCount",passCount);
     y = y + 48;
 
-    load_flax = lsCheckBox(15, y, z+10, 0xffffffff, "Dried Flax",
+    if load_flax then
+      flaxColor = 0xffffffff;
+    else
+      flaxColor = 0xff8080ff;
+    end
+    if load_papyrus then
+      papyrusColor = 0xffffffff;
+    else
+      papyrusColor = 0xff8080ff;
+    end
+    if load_leeks then
+      leeksColor = 0xffffffff;
+    else
+      leeksColor = 0xff8080ff;
+    end
+    if load_limestone then
+      limestoneColor = 0xffffffff;
+    else
+      limestoneColor = 0xff8080ff;
+    end
+
+    load_flax = readSetting("load_flax",load_flax);
+    load_flax = CheckBox(15, y, z+10, flaxColor, " Dried Flax",
                            load_flax);
+    writeSetting("load_flax",load_flax);
     y = y + 32;
 
-    load_papyrus = lsCheckBox(15, y, z+10, 0xffffffff, "Dried Papyrus",
+    load_papyrus = readSetting("load_papyrus",load_papyrus);
+    load_papyrus = CheckBox(15, y, z+10, papyrusColor, " Dried Papyrus",
                               load_papyrus);
+    writeSetting("load_papyrus",load_papyrus);
     y = y + 32;
 
-    load_leeks = lsCheckBox(15, y, z+10, 0xffffffff, "Leeks",
+    load_leeks = readSetting("load_leeks",load_leeks);
+    load_leeks = CheckBox(15, y, z+10, leeksColor, " Leeks",
                             load_leeks);
+    writeSetting("load_leeks",load_leeks);
     y = y + 32;
 
-    load_limestone = lsCheckBox(15, y, z+10, 0xffffffff, "Limestone",
+    load_limestone = readSetting("load_limestone",load_limestone);
+    load_limestone = CheckBox(15, y, z+10, limestoneColor, " Limestone",
                                 load_limestone);
+    writeSetting("load_limestone",load_limestone);
     y = y + 32;
 
     lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xd0d0d0ff,
