@@ -10,6 +10,7 @@ cutstoneTimer = 3;
 flystoneTimer = 5;
 pulleyTimer = 10;
 duckTeppyOffset = 10; -- How many extra seconds to add (to each real-life minute) to compensate for game time
+timer = 0;   -- Just a default to prevent error
 tol = 5000;  -- Increase tolerance if Automato isn't finding images. Try increasing 500 at a time
 
 askText = "Rock Saw v1.0 - by Cegaiel\n\nMake Cut Stones, Pulleys or Flystones on Rock Saws.\n\nPin up windows manually or use Window Manager to pin/arrange windows.";
