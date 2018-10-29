@@ -24,6 +24,7 @@ tickTime = 500;
 maxWait = 1000;
 longWait = 500;
 shortWait = 30;
+loadDelay = 500;
 
 colOffsets = {
   {15, 22}, --{35-40-3, 204-182}
@@ -508,7 +509,7 @@ function promptLoad()
 
     passCount = readSetting("passCount",passCount);
     lsPrint(15, y, z, scale, scale, 0xffffffff, "Passes:");
-    is_done, passCount = lsEditBox("passes", 110, y, z, 50, 30, scale, scale,
+    is_done, passCount = lsEditBox("passes", 90, y, z, 50, 25, scale, scale,
                                    0x000000ff, passCount);
     if not tonumber(passCount) then
       is_done = false;
@@ -543,19 +544,19 @@ function promptLoad()
     load_flax = CheckBox(15, y, z+10, flaxColor, " Dried Flax",
                            load_flax);
     writeSetting("load_flax",load_flax);
-    y = y + 32;
+    y = y + 28;
 
     load_papyrus = readSetting("load_papyrus",load_papyrus);
     load_papyrus = CheckBox(15, y, z+10, papyrusColor, " Dried Papyrus",
                               load_papyrus);
     writeSetting("load_papyrus",load_papyrus);
-    y = y + 32;
+    y = y + 28;
 
     load_leeks = readSetting("load_leeks",load_leeks);
     load_leeks = CheckBox(15, y, z+10, leeksColor, " Leeks",
                             load_leeks);
     writeSetting("load_leeks",load_leeks);
-    y = y + 32;
+    y = y + 28;
 
     load_limestone = readSetting("load_limestone",load_limestone);
     load_limestone = CheckBox(15, y, z+10, limestoneColor, " Limestone",
@@ -563,8 +564,20 @@ function promptLoad()
     writeSetting("load_limestone",load_limestone);
     y = y + 32;
 
-    lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.7, 0.7, 0xd0d0d0ff,
-                   "Make sure each crematory is pinned and empty.");
+    loadDelay = readSetting("loadDelay",loadDelay);
+    lsPrint(15, y, z, scale, scale, 0xffffffff, "Load Delay (ms):");
+    is_done, loadDelay = lsEditBox("loadDelay", 150, y, z, 60, 25, scale, scale,
+                                   0x000000ff, loadDelay);
+    if not tonumber(loadDelay) then
+      is_done = false;
+      lsPrint(10, y+30, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+      loadDelay = 500;
+    end
+    writeSetting("loadDelay",loadDelay);
+    y = y + 32;
+
+    lsPrintWrapped(10, y, z+10, lsScreenX - 20, 0.65, 0.65, 0xd0d0d0ff,
+                   "Load Delay: Wait Time after clicking Max button (increase delay if getting 'Busy' errors). Make sure each crematory is pinned and empty.");
 
     if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Begin") then
         is_done = 1;
@@ -618,7 +631,7 @@ function loadAll()
          safeClick(t.x + t.width/2, t.bottom - 50);
          lsSleep(shortWait*2);
          waitForNoText("Load how much");
-         sleepWithStatus(500,"Loaded: " .. v);
+         sleepWithStatus(loadDelay,"Loaded: " .. v);
       end
 
 	foundOK = nil;
