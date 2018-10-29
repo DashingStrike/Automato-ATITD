@@ -282,6 +282,7 @@ function glassTick(window_pos, state)
 						--state.status = state.status .. " Making:" .. item_priority[item_index];
 						state.status = state.status .. " Making:" .. making;
 						srClickMouseNoMove(pos[0]+5, pos[1]+2);
+						lsSleep(100);
 						made_one = 1;
 						break;
 					end
@@ -297,6 +298,7 @@ function glassTick(window_pos, state)
 					  state.status = state.status .. " NothingToMake - Refreshing Window";
 					--srSetMousePos(thisIs[0], thisIs[1]);
 					  srClickMouseNoMove(thisIs[0], thisIs[1]);
+					  lsSleep(100);
 					end
 				end
 			end
