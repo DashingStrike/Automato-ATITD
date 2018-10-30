@@ -9,10 +9,10 @@ dofile("common.inc");
 -- <ingredient> should be quoted, no spaces or special characters. IE: "MaltMediumRoasted"
 --
 ingredients = { 
-	{ "WheatDriedRaw", 60, 1200 },
-	{ "Honey", 160, 1200 }
+	{ "WheatDriedRaw", 10, 300 },
+	{ "Honey", 10, 15 }
 };
-sealTime = 10;
+sealTime = 1400; -- When do you want the Seal button clicked?
 
 -- Please DON'T modify anything below for proper operation
 kettles = {};
@@ -210,7 +210,15 @@ end
 
 function doit()
 --	promptForNumbers();
-	askForWindow("-- Script written by Walter K. Zydhek\n\nPlease avoid using the mouse while macro is working.");
+	askForWindow("-- Script written by Walter K. Zydhek\n\nPlease avoid using the mouse while macro is working.\n\nMake sure no windows overlap (all 4 borders of each window must be completely visible).\n\nDon\'t pin any windows near center (where popup boxes to add ingredients or OK popups occur).\n\nOpen macro in notepad to edit your ingredient list and seal times. Macro will add wood/water and fire up your kettles!");
+
+  windowManager("Beer Kettle Setup", nil);
+  askForFocus();
+  unpinOnExit(main);
+end
+
+
+function main()
 	srReadScreen();
 	
 	kettles = findAllText("This is [a-z]+ Beer Kettle", nil, REGION+REGEX);
@@ -244,4 +252,5 @@ function doit()
 			
 		end
 	end
+	lsPlaySound("Complete.wav");
 end
