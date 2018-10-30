@@ -683,7 +683,16 @@ function doit()
 	while 1 do
 		-- Tick
 		srReadScreen();
-		labWindows2 = findAllText("This is [a-z]+ Chemistry Laboratory", nil, REGION+REGEX);
+
+		--labWindows2 = findAllText("This is [a-z]+ Chemistry Laboratory", nil, REGION+REGEX);
+		--On around October 22, 2018 - Chem Lab window behavior has changed breaking the macro
+		--Once the Chem Lab starts up, the window shrinks down to almost nothing and most options disappear (including This is a Chem Lab)
+		-- See https://i.gyazo.com/4ec9eaf1d3bd7dc65e9dc919ef921215.png for example
+		-- Now we're forced to search for Utility on menu instead.
+		labWindows2 = findAllText("Utility", nil, REGION+REGEX);
+
+
+
 		
 		local should_continue = nil;
 		
@@ -704,6 +713,9 @@ function doit()
 					should_continue = 1;
 				end
 			end
+		else
+		--refresh windows. Chem Lab window does not refresh itself after it's done making essence. Refresh to force window to update, so we know when it's done.
+		refreshWindows();
 		end
 		
 		--check to see if we're finished.
@@ -724,4 +736,15 @@ function doit()
 		checkBreak();
 		-- error 'done';
 	end
+end
+
+function refreshWindows()
+  srReadScreen();
+  pinWindows = findAllImages("UnPin.png");
+	for i=1, #pinWindows do
+	  checkBreak();
+	  safeClick(pinWindows[i][0] - 7, pinWindows[i][1]);
+	  lsSleep(100);
+  	end
+  lsSleep(500);
 end
