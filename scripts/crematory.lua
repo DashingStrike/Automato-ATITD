@@ -708,6 +708,8 @@ function sleepWithStatus(delay_time, message, color, scale)
   end
   if not delay_time then
     error("Incorrect number of arguments for sleepWithStatus()");
+  else
+  delay_time = tonumber(delay_time);
   end
   if not scale then
     scale = 0.8;
