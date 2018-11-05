@@ -1,4 +1,4 @@
--- mining_ore.lua v2.2.6 -- by Cegaiel
+-- mining_ore.lua v2.2.7 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -22,23 +22,21 @@
 -- It will then move mouse once to upper left corner then start popping up menus.
 -- BEWARE: You must uncheck Options, Interface Options: Right-Click opens a menu as pinned. Or else you will have tons of left-over pinned menus, that you need to close out!
 
+-- For a more detailed Change Log and history, see https://github.com/DashingStrike/Automato-ATITD/commits/master/scripts/mining_ore.lua
+
 
 dofile("common.inc");
 dofile("settings.inc");
 
-info = "Ore Mining v2.2.6 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
+info = "Ore Mining v2.2.7 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
 
--- These arrays aren't in use currently.
---Chat_Types = {
---["Your workload had"] = "workload",
---};
 
 -- Start don't alter these ...
 oreGathered = 0;
 oreGatheredTotal = 0;
 oreGatheredLast = 0;
 miningTime = 0;
-autoWorkMine = true;
+autoWorkMine = true; -- written to Settings.mining_ore.lua.txt
 timesworked = 0;
 miningTimeTotal = 0;
 dropdown_key_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
@@ -54,6 +52,7 @@ extraStones = false; -- written to Settings.mining_ore.lua.txt
 noMouseMove = false; -- written to Settings.mining_ore.lua.txt
 muteSoundEffects = false; -- written to Settings.mining_ore.lua.txt
 minPopSleepDelay = 150;  -- The minimum delay time used during findClosePopUp() function
+clickDelay = 100; -- written to Settings.mining_ore.lua.txt
 
 
 
@@ -281,24 +280,25 @@ function getPoints()
         y = y + 30;
         lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Mine Type: " .. ore .. " / Worked: " .. timesworked .. " times");
         y = y + 20;
-        miningTimeGUI = "N/A";
-
         if miningTime ~= 0 then
-          miningTimeGUI = round((miningTime/100)/10,2) .. " secs";
+          miningTimeGUI = DecimalsToMinutes(miningTime/1000);
+        else
+          miningTimeGUI = "N/A";
         end
-        avgMiningTimeGUI =  "N/A";
 
         if miningTimeTotal ~= 0 then
-          avgMiningTimeGUI = round((miningTimeTotal/timesworked/100)/10,2) .. " secs";
+          avgMiningTimeGUI = DecimalsToMinutes(miningTimeTotal/timesworked/1000);
+        else
+          avgMiningTimeGUI =  "N/A";
         end
 
-        lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Last: " .. miningTimeGUI .. " / Avg: " .. avgMiningTimeGUI);
+        lsPrint(10, y, z, 0.7, 0.7, 0xf0f0f0ff, "Last: " .. miningTimeGUI .. "   /   Average: " .. avgMiningTimeGUI);
         y = y + 20;
         lsPrint(10, y, z, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal));
         lsPrint(175, y, z, 0.7, 0.7, 0x40ffffff, " Last: " .. math.floor(oreGatheredLast));
         y = y + 20;
-        lsPrint(10, y, z, 0.7, 0.7, 0xB0B0B0ff, "Select " .. nodeleft .. " more nodes to automatically start!");
-        y = y + 30;
+        lsPrint(10, y, z, 0.65, 0.65, 0xB0B0B0ff, "Select " .. nodeleft .. " more nodes to automatically start!");
+        y = y + 20;
         local start = math.max(1, #clickList - 20);
         local index = 0;
         for i=start,#clickList do
@@ -335,7 +335,7 @@ function getPoints()
             error "Clicked End Script button";
         end
         lsDoFrame();
-        lsSleep(10);
+        lsSleep(50);
     end
 end
 
@@ -353,8 +353,109 @@ function clickSequence()
     end
     oreGatheredLast = 0;
     oreGathered = 0;
-    local worked = 1;
-    local startMiningTime = lsGetTimer();
+    worked = 0;
+    startMiningTime = lsGetTimer();
+
+  if extraStones then -- Do 4 stone combos first, in addition to the regular 3 stone combos later, below
+
+-- Begin 4 stone combos
+
+    for i=1,#clickList do
+        for j=i+1,#clickList do
+            for k=j+1,#clickList do
+            	 for l=k+1,#clickList do
+                --checkCloseWindows();
+                findClosePopUpOld(); --Extra precaution to check for remaining popup before working the nodes
+
+                -- 1st Node
+                checkBreak();
+                checkAbort();
+                startSetTime = lsGetTimer();
+
+                if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
+
+                srClickMouseNoMove(clickList[i][1], clickList[i][2], 1);
+                lsSleep(clickDelay);
+                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+                -- 2nd Node
+                checkBreak();
+                checkAbort();
+                srClickMouseNoMove(clickList[j][1], clickList[j][2]);
+                lsSleep(clickDelay);
+                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+                -- 3rd Node
+                checkBreak();
+                checkAbort();
+                srClickMouseNoMove(clickList[k][1], clickList[k][2]);
+                lsSleep(clickDelay);
+                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+
+                 -- 4th Node
+                checkBreak();
+                checkAbort();
+                srClickMouseNoMove(clickList[l][1], clickList[l][2]);
+                lsSleep(clickDelay);
+                clickAllText("[S]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
+
+
+                else -- noMouseMove is false
+
+                --checkCloseWindows();
+                findClosePopUpOld(); --Extra precaution to check for remaining popup before working the nodes
+
+                -- 1st Node
+                checkBreak();
+                checkAbort();
+                startSetTime = lsGetTimer();
+                srSetMousePos(clickList[i][1], clickList[i][2]);
+                lsSleep(clickDelay);
+                srKeyEvent('A');
+
+                -- 2nd Node
+                checkBreak();
+                checkAbort();
+                srSetMousePos(clickList[j][1], clickList[j][2]);
+                lsSleep(clickDelay);
+                srKeyEvent('A');
+
+                -- 3rd Node
+                checkBreak();
+                checkAbort();
+                srSetMousePos(clickList[k][1], clickList[k][2]);
+                lsSleep(clickDelay);
+                srKeyEvent('A');
+
+
+                 -- 4th Node
+                checkBreak();
+                checkAbort();
+                srSetMousePos(clickList[l][1], clickList[l][2]);
+                lsSleep(clickDelay);
+                srKeyEvent('S');
+
+                end -- end noMouseMove check
+
+
+                findClosePopUp();
+
+                worked = worked + 1
+                elapsedTime = lsGetTimer() - startMiningTime;
+                setTime = lsGetTimer() - startSetTime;
+                updateGUI(i,j,k,l);
+            	 end
+            end
+        end
+    end
+
+  end -- if extraStones (4 stone combos)
+
+-- End 4 stone combos
+
+
+-- Begin 3 stone combos
 
     for i=1,#clickList do
         for j=i+1,#clickList do
@@ -365,7 +466,7 @@ function clickSequence()
                 -- 1st Node
                 checkBreak();
                 checkAbort();
-                local startSetTime = lsGetTimer();
+                startSetTime = lsGetTimer();
 
                 if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
                 --srSetMousePos(0,180); -- Move mouse to near top right corner (below icons), once, to hopefully make node popup menus appear there.
@@ -412,161 +513,16 @@ function clickSequence()
                 findClosePopUp();
 
                 worked = worked + 1
-                local elapsedTime = lsGetTimer() - startMiningTime;
-                local setTime = lsGetTimer() - startSetTime;
-
-                local y = 10;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
-                y = y +15
-                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Alt+Shift to pause this script.");
-                y = y +35
-                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "[" .. worked .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k);
-                y = y + 25;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Node Click Delay: " .. clickDelay .. " ms");
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. round((setTime/100)/10,2) .. " secs");
-                y = y + 16;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Total Mines Worked: " .. timesworked .. " times");
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. round((elapsedTime/100)/10,2) .. " secs");
-                y = y + 16;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
-                y = y + 16;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Average Time Elapsed: " .. avgMiningTimeGUI);
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Current Ore Found: " .. math.floor(oreGatheredLast));
-                y = y + 20;
-                lsPrint(10, y, 0, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal));
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffff80ff, "HOLD Shift to Abort and Return to Menu.");
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xff8080ff, "Don't touch mouse until finished!");
-                lsDoFrame();
+                elapsedTime = lsGetTimer() - startMiningTime;
+                setTime = lsGetTimer() - startSetTime;
+                updateGUI(i,j,k);
             end
         end
     end
 
+   lsSleep(1000); -- Delay not required, just gives a slight chance to see the last node worked on GUI, from updateGUI(), before it disappears off screen
 
-  if extraStones then -- Do 4 stone combos first, in addition to the regular 3 stone combos later, below
-
-    for i=1,#clickList do
-        for j=i+1,#clickList do
-            for k=j+1,#clickList do
-            	 for l=k+1,#clickList do
-                --checkCloseWindows();
-                findClosePopUpOld(); --Extra precaution to check for remaining popup before working the nodes
-
-                -- 1st Node
-                checkBreak();
-                checkAbort();
-                local startSetTime = lsGetTimer();
-
-                if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
-
-                srClickMouseNoMove(clickList[i][1], clickList[i][2], 1);
-                lsSleep(clickDelay);
-                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
-
-                -- 2nd Node
-                checkBreak();
-                checkAbort();
-                srClickMouseNoMove(clickList[j][1], clickList[j][2]);
-                lsSleep(clickDelay);
-                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
-
-                -- 3rd Node
-                checkBreak();
-                checkAbort();
-                srClickMouseNoMove(clickList[k][1], clickList[k][2]);
-                lsSleep(clickDelay);
-                clickAllText("[A]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
-
-
-                 -- 4th Node
-                checkBreak();
-                checkAbort();
-                srClickMouseNoMove(clickList[l][1], clickList[l][2]);
-                lsSleep(clickDelay);
-                clickAllText("[S]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
-
-
-                else -- noMouseMove is false
-
-                --checkCloseWindows();
-                findClosePopUpOld(); --Extra precaution to check for remaining popup before working the nodes
-
-                -- 1st Node
-                checkBreak();
-                checkAbort();
-                local startSetTime = lsGetTimer();
-                srSetMousePos(clickList[i][1], clickList[i][2]);
-                lsSleep(clickDelay);
-                srKeyEvent('A');
-
-                -- 2nd Node
-                checkBreak();
-                checkAbort();
-                srSetMousePos(clickList[j][1], clickList[j][2]);
-                lsSleep(clickDelay);
-                srKeyEvent('A');
-
-                -- 3rd Node
-                checkBreak();
-                checkAbort();
-                srSetMousePos(clickList[k][1], clickList[k][2]);
-                lsSleep(clickDelay);
-                srKeyEvent('A');
-
-
-                 -- 4th Node
-                checkBreak();
-                checkAbort();
-                srSetMousePos(clickList[l][1], clickList[l][2]);
-                lsSleep(clickDelay);
-                srKeyEvent('S');
-
-                end -- end noMouseMove check
-
-
-                findClosePopUp();
-
-                worked = worked + 1
-                local elapsedTime = lsGetTimer() - startMiningTime;
-                local setTime = lsGetTimer() - startSetTime;
-
-                local y = 10;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to end this script.");
-                y = y +15
-                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Alt+Shift to pause this script.");
-                y = y +35
-                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "[" .. worked .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k .. ", " .. l);
-                y = y + 25;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Node Click Delay: " .. clickDelay .. " ms");
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last Work Time: " .. round((setTime/100)/10,2) .. " secs");
-                y = y + 16;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Total Mines Worked: " .. timesworked .. " times");
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed: " .. round((elapsedTime/100)/10,2) .. " secs");
-                y = y + 16;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
-                y = y + 16;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Average Time Elapsed: " .. avgMiningTimeGUI);
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Current Ore Found: " .. math.floor(oreGatheredLast));
-                y = y + 20;
-                lsPrint(10, y, 0, 0.7, 0.7, 0x80ff80ff, "Total Ore Found: " .. math.floor(oreGatheredTotal));
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xffff80ff, "HOLD Shift to Abort and Return to Menu.");
-                y = y + 32;
-                lsPrint(10, y, 0, 0.7, 0.7, 0xff8080ff, "Don't touch mouse until finished!");
-                lsDoFrame();
-            	 end
-            end
-        end
-    end
-  end
-
+-- End 3 stone combos
 
     miningTime = lsGetTimer() - startMiningTime;
     miningTimeTotal =  miningTimeTotal + miningTime;
@@ -614,7 +570,7 @@ function checkCloseWindows()
             lsSleep(100);
             srClickMouseNoMove(closeWindows[i][0]+5, closeWindows[i][1]+10, true);
         end
-        lsSleep(clickDelay);
+        lsSleep(50);
     end
 end
 
@@ -667,7 +623,7 @@ function findClosePopUp()
             lsSleep(popSleepDelay);
             break;
         end
-    lsSleep(100);
+    lsSleep(50);
     end
 end
 
@@ -856,6 +812,16 @@ function round(num, numDecimalPlaces)
 end
 
 
+function DecimalsToMinutes(dec) 
+  local ms = tonumber(dec) 
+  if ms >= 60 then
+    return math.floor(ms / 60).."m ".. math.floor(ms % 60) .. "s"; 
+  else
+    return math.floor(ms) .. "s"; 
+  end
+end 
+
+
 function TakeOreWindowRefresh()
  findAllOre = findText("All Ore");
 	if findAllOre then 
@@ -866,3 +832,37 @@ function TakeOreWindowRefresh()
 	end
 end
 
+
+function updateGUI(i,j,k,l)
+                local y = 10;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Ctrl+Shift to End this script.");
+                y = y +15
+                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Hold Alt+Shift to Pause this script.");
+                y = y +35
+                if l ~= nil then -- this is l (lower cased L), not 1 (number one), l is the 4th node from a 4 stone combo (i,j,k,l)
+                  lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "[" .. worked .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k .. ", " .. l);
+                else -- We're doing a 3 stone combo (i,j,k)
+                  lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "[" .. worked .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k);
+                end
+                y = y + 25;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xB0B0B0ff, "Node Click Delay: " .. clickDelay .. " ms");
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Last 'Nodes Worked' Time: " .. round((setTime/100)/10,2) .. "s");
+                y = y + 16;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Mine Worked: " .. timesworked .. " times");
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Current Time Elapsed:   " .. DecimalsToMinutes(elapsedTime/1000));
+                y = y + 16;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Previous Time Elapsed: " .. miningTimeGUI);
+                y = y + 16;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Average Time Elapsed:  " .. avgMiningTimeGUI);
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0x40ffffff, "Current Ore Found: " .. math.floor(oreGatheredLast));
+                y = y + 20;
+                lsPrint(10, y, 0, 0.7, 0.7, 0x80ff80ff, "Total Ore Found:     " .. math.floor(oreGatheredTotal));
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xffff80ff, "HOLD Shift to Abort and Return to Menu.");
+                y = y + 32;
+                lsPrint(10, y, 0, 0.7, 0.7, 0xff8080ff, "Don't touch mouse until finished!");
+                lsDoFrame();
+end
