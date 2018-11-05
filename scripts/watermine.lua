@@ -2,8 +2,7 @@
 -- 
 --
 
-dofile("screen_reader_common.inc");
-dofile("ui_utils.inc");
+dofile("common.inc");
 
 wind_time = 7920000;  	-- 2 hours teppy time
 check_time = 10000;   	-- 10 seconds
@@ -106,9 +105,9 @@ function promptOptions()
 		local y = 40;
 
 
-		do_initial_wind = lsCheckBox(10, y, z+10, 0xFFFFFFff, "Do Initial Wind", do_initial_wind);
+		do_initial_wind = lsCheckBox(10, y, z+10, 0xFFFFFFff, " Do Initial Wind", do_initial_wind);
 		y = y + 32;
-		do_wind = lsCheckBox(10, y, z+10, 0xFFFFFFff, "Do Any Windings", do_wind);
+		do_wind = lsCheckBox(10, y, z+10, 0xFFFFFFff, " Do Any Windings", do_wind);
 		y = y + 32;
 
 
@@ -139,13 +138,13 @@ function timestr (timer)
 
 	local result = "";
 	if (days > 0) then
-		result = result .. days .. "d";
+		result = result .. days .. "d ";
 	end
 	if ((hours > 0) or (#result >1)) then
-		result = result .. hours .. "h";
+		result = result .. hours .. "h ";
 	end
 	if ((minutes > 0) or (#result>1)) then
-		result = result .. minutes .. "m";
+		result = result .. minutes .. "m ";
 	end
 	if ((seconds > 0) or (#result>1)) then
 		result = result .. seconds .. "s";
