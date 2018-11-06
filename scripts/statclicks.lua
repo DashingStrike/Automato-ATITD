@@ -185,11 +185,12 @@ end
 
 
 function hacklingRake()
-   flaxReg = findText("This is [a-z]+ Hackling Rake", nil, REGION+REGEX);
+   expressionToFind = "This is [a-z]+( Improved)? Hackling Rake";
+   flaxReg = findText(expressionToFind, nil, REGION+REGEX);
    if flaxReg == nil then
       return;
    end
-   flaxText = findText("This is [a-z]+ Hackling Rake", flaxReg, REGEX);
+   flaxText = findText(expressionToFind, flaxReg, REGEX);
    clickText(flaxText);
    lsSleep(per_tick);
    srReadScreen();
