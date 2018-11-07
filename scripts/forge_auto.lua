@@ -231,8 +231,8 @@ end
       downArrow(); -- Click the Down arrow button to scroll
    end
 
-   if lastParent == "1 Bar" or lastParent == "5 Bars" then
-	text = name;
+   if lastParent == "Bars x1" or lastParent == "Bars x5" then
+	text = name .. " Bars";
    elseif lastParent == "Sheeting" or lastParent == "Wire" then
       text = string.format("Make %s %s", name, lastParent);
    elseif lastParent == "Pipes" or lastParent == "Foils" or lastParent == "Straps" then
@@ -432,10 +432,10 @@ function doit()
    while 1 do
       local t, u;
       if slept == false then
-         sleepWithStatus(6000, "Sleeping before checking forges again");
+         sleepWithStatus(6000, "Sleeping before checking forges again", nil, 0.7, 0.7);
          slept = true;
       else
-         sleepWithStatus(150, "Short sleep before forges");
+         sleepWithStatus(150, "Short sleep before forges", nil, 0.7, 0.7);
          slept = false;
       end
       srReadScreen();
