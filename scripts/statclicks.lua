@@ -185,7 +185,7 @@ end
 
 
 function hacklingRake()
-   expressionToFind = "This is [a-z]+( Improved)? Hackling Rake";
+   expressionToFind = "This is [a-z]+[ Improved]* Hackling Rake";
    flaxReg = findText(expressionToFind, nil, REGION+REGEX);
    if flaxReg == nil then
       return;
