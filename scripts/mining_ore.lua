@@ -1,4 +1,4 @@
--- mining_ore.lua v2.2.8 -- by Cegaiel
+-- mining_ore.lua v2.2.9 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -20,7 +20,7 @@
 dofile("common.inc");
 dofile("settings.inc");
 
-info = "Ore Mining v2.2.8 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
+info = "Ore Mining v2.2.9 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
 
 
 -- Start don't alter these ...
@@ -46,6 +46,11 @@ muteSoundEffects = false; -- written to Settings.mining_ore.lua.txt
 minPopSleepDelay = 150;  -- The minimum delay time used during findClosePopUp() function
 clickDelay = 100; -- written to Settings.mining_ore.lua.txt
 defaultOrder = true;  -- written to Settings.mining_ore.lua.txt -- Determines to run 4 stone combo first, then 3 (true); or vice versa (false). Only applies when "Also do 4 stone combo" is checked.
+
+--TESTING
+rgbTol = 10;
+hueTol = 50;
+brokenStoneCheck = false;
 
 
 function doit()
@@ -130,7 +135,7 @@ function getMineLoc()
             is_done = 1;
         end
 
-        if ButtonText(220, lsScreenY - 30, z, 110, 0xFFFFFFff,
+        if ButtonText(205, lsScreenY - 30, z, 110, 0xFFFFFFff,
             "End script") then
             error "Clicked End Script button";
         end
@@ -171,6 +176,7 @@ end
 
 function getPoints()
     clickList = {};
+    clickListColor = {};
     if (dropdown_ore_cur_value == 1) then
         ore = "Aluminum";
         stonecount = 9;
@@ -236,6 +242,7 @@ function getPoints()
     local z = 0;
     while not is_done do
         nx, ny = srMousePos();
+        pixels = srReadPixel(nx, ny);
         local is_shifted = lsShiftHeld();
         if (dropdown_cur_value_key == 1) then
             is_shifted = lsShiftHeld();
@@ -249,6 +256,7 @@ function getPoints()
 
         if is_shifted and not was_shifted then
             clickList[#clickList + 1] = {nx, ny};
+            clickListColor[#clickListColor + 1] = {pixels};
             nodeleft = nodeleft - 1;
         end
         was_shifted = is_shifted;
@@ -264,7 +272,21 @@ function getPoints()
         noMouseMove = readSetting("noMouseMove",noMouseMove);
         noMouseMove = lsCheckBox(15, y, z, 0xffffffff, " Dual Monitor (NoMouseMove) Mode", noMouseMove);
         writeSetting("noMouseMove",noMouseMove);
-        y = y + 30
+        y = y + 25
+        if brokenStoneCheck then
+          brokenStoneCheckColor = 0xff8080ff;
+        else
+          brokenStoneCheckColor = 0xffffffff;
+        end
+
+
+        --TESTING: BETA
+        brokenStoneCheck = readSetting("brokenStoneCheck",brokenStoneCheck);
+        brokenStoneCheck = lsCheckBox(15, y, z, brokenStoneCheckColor, " Beta: Broken Stone Check", brokenStoneCheck);
+        writeSetting("brokenStoneCheck",brokenStoneCheck);
+
+
+        y = y + 25
         extraStones = readSetting("extraStones",extraStones);
         extraStones = lsCheckBox(15, y, z, 0xffffffff, " Also do 4 stone combinations", extraStones);
         writeSetting("extraStones",extraStones);
@@ -333,7 +355,7 @@ function getPoints()
             end
         end
 
-        if ButtonText(125, lsScreenY -30, z, 80, 0xffffffff, "Config") then
+        if ButtonText(120, lsScreenY -30, z, 80, 0xffffffff, "Config") then
             cancelButton = 1;
             doit2();
         end
@@ -344,7 +366,7 @@ function getPoints()
             end
         end
 
-        if ButtonText(220, lsScreenY - 30, z, 110, 0xFFFFFFff,
+        if ButtonText(205, lsScreenY - 30, z, 110, 0xFFFFFFff,
             "End script") then
             error "Clicked End Script button";
         end
@@ -558,6 +580,7 @@ function chatRead()
    end
 
 	if string.sub(lastLineParse, 1, 13) == "Your workload" then
+	  --TESTING : Comment below 2 lines if you want to test this macro on a Sand Mine (Select: Iron), to see nodes break more quickly and test if it detects nodes are breaking, easier (brokenStoneCheck).
 	  oreFound = true;
 	  oreGathered = string.match(lastLine, "(%d+) " .. ore);
 	else
@@ -636,9 +659,9 @@ function promptDelays()
             end
         end
 
-        if ButtonText(220, lsScreenY - 30, 0, 110, 0xFFFFFFff,
+        if ButtonText(205, lsScreenY - 30, 0, 110, 0xFFFFFFff,
             "End script") then
-            error(quitMessage);
+            error "Clicked End Script button";
         end
         lsDoFrame();
         lsSleep(10);
@@ -736,6 +759,43 @@ function fourStoneCombo()
                 findClosePopUpOld(); --Extra precaution to check for remaining popup before working the nodes
                 startSetTime = lsGetTimer();
 
+
+                if brokenStoneCheck then
+                -- START TESTING (brokenStoneCheck)
+
+                local status = "";
+                thisColor1 = srReadPixel(clickList[i][1], clickList[i][2]);
+                thisColor2 = srReadPixel(clickList[j][1], clickList[j][2]);
+                thisColor3 = srReadPixel(clickList[k][1], clickList[k][2]);
+                thisColor4 = srReadPixel(clickList[l][1], clickList[l][2]);
+
+
+                --function compareColorEx(left, right, rgbTol, hueTol)
+                if(not compareColorEx(thisColor1, clickListColor[i][1], rgbTol, hueTol)) then
+                  status = status .. "\n" .. i;
+                end
+
+                if(not compareColorEx(thisColor2, clickListColor[j][1], rgbTol, hueTol)) then
+                  status = status .. "\n" .. j;
+                end
+
+                if(not compareColorEx(thisColor3, clickListColor[k][1], rgbTol, hueTol)) then
+                  status = status .. "\n" .. k;
+                end
+
+                if(not compareColorEx(thisColor4, clickListColor[l][1], rgbTol, hueTol)) then
+                  status = status .. "\n" .. l;
+                end
+
+                if status ~= "" then
+                  lsPlaySound("start.wav");
+                  sleepWithStatus(500, "Skipping Broken Nodes:\n" .. status);
+                  break;
+                end
+                -- END TESTING
+                end
+
+
                 if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
 
                 -- 1st Node
@@ -766,7 +826,6 @@ function fourStoneCombo()
                 srClickMouseNoMove(clickList[l][1], clickList[l][2]);
                 lsSleep(clickDelay);
                 clickAllText("[S]", 20, 2, 1); -- offsetX, offsetY, rightClick (1 = true)
-
 
                 else -- noMouseMove is false
 
@@ -802,9 +861,7 @@ function fourStoneCombo()
 
                 end -- end noMouseMove check
 
-
                 findClosePopUp();
-
                 worked = worked + 1
                 elapsedTime = lsGetTimer() - startMiningTime;
                 setTime = lsGetTimer() - startSetTime;
@@ -823,6 +880,37 @@ function threeStoneCombo()
                 --checkCloseWindows();
                 findClosePopUpOld(); --Extra precaution to check for remaining popup before working the nodes
                 startSetTime = lsGetTimer();
+
+
+                if brokenStoneCheck then
+                -- START TESTING (brokenStoneCheck)
+
+                local status = "";
+                thisColor1 = srReadPixel(clickList[i][1], clickList[i][2]);
+                thisColor2 = srReadPixel(clickList[j][1], clickList[j][2]);
+                thisColor3 = srReadPixel(clickList[k][1], clickList[k][2]);
+
+                --function compareColorEx(left, right, rgbTol, hueTol)
+
+                if(not compareColorEx(thisColor1, clickListColor[i][1], rgbTol, hueTol)) then
+                  status = status .. "\n" .. i;
+                end
+
+                if(not compareColorEx(thisColor2, clickListColor[j][1], rgbTol, hueTol)) then
+                  status = status .. "\n" .. j;
+                end
+
+                if(not compareColorEx(thisColor3, clickListColor[k][1], rgbTol, hueTol)) then
+                  status = status .. "\n" .. k;
+                end
+
+                if status ~= "" then
+                  lsPlaySound("start.wav");
+                  sleepWithStatus(500, "Skipping Broken Nodes:\n" .. status);
+                  break;
+                end
+                -- END TESTING
+                end
 
 
                 if noMouseMove then -- Check for dual monitor option - don't move mouse cursor over each node and send keyEvents. Instead do rightClick popup menus
@@ -863,6 +951,7 @@ function threeStoneCombo()
                 checkBreak();
                 checkAbort();
                 srSetMousePos(clickList[j][1], clickList[j][2]);
+
                 lsSleep(clickDelay);
                 srKeyEvent('A');
 
@@ -875,7 +964,6 @@ function threeStoneCombo()
                 end -- end noMouseMove check
 
                 findClosePopUp();
-
                 worked = worked + 1
                 elapsedTime = lsGetTimer() - startMiningTime;
                 setTime = lsGetTimer() - startSetTime;
@@ -883,4 +971,48 @@ function threeStoneCombo()
             end
         end
     end
+end
+
+
+function compareColorEx(left, right, rgbTol, hueTol)
+	local leftRgb = parseColor(left);
+	local rightRgb = parseColor(right);
+	local i;
+	local d;
+	local rgbTotal = 0;
+	local hueTotal = 0;
+	for i = 0, 2 do
+		-- Compare raw RGB values
+		d = leftRgb[i] - rightRgb[i];
+		rgbTotal = rgbTotal + (d * d);
+		if(rgbTotal > rgbTol) then
+			return false;
+		end
+		-- Compare hue
+		if(i < 2) then
+			d = (leftRgb[i] - leftRgb[i+1]) - (rightRgb[i] - rightRgb[i+1]);
+			hueTotal = hueTotal + (d * d);
+		else
+			d = (leftRgb[i] - leftRgb[0]) - (rightRgb[i] - rightRgb[0]);
+			hueTotal = hueTotal + (d * d);
+		end
+		if(hueTotal > hueTol) then
+			return false;
+		end
+	end
+	return true;
+end
+
+
+function parseColor(color)
+	local rgb = {};
+	local c = color / 256;
+	rgb[0] = math.floor(c / 65536);
+	c1 = c - (rgb[0] * 65536);
+	if(rgb[0] < 0) then
+		rgb[0] = rgb[0] + 256;
+	end
+	rgb[1] = math.floor(c1 / 256);
+	rgb[2] = math.floor(c1 - (rgb[1] * 256));
+	return rgb;
 end
