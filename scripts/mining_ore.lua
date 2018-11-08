@@ -48,8 +48,8 @@ clickDelay = 100; -- written to Settings.mining_ore.lua.txt
 defaultOrder = true;  -- written to Settings.mining_ore.lua.txt -- Determines to run 4 stone combo first, then 3 (true); or vice versa (false). Only applies when "Also do 4 stone combo" is checked.
 
 --TESTING
-rgbTol = 10;
-hueTol = 50;
+rgbTol = 50;
+hueTol = 10;
 brokenStoneCheck = false;
 
 
@@ -773,18 +773,22 @@ function fourStoneCombo()
                 --function compareColorEx(left, right, rgbTol, hueTol)
                 if(not compareColorEx(thisColor1, clickListColor[i][1], rgbTol, hueTol)) then
                   status = status .. "\n" .. i;
+                  srSetMousePos(clickList[i][1], clickList[i][2]);
                 end
 
                 if(not compareColorEx(thisColor2, clickListColor[j][1], rgbTol, hueTol)) then
                   status = status .. "\n" .. j;
+                  srSetMousePos(clickList[j][1], clickList[j][2]);
                 end
 
                 if(not compareColorEx(thisColor3, clickListColor[k][1], rgbTol, hueTol)) then
                   status = status .. "\n" .. k;
+                  srSetMousePos(clickList[k][1], clickList[k][2]);
                 end
 
                 if(not compareColorEx(thisColor4, clickListColor[l][1], rgbTol, hueTol)) then
                   status = status .. "\n" .. l;
+                  srSetMousePos(clickList[l][1], clickList[l][2]);
                 end
 
                 if status ~= "" then
@@ -891,17 +895,19 @@ function threeStoneCombo()
                 thisColor3 = srReadPixel(clickList[k][1], clickList[k][2]);
 
                 --function compareColorEx(left, right, rgbTol, hueTol)
-
                 if(not compareColorEx(thisColor1, clickListColor[i][1], rgbTol, hueTol)) then
                   status = status .. "\n" .. i;
+                  srSetMousePos(clickList[i][1], clickList[i][2]);
                 end
 
                 if(not compareColorEx(thisColor2, clickListColor[j][1], rgbTol, hueTol)) then
                   status = status .. "\n" .. j;
+                  srSetMousePos(clickList[j][1], clickList[j][2]);
                 end
 
                 if(not compareColorEx(thisColor3, clickListColor[k][1], rgbTol, hueTol)) then
                   status = status .. "\n" .. k;
+                  srSetMousePos(clickList[k][1], clickList[k][2]);
                 end
 
                 if status ~= "" then
