@@ -93,7 +93,7 @@ function ocrNumber(x, y)
 	return ret;
 end
 
-function addCC(window_pos, state)
+function addCC(window_pos, state, message)
 	if state.just_added then
 		return;
 	end
@@ -102,7 +102,7 @@ function addCC(window_pos, state)
 	
 	state.just_added = 1;
 	srClickMouseNoMove(pos[0]+5, pos[1]+2);
-	state.status = state.status .. " (Adding2CC)";
+	state.status = state.status .. " (Adding2CC" .. message .. ")";
 end
 
 function glassTick(window_pos, state)
@@ -181,7 +181,7 @@ function glassTick(window_pos, state)
 
 			    --  if just fell, and under max threshold, check if we should add 2 CC
 			if ( (temp < max_add_temp) and not state.benchTicksConfirmed ) or ( (temp < 2399 - state.HV) and state.benchTicksConfirmed ) then 
-			  addCC(window_pos, state);
+			  addCC(window_pos, state, "");
 			end
 
 			if temp <= (1600 - state.HV + state.DV) and state.benchTicksConfirmed then
@@ -215,7 +215,7 @@ function glassTick(window_pos, state)
 		if state.want_spike and state.spikeRose <= 0 then
 		  state.want_spike = nil;
 		  state.spiking = 1;
-		  addCC(window_pos, state);
+		  addCC(window_pos, state, ": Spiking");
 		end
 
 
@@ -254,19 +254,32 @@ function glassTick(window_pos, state)
 	
 	if not cooking then
 
-		if maintainHeatNoCook then
-		  state.status = state.status .. " (CookingSuspended)";
-		elseif state.lastSpike == 0 and (state.spiking or state.want_spike) then
+		if state.lastSpike == 0 and (state.spiking or state.want_spike) then
 		  state.status = state.status .. " (LastSpikeUnknown-CookingPausedWhileSpiking)";
 		elseif not cookDuringSpike and (state.spiking or state.want_spike) then
 		  state.status = state.status .. " (SpikeWillOverHeat-CookingPausedWhileSpiking)";
-		elseif temp <= (1600 - state.HV + state.DV) or temp >= (2399 - state.HV) then
+		end
+
+		if ( temp <= (1600 - state.HV + state.DV) or temp >= (2399 - state.HV) ) then
 		  state.status = state.status .. " (TempOutOfRange)";
-		else
+		elseif not maintainHeatNoCook and state.benchTicksConfirmed then
 		  state.status = state.status .. " (NothingCooking)";
 		end
 
+		if maintainHeatNoCook then
+		  state.status = state.status .. " (CookingSuspended)";
+		end
+
+
 		if not stop_cooking then
+
+			-- Check if all conditions are met to make Glass and start project
+
+			--Just used for extra debugging details. If Cooking is Suspended, then show us it WANTS to make glass with "MakeGlassOK" message
+			if temp >= (1600 - state.HV + state.DV) and temp <= (2399 - state.HV) and maintainHeatNoCook and state.MinTempReachedOnce and not ( (state.spiking or state.want_spike) and not cookDuringSpike ) then  
+			  state.status = state.status .. " (MakeGlassOK)";
+			end
+
 			--if temp > 1600 and temp < 2400 then
 			if temp >= (1600 - state.HV + state.DV) and temp <= (2399 - state.HV) and not maintainHeatNoCook and state.MinTempReachedOnce and not ( (state.spiking or state.want_spike) and not cookDuringSpike ) then  
 				local made_one=nil;
