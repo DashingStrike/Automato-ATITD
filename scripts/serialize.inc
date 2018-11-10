@@ -17,36 +17,13 @@ function serialize(o, filename)
 end
 
 function deserialize(filename)
-
-	if(pcall(dofile,filename)) then
-
-	--Start: Check & Attempt to fix corrupt file
-	--If file exists and is blank or does not have proper format:
-	--return
-	--{
-	--}
-	-- Then it will cause this error: "attempt to index a string value (global 'settings')
-
-	local parsed = {};
-	local outputFile = io.open("scripts/" .. filename,"r");
-	for line in outputFile.lines(outputFile) do
-	  parsed[#parsed + 1] = line
-	end
-	outputFile:close();
-
-	if parsed[1] ~= "return" then
-	--sleepWithStatus(1000,"Format Error, Fixing!\n\nLine 1 does not say 'return'.", nil, 0.7, 0.7);
-	outputFile = io.open("scripts/" .. filename,"w");
-	outputFile:write("return\n{\n}");
-	outputFile:close();
-	end
-	--End: Check & Attempt to fix corrupt file
-
-		return true, dofile(filename);
-
-	else
-		return false, nil;
-	end
+  if (pcall(dofile,filename)) then
+    local parsed = dofile(filename);
+    if (type(parsed) == "table") then
+      return true, parsed;
+    end
+  end
+  return false, nil;
 end
 
 
