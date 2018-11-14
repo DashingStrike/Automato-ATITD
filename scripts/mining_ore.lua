@@ -1,4 +1,4 @@
--- mining_ore.lua v2.2.9.1 -- by Cegaiel
+-- mining_ore.lua v2.2.9.2 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -24,7 +24,7 @@
 dofile("common.inc");
 dofile("settings.inc");
 
-info = "Ore Mining v2.2.9.1 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
+info = "Ore Mining v2.2.9.2 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
 
 
 -- Start don't alter these ...
@@ -59,6 +59,11 @@ brokenStoneCheck = false;
 --These tolerance values might need tweaked
 rgbTol = 150; --50
 hueTol = 75; --10
+
+-- We normally look for an OK popup box to move on. We also compare last chat Line to current chat Line.
+-- If we gathered the EXACT same amount of Ore from previous round, then this confuses macro and needs timeOut to move on.
+-- Silver is a good example of repetive quantities, 1, 2 silver is common, back to back. Later in script, Silver will use 4000ms timeout instead of usual 6000ms timeout.
+chatReadTimeOut = 6000; -- Maximum Time (ms) before moving on.
 --End Customizable
 
 
@@ -308,7 +313,7 @@ function getPoints()
           writeSetting("defaultOrder",defaultOrder);
         end
         lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-        y = y - 12
+        y = y - 22
         lsPrint(10, y, z, 0.7, 0.7, 0xc0c0ffff, "Hover and " .. key .. " over each node.");
         y = y + 20;
         lsPrint(10, y, z, 0.7, 0.7, 0xff8080ff, "Make sure chat is MINIMIZED!");
@@ -339,14 +344,20 @@ function getPoints()
         for i=start,#clickList do
             local xOff = (index % 4) * 75;
             local yOff = (index - index%4)/2 * 7;
-            if i < 10 then -- Add a single space after : so that i = 10 and above aligns better
-              lsPrint(11 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff,
-                i .. ":  (" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
-            else
-              lsPrint(11 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff,
-                i .. ": (" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
-            end
+            local xOff2 = (#clickList % 4) * 75;
+            local yOff2 = (#clickList - #clickList%4)/2 * 7;
+            lsPrint(11 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff, i .. ":");
+            lsPrint(11 + xOff, y + yOff, z, 0.5, 0.5, clickListColor[i][1], "     (" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
             index = index + 1;
+            if #clickList < stonecount then
+              lsPrint(11 + xOff2, y+yOff2, z, 0.5, 0.5, 0xffffffff, #clickList+1 .. ":");
+              lsPrint(11 + xOff2, y+yOff2, z, 0.5, 0.5, pixels, "      " .. nx .. ", " .. ny);
+            end
+        end
+
+        if #clickList == 0 then
+          lsPrint(11, y, z, 0.5, 0.5, 0xffffffff, "1:");
+          lsPrint(11, y, z, 0.5, 0.5, pixels, "      " .. nx .. ", " .. ny);
         end
 
         if #clickList >= stonecount then
@@ -502,10 +513,14 @@ function findClosePopUp()
             break;
         end
 
-        --If we gathered new ore, add to tally, we're not going to get a popup.
-	  if (lastLineFound2 ~= lastLineParse2) or (lastLineFound ~= lastLineParse) or skipRead or ( (lsGetTimer() - startTime) > 6000 )  then
+	  if ore == "Silver" then
+	    chatReadTimeOut = 4000; -- else we use default 6000
+	  end
 
-		if oreFound and ( (lsGetTimer() - startTime) <= 6000 ) then -- if it timed out, don't add ore to total, because we're not sure if we got any or not
+       --If we gathered new ore, add to tally, we're not going to get a popup.
+	  if (lastLineFound2 ~= lastLineParse2) or (lastLineFound ~= lastLineParse) or skipRead or ( (lsGetTimer() - startTime) > chatReadTimeOut )  then
+
+		if oreFound and ( (lsGetTimer() - startTime) <= chatReadTimeOut ) then -- if it timed out, don't add ore to total, because we're not sure if we got any or not
               oreGatheredTotal = oreGatheredTotal + oreGathered;
               oreGatheredLast = oreGatheredLast + oreGathered;
 		end
@@ -811,7 +826,6 @@ function threeStoneCombo()
 
               end-- if brokenStoneCheck
 
-
               if not brokenStoneDetected then
                 startSetTime = lsGetTimer();
 
@@ -865,13 +879,15 @@ function threeStoneCombo()
                 srKeyEvent('S');
                 end -- end noMouseMove check
 
-
                 findClosePopUp();
                 elapsedTime = lsGetTimer() - startMiningTime;
                 setTime = lsGetTimer() - startSetTime;
 			if writeLogFile then
 			  WriteLog("[" .. worked+1 .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k);
 			end
+              else  --if brokenStoneDetected
+                checkBreak();
+                checkAbort();
               end -- if not brokenStoneDetected
 
                 worked = worked + 1
@@ -929,7 +945,6 @@ function fourStoneCombo()
 			  WriteLog("[" .. worked+1 .. "/" .. TotalCombos .. "] Skipping Broken Node Combo (Broken Node#): " .. i .. ", " .. j .. ", " .. k .. ", " .. l .. " ( " .. status .. ")");
 			end
                 end  -- if status ~= ""
-
               end-- if brokenStoneCheck
 
 
@@ -1008,6 +1023,9 @@ function fourStoneCombo()
 			if writeLogFile then
 			  WriteLog("[" .. worked+1 .. "/" .. TotalCombos .. "] Nodes Worked: " .. i .. ", " .. j .. ", " .. k .. ", " .. l);
 			end
+              else  --if brokenStoneDetected
+                checkBreak();
+                checkAbort();
               end -- if not brokenStoneDetected
 
                 worked = worked + 1
