@@ -166,28 +166,27 @@ local function makeItem(currentItem, window)
    local parents = currentItem[2];
    local name = currentItem[1];
    local t;
-   
    -- Start at 2 so that it skips the Forge... and Casting... objects
    lsPrintln("Making " .. name);
    if #parents >= 2 then
 
-   if parents[2] == "Bars x1" or parents[2] == "Bars x5" then
-      t = findText("Bars" .. "...", window);
-      lsSleep(100);
-      clickText(t);
-   elseif parents[2] == "Small Gear x1" or parents[2] == "Small Gear x10" then
-      t = findText("Gearwork" .. "...", window);
-      lsSleep(100);
-      clickText(t);
-   else
-      t = findText(parents[2] .. "...", window);
-   end
+     if parents[2] == "Bars x1" or parents[2] == "Bars x5" then
+        t = findText("Bars" .. "...", window);
+        clickText(t);
+     elseif parents[2] == "Small Gear x1" or parents[2] == "Small Gear x10" then
+        t = findText("Gearwork" .. "...", window);
+        clickText(t);
+     else
+        t = findText(parents[2] .. "...", window);
+     end
 
+      lsSleep(100);
       if t == nil then
          lsPrintln("Initial window error");
          return false;
       end
       clickText(t);
+      lsSleep(100);
    end
 
    for i=3, #parents do
@@ -197,6 +196,7 @@ local function makeItem(currentItem, window)
          return false;
       end
       clickText(t);
+      lsSleep(100);
    end
    local text;
    local lastParent = parents[#parents];
@@ -204,13 +204,11 @@ local function makeItem(currentItem, window)
    if lastParent == "Small Gear x1" then
      local t = waitForText("Small Gear");
      clickText(t);
-     lsSleep(100);
      local t = waitForText("Make 1...");
      clickText(t);
    elseif lastParent == "Small Gear x10" then
       local t = waitForText("Small Gear");
       clickText(t);
-      lsSleep(100);
       local t = waitForText("Make 10...");
       clickText(t);
    elseif lastParent == "Bars x5" then
@@ -219,10 +217,11 @@ local function makeItem(currentItem, window)
    elseif lastParent == "Bars x1" then
       local t = waitForText("Make 1 set");
       clickText(t);
-end
+   end
+      lsSleep(100);
 
    -- Check if we have to click down arrow button (scrollable menu)
-   if (lastParent == "1 Bar" or lastParent == "5 Bars") and name > "Titanium" then
+   if (lastParent == "Bars x1" or lastParent == "Bars x5") and name > "Titanium" then
       local t = waitForText("Aluminum Bars", nil, nil, nil, REGION);
       downArrow(); -- Click the Down arrow button to scroll
    end
@@ -255,14 +254,22 @@ end
    if textLookup[text] ~= nil then
       text = textLookup[text];
    end
+
    lsPrintln(string.format("Searching for text %s", text));
    -- For top level items look in the window we're currently on
    -- otherwise, search the entire screen.
+
    if #parents == 1 then
       t = waitForText(text, 1000, nil, window);
+   elseif lastParent == "Bars x1" or lastParent == "Bars x5" then
+      srReadScreen();
+      pin = srFindImage("unpinnedPin.png");
+      thisRange = makeBox(pin[0]-180, pin[1], 180, 450);
+      t = waitForText(text, 1000, nil, thisRange);
    else
       t = waitForText(text, 1000);
    end
+
    if t == nil then
       return false;
    end
@@ -334,6 +341,8 @@ function doit()
             beeswax = beeswax + math.ceil(v.num/v.item.prod)*v.item.beeswax;
          end
       end
+
+
       if v.item.metal == nil then
          metalType = v.name
       else
