@@ -10,15 +10,15 @@
 dofile("common.inc");
 dofile("settings.inc");
 
-askText = "Simon v1.12\n\nv1.1 - by Tallow\nv1.12 - Tweaked by Cegaiel\n\nSets up a list of points and then clicks on them in sequence.\n\nCan optionally add a timer to wait between each pass (ie project takes a few minutes to complete).\n\nOr will watch Stats Timer (red/black) for clicking.";
+askText = "Simon v1.13\n\nv1.1 - by Tallow\nv1.12-.13 - Tweaked by Cegaiel\n\nSets up a list of points and then clicks on them in sequence.\n\nCan optionally add a timer to wait between each pass (ie project takes a few minutes to complete).\n\nOr will watch Stats Timer (red/black) for clicking.";
 
-clickList = {};
 clickDelay = 150;
 is_stats = true;
 passDelay = 0;
 refresh = true;
 
 function getPoints()
+clickList = {};
   local was_shifted = lsShiftHeld();
   local is_done = false;
   local mx = 0;
@@ -41,22 +41,25 @@ function getPoints()
     local start = math.max(1, #clickList - 20);
     local index = 0;
     for i=start,#clickList do
-      local xOff = (index % 3) * 100;
-      local yOff = (index - index%3)/2 * 15;
-      lsPrint(20 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff,
+      local xOff = (index % 4) * 75;
+      local yOff = (index - index%4)/2 * 7;
+      lsPrint(10 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff,
               "(" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
       index = index + 1;
     end
 
     if #clickList > 0 then -- Don't show Next button until at least one point is added
-      if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Next") then
+      if ButtonText(10, lsScreenY - 30, z, 80, 0xFFFFFFff, "Next") then
           is_done = 1;
       end
-    end
 
-    if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100, 0xFFFFFFff,
+      if ButtonText(87, lsScreenY - 30, 0, 125, 0xFFFFFFff, "Reset Points") then
+          getPoints();
+      end
+    end
+    if ButtonText(200, lsScreenY - 30, 0, 110, 0xFFFFFFff,
                     "End script") then
-      error "Clicked End Script button";
+      error(quit_message);
     end
     lsDoFrame();
     lsSleep(10);
@@ -124,14 +127,16 @@ function promptRun()
     lsPrintWrapped(5, y, z, lsScreenX - 20, 0.65, 0.65, 0xFFFFFFff, "Pass Delay: How long to wait, after each click sequence, before moving onto the next pass.");
     end
 
-    if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff, "Begin") then
+    if ButtonText(10, lsScreenY - 30, 0, 80, 0xFFFFFFff, "Begin") then
         is_done = 1;
     end
-    if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
+    if ButtonText(87, lsScreenY - 30, 0, 125, 0xFFFFFFff, "Reset Points") then
+        getPoints();
+    end
+    if ButtonText(200, lsScreenY - 30, 0, 110, 0xFFFFFFff,
                     "End script") then
       error(quit_message);
     end
-
     lsSleep(50);
     lsDoFrame();
   end
