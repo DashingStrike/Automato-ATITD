@@ -198,7 +198,6 @@ function waitForMonChange(message)
 		if finish_up then
 			if lsButtonText(40, lsScreenY - 120, z, 200, 0x40ff40ff, "Cancel Finish Up") then
 				finish_up = nil;
-				cancel_finish_up = 1;
 			end
 
 		else
@@ -305,6 +304,11 @@ function main()
 		-- statusScreen("(" .. loops .. "/" .. num_loops .. ") Doing initial 2s wait...");
 		-- lsSleep(2000);
 		--waitForMonChange("Getting initial image...");
+
+		if finish_up then
+		  break;
+		end
+
 		for i=0, 39 do
 			drawWater(1);
 
@@ -328,13 +332,6 @@ function main()
 			if (i == 0) then -- first one immediately finds a change
 				waitForMonChange("(" .. loops .. "/" .. num_loops .. ") Tick " .. i .. "/40 done");
 			end
-			if finish_up then
-				last_num_loops = num_loops;
-				num_loops = loops;
-			elseif cancel_finish_up then
-				num_loops = last_num_loops;
-				cancel_finish = nil;
-			end			
 			if abort then
 				to_click[1] = "ThistleAbort.png";
 				clickAllComplex(to_click, ("Aborting Crops ..."));
