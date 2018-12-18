@@ -36,7 +36,7 @@ autoWorkMine = true; -- written to Settings.mining_ore.lua.txt
 timesworked = 0;
 miningTimeTotal = 0;
 dropdown_key_values = {"Shift Key", "Ctrl Key", "Alt Key", "Mouse Wheel Click"};
-dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)", "Iron (7)", "Lead (9)", "Lithium (10)", "Magnesium (9)", "Platinum (12)", "Silver (10)", "Strontium (10)", "Tin (9)", "Titanium (12)","Tungsten (12)", "Zinc (10)"};
+dropdown_ore_values = {"Aluminum (9)", "Antimony (14)", "Copper (8)", "Gold (12)", "Iron (7)", "Lead (9)", "Lithium (10)", "Magnesium (9)", "Nickel (13)", "Platinum (12)", "Silver (10)", "Strontium (10)", "Tin (9)", "Titanium (12)","Tungsten (12)", "Zinc (10)"};
 cancelButton = 0;
 lastLineFound = "";
 lastLineFound2 = "";
@@ -63,7 +63,10 @@ hueTol = 75; --10
 -- We normally look for an OK popup box to move on. We also compare last chat Line to current chat Line.
 -- If we gathered the EXACT same amount of Ore from previous round, then this confuses macro and needs timeOut to move on.
 -- Silver is a good example of repetive quantities, 1, 2 silver is common, back to back. Later in script, Silver will use 4000ms timeout instead of usual 6000ms timeout.
-chatReadTimeOut = 6000; -- Maximum Time (ms) before moving on.
+
+chatReadTimeOut = 3000; -- Maximum Time (ms) before moving on.
+chatReadTimeOutSilver = 4000; -- Since silver frequently gets 1, 2 silver back to back, then lower time out to 4000 instead of 6000 so prevent longer hang times (when last chat line is same as previous line).
+
 --End Customizable
 
 
@@ -216,24 +219,27 @@ function getPoints()
         ore = "Magnesium";
         stonecount = 9;
     elseif (dropdown_ore_cur_value == 9) then
+        ore = "Nickel";
+        stonecount = 13;
+    elseif (dropdown_ore_cur_value == 10) then
         ore = "Platinum";
         stonecount = 12;
-    elseif (dropdown_ore_cur_value == 10) then
+    elseif (dropdown_ore_cur_value == 11) then
         ore = "Silver";
         stonecount = 10;
-    elseif (dropdown_ore_cur_value == 11) then
+    elseif (dropdown_ore_cur_value == 12) then
         ore = "Strontium";
         stonecount = 10;
-    elseif (dropdown_ore_cur_value == 12) then
+    elseif (dropdown_ore_cur_value == 13) then
         ore = "Tin";
         stonecount = 9;
-    elseif (dropdown_ore_cur_value == 13) then
+    elseif (dropdown_ore_cur_value == 14) then
         ore = "Titanium";
         stonecount = 12;
-    elseif (dropdown_ore_cur_value == 14) then
+    elseif (dropdown_ore_cur_value == 15) then
         ore = "Tungsten";
         stonecount = 12;
-    elseif (dropdown_ore_cur_value == 15) then
+    elseif (dropdown_ore_cur_value == 16) then
         ore = "Zinc";
         stonecount = 10;
     end
@@ -514,7 +520,7 @@ function findClosePopUp()
         end
 
 	  if ore == "Silver" then
-	    chatReadTimeOut = 4000; -- else we use default 6000
+	    chatReadTimeOut = chatReadTimeOutSilver; -- Since Silver gets 1,2 ore commonly back to back, then wait less time to timeout.
 	  end
 
        --If we gathered new ore, add to tally, we're not going to get a popup.
