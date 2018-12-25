@@ -278,24 +278,46 @@ local function makeItem(currentItem, window)
       waitForNoText(text, 1000);
    end
    -- Special case for complex items
-   if name == "Stainless Steel Pot" then
-      local win = waitForText("A stainless Steel Pot requires", 1000, nil, nil, REGION);
-      if win ~= nil then
-         t = findText("Steel:", nil, nil, CPLX_ITEM_CHOOSE);
-         if t ~= nil then
-            clickText(t);
-            waitForNoText("Steel:", 1000, nil, nil, nil, CPLX_ITEM_CHOOSE);
-            t = findText("Steel:", nil, nil, CPLX_ITEM_CHOOSE);
-            if t ~= nil then
-               lsPrintln(string.format("tl: %d, %d", win.x, win.y));
-               safeClick(win.x+93, win.y + 290);
-               waitForNoText("A stainless Steel Pot requires", 1500);
-            end
-         else
-            lsPrintln("Couldn't find Steel:");
-         end
-      end
-   end
+--   if name == "Stainless Steel Pot" then
+--      local win = waitForText("A stainless Steel Pot requires", 1000, nil, nil, REGION);
+--      if win ~= nil then
+--         t = findText("Steel:", nil, nil, CPLX_ITEM_CHOOSE);
+--         if t ~= nil then
+--            clickText(t);
+--            waitForNoText("Steel:", 1000, nil, nil, nil, CPLX_ITEM_CHOOSE);
+--            t = findText("Steel:", nil, nil, CPLX_ITEM_CHOOSE);
+--            if t ~= nil then
+--               lsPrintln(string.format("tl: %d, %d", win.x, win.y));
+--               safeClick(win.x+93, win.y + 290);
+--               waitForNoText("A stainless Steel Pot requires", 1500);
+--            end
+--         else
+--            lsPrintln("Couldn't find Steel:");
+--         end
+--      end
+--   end
+
+-- Quick/dirty hack to get Stainless working on T8. Above commented section doesn't work due to how the text displays
+
+  if name == "Stainless Steel Pot" then
+  local win = waitForText("A stainless Steel Pot requires", 1000, nil, nil, REGION);
+
+    if win ~= nil then
+     t = findText("Steel");
+
+      if t ~= nil then
+       safeClick(t[0]+20,t[1]+60);
+       lsSleep(per_tick);
+       srReadScreen()
+       ok = srFindImage("ok.png")
+        if ok then
+          safeClick(ok[0],ok[1]);
+        end -- if ok
+      end -- if t
+    end -- if win
+  end -- if name
+
+
    lsSleep(per_tick);
    return true;
 end
