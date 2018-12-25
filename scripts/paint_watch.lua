@@ -38,6 +38,11 @@ per_paint_delay_time = 1000;
 per_read_delay_time = 600;
 per_click_delay = 10;
 
+-- bar_width: This is how many pixels wide the Red, Green, Blue bars are in Pigment lab.
+-- This used to be 307 until around Dec 2018.
+-- We think the addition of Red/Green cloth to menus or Falcon Bait caused the window to be wider and causing the pixels to stretch
+
+bar_width = 328; 
 
 function doit()
 
@@ -69,7 +74,7 @@ function doit()
         m_x, m_y = srMousePos();
     else
         m_x = colour_panel[1][0];
-        m_y = colour_panel[1][1];    
+        m_y = colour_panel[1][1]+2;    
     end
 
     local paint_buttons = findAllImages("paint-button.png");
@@ -160,7 +165,7 @@ function doit()
             for i=1, 3 do
                 if(bar_colour[i]>0)then                
                     bar_colour[i]=bar_colour[i]+1;
-                    bar_colour[i]=bar_colour[i]*256.0/307;
+                    bar_colour[i]=bar_colour[i]*256.0/bar_width;
                 end
             end
 
