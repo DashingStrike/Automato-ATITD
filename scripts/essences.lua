@@ -509,7 +509,7 @@ function clickAll(image_name, up)
 	local buttons = findAllImages(image_name, nil, 1000);
 	
 	if #buttons ~= 0 then
-		statusScreen("Clicking " .. #buttons .. " button(s)...");
+		--statusScreen("Clicking " .. #buttons .. " button(s)...");
 		if up then
 			for i=#buttons, 1, -1  do
 				srClickMouseNoMove(buttons[i][0]+2, buttons[i][1]+1, true);
@@ -530,6 +530,8 @@ end
 numFinished = 0;
 
 function labTick(essWin, state)
+	message = "";
+	statusScreen("Starting ...", nil, 0.7, 0.7);
 	state.count = state.count + 1;
 	state.status = "Chem Lab: " .. state.count;
 	state.active = false;
@@ -545,20 +547,24 @@ function labTick(essWin, state)
 	while outer == nil do
 		safeClick(essWin.x + 10, essWin.y + essWin.height / 2);
 		srReadScreen();
+		statusScreen("Waiting to Click: Manufacture ...", nil, 0.7, 0.7);
 		outer = findText("Manufacture...", essWin);
 		lsSleep(per_read_delay);
 		checkBreak();
 	end
 	clickText(outer);
 --	lsSleep(per_click_delay);
-	
+
+	statusScreen("Waiting to Click: Essential Distill ...", nil, 0.7, 0.7);
 	local t = waitForText("Essential Distill");
 	clickText(t);
 --	lsSleep(per_click_delay);
+	statusScreen("Waiting to Click: Place Essential Mat ...", nil, 0.7, 0.7);
 	t = waitForText("Place Essential Mat");
 	clickText(t);
 --	lsSleep(per_click_delay);
-	
+
+	statusScreen("Searching for Macerator ...", nil, 0.7, 0.7);
 	--search for something to add
 	local rw = waitForText("Choose a material", nil, nil, nil, REGION);
 	rw.x = rw.x+7;
@@ -576,6 +582,7 @@ function labTick(essWin, state)
 						state.essenceIndex = k;
 						foundEss = true;
 						clickText(parse[i]);
+						message = "Added Macerator: " .. essences[k][1] .. "\n";
 						state.temp = essences[k][2];
 						if state.temp == nil then
 						  error("That material has not yet been mapped.");
@@ -615,15 +622,18 @@ function labTick(essWin, state)
 		lsSleep(per_click_delay);
 		clickText(waitForText("Alcohol Lamp."));
 		lsSleep(per_click_delay);
-		clickText(waitForText("Fill Alcohol Lamp"), nil, 20, 4);
+		clickText(waitForText("Fill Alcohol Lamp"), nil, 20, 1);
 		lsSleep(per_click_delay);
-		
+
 		--click on the spirit itself
+		message = message .. "\nAdding Spirits : " .. spiritsNeeded[i][2] .. " " .. spiritsNeeded[i][1];
+		statusScreen(message, nil, 0.7, 0.7);
 		clickText(waitForText(spiritsNeeded[i][1]));
 		lsSleep(per_click_delay);
 		waitForText("How much");
 		srKeyEvent(spiritsNeeded[i][2] .. "\n");
 		lsSleep(per_click_delay + per_read_delay)
+		message = message .. " -- OK!"
 	end
 	
 	clickText(waitForText("Manufacture...", nil, nil, essWin));
