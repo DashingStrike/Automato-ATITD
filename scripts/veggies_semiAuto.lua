@@ -60,6 +60,7 @@ saveCoords = true;
 delayAfterHarvestPerPlant = 3000;
 grid_x = 260; -- Watermelon seeds are widest window width, 260
 grid_y = 100;
+max_window_size = 425; -- We don't want to close out the Aquaduct window. This should be about 425. We can use 350 if no aquaduct window is present (to refill jugs).
 
 firstLoop = 1;
 totalHarvests = 0;
@@ -87,9 +88,11 @@ function doit()
 	setCameraView(CARTOGRAPHER2CAM);
 	lsSleep(500);
 	repositionAvatar();
-	closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
+	closeAllWindows(0,0, size[0]-max_window_size, size[1]); -- Look for windows for any left over planted windows
 
   while 1 do
+	refreshWindows();
+	drawWater(1);
 	firstWater = 1;
 	abort = nil;
 	finalTending = nil;
@@ -98,7 +101,7 @@ function doit()
 	  vegclickTimer = {};
 	end
 
-	closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
+	closeAllWindows(0,0, size[0]-max_window_size, size[1]); -- Look for windows for any left over planted windows
 	closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
 
 	 if autoWater and (manualPin or not saveCoords or firstLoop) then --If using manual Pin mode or not saving coords, then do autowater first, to avoid it getting in the way later.
@@ -130,7 +133,7 @@ function doit()
 
 
 	waterThese();
-	closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
+	closeAllWindows(0,0, size[0]-max_window_size, size[1]); -- Look for windows for any left over planted windows
 	closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
 
 
@@ -295,7 +298,7 @@ function main()
     safeClick(BuildButton[0], BuildButton[1]);
     lsSleep(click_delay);
   end
-    srSetMousePos(center[0],center[1]);
+    srSetMousePos(center[0],center[1]); -- BLAH
 end
 
 
@@ -466,7 +469,7 @@ function pinWindows()
 	safeClick(vegclickList[i][1], vegclickList[i][2], 1);
 	lsSleep(click_delay);
     end
-	arrangeStashed(false, false, grid_x, grid_y);
+	arrangeStashed(false, false, grid_x, grid_y, max_window_size);
 	srSetMousePos(center[0],center[1]);
 end
 
@@ -568,12 +571,12 @@ function waitForShift()
 
 
 	  pickUpSeeds();
-	  closeAllWindows(0,0, size[0]-350, size[1]); -- Look for windows for any left over planted windows
+	  closeAllWindows(0,0, size[0]-max_window_size, size[1]); -- Look for windows for any left over planted windows
 	  closeAllWindows(size[0]-500, size[1]-200, size[0], size[1]); -- Look for any leftover windows (stashed) at bottom right.
 	end
 
 	if saveCoords then
-		if ButtonText(5, lsScreenY - 60, z, 150, 0xFFFFFFff, "Reset Coords") then
+		if ButtonText(5, lsScreenY - 60, z, 150, 0xFFFFFFff, "Reset Coords+Replant") then
 	  	  firstLoop = 1;
 	  	  break;
 		end
@@ -687,7 +690,7 @@ function pickUpSeeds()
   srReadScreen();
 
   bags = findText("Make nearby");
-  lsSleep(75);
+  lsSleep(150);
 
 	if bags then
 	  srClickMouseNoMove(bags[0]+12,bags[1]+5);
