@@ -1,7 +1,7 @@
 dofile("screen_reader_common.inc");
 dofile("ui_utils.inc");
 
-local distance_scale = 0.11; -- only scans pixels within a distance of this percentage from the center of the screen
+local distance_scale = 0.50; -- only scans pixels within a distance of this percentage from the center of the screen
 
 function getCenterPos()
 	local ret = {};
@@ -37,13 +37,15 @@ function clickAll(image_name, up, right_click)
 		if up then
 			for i=#buttons, 1, -1  do
 				if (buttons[i][0] > 200) then
-					srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, right_click);
+					-- srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, right_click);
+					srSetMousePos(buttons[i][0]+5, buttons[i][1]+3);
 					lsSleep(per_click_delay);
 				end
 			end
 		else
 			for i=1, #buttons  do
-				srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, right_click);
+				-- srClickMouseNoMove(buttons[i][0]+5, buttons[i][1]+3, right_click);
+				srSetMousePos(buttons[i][0]+5, buttons[i][1]+3);
 				lsSleep(per_click_delay);
 			end
 		end
@@ -53,8 +55,8 @@ function clickAll(image_name, up, right_click)
 end
 
 function clickMouseSplatter(x, y, right)
-	-- srSetMousePos(x, y);
-	srClickMouse(x + math.random(-2, 2), y + math.random(-2, 2), right);
+	srSetMousePos(x, y);
+	-- srClickMouse(x + math.random(-2, 2), y + math.random(-2, 2), right);
 end
 
 function doit()
@@ -64,26 +66,27 @@ function doit()
 
 	while true do
 		local frame_start = lsGetTimer();
-		statusScreen("Watching for silt");
-		possible_papy = lsAnalyzeSilt(7, 40, 1, xyWindowSize[0] * distance_scale);
+		statusScreen("Watching for red");
+		-- Looks for pixels whose red is between 0xA0 and 0xFF (160-255), and green/blue are less than 0x60
+		clusters = lsAnalyzeCustom(7, 40, 1, xyWindowSize[0] * distance_scale, 0xA0000000, 0xFF606000, true);
 		local clicked = nil;
-		if possible_papy then
-			for i = 1, #possible_papy do
+		if clusters then
+			for i = 1, #clusters do
 				-- bias because it seems to drag to the upper left, take this off
 				--  if I fix the downsampling
-				possible_papy[i][0] = possible_papy[i][0] + 5;
-				--possible_papy[i][1] = possible_papy[i][1] + 5;
-				if isWithinRange(possible_papy[i][0], possible_papy[i][1]) then
+				clusters[i][0] = clusters[i][0] + 5;
+				--clusters[i][1] = clusters[i][1] + 5;
+				if isWithinRange(clusters[i][0], clusters[i][1]) then
 				
-					-- srClickMouse(possible_papy[i][0], possible_papy[i][1], 1);
-					-- srSetMousePos(possible_papy[i][0], possible_papy[i][1]);
+					-- srClickMouse(clusters[i][0], clusters[i][1], 1);
+					-- srSetMousePos(clusters[i][0], clusters[i][1]);
 
 					-- code to try to make sure the pixel is the right color
 					-- off by a few pixels in translation, maybe?  needs to be pixel accurate!
 					local good;
 					local r, g, b;
 					if nil then
-						pxval = srReadPixel(possible_papy[i][0], possible_papy[i][1]);
+						pxval = srReadPixel(clusters[i][0], clusters[i][1]);
 						a = pxval % 256;
 						pxval = (pxval - a) / 256;
 						b = pxval % 256;
@@ -102,14 +105,14 @@ function doit()
 					end
 					
 					if good then
-						lsPrint(10, 80 + i*20, 0, 0.7, 0.7, 0xFFFFFFff, possible_papy[i][0] .. ", " .. possible_papy[i][1] .. " : " .. r .. "," .. g .. "," .. b);
-						clickMouseSplatter(possible_papy[i][0], possible_papy[i][1], 1);
+						lsPrint(10, 80 + i*20, 0, 0.7, 0.7, 0xFFFFFFff, clusters[i][0] .. ", " .. clusters[i][1] .. " : " .. r .. "," .. g .. "," .. b);
+						clickMouseSplatter(clusters[i][0], clusters[i][1], 1);
 						clicked = 1;
 					else
-						lsPrint(10, 80 + i*20, 0, 0.7, 0.7, 0xFF7F7Fff, possible_papy[i][0] .. ", " .. possible_papy[i][1] .. " : " .. r .. "," .. g .. "," .. b);
+						lsPrint(10, 80 + i*20, 0, 0.7, 0.7, 0xFF7F7Fff, clusters[i][0] .. ", " .. clusters[i][1] .. " : " .. r .. "," .. g .. "," .. b);
 					end
 				else 
-					lsPrint(10, 80 + i*20, 0, 0.7, 0.7, 0x7F7F7Fff, possible_papy[i][0] .. ", " .. possible_papy[i][1] );
+					lsPrint(10, 80 + i*20, 0, 0.7, 0.7, 0x7F7F7Fff, clusters[i][0] .. ", " .. clusters[i][1] );
 				end
 			end
 		end
