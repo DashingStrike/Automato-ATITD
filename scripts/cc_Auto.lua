@@ -32,6 +32,8 @@ function ccMenu()
 	woodAdded = 0;
 	waterAdded = 0;
 	woodx1Click = 0;
+    drawWater(1); -- Refill Jugs. The parameter of 1 means don't do the animation countdown. Since we won't be running somewhere, not needed
+    lsSleep(100);
     Do_Take_All_Click(); -- Make sure ovens are empty. If a previous run didn't complete and has wood leftover, will cause a popup 'Your oven already has wood' and throw macro off
     runCommand(buttons[1]);
     lsSleep(1000);
