@@ -349,11 +349,11 @@ per_click_delay = 50;
 per_read_delay = 150;
 
 alcType = {};
-alcType[3] = {"Wood", 1};
-alcType[2] = {"Worm", 2};
-alcType[1] = {"Grain", 3};
-alcType[4] = {"Vegetable", 6};
-alcType[5] = {"Mineral", 7};
+alcType[3] = {"Wood Spirits", 1};
+alcType[2] = {"Worm Spirits", 2};
+alcType[1] = {"Grain Spirits", 3};
+alcType[4] = {"Vegetable Spirits", 6};
+alcType[5] = {"Mineral Spirits", 7};
 
 function stripCharacters(s)
 	local badChars = "%:%(%)%-%,%'%d%s";
@@ -365,72 +365,58 @@ function getSpirits(goal)
 	local t = {};
 	if goal < 10 then
 		t[1] = {};
-		t[1][1] = "Rock";
+		t[1][1] = "Rock Spirits";
 		t[1][2] = 10-goal;
 		if goal ~= 0 then
 			t[2] = {};
-			t[2][1] = "Wood";
+			t[2][1] = "Wood Spirits";
 			t[2][2] = goal;
 		end
 		return t;
 	end
 	if goal == 81 or goal == 82 or goal == 83 then
 		t[1] = {};
-		t[1][1] = "Fish";
+		t[1][1] = "Fish Spirits";
 		t[1][2] = 10;
 		return t;
 	end
 	if goal == 84 then
 		t[1] = {};
-		t[1][1] = "Grey";
+		t[1][1] = "Grey Spirits";
 		t[1][2] = 9;
 		t[2] = {};
-		t[2][1] = "Grain";
+		t[2][1] = "Grain Spirits";
 		t[2][2] = 1;
 		return t;
 	end
 	if goal == 85 then
 		if goal ~= 0 then
 			t[1] = {};
-			t[1][1] = "Mineral";
+			t[1][1] = "Mineral Spirits";
 			t[1][2] = 1;
 			t[2] = {};
-			t[2][1] = "Vegetable";
+			t[2][1] = "Vegetable Spirits";
 			t[2][2] = 1;
 			t[3] = {};
-			t[3][1] = "Grey";
+			t[3][1] = "Grey Spirits";
 			t[3][2] = 8;
 		end
 		return t;
 	end
-	if goal == 83 then
-		if goal ~= 0 then
-			t[1] = {};
-			t[1][1] = "Mineral";
-			t[1][2] = 2;
-			t[2] = {};
-			t[2][1] = "Vegetable";
-			t[2][2] = 1;
-			t[3] = {};
-			t[3][1] = "Grey";
-			t[3][2] = 7;
-		end
-		return t;
-	end
 	if goal > 80 then
-		alcType[7] = {"Grey", 9};
-		alcType[6] = {"Fish", 8};
+		alcType[7] = {"Grey Spirits", 9};
+		alcType[6] = {"Fish Spirits", 8};
 	else
 		alcType[7] = nil;
 		alcType[6] = nil;
 	end
 	if goal > 70 and goal <= 80 then
 		t[1] = {};
-		t[1][1] = "Fish";
+		t[1][1] = "Fish Spirits";
 		t[1][2] = goal - 70;
 		if goal ~= 80 then
 			t[2] = {};
-			t[2][1] = "Mineral";
+			t[2][1] = "Mineral Spirits";
 			t[2][2] = 80-goal;
 		end
 		return t;
@@ -709,6 +695,8 @@ function doit()
 		if #labWindows2 == #labWindows then
 			for window_index=1, #labWindows do
 				local wasActive = labState[window_index].active;
+
+
 				if wasActive == true then
 					local r = labTick(labWindows[window_index], labState[window_index]);
 					--check to see if it's still active
