@@ -24,7 +24,6 @@ end
 
 function tryAllTypes()
   for i=1,#types do
-checkBreak();
     local done = false;
     if typeEnabled[i] then
       statusScreen("Trying type " .. types[i]);
@@ -136,10 +135,10 @@ function makeRecipe(recipe, window)
   srReadScreen();
   statusScreen("Creating extract", nil, status);
   requiredWindow = findText("Required:", nil, REGION);
-  t = findText("Required:", requiredWindow, nil, CPLX_ITEM_CHOOSE);
-  safeClick(t[0]+20, t[1]+135);
+  t = findText("Essential Comp", requiredWindow, nil, CPLX_ITEM_CHOOSE);
+  safeClick(t[0]+10, t[1]+5);
   sleepWithStatus(200, status);
-  clickAllImages("Ok.png");
+  clickAllImages("Okb.png");
   sleepWithStatus(200, status);
   return true;
 end
