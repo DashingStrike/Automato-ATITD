@@ -74,7 +74,8 @@ function setLine(tree, line)
     error("Cannot parse line: " .. line);
   end
   --local tags = csplit(sections[1], ",");
-  local tags = csplit(",",sections[1]);
+--  local tags = csplit(",",sections[1]);
+  local tags = explode(",",sections[1]);
   local data = sections[2];
   setData(tree, tags, data);
 end
