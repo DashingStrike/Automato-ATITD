@@ -129,6 +129,7 @@ function kettleTick(kettle)
 	anchor[0] = anchor[0]+8;
 	
 	if kettle.stage == STAGE_WAITING then
+		refreshWindows();
 		safeClick(anchor[0] + 165, anchor[1] + 127);
 		kettle.stage = STAGE_BEERWAIT;
 		kettle.status = "Starting";
@@ -136,7 +137,7 @@ function kettleTick(kettle)
 		return;
 	end
 	if kettle.stage == STAGE_BEERWAIT then
-		safeClick(anchor[0] + 46, anchor[1] + 153);
+		safeClick(anchor[0] + 46, anchor[1] + 175);
 		kettle.stage = STAGE_BREWING;
 		kettle.status = "Brewing";
 		lsSleep(200);
@@ -253,4 +254,9 @@ function main()
 		end
 	end
 	lsPlaySound("Complete.wav");
+end
+
+
+function refreshWindows()
+  clickAllImages("This.png");
 end
