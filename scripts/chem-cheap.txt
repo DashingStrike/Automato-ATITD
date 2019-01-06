@@ -1274,428 +1274,423 @@ Set,So---,Sw+++,To---|Arconis,Chakkanut Tree,Folded Birch,Locust Palm,Tapacae Mi
 Set,So---,Sw---,To+++|Arconis,Bloodbark,Oleaceae,Razor Palm,Windriver Palm
 Set,Sp+++,Sw+++,To---|Cerulean Blue,Chakkanut Tree,Locust Palm,Monkey Palm,Spiked Fishtree
 Set,Sp+++,Sw---,To+++|Bloodbark,Delta Palm,Giant Cricklewood,Oleaceae,Trilobellia
-Maat,Ar+++,As+++|Arconis,Beetlenut,Cinnar,Royal Palm,Spindle Tree
-Maat,Ar+++,As---|Anaxi,Monkey Palm,Phoenix Palm,Razor Palm,Trilobellia
+Maat,Ar+++,As+++|Fern Palm,Beetlenut,Cinnar,Royal Palm,Spindle Tree
+Maat,Ar+++,As---|Bramble Hedge,Monkey Palm,Red Maple,Razor Palm,Trilobellia
 Maat,Ar+++,Bi---|Anaxi,Bramble Hedge,Razor Palm,Royal Palm,Spindle Tree
-Maat,Ar+++,Sa---|Beetlenut,Bottle Tree,Butterleaf Tree,Elephantia,Razor Palm
+Maat,Ar+++,Sa---|Beetlenut,Monkey Palm,Butterleaf Tree,Elephantia,Razor Palm
 Maat,Ar+++,So+++|Anaxi,Bramble Hedge,Razor Palm,Royal Palm,Spindle Tree
-Maat,Ar+++,So---|Arconis,Beetlenut,Bottle Tree,Oil Palm,Royal Palm
+Maat,Ar+++,So---|Coconut Palm,Beetlenut,Powdered Ruby,Oil Palm,Royal Palm
 Maat,Ar+++,Sp+++|Beetlenut,Bloodbark,Monkey Palm,Spindle Tree,Trilobellia
 Maat,Ar+++,Sp---|Anaxi,Bramble Hedge,Razor Palm,Royal Palm,Spindle Tree
-Maat,Ar+++,Sw+++|Elephantia,Mini Palmetto,Monkey Palm,Royal Palm,Tapacae Miralis
+Maat,Ar+++,Sw+++|Elephantia,Powdered Ruby,Red Maple,Royal Palm,Tapacae Miralis
 Maat,Ar+++,Sw---|Anaxi,Beetlenut,Razor Palm,Spindle Tree,Trilobellia
 Maat,Ar+++,To+++|Beetlenut,Hokkaido,Razor Palm,Royal Palm,Windriver Palm
-Maat,Ar+++,To---|Arconis,Bottle Tree,Chakkanut Tree,Royal Palm,Spindle Tree
-Maat,Ar---,As+++|Anaxi,Arconis,Ash Palm,Bloodbark,Towering Palm
+Maat,Ar+++,To---|Monkey Palm,Cinnar,Chakkanut Tree,Royal Palm,Spindle Tree
+Maat,Ar---,As+++|Anaxi,Fern Palm,Ash Palm,Bloodbark,Towering Palm
 Maat,Ar---,As---|Anaxi,Cerulean Blue,Chakkanut Tree,Feather Tree,Passam
 Maat,Ar---,Bi+++|Anaxi,Ash Palm,Chicory,Kaeshra,Oil Palm
-Maat,Ar---,Bi---|Anaxi,Arconis,Broadleaf Palm,Passam,Umbrella Palm
+Maat,Ar---,Bi---|Anaxi,Fern Palm,Broadleaf Palm,Passam,Umbrella Palm
 Maat,Ar---,Sa+++|Ash Palm,Chicory,Coconut Palm,Feather Tree,Windriver Palm
 Maat,Ar---,Sa---|Anaxi,Broadleaf Palm,Butterleaf Tree,Chicory,Locust Palm
-Maat,Ar---,So+++|Anaxi,Arconis,Bramble Hedge,Chicory,Ranyahn
-Maat,Ar---,So---|Anaxi,Arconis,Bloodbark,Coconut Palm,Folded Birch
-Maat,Ar---,Sp+++|Anaxi,Arconis,Bloodbark,Locust Palm,Ranyahn
+Maat,Ar---,So+++|Anaxi,Fern Palm,Bramble Hedge,Chicory,Ranyahn
+Maat,Ar---,So---|Anaxi,Feather Tree,Bloodbark,Coconut Palm,Folded Birch
+Maat,Ar---,Sp+++|Anaxi,Pratyeka Tree,Bloodbark,Locust Palm,Ranyahn
 Maat,Ar---,Sp---|Anaxi,Ash Palm,Bramble Hedge,Cinnar,Towering Palm
-Maat,Ar---,Sw+++|Anaxi,Arconis,Elephantia,Spiked Fishtree,Towering Palm
-Maat,Ar---,Sw---|Anaxi,Arconis,Chicory,Delta Palm,Oleaceae
+Maat,Ar---,Sw+++|Anaxi,Locust Palm,Elephantia,Spiked Fishtree,Towering Palm
+Maat,Ar---,Sw---|Anaxi,Trilobellia,Chicory,Delta Palm,Oleaceae
 Maat,Ar---,To+++|Anaxi,Ash Palm,Bloodbark,Oleaceae,Windriver Palm
-Maat,Ar---,To---|Anaxi,Arconis,Ash Palm,Chakkanut Tree,Locust Palm
+Maat,Ar---,To---|Anaxi,Fern Palm,Ash Palm,Chakkanut Tree,Locust Palm
 Maat,As+++,Bi+++|Ash Palm,Beetlenut,Cinnar,Kaeshra,Oil Palm
-Maat,As+++,Bi---|Anaxi,Arconis,Beetlenut,Elephantia,Spindle Tree
-Maat,As+++,Sa---|Anaxi,Arconis,Beetlenut,Broadleaf Palm,Elephantia
+Maat,As+++,Bi---|Anaxi,Fern Palm,Beetlenut,Elephantia,Spindle Tree
+Maat,As+++,Sa---|Anaxi,Fern Palm,Beetlenut,Broadleaf Palm,Elephantia
 Maat,As+++,So+++|Anaxi,Ash Palm,Beetlenut,Bramble Hedge,Elephantia
-Maat,As+++,So---|Arconis,Ash Palm,Beetlenut,Bloodbark,Broadleaf Palm
-Maat,As+++,Sp+++|Anaxi,Arconis,Beetlenut,Bloodbark,Delta Palm
+Maat,As+++,So---|Coconut Palm,Ash Palm,Beetlenut,Bloodbark,Broadleaf Palm
+Maat,As+++,Sp+++|Anaxi,Locust Palm,Beetlenut,Bloodbark,Delta Palm
 Maat,As+++,Sp---|Anaxi,Ash Palm,Bramble Hedge,Cinnar,Orrorin
 Maat,As+++,Sw+++|Anaxi,Ash Palm,Broadleaf Palm,Spiked Fishtree,Towering Palm
-Maat,As+++,Sw---|Anaxi,Arconis,Delta Palm,Hawthorn,Spindle Tree
+Maat,As+++,Sw---|Anaxi,Powdered Garnet,Delta Palm,Hawthorn,Spindle Tree
 Maat,As+++,To+++|Anaxi,Beetlenut,Bloodbark,Towering Palm,Windriver Palm
-Maat,As+++,To---|Anaxi,Arconis,Ash Palm,Cinnar,Coconut Palm
+Maat,As+++,To---|Anaxi,Fern Palm,Ash Palm,Cinnar,Coconut Palm
 Maat,As---,Bi+++|Butterleaf Tree,Feather Tree,Kaeshra,Oil Palm,Tiny Oil Palm
-Maat,As---,Bi---|Anaxi,Butterleaf Tree,Cerulean Blue,Giant Cricklewood,Mini Palmetto
+Maat,As---,Bi---|Bramble Hedge,Chakkanut Tree,Umbrella Palm,Giant Cricklewood,Pratyeka Tree
 Maat,As---,Sa+++|Cerulean Blue,Coconut Palm,Feather Tree,Hokkaido,Windriver Palm
 Maat,As---,Sa---|Anaxi,Butterleaf Tree,Cerulean Blue,Pratyeka Tree,Red Maple
 Maat,As---,So+++|Anaxi,Butterleaf Tree,Giant Cricklewood,Pratyeka Tree,Razor Palm
-Maat,As---,So---|Arconis,Bloodbark,Butterleaf Tree,Cerulean Blue,Feather Tree
+Maat,As---,So---|Coconut Palm,Bloodbark,Butterleaf Tree,Cerulean Blue,Feather Tree
 Maat,As---,Sp+++|Anaxi,Cerulean Blue,Feather Tree,Giant Cricklewood,Monkey Palm
-Maat,As---,Sp---|Bramble Hedge,Butterleaf Tree,Mini Palmetto,Razor Palm,Royal Palm
-Maat,As---,Sw+++|Anaxi,Cerulean Blue,Mini Palmetto,Phoenix Palm,Spiked Fishtree
-Maat,As---,Sw---|Arconis,Bloodbark,Feather Tree,Razor Palm,Trilobellia
+Maat,As---,Sp---|Bramble Hedge,Butterleaf Tree,Pratyeka Palm,Razor Palm,Royal Palm
+Maat,As---,Sw+++|Chakkanut Tree,Cerulean Blue,Monkey Palm,Spiked Fishtree,Tapacae Miralis
+Maat,As---,Sw---|Fern Palm,Bloodbark,Feather Tree,Razor Palm,Trilobellia
 Maat,As---,To+++|Anaxi,Giant Cricklewood,Hokkaido,Passam,Pratyeka Tree
-Maat,As---,To---|Arconis,Bottle Tree,Chakkanut Tree,Feather Tree,Mini Palmetto
-Maat,Bi+++,As---|Butterleaf Tree,Feather Tree,Kaeshra,Oil Palm,Tiny Oil Palm
+Maat,As---,To---|Cerulean Blue,Coconut Palm,Chakkanut Tree,Feather Tree,Powdered Diamond
 Maat,Bi+++,Sa---|Butterleaf Tree,Fern Palm,Kaeshra,Oil Palm,Tiny Oil Palm
-Maat,Bi+++,So---|Arconis,Ash Palm,Bloodbark,Kaeshra,Oil Palm
+Maat,Bi+++,So---|Folded Birch,Ash Palm,Bloodbark,Kaeshra,Oil Palm
 Maat,Bi+++,Sp+++|Ash Palm,Delta Palm,Kaeshra,Locust Palm,Tiny Oil Palm
 Maat,Bi+++,Sw+++|Chakkanut Tree,Oil Palm,Spiked Fishtree,Tiny Oil Palm,Towering Palm
 Maat,Bi+++,Sw---|Ash Palm,Chicory,Oil Palm,Oleaceae,Razor Palm
 Maat,Bi+++,To+++|Ash Palm,Bloodbark,Oleaceae,Tiny Oil Palm,Windriver Palm
-Maat,Bi+++,To---|Arconis,Ash Palm,Chakkanut Tree,Kaeshra,Oil Palm
-Maat,Bi---,Sa---|Anaxi,Arconis,Broadleaf Palm,Butterleaf Tree,Elephantia
-Maat,Bi---,So+++|Anaxi,Arconis,Bramble Hedge,Elephantia,Giant Cricklewood
-Maat,Bi---,So---|Arconis,Beetlenut,Broadleaf Palm,Orrorin,Tapacae Miralis
+Maat,Bi+++,To---|Locust Palm,Ash Palm,Chakkanut Tree,Kaeshra,Oil Palm
+Maat,Bi---,Sa---|Anaxi,Fern Palm,Broadleaf Palm,Butterleaf Tree,Elephantia
+Maat,Bi---,So+++|Anaxi,Fern Palm,Bramble Hedge,Elephantia,Giant Cricklewood
+Maat,Bi---,So---|Folded Birch,Beetlenut,Broadleaf Palm,Orrorin,Tapacae Miralis
 Maat,Bi---,Sp+++|Anaxi,Beetlenut,Cerulean Blue,Giant Cricklewood,Stout Palm
-Maat,Bi---,Sp---|Anaxi,Arconis,Bramble Hedge,Orrorin,Royal Palm
+Maat,Bi---,Sp---|Anaxi,Folded Birch,Bramble Hedge,Orrorin,Royal Palm
 Maat,Bi---,Sw+++|Anaxi,Ash Palm,Elephantia,Tapacae Miralis,Umbrella Palm
 Maat,Bi---,Sw---|Anaxi,Delta Palm,Giant Cricklewood,Razor Palm,Spindle Tree
 Maat,Bi---,To+++|Anaxi,Bloodbark,Giant Cricklewood,Hokkaido,Umbrella Palm
-Maat,Bi---,To---|Anaxi,Arconis,Chakkanut Tree,Elephantia,Spindle Tree
-Maat,Sa+++,So---|Arconis,Ash Palm,Coconut Palm,Feather Tree,Windriver Palm
+Maat,Bi---,To---|Anaxi,Locust Palm,Chakkanut Tree,Elephantia,Spindle Tree
+Maat,Sa+++,So---|Delta Palm,Ash Palm,Coconut Palm,Feather Tree,Windriver Palm
 Maat,Sa---,So+++|Anaxi,Ash Palm,Broadleaf Palm,Elephantia,Fern Palm
-Maat,Sa---,So---|Arconis,Beetlenut,Bloodbark,Broadleaf Palm,Butterleaf Tree
+Maat,Sa---,So---|Tapacae Miralis,Beetlenut,Bloodbark,Broadleaf Palm,Butterleaf Tree
 Maat,Sa---,Sp+++|Anaxi,Beetlenut,Broadleaf Palm,Giant Cricklewood,Locust Palm
 Maat,Sa---,Sp---|Bramble Hedge,Broadleaf Palm,Butterleaf Tree,Cinnar,Orrorin
 Maat,Sa---,Sw+++|Anaxi,Beetlenut,Elephantia,Tapacae Miralis,Umbrella Palm
-Maat,Sa---,Sw---|Arconis,Beetlenut,Fern Palm,Hawthorn,Razor Palm
+Maat,Sa---,Sw---|Chicory,Beetlenut,Fern Palm,Hawthorn,Razor Palm
 Maat,Sa---,To+++|Beetlenut,Bloodbark,Broadleaf Palm,Oleaceae,Pratyeka Tree
-Maat,Sa---,To---|Anaxi,Arconis,Broadleaf Palm,Cinnar,Fern Palm
+Maat,Sa---,To---|Anaxi,Chakkanut Tree,Broadleaf Palm,Cinnar,Fern Palm
 Maat,So+++,Sp+++|Anaxi,Ash Palm,Delta Palm,Giant Cricklewood,Ranyahn
 Maat,So+++,Sp---|Anaxi,Bramble Hedge,Chicory,Cinnar,Royal Palm
 Maat,So+++,Sw+++|Anaxi,Bramble Hedge,Elephantia,Locust Palm,Spiked Fishtree
-Maat,So+++,Sw---|Anaxi,Ash Palm,Chicory,Razor Palm,Savaka
+Maat,So+++,Sw---|Anaxi,Ash Palm,Chicory,Razor Palm,Spindle Tree
 Maat,So+++,To+++|Anaxi,Giant Cricklewood,Oleaceae,Passam,Razor Palm
-Maat,So+++,To---|Anaxi,Arconis,Bramble Hedge,Fern Palm,Ranyahn
-Maat,So---,Sp+++|Arconis,Ash Palm,Beetlenut,Bloodbark,Delta Palm
-Maat,So---,Sp---|Arconis,Cinnar,Coconut Palm,Orrorin,Royal Palm
-Maat,So---,Sw+++|Arconis,Ash Palm,Folded Birch,Spiked Fishtree,Tapacae Miralis
-Maat,So---,Sw---|Arconis,Ash Palm,Hawthorn,Trilobellia,Windriver Palm
-Maat,So---,To+++|Arconis,Bloodbark,Hokkaido,Oleaceae,Passam
-Maat,So---,To---|Arconis,Ash Palm,Beetlenut,Bottle Tree,Coconut Palm
+Maat,So+++,To---|Anaxi,Chakkanut Tree,Bramble Hedge,Fern Palm,Ranyahn
+Maat,So---,Sp+++|Coconut Palm,Ash Palm,Beetlenut,Bloodbark,Locust Palm
+Maat,So---,Sp---|Tapacae Miralis,Cinnar,Coconut Palm,Orrorin,Royal Palm
+Maat,So---,Sw+++|Coconut Palm,Ash Palm,Folded Birch,Spiked Fishtree,Tapacae Miralis
+Maat,So---,Sw---|Bloodbark,Beetlenut,Hawthorn,Trilobellia,Powdered Garnet
+Maat,So---,To+++|Tapacae Miralis,Bloodbark,Hokkaido,Oleaceae,Passam
+Maat,So---,To---|Oil Palm,Ash Palm,Beetlenut,Powdered Emerald,Coconut Palm
 Maat,Sp+++,Sw+++|Anaxi,Folded Birch,Locust Palm,Monkey Palm,Spiked Fishtree
-Maat,Sp+++,Sw---|Arconis,Beetlenut,Delta Palm,Ranyahn,Trilobellia
+Maat,Sp+++,Sw---|Chicory,Beetlenut,Delta Palm,Ranyahn,Blue Damia
 Maat,Sp+++,To+++|Anaxi,Bloodbark,Delta Palm,Giant Cricklewood,Windriver Palm
-Maat,Sp+++,To---|Anaxi,Arconis,Beetlenut,Locust Palm,Ranyahn
+Maat,Sp+++,To---|Anaxi,Fern Palm,Beetlenut,Locust Palm,Ranyahn
 Maat,Sp---,Sw+++|Bramble Hedge,Broadleaf Palm,Cinnar,Spiked Fishtree,Towering Palm
-Maat,Sp---,Sw---|Arconis,Bramble Hedge,Razor Palm,Royal Palm,Trilobellia
+Maat,Sp---,Sw---|Fern Palm,Bramble Hedge,Razor Palm,Royal Palm,Trilobellia
 Maat,Sp---,To+++|Bramble Hedge,Hokkaido,Razor Palm,Royal Palm,Windriver Palm
-Maat,Sp---,To---|Arconis,Bottle Tree,Bramble Hedge,Cinnar,Orrorin
+Maat,Sp---,To---|Chakkanut Tree,Coconut Palm,Bramble Hedge,Cinnar,Orrorin
 Maat,Sw+++,To+++|Bloodbark,Folded Birch,Hokkaido,Towering Palm,Umbrella Palm
 Maat,Sw+++,To---|Anaxi,Chakkanut Tree,Elephantia,Folded Birch,Locust Palm
 Maat,Sw---,To+++|Anaxi,Bloodbark,Chicory,Oleaceae,Razor Palm
-Maat,Sw---,To---|Arconis,Bottle Tree,Ranyahn,Spindle Tree,Trilobellia
-Maat,As+++,Ar+++|Arconis,Beetlenut,Cinnar,Royal Palm,Spindle Tree
-Maat,As---,Ar+++|Anaxi,Monkey Palm,Phoenix Palm,Razor Palm,Trilobellia
+Maat,Sw---,To---|Cinnar,Powdered Garnet,Ranyahn,Spindle Tree,Trilobellia
+Maat,As+++,Ar+++|Fern Palm,Beetlenut,Cinnar,Royal Palm,Spindle Tree
+Maat,As---,Ar+++|Bramble Hedge,Monkey Palm,Red Maple,Razor Palm,Trilobellia
 Maat,Bi---,Ar+++|Anaxi,Bramble Hedge,Razor Palm,Royal Palm,Spindle Tree
-Maat,Sa---,Ar+++|Beetlenut,Bottle Tree,Butterleaf Tree,Elephantia,Razor Palm
+Maat,Sa---,Ar+++|Beetlenut,Monkey Palm,Butterleaf Tree,Elephantia,Razor Palm
 Maat,So+++,Ar+++|Anaxi,Bramble Hedge,Razor Palm,Royal Palm,Spindle Tree
-Maat,So---,Ar+++|Arconis,Beetlenut,Bottle Tree,Oil Palm,Royal Palm
+Maat,So---,Ar+++|Coconut Palm,Beetlenut,Powdered Ruby,Oil Palm,Royal Palm
 Maat,Sp+++,Ar+++|Beetlenut,Bloodbark,Monkey Palm,Spindle Tree,Trilobellia
 Maat,Sp---,Ar+++|Anaxi,Bramble Hedge,Razor Palm,Royal Palm,Spindle Tree
-Maat,Sw+++,Ar+++|Elephantia,Mini Palmetto,Monkey Palm,Royal Palm,Tapacae Miralis
+Maat,Sw+++,Ar+++|Elephantia,Powdered Ruby,Red Maple,Royal Palm,Tapacae Miralis
 Maat,Sw---,Ar+++|Anaxi,Beetlenut,Razor Palm,Spindle Tree,Trilobellia
 Maat,To+++,Ar+++|Beetlenut,Hokkaido,Razor Palm,Royal Palm,Windriver Palm
-Maat,To---,Ar+++|Arconis,Bottle Tree,Chakkanut Tree,Royal Palm,Spindle Tree
-Maat,As+++,Ar---|Anaxi,Arconis,Ash Palm,Bloodbark,Towering Palm
+Maat,To---,Ar+++|Monkey Palm,Cinnar,Chakkanut Tree,Royal Palm,Spindle Tree
+Maat,As+++,Ar---|Anaxi,Fern Palm,Ash Palm,Bloodbark,Towering Palm
 Maat,As---,Ar---|Anaxi,Cerulean Blue,Chakkanut Tree,Feather Tree,Passam
 Maat,Bi+++,Ar---|Anaxi,Ash Palm,Chicory,Kaeshra,Oil Palm
-Maat,Bi---,Ar---|Anaxi,Arconis,Broadleaf Palm,Passam,Umbrella Palm
+Maat,Bi---,Ar---|Anaxi,Fern Palm,Broadleaf Palm,Passam,Umbrella Palm
 Maat,Sa+++,Ar---|Ash Palm,Chicory,Coconut Palm,Feather Tree,Windriver Palm
 Maat,Sa---,Ar---|Anaxi,Broadleaf Palm,Butterleaf Tree,Chicory,Locust Palm
-Maat,So+++,Ar---|Anaxi,Arconis,Bramble Hedge,Chicory,Ranyahn
-Maat,So---,Ar---|Anaxi,Arconis,Bloodbark,Coconut Palm,Folded Birch
-Maat,Sp+++,Ar---|Anaxi,Arconis,Bloodbark,Locust Palm,Ranyahn
+Maat,So+++,Ar---|Anaxi,Fern Palm,Bramble Hedge,Chicory,Ranyahn
+Maat,So---,Ar---|Anaxi,Feather Tree,Bloodbark,Coconut Palm,Folded Birch
+Maat,Sp+++,Ar---|Anaxi,Pratyeka Tree,Bloodbark,Locust Palm,Ranyahn
 Maat,Sp---,Ar---|Anaxi,Ash Palm,Bramble Hedge,Cinnar,Towering Palm
-Maat,Sw+++,Ar---|Anaxi,Arconis,Elephantia,Spiked Fishtree,Towering Palm
-Maat,Sw---,Ar---|Anaxi,Arconis,Chicory,Delta Palm,Oleaceae
+Maat,Sw+++,Ar---|Anaxi,Locust Palm,Elephantia,Spiked Fishtree,Towering Palm
+Maat,Sw---,Ar---|Anaxi,Trilobellia,Chicory,Delta Palm,Oleaceae
 Maat,To+++,Ar---|Anaxi,Ash Palm,Bloodbark,Oleaceae,Windriver Palm
-Maat,To---,Ar---|Anaxi,Arconis,Ash Palm,Chakkanut Tree,Locust Palm
+Maat,To---,Ar---|Anaxi,Fern Palm,Ash Palm,Chakkanut Tree,Locust Palm
 Maat,Bi+++,As+++|Ash Palm,Beetlenut,Cinnar,Kaeshra,Oil Palm
-Maat,Bi---,As+++|Anaxi,Arconis,Beetlenut,Elephantia,Spindle Tree
-Maat,Sa---,As+++|Anaxi,Arconis,Beetlenut,Broadleaf Palm,Elephantia
+Maat,Bi---,As+++|Anaxi,Fern Palm,Beetlenut,Elephantia,Spindle Tree
+Maat,Sa---,As+++|Anaxi,Fern Palm,Beetlenut,Broadleaf Palm,Elephantia
 Maat,So+++,As+++|Anaxi,Ash Palm,Beetlenut,Bramble Hedge,Elephantia
-Maat,So---,As+++|Arconis,Ash Palm,Beetlenut,Bloodbark,Broadleaf Palm
-Maat,Sp+++,As+++|Anaxi,Arconis,Beetlenut,Bloodbark,Delta Palm
+Maat,So---,As+++|Coconut Palm,Ash Palm,Beetlenut,Bloodbark,Broadleaf Palm
+Maat,Sp+++,As+++|Anaxi,Locust Palm,Beetlenut,Bloodbark,Delta Palm
 Maat,Sp---,As+++|Anaxi,Ash Palm,Bramble Hedge,Cinnar,Orrorin
 Maat,Sw+++,As+++|Anaxi,Ash Palm,Broadleaf Palm,Spiked Fishtree,Towering Palm
-Maat,Sw---,As+++|Anaxi,Arconis,Delta Palm,Hawthorn,Spindle Tree
+Maat,Sw---,As+++|Anaxi,Powdered Garnet,Delta Palm,Hawthorn,Spindle Tree
 Maat,To+++,As+++|Anaxi,Beetlenut,Bloodbark,Towering Palm,Windriver Palm
-Maat,To---,As+++|Anaxi,Arconis,Ash Palm,Cinnar,Coconut Palm
+Maat,To---,As+++|Anaxi,Fern Palm,Ash Palm,Cinnar,Coconut Palm
 Maat,Bi+++,As---|Butterleaf Tree,Feather Tree,Kaeshra,Oil Palm,Tiny Oil Palm
-Maat,Bi---,As---|Anaxi,Butterleaf Tree,Cerulean Blue,Giant Cricklewood,Mini Palmetto
+Maat,Bi---,As---|Bramble Hedge,Chakkanut Tree,Umbrella Palm,Giant Cricklewood,Pratyeka Tree
 Maat,Sa+++,As---|Cerulean Blue,Coconut Palm,Feather Tree,Hokkaido,Windriver Palm
 Maat,Sa---,As---|Anaxi,Butterleaf Tree,Cerulean Blue,Pratyeka Tree,Red Maple
 Maat,So+++,As---|Anaxi,Butterleaf Tree,Giant Cricklewood,Pratyeka Tree,Razor Palm
-Maat,So---,As---|Arconis,Bloodbark,Butterleaf Tree,Cerulean Blue,Feather Tree
+Maat,So---,As---|Coconut Palm,Bloodbark,Butterleaf Tree,Cerulean Blue,Feather Tree
 Maat,Sp+++,As---|Anaxi,Cerulean Blue,Feather Tree,Giant Cricklewood,Monkey Palm
-Maat,Sp---,As---|Bramble Hedge,Butterleaf Tree,Mini Palmetto,Razor Palm,Royal Palm
-Maat,Sw+++,As---|Anaxi,Cerulean Blue,Mini Palmetto,Phoenix Palm,Spiked Fishtree
-Maat,Sw---,As---|Arconis,Bloodbark,Feather Tree,Razor Palm,Trilobellia
+Maat,Sp---,As---|Bramble Hedge,Butterleaf Tree,Pratyeka Palm,Razor Palm,Royal Palm
+Maat,Sw+++,As---|Chakkanut Tree,Cerulean Blue,Monkey Palm,Spiked Fishtree,Tapacae Miralis
+Maat,Sw---,As---|Fern Palm,Bloodbark,Feather Tree,Razor Palm,Trilobellia
 Maat,To+++,As---|Anaxi,Giant Cricklewood,Hokkaido,Passam,Pratyeka Tree
-Maat,To---,As---|Arconis,Bottle Tree,Chakkanut Tree,Feather Tree,Mini Palmetto
+Maat,To---,As---|Cerulean Blue,Coconut Palm,Chakkanut Tree,Feather Tree,Powdered Diamond
 Maat,Sa---,Bi+++|Butterleaf Tree,Fern Palm,Kaeshra,Oil Palm,Tiny Oil Palm
-Maat,So---,Bi+++|Arconis,Ash Palm,Bloodbark,Kaeshra,Oil Palm
+Maat,So---,Bi+++|Folded Birch,Ash Palm,Bloodbark,Kaeshra,Oil Palm
 Maat,Sp+++,Bi+++|Ash Palm,Delta Palm,Kaeshra,Locust Palm,Tiny Oil Palm
 Maat,Sw+++,Bi+++|Chakkanut Tree,Oil Palm,Spiked Fishtree,Tiny Oil Palm,Towering Palm
 Maat,Sw---,Bi+++|Ash Palm,Chicory,Oil Palm,Oleaceae,Razor Palm
 Maat,To+++,Bi+++|Ash Palm,Bloodbark,Oleaceae,Tiny Oil Palm,Windriver Palm
-Maat,To---,Bi+++|Arconis,Ash Palm,Chakkanut Tree,Kaeshra,Oil Palm
-Maat,Sa---,Bi---|Anaxi,Arconis,Broadleaf Palm,Butterleaf Tree,Elephantia
-Maat,So+++,Bi---|Anaxi,Arconis,Bramble Hedge,Elephantia,Giant Cricklewood
-Maat,So---,Bi---|Arconis,Beetlenut,Broadleaf Palm,Orrorin,Tapacae Miralis
+Maat,To---,Bi+++|Locust Palm,Ash Palm,Chakkanut Tree,Kaeshra,Oil Palm
+Maat,Sa---,Bi---|Anaxi,Fern Palm,Broadleaf Palm,Butterleaf Tree,Elephantia
+Maat,So+++,Bi---|Anaxi,Fern Palm,Bramble Hedge,Elephantia,Giant Cricklewood
+Maat,So---,Bi---|Folded Birch,Beetlenut,Broadleaf Palm,Orrorin,Tapacae Miralis
 Maat,Sp+++,Bi---|Anaxi,Beetlenut,Cerulean Blue,Giant Cricklewood,Stout Palm
-Maat,Sp---,Bi---|Anaxi,Arconis,Bramble Hedge,Orrorin,Royal Palm
+Maat,Sp---,Bi---|Anaxi,Folded Birch,Bramble Hedge,Orrorin,Royal Palm
 Maat,Sw+++,Bi---|Anaxi,Ash Palm,Elephantia,Tapacae Miralis,Umbrella Palm
 Maat,Sw---,Bi---|Anaxi,Delta Palm,Giant Cricklewood,Razor Palm,Spindle Tree
 Maat,To+++,Bi---|Anaxi,Bloodbark,Giant Cricklewood,Hokkaido,Umbrella Palm
-Maat,To---,Bi---|Anaxi,Arconis,Chakkanut Tree,Elephantia,Spindle Tree
-Maat,So---,Sa+++|Arconis,Ash Palm,Coconut Palm,Feather Tree,Windriver Palm
+Maat,To---,Bi---|Anaxi,Locust Palm,Chakkanut Tree,Elephantia,Spindle Tree
+Maat,So---,Sa+++|Delta Palm,Ash Palm,Coconut Palm,Feather Tree,Windriver Palm
 Maat,So+++,Sa---|Anaxi,Ash Palm,Broadleaf Palm,Elephantia,Fern Palm
-Maat,So---,Sa---|Arconis,Beetlenut,Bloodbark,Broadleaf Palm,Butterleaf Tree
+Maat,So---,Sa---|Tapacae Miralis,Beetlenut,Bloodbark,Broadleaf Palm,Butterleaf Tree
 Maat,Sp+++,Sa---|Anaxi,Beetlenut,Broadleaf Palm,Giant Cricklewood,Locust Palm
 Maat,Sp---,Sa---|Bramble Hedge,Broadleaf Palm,Butterleaf Tree,Cinnar,Orrorin
 Maat,Sw+++,Sa---|Anaxi,Beetlenut,Elephantia,Tapacae Miralis,Umbrella Palm
-Maat,Sw---,Sa---|Arconis,Beetlenut,Fern Palm,Hawthorn,Razor Palm
+Maat,Sw---,Sa---|Chicory,Beetlenut,Fern Palm,Hawthorn,Razor Palm
 Maat,To+++,Sa---|Beetlenut,Bloodbark,Broadleaf Palm,Oleaceae,Pratyeka Tree
-Maat,To---,Sa---|Anaxi,Arconis,Broadleaf Palm,Cinnar,Fern Palm
+Maat,To---,Sa---|Anaxi,Chakkanut Tree,Broadleaf Palm,Cinnar,Fern Palm
 Maat,Sp+++,So+++|Anaxi,Ash Palm,Delta Palm,Giant Cricklewood,Ranyahn
 Maat,Sp---,So+++|Anaxi,Bramble Hedge,Chicory,Cinnar,Royal Palm
 Maat,Sw+++,So+++|Anaxi,Bramble Hedge,Elephantia,Locust Palm,Spiked Fishtree
-Maat,Sw---,So+++|Anaxi,Ash Palm,Chicory,Razor Palm,Savaka
+Maat,Sw---,So+++|Anaxi,Ash Palm,Chicory,Razor Palm,Spindle Tree
 Maat,To+++,So+++|Anaxi,Giant Cricklewood,Oleaceae,Passam,Razor Palm
-Maat,To---,So+++|Anaxi,Arconis,Bramble Hedge,Fern Palm,Ranyahn
-Maat,Sp+++,So---|Arconis,Ash Palm,Beetlenut,Bloodbark,Delta Palm
-Maat,Sp---,So---|Arconis,Cinnar,Coconut Palm,Orrorin,Royal Palm
-Maat,Sw+++,So---|Arconis,Ash Palm,Folded Birch,Spiked Fishtree,Tapacae Miralis
-Maat,Sw---,So---|Arconis,Ash Palm,Hawthorn,Trilobellia,Windriver Palm
-Maat,To+++,So---|Arconis,Bloodbark,Hokkaido,Oleaceae,Passam
-Maat,To---,So---|Arconis,Ash Palm,Beetlenut,Bottle Tree,Coconut Palm
+Maat,To---,So+++|Anaxi,Chakkanut Tree,Bramble Hedge,Fern Palm,Ranyahn
+Maat,Sp+++,So---|Coconut Palm,Ash Palm,Beetlenut,Bloodbark,Locust Palm
+Maat,Sp---,So---|Tapacae Miralis,Cinnar,Coconut Palm,Orrorin,Royal Palm
+Maat,Sw+++,So---|Coconut Palm,Ash Palm,Folded Birch,Spiked Fishtree,Tapacae Miralis
+Maat,Sw---,So---|Bloodbark,Beetlenut,Hawthorn,Trilobellia,Powdered Garnet
+Maat,To+++,So---|Tapacae Miralis,Bloodbark,Hokkaido,Oleaceae,Passam
+Maat,To---,So---|Oil Palm,Ash Palm,Beetlenut,Powdered Emerald,Coconut Palm
 Maat,Sw+++,Sp+++|Anaxi,Folded Birch,Locust Palm,Monkey Palm,Spiked Fishtree
-Maat,Sw---,Sp+++|Arconis,Beetlenut,Delta Palm,Ranyahn,Trilobellia
+Maat,Sw---,Sp+++|Chicory,Beetlenut,Delta Palm,Ranyahn,Blue Damia
 Maat,To+++,Sp+++|Anaxi,Bloodbark,Delta Palm,Giant Cricklewood,Windriver Palm
-Maat,To---,Sp+++|Anaxi,Arconis,Beetlenut,Locust Palm,Ranyahn
+Maat,To---,Sp+++|Anaxi,Fern Palm,Beetlenut,Locust Palm,Ranyahn
 Maat,Sw+++,Sp---|Bramble Hedge,Broadleaf Palm,Cinnar,Spiked Fishtree,Towering Palm
-Maat,Sw---,Sp---|Arconis,Bramble Hedge,Razor Palm,Royal Palm,Trilobellia
+Maat,Sw---,Sp---|Fern Palm,Bramble Hedge,Razor Palm,Royal Palm,Trilobellia
 Maat,To+++,Sp---|Bramble Hedge,Hokkaido,Razor Palm,Royal Palm,Windriver Palm
-Maat,To---,Sp---|Arconis,Bottle Tree,Bramble Hedge,Cinnar,Orrorin
+Maat,To---,Sp---|Chakkanut Tree,Coconut Palm,Bramble Hedge,Cinnar,Orrorin
 Maat,To+++,Sw+++|Bloodbark,Folded Birch,Hokkaido,Towering Palm,Umbrella Palm
 Maat,To---,Sw+++|Anaxi,Chakkanut Tree,Elephantia,Folded Birch,Locust Palm
 Maat,To+++,Sw---|Anaxi,Bloodbark,Chicory,Oleaceae,Razor Palm
-Maat,To---,Sw---|Arconis,Bottle Tree,Ranyahn,Spindle Tree,Trilobellia
-Geb,As++,Ar++|Anaxi,Arconis,Beetlenut,Monkey Palm,Spindle Tree
-Geb,As--,Ar++|Anaxi,Arconis,Butterleaf Tree,Monkey Palm,Razor Palm
-Geb,Bi++,Ar++|Anaxi,Monkey Palm,Oil Palm,Razor Palm,Tiny Oil Palm
-Geb,Bi--,Ar++|Anaxi,Arconis,Beetlenut,Monkey Palm,Spindle Tree
+Maat,To---,Sw---|Cinnar,Powdered Garnet,Ranyahn,Spindle Tree,Trilobellia
+Geb,As++,Ar++|Anaxi,Fern Palm,Beetlenut,Monkey Palm,Spindle Tree
+Geb,As--,Ar++|Anaxi,Oil Palm,Butterleaf Tree,Monkey Palm,Razor Palm
+Geb,Bi++,Ar++|Hawthorn,Monkey Palm,Oil Palm,Trilobellia,Tiny Oil Palm
+Geb,Bi--,Ar++|Anaxi,Fern Palm,Trilobellia,Monkey Palm,Spindle Tree
 Geb,Sa++,Ar++|Anaxi,Hokkaido,Razor Palm,Royal Palm,Windriver Palm
-Geb,Sa--,Ar++|Anaxi,Beetlenut,Bottle Tree,Butterleaf Tree,Monkey Palm
-Geb,So++,Ar++|Anaxi,Arconis,Bramble Hedge,Razor Palm,Spindle Tree
-Geb,So--,Ar++|Anaxi,Arconis,Oil Palm,Phoenix Palm,Royal Palm
-Geb,Sp++,Ar++|Anaxi,Arconis,Beetlenut,Monkey Palm,Razor Palm
-Geb,Sp--,Ar++|Anaxi,Arconis,Bramble Hedge,Razor Palm,Royal Palm
-Geb,Sw++,Ar++|Anaxi,Beetlenut,Monkey Palm,Phoenix Palm,Tapacae Miralis
-Geb,Sw--,Ar++|Anaxi,Arconis,Beetlenut,Monkey Palm,Razor Palm
+Geb,Sa--,Ar++|Anaxi,Fern Palm,Spindle Tree,Butterleaf Tree,Monkey Palm
+Geb,So++,Ar++|Anaxi,Oil Palm,Bramble Hedge,Monkey Palm,Spindle Tree
+Geb,So--,Ar++|Bloodbark,Monkey Palm,Oil Palm,Tiny Oil Palm,Trilobellia
+Geb,Sp++,Ar++|Spindle Tree,Fern Palm,Giant Cricklewood,Monkey Palm,Tapacae Miralis
+Geb,Sp--,Ar++|Bramble Hedge,Fern Palm,Cinnar,Spindle Tree,Oil Palm
+Geb,Sw++,Ar++|Monkey Palm,Beetlenut,Tapacae Miralis,Umbrella Palm,Oil Palm
+Geb,Sw--,Ar++|Fern Palm,Spindle Tree,Tiny Oil Palm,Bramble Hedge,Trilobellia
 Geb,To++,Ar++|Anaxi,Beetlenut,Bloodbark,Razor Palm,Royal Palm
-Geb,To--,Ar++|Anaxi,Arconis,Beetlenut,Monkey Palm,Spindle Tree
-Geb,To--,Ar++|Anaxi,Arconis,Bottle Tree,Butterleaf Tree,Royal Palm
-Geb,As++,Ar--|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,As--,Ar--|Anaxi,Arconis,Bloodbark,Feather Tree,Pratyeka Tree
-Geb,Bi++,Ar--|Anaxi,Arconis,Ash Palm,Bloodbark,Oil Palm
-Geb,Bi--,Ar--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
-Geb,Sa++,Ar--|Anaxi,Arconis,Ash Palm,Coconut Palm,Feather Tree
-Geb,Sa--,Ar--|Anaxi,Arconis,Ash Palm,Beetlenut,Broadleaf Palm
-Geb,So++,Ar--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Chicory
-Geb,So--,Ar--|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,Sp++,Ar--|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,Sp--,Ar--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Cinnar
-Geb,Sw++,Ar--|Anaxi,Arconis,Ash Palm,Elephantia,Spiked Fishtree
-Geb,Sw--,Ar--|Anaxi,Arconis,Ash Palm,Chicory,Delta Palm
-Geb,To++,Ar--|Anaxi,Arconis,Bloodbark,Broadleaf Palm,Windriver Palm
-Geb,To--,Ar--|Anaxi,Arconis,Ash Palm,Beetlenut,Chakkanut Tree
-Geb,Bi++,As++|Anaxi,Arconis,Ash Palm,Beetlenut,Oil Palm
-Geb,Bi--,As++|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
-Geb,Sa++,As++|Anaxi,Arconis,Ash Palm,Coconut Palm,Royal Palm
-Geb,Sa--,As++|Anaxi,Arconis,Ash Palm,Beetlenut,Broadleaf Palm
-Geb,So++,As++|Anaxi,Arconis,Ash Palm,Bramble Hedge,Chicory
-Geb,So--,As++|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,Sp++,As++|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,Sp--,As++|Anaxi,Arconis,Ash Palm,Bramble Hedge,Cinnar
-Geb,Sw++,As++|Anaxi,Arconis,Ash Palm,Elephantia,Spiked Fishtree
-Geb,Sw--,As++|Anaxi,Arconis,Ash Palm,Beetlenut,Razor Palm
-Geb,To++,As++|Anaxi,Arconis,Beetlenut,Bloodbark,Windriver Palm
-Geb,To--,As++|Anaxi,Arconis,Ash Palm,Beetlenut,Chakkanut Tree
+Geb,To--,Ar++|Anaxi,Monkey Palm,Spindle Tree,Fern Palm,Oil Palm
+Geb,As++,Ar--|Anaxi,Ash Palm,Bloodbark,Fern Palm,Hawthorn
+Geb,As--,Ar--|Anaxi,Bloodbark,Feather Tree,Folded Birch,Hokkaido
+Geb,Bi++,Ar--|Anaxi,Fern Palm,Ash Palm,Bloodbark,Oil Palm
+Geb,Bi--,Ar--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Elephantia
+Geb,Sa++,Ar--|Anaxi,Folded Birch,Ash Palm,Coconut Palm,Feather Tree
+Geb,Sa--,Ar--|Anaxi,Fern Palm,Ash Palm,Locust Palm,Broadleaf Palm
+Geb,So++,Ar--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Chicory
+Geb,So--,Ar--|Anaxi,Folded Birch,Ash Palm,Coconut Palm,Bloodbark
+Geb,Sp++,Ar--|Anaxi,Folded Birch,Ash Palm,Stout Palm,Bloodbark
+Geb,Sp--,Ar--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Cinnar
+Geb,Sw++,Ar--|Anaxi,Folded Birch,Ash Palm,Elephantia,Spiked Fishtree
+Geb,Sw--,Ar--|Anaxi,Fern Palm,Ash Palm,Chicory,Delta Palm
+Geb,To++,Ar--|Anaxi,Fern Palm,Bloodbark,Broadleaf Palm,Windriver Palm
+Geb,To--,Ar--|Anaxi,Fern Palm,Ash Palm,Folded Birch,Chakkanut Tree
+Geb,Bi++,As++|Anaxi,Fern Palm,Ash Palm,Locust Palm,Oil Palm
+Geb,Bi--,As++|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Elephantia
+Geb,Sa++,As++|Anaxi,Folded Birch,Ash Palm,Coconut Palm,Stout Palm
+Geb,Sa--,As++|Anaxi,Fern Palm,Ash Palm,Cinnar,Hawthorn
+Geb,So++,As++|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Chicory
+Geb,So--,As++|Anaxi,Folded Birch,Ash Palm,Coconut Palm,Bloodbark
+Geb,Sp++,As++|Anaxi,Fern Palm,Ash Palm,Locust Palm,Bloodbark
+Geb,Sp--,As++|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Cinnar
+Geb,Sw++,As++|Anaxi,Locust Palm,Ash Palm,Elephantia,Spiked Fishtree
+Geb,Sw--,As++|Anaxi,Ash Palm,Fern Palm,Spindle Tree,Hawthorn
+Geb,To++,As++|Anaxi,Bloodbark,Broadleaf Palm,Bramble Hedge,Umbrella Palm
+Geb,To--,As++|Anaxi,Fern Palm,Ash Palm,Locust Palm,Chakkanut Tree
 Geb,Bi++,As--|Anaxi,Butterleaf Tree,Chakkanut Tree,Oil Palm,Tiny Oil Palm
-Geb,Bi--,As--|Anaxi,Arconis,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
-Geb,Sa++,As--|Anaxi,Arconis,Feather Tree,Phoenix Palm,Windriver Palm
-Geb,Sa--,As--|Anaxi,Arconis,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
-Geb,So++,As--|Anaxi,Arconis,Butterleaf Tree,Giant Cricklewood,Razor Palm
-Geb,So--,As--|Anaxi,Arconis,Bloodbark,Feather Tree,Pratyeka Tree
-Geb,Sp++,As--|Anaxi,Arconis,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
+Geb,Bi--,As--|Anaxi,Fern Palm,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
+Geb,Sa++,As--|Anaxi,Folded Birch,Feather Tree,Hokkaido,Windriver Palm
+Geb,Sa--,As--|Anaxi,Fern Palm,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
+Geb,So++,As--|Anaxi,Bramble Hedge,Butterleaf Tree,Giant Cricklewood,Cerulean Blue
+Geb,So--,As--|Fern Palm,Folded Birch,Bloodbark,Feather Tree,Stout Palm
+Geb,Sp++,As--|Anaxi,Fern Palm,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
 Geb,Sp--,As--|Anaxi,Bramble Hedge,Butterleaf Tree,Chakkanut Tree,Razor Palm
-Geb,Sw++,As--|Anaxi,Arconis,Cerulean Blue,Phoenix Palm,Spiked Fishtree
-Geb,Sw--,As--|Anaxi,Arconis,Butterleaf Tree,Feather Tree,Razor Palm
-Geb,To++,As--|Anaxi,Arconis,Hokkaido,Oleaceae,Pratyeka Tree
-Geb,To--,As--|Anaxi,Arconis,Butterleaf Tree,Cerulean Blue,Chakkanut Tree
+Geb,Sw++,As--|Anaxi,Folded Birch,Cerulean Blue,Hokkaido,Spiked Fishtree
+Geb,Sw--,As--|Fern Palm,Chicory,Butterleaf Tree,Feather Tree,Hawthorn
+Geb,To++,As--|Folded Birch,Bloodbark,Hokkaido,Oleaceae,Bramble Hedge
+Geb,To--,As--|Anaxi,Fern Palm,Butterleaf Tree,Cerulean Blue,Chakkanut Tree
 Geb,Sa++,Bi++|Anaxi,Ash Palm,Coconut Palm,Feather Tree,Oil Palm
-Geb,Sa--,Bi++|Anaxi,Arconis,Butterleaf Tree,Oil Palm,Tiny Oil Palm
+Geb,Sa--,Bi++|Bloodbark,Fern Palm,Butterleaf Tree,Oil Palm,Tiny Oil Palm
 Geb,So++,Bi++|Anaxi,Ash Palm,Beetlenut,Chicory,Kaeshra
-Geb,So--,Bi++|Anaxi,Arconis,Ash Palm,Bloodbark,Oil Palm
-Geb,Sp++,Bi++|Anaxi,Arconis,Ash Palm,Delta Palm,Tiny Oil Palm
+Geb,So--,Bi++|Fern Palm,Folded Birch,Ash Palm,Bloodbark,Oil Palm
+Geb,Sp++,Bi++|Fern Palm,Folded Birch,Ash Palm,Delta Palm,Tiny Oil Palm
 Geb,Sp--,Bi++|Anaxi,Ash Palm,Cinnar,Oil Palm,Towering Palm
 Geb,Sw++,Bi++|Anaxi,Ash Palm,Cerulean Blue,Oil Palm,Spiked Fishtree
-Geb,Sw--,Bi++|Anaxi,Arconis,Ash Palm,Chicory,Kaeshra
+Geb,Sw--,Bi++|Fern Palm,Hawthorn,Ash Palm,Chicory,Kaeshra
 Geb,To++,Bi++|Anaxi,Ash Palm,Bloodbark,Hokkaido,Tiny Oil Palm
-Geb,To--,Bi++|Anaxi,Arconis,Ash Palm,Beetlenut,Oil Palm
-Geb,Sa++,Bi--|Anaxi,Arconis,Coconut Palm,Feather Tree,Orrorin
-Geb,Sa--,Bi--|Anaxi,Arconis,Ash Palm,Broadleaf Palm,Elephantia
-Geb,So++,Bi--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
-Geb,So--,Bi--|Anaxi,Arconis,Ash Palm,Orrorin,Tapacae Miralis
-Geb,Sp++,Bi--|Anaxi,Arconis,Ash Palm,Giant Cricklewood,Stout Palm
-Geb,Sp--,Bi--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Orrorin
-Geb,Sw++,Bi--|Anaxi,Arconis,Ash Palm,Elephantia,Tapacae Miralis
-Geb,Sw--,Bi--|Anaxi,Arconis,Beetlenut,Delta Palm,Spindle Tree
-Geb,To++,Bi--|Anaxi,Arconis,Bloodbark,Giant Cricklewood,Hokkaido
-Geb,To--,Bi--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
+Geb,To--,Bi++|Fern Palm,Folded Birch,Ash Palm,Locust Palm,Oil Palm
+Geb,Sa++,Bi--|Anaxi,Folded Birch,Coconut Palm,Feather Tree,Orrorin
+Geb,Sa--,Bi--|Anaxi,Fern Palm,Ash Palm,Broadleaf Palm,Elephantia
+Geb,So++,Bi--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Elephantia
+Geb,So--,Bi--|Folded Birch,Stout Palm,Ash Palm,Orrorin,Tapacae Miralis
+Geb,Sp++,Bi--|Anaxi,Fern Palm,Ash Palm,Giant Cricklewood,Stout Palm
+Geb,Sp--,Bi--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Orrorin
+Geb,Sw++,Bi--|Anaxi,Locust Palm,Ash Palm,Elephantia,Tapacae Miralis
+Geb,Sw--,Bi--|Anaxi,Fern Palm,Hawthorn,Delta Palm,Spindle Tree
+Geb,To++,Bi--|Anaxi,Folded Birch,Bloodbark,Giant Cricklewood,Hokkaido
+Geb,To--,Bi--|Anaxi,Locust Palm,Ash Palm,Bramble Hedge,Elephantia
 Geb,So++,Sa++|Anaxi,Ash Palm,Feather Tree,Ranyahn,Royal Palm
-Geb,So--,Sa++|Anaxi,Arconis,Ash Palm,Coconut Palm,Feather Tree
-Geb,Sp++,Sa++|Anaxi,Arconis,Coconut Palm,Delta Palm,Feather Tree
+Geb,So--,Sa++|Folded Birch,Locust Palm,Ash Palm,Coconut Palm,Feather Tree
+Geb,Sp++,Sa++|Locust Palm,Stout Palm,Coconut Palm,Delta Palm,Feather Tree
 Geb,Sp--,Sa++|Anaxi,Ash Palm,Coconut Palm,Orrorin,Royal Palm
 Geb,Sw++,Sa++|Anaxi,Cerulean Blue,Coconut Palm,Feather Tree,Spiked Fishtree
-Geb,Sw--,Sa++|Anaxi,Arconis,Chicory,Coconut Palm,Windriver Palm
-Geb,To++,Sa++|Anaxi,Arconis,Bloodbark,Feather Tree,Windriver Palm
-Geb,To--,Sa++|Anaxi,Arconis,Ash Palm,Coconut Palm,Feather Tree
-Geb,So++,Sa--|Anaxi,Arconis,Ash Palm,Elephantia,Fern Palm
-Geb,So--,Sa--|Anaxi,Arconis,Beetlenut,Bloodbark,Broadleaf Palm
-Geb,Sp++,Sa--|Anaxi,Arconis,Beetlenut,Bloodbark,Broadleaf Palm
-Geb,Sp--,Sa--|Anaxi,Arconis,Bramble Hedge,Broadleaf Palm,Cinnar
-Geb,Sw++,Sa--|Anaxi,Arconis,Beetlenut,Elephantia,Spiked Fishtree
-Geb,Sw--,Sa--|Anaxi,Arconis,Ash Palm,Fern Palm,Hawthorn
-Geb,To++,Sa--|Anaxi,Arconis,Bloodbark,Pratyeka Tree,Umbrella Palm
-Geb,To--,Sa--|Anaxi,Arconis,Ash Palm,Beetlenut,Fern Palm
-Geb,Sp++,So++|Anaxi,Arconis,Ash Palm,Giant Cricklewood,Ranyahn
-Geb,Sp--,So++|Anaxi,Arconis,Bramble Hedge,Chicory,Cinnar
-Geb,Sw++,So++|Anaxi,Arconis,Bramble Hedge,Elephantia,Spiked Fishtree
-Geb,Sw--,So++|Anaxi,Arconis,Ash Palm,Chicory,Fern Palm
+Geb,Sw--,Sa++|Windriver Palm,Spindle Tree,Chicory,Coconut Palm,Oleaceae
+Geb,To++,Sa++|Folded Birch,Stout Palm,Bloodbark,Feather Tree,Windriver Palm
+Geb,To--,Sa++|Folded Birch,Locust Palm,Ash Palm,Coconut Palm,Feather Tree
+Geb,So++,Sa--|Locust Palm,Hawthorn,Ash Palm,Elephantia,Fern Palm
+Geb,So--,Sa--|Folded Birch,Fern Palm,Towering Palm,Bloodbark,Broadleaf Palm
+Geb,Sp++,Sa--|Fern Palm,Folded Birch,Stout Palm,Bloodbark,Broadleaf Palm
+Geb,Sp--,Sa--|Fern Palm,Folded Birch,Bramble Hedge,Broadleaf Palm,Cinnar
+Geb,Sw++,Sa--|Fern Palm,Folded Birch,Towering Palm,Elephantia,Spiked Fishtree
+Geb,Sw--,Sa--|Spindle Tree,Stout Palm,Ash Palm,Fern Palm,Hawthorn
+Geb,To++,Sa--|Hawthorn,Folded Birch,Bloodbark,Trilobellia,Umbrella Palm
+Geb,To--,Sa--|Folded Birch,Chakkanut Tree,Ash Palm,Umbrella Palm,Fern Palm
+Geb,Sp++,So++|Anaxi,Locust Palm,Ash Palm,Giant Cricklewood,Folded Birch
+Geb,Sp--,So++|Anaxi,Fern Palm,Bramble Hedge,Chicory,Cinnar
+Geb,Sw++,So++|Anaxi,Folded Birch,Bramble Hedge,Elephantia,Spiked Fishtree
+Geb,Sw--,So++|Spindle Tree,Stout Palm,Ash Palm,Chicory,Fern Palm
 Geb,To++,So++|Anaxi,Ash Palm,Bloodbark,Giant Cricklewood,Razor Palm
-Geb,To--,So++|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
-Geb,Sp++,So--|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,Sp--,So--|Anaxi,Arconis,Cinnar,Coconut Palm,Orrorin
-Geb,Sw++,So--|Anaxi,Arconis,Ash Palm,Folded Birch,Tapacae Miralis
-Geb,Sw--,So--|Anaxi,Arconis,Ash Palm,Bloodbark,Trilobellia
-Geb,To++,So--|Anaxi,Arconis,Beetlenut,Bloodbark,Windriver Palm
-Geb,To--,So--|Anaxi,Arconis,Ash Palm,Beetlenut,Coconut Palm
-Geb,Sw++,Sp++|Anaxi,Arconis,Beetlenut,Locust Palm,Spiked Fishtree
-Geb,Sw--,Sp++|Anaxi,Arconis,Ash Palm,Delta Palm,Ranyahn
-Geb,To++,Sp++|Anaxi,Arconis,Beetlenut,Bloodbark,Windriver Palm
-Geb,To--,Sp++|Anaxi,Arconis,Ash Palm,Beetlenut,Locust Palm
-Geb,Sw++,Sp--|Anaxi,Arconis,Bramble Hedge,Elephantia,Towering Palm
-Geb,Sw--,Sp--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Razor Palm
-Geb,Sw--,Sp--|Anaxi,Arconis,Bottle Tree,Razor Palm,Royal Palm
+Geb,To--,So++|Anaxi,Bramble Hedge,Umbrella Palm,Towering Palm,Passam
+Geb,Sp++,So--|Folded Birch,Chakkanut Tree,Ash Palm,Cerulean Blue,Bloodbark
+Geb,Sp--,So--|Folded Birch,Bramble Hedge,Cinnar,Coconut Palm,Orrorin
+Geb,Sw++,So--|Locust Palm,Stout Palm,Ash Palm,Folded Birch,Tapacae Miralis
+Geb,Sw--,So--|Spindle Tree,Hawthorn,Ash Palm,Bloodbark,Trilobellia
+Geb,To++,So--|Folded Birch,Fern Palm,Towering Palm,Bloodbark,Windriver Palm
+Geb,To--,So--|Folded Birch,Fern Palm,Ash Palm,Hawthorn,Coconut Palm
+Geb,Sw++,Sp++|Folded Birch,Fern Palm,Umbrella Palm,Locust Palm,Spiked Fishtree
+Geb,Sw--,Sp++|Fern Palm,Monkey Palm,Ash Palm,Delta Palm,Chicory
+Geb,To++,Sp++|Folded Birch,Locust Palm,Towering Palm,Bloodbark,Windriver Palm
+Geb,To--,Sp++|Anaxi,Folded Birch,Ash Palm,Fern Palm,Locust Palm
+Geb,Sw++,Sp--|Folded Birch,Fern Palm,Bramble Hedge,Elephantia,Towering Palm
+Geb,Sw--,Sp--|Cinnar,Hawthorn,Ash Palm,Bramble Hedge,Trilobellia
 Geb,To++,Sp--|Anaxi,Ash Palm,Bramble Hedge,Razor Palm,Windriver Palm
-Geb,To--,Sp--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Cinnar
+Geb,To--,Sp--|Fern Palm,Folded Birch,Ash Palm,Bramble Hedge,Cinnar
 Geb,To++,Sw++|Anaxi,Ash Palm,Bloodbark,Towering Palm,Umbrella Palm
-Geb,To--,Sw++|Anaxi,Arconis,Ash Palm,Elephantia,Spiked Fishtree
-Geb,To++,Sw--|Anaxi,Arconis,Bloodbark,Chicory,Windriver Palm
-Geb,To--,Sw--|Anaxi,Arconis,Ash Palm,Chicory,Fern Palm
-Geb,Ar++,As++|Anaxi,Arconis,Beetlenut,Monkey Palm,Spindle Tree
-Geb,Ar++,As--|Anaxi,Arconis,Butterleaf Tree,Monkey Palm,Razor Palm
-Geb,Ar++,Bi++|Anaxi,Monkey Palm,Oil Palm,Razor Palm,Tiny Oil Palm
-Geb,Ar++,Bi--|Anaxi,Arconis,Beetlenut,Monkey Palm,Spindle Tree
+Geb,To--,Sw++|Folded Birch,Locust Palm,Ash Palm,Elephantia,Spiked Fishtree
+Geb,To++,Sw--|Fern Palm,Stout Palm,Bloodbark,Chicory,Windriver Palm
+Geb,To--,Sw--|Coconut Palm,Spindle Tree,Ash Palm,Chicory,Fern Palm
+Geb,Ar++,As++|Anaxi,Fern Palm,Beetlenut,Monkey Palm,Spindle Tree
+Geb,Ar++,As--|Anaxi,Oil Palm,Butterleaf Tree,Monkey Palm,Razor Palm
+Geb,Ar++,Bi++|Hawthorn,Monkey Palm,Oil Palm,Trilobellia,Tiny Oil Palm
+Geb,Ar++,Bi--|Anaxi,Fern Palm,Trilobellia,Monkey Palm,Spindle Tree
 Geb,Ar++,Sa++|Anaxi,Hokkaido,Razor Palm,Royal Palm,Windriver Palm
-Geb,Ar++,Sa--|Anaxi,Beetlenut,Bottle Tree,Butterleaf Tree,Monkey Palm
-Geb,Ar++,So++|Anaxi,Arconis,Bramble Hedge,Razor Palm,Spindle Tree
-Geb,Ar++,So--|Anaxi,Arconis,Oil Palm,Phoenix Palm,Royal Palm
-Geb,Ar++,Sp++|Anaxi,Arconis,Beetlenut,Monkey Palm,Razor Palm
-Geb,Ar++,Sp--|Anaxi,Arconis,Bramble Hedge,Razor Palm,Royal Palm
-Geb,Ar++,Sw++|Anaxi,Beetlenut,Monkey Palm,Phoenix Palm,Tapacae Miralis
-Geb,Ar++,Sw--|Anaxi,Arconis,Beetlenut,Monkey Palm,Razor Palm
+Geb,Ar++,Sa--|Anaxi,Fern Palm,Spindle Tree,Butterleaf Tree,Monkey Palm
+Geb,Ar++,So++|Anaxi,Oil Palm,Bramble Hedge,Monkey Palm,Spindle Tree
+Geb,Ar++,So--|Bloodbark,Monkey Palm,Oil Palm,Tiny Oil Palm,Trilobellia
+Geb,Ar++,Sp++|Spindle Tree,Fern Palm,Giant Cricklewood,Monkey Palm,Tapacae Miralis
+Geb,Ar++,Sp--|Bramble Hedge,Fern Palm,Cinnar,Spindle Tree,Oil Palm
+Geb,Ar++,Sw++|Monkey Palm,Beetlenut,Tapacae Miralis,Umbrella Palm,Oil Palm
+Geb,Ar++,Sw--|Fern Palm,Spindle Tree,Tiny Oil Palm,Bramble Hedge,Trilobellia
 Geb,Ar++,To++|Anaxi,Beetlenut,Bloodbark,Razor Palm,Royal Palm
-Geb,Ar++,To--|Anaxi,Arconis,Beetlenut,Monkey Palm,Spindle Tree
-Geb,Ar++,To--|Anaxi,Arconis,Bottle Tree,Butterleaf Tree,Royal Palm
-Geb,Ar--,As++|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,Ar--,As--|Anaxi,Arconis,Bloodbark,Feather Tree,Pratyeka Tree
-Geb,Ar--,Bi++|Anaxi,Arconis,Ash Palm,Bloodbark,Oil Palm
-Geb,Ar--,Bi--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
-Geb,Ar--,Sa++|Anaxi,Arconis,Ash Palm,Coconut Palm,Feather Tree
-Geb,Ar--,Sa--|Anaxi,Arconis,Ash Palm,Beetlenut,Broadleaf Palm
-Geb,Ar--,So++|Anaxi,Arconis,Ash Palm,Bramble Hedge,Chicory
-Geb,Ar--,So--|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,Ar--,Sp++|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,Ar--,Sp--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Cinnar
-Geb,Ar--,Sw++|Anaxi,Arconis,Ash Palm,Elephantia,Spiked Fishtree
-Geb,Ar--,Sw--|Anaxi,Arconis,Ash Palm,Chicory,Delta Palm
-Geb,Ar--,To++|Anaxi,Arconis,Bloodbark,Broadleaf Palm,Windriver Palm
-Geb,Ar--,To--|Anaxi,Arconis,Ash Palm,Beetlenut,Chakkanut Tree
-Geb,As++,Bi++|Anaxi,Arconis,Ash Palm,Beetlenut,Oil Palm
-Geb,As++,Bi--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
-Geb,As++,Sa++|Anaxi,Arconis,Ash Palm,Coconut Palm,Royal Palm
-Geb,As++,Sa--|Anaxi,Arconis,Ash Palm,Beetlenut,Broadleaf Palm
-Geb,As++,So++|Anaxi,Arconis,Ash Palm,Bramble Hedge,Chicory
-Geb,As++,So--|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,As++,Sp++|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,As++,Sp--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Cinnar
-Geb,As++,Sw++|Anaxi,Arconis,Ash Palm,Elephantia,Spiked Fishtree
-Geb,As++,Sw--|Anaxi,Arconis,Ash Palm,Beetlenut,Razor Palm
-Geb,As++,To++|Anaxi,Arconis,Beetlenut,Bloodbark,Windriver Palm
-Geb,As++,To--|Anaxi,Arconis,Ash Palm,Beetlenut,Chakkanut Tree
+Geb,Ar++,To--|Anaxi,Monkey Palm,Spindle Tree,Fern Palm,Oil Palm
+Geb,Ar--,As++|Anaxi,Ash Palm,Bloodbark,Fern Palm,Hawthorn
+Geb,Ar--,As--|Anaxi,Bloodbark,Feather Tree,Folded Birch,Hokkaido
+Geb,Ar--,Bi++|Anaxi,Fern Palm,Ash Palm,Bloodbark,Oil Palm
+Geb,Ar--,Bi--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Elephantia
+Geb,Ar--,Sa++|Anaxi,Folded Birch,Ash Palm,Coconut Palm,Feather Tree
+Geb,Ar--,Sa--|Anaxi,Fern Palm,Ash Palm,Locust Palm,Broadleaf Palm
+Geb,Ar--,So++|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Chicory
+Geb,Ar--,So--|Anaxi,Folded Birch,Ash Palm,Coconut Palm,Bloodbark
+Geb,Ar--,Sp++|Anaxi,Folded Birch,Ash Palm,Stout Palm,Bloodbark
+Geb,Ar--,Sp--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Cinnar
+Geb,Ar--,Sw++|Anaxi,Folded Birch,Ash Palm,Elephantia,Spiked Fishtree
+Geb,Ar--,Sw--|Anaxi,Fern Palm,Ash Palm,Chicory,Delta Palm
+Geb,Ar--,To++|Anaxi,Fern Palm,Bloodbark,Broadleaf Palm,Windriver Palm
+Geb,Ar--,To--|Anaxi,Fern Palm,Ash Palm,Folded Birch,Chakkanut Tree
+Geb,As++,Bi++|Anaxi,Fern Palm,Ash Palm,Locust Palm,Oil Palm
+Geb,As++,Bi--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Elephantia
+Geb,As++,Sa++|Anaxi,Folded Birch,Ash Palm,Coconut Palm,Stout Palm
+Geb,As++,Sa--|Anaxi,Fern Palm,Ash Palm,Cinnar,Hawthorn
+Geb,As++,So++|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Chicory
+Geb,As++,So--|Anaxi,Folded Birch,Ash Palm,Coconut Palm,Bloodbark
+Geb,As++,Sp++|Anaxi,Fern Palm,Ash Palm,Locust Palm,Bloodbark
+Geb,As++,Sp--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Cinnar
+Geb,As++,Sw++|Anaxi,Locust Palm,Ash Palm,Elephantia,Spiked Fishtree
+Geb,As++,Sw--|Anaxi,Ash Palm,Fern Palm,Spindle Tree,Hawthorn
+Geb,As++,To++|Anaxi,Bloodbark,Broadleaf Palm,Bramble Hedge,Umbrella Palm
+Geb,As++,To--|Anaxi,Fern Palm,Ash Palm,Locust Palm,Chakkanut Tree
 Geb,As--,Bi++|Anaxi,Butterleaf Tree,Chakkanut Tree,Oil Palm,Tiny Oil Palm
-Geb,As--,Bi--|Anaxi,Arconis,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
-Geb,As--,Sa++|Anaxi,Arconis,Feather Tree,Phoenix Palm,Windriver Palm
-Geb,As--,Sa--|Anaxi,Arconis,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
-Geb,As--,So++|Anaxi,Arconis,Butterleaf Tree,Giant Cricklewood,Razor Palm
-Geb,As--,So--|Anaxi,Arconis,Bloodbark,Feather Tree,Pratyeka Tree
-Geb,As--,Sp++|Anaxi,Arconis,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
+Geb,As--,Bi--|Anaxi,Fern Palm,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
+Geb,As--,Sa++|Anaxi,Folded Birch,Feather Tree,Hokkaido,Windriver Palm
+Geb,As--,Sa--|Anaxi,Fern Palm,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
+Geb,As--,So++|Anaxi,Bramble Hedge,Butterleaf Tree,Giant Cricklewood,Cerulean Blue
+Geb,As--,So--|Fern Palm,Folded Birch,Bloodbark,Feather Tree,Stout Palm
+Geb,As--,Sp++|Anaxi,Fern Palm,Butterleaf Tree,Cerulean Blue,Giant Cricklewood
 Geb,As--,Sp--|Anaxi,Bramble Hedge,Butterleaf Tree,Chakkanut Tree,Razor Palm
-Geb,As--,Sw++|Anaxi,Arconis,Cerulean Blue,Phoenix Palm,Spiked Fishtree
-Geb,As--,Sw--|Anaxi,Arconis,Butterleaf Tree,Feather Tree,Razor Palm
-Geb,As--,To++|Anaxi,Arconis,Hokkaido,Oleaceae,Pratyeka Tree
-Geb,As--,To--|Anaxi,Arconis,Butterleaf Tree,Cerulean Blue,Chakkanut Tree
+Geb,As--,Sw++|Anaxi,Folded Birch,Cerulean Blue,Hokkaido,Spiked Fishtree
+Geb,As--,Sw--|Fern Palm,Chicory,Butterleaf Tree,Feather Tree,Hawthorn
+Geb,As--,To++|Folded Birch,Bloodbark,Hokkaido,Oleaceae,Bramble Hedge
+Geb,As--,To--|Anaxi,Fern Palm,Butterleaf Tree,Cerulean Blue,Chakkanut Tree
 Geb,Bi++,Sa++|Anaxi,Ash Palm,Coconut Palm,Feather Tree,Oil Palm
-Geb,Bi++,Sa--|Anaxi,Arconis,Butterleaf Tree,Oil Palm,Tiny Oil Palm
+Geb,Bi++,Sa--|Bloodbark,Fern Palm,Butterleaf Tree,Oil Palm,Tiny Oil Palm
 Geb,Bi++,So++|Anaxi,Ash Palm,Beetlenut,Chicory,Kaeshra
-Geb,Bi++,So--|Anaxi,Arconis,Ash Palm,Bloodbark,Oil Palm
-Geb,Bi++,Sp++|Anaxi,Arconis,Ash Palm,Delta Palm,Tiny Oil Palm
+Geb,Bi++,So--|Fern Palm,Folded Birch,Ash Palm,Bloodbark,Oil Palm
+Geb,Bi++,Sp++|Fern Palm,Folded Birch,Ash Palm,Delta Palm,Tiny Oil Palm
 Geb,Bi++,Sp--|Anaxi,Ash Palm,Cinnar,Oil Palm,Towering Palm
 Geb,Bi++,Sw++|Anaxi,Ash Palm,Cerulean Blue,Oil Palm,Spiked Fishtree
-Geb,Bi++,Sw--|Anaxi,Arconis,Ash Palm,Chicory,Kaeshra
+Geb,Bi++,Sw--|Fern Palm,Hawthorn,Ash Palm,Chicory,Kaeshra
 Geb,Bi++,To++|Anaxi,Ash Palm,Bloodbark,Hokkaido,Tiny Oil Palm
-Geb,Bi++,To--|Anaxi,Arconis,Ash Palm,Beetlenut,Oil Palm
-Geb,Bi--,Sa++|Anaxi,Arconis,Coconut Palm,Feather Tree,Orrorin
-Geb,Bi--,Sa--|Anaxi,Arconis,Ash Palm,Broadleaf Palm,Elephantia
-Geb,Bi--,So++|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
-Geb,Bi--,So--|Anaxi,Arconis,Ash Palm,Orrorin,Tapacae Miralis
-Geb,Bi--,Sp++|Anaxi,Arconis,Ash Palm,Giant Cricklewood,Stout Palm
-Geb,Bi--,Sp--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Orrorin
-Geb,Bi--,Sw++|Anaxi,Arconis,Ash Palm,Elephantia,Tapacae Miralis
-Geb,Bi--,Sw--|Anaxi,Arconis,Beetlenut,Delta Palm,Spindle Tree
-Geb,Bi--,To++|Anaxi,Arconis,Bloodbark,Giant Cricklewood,Hokkaido
-Geb,Bi--,To--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
+Geb,Bi++,To--|Fern Palm,Folded Birch,Ash Palm,Locust Palm,Oil Palm
+Geb,Bi--,Sa++|Anaxi,Folded Birch,Coconut Palm,Feather Tree,Orrorin
+Geb,Bi--,Sa--|Anaxi,Fern Palm,Ash Palm,Broadleaf Palm,Elephantia
+Geb,Bi--,So++|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Elephantia
+Geb,Bi--,So--|Folded Birch,Stout Palm,Ash Palm,Orrorin,Tapacae Miralis
+Geb,Bi--,Sp++|Anaxi,Fern Palm,Ash Palm,Giant Cricklewood,Stout Palm
+Geb,Bi--,Sp--|Anaxi,Fern Palm,Ash Palm,Bramble Hedge,Orrorin
+Geb,Bi--,Sw++|Anaxi,Locust Palm,Ash Palm,Elephantia,Tapacae Miralis
+Geb,Bi--,Sw--|Anaxi,Fern Palm,Hawthorn,Delta Palm,Spindle Tree
+Geb,Bi--,To++|Anaxi,Folded Birch,Bloodbark,Giant Cricklewood,Hokkaido
+Geb,Bi--,To--|Anaxi,Locust Palm,Ash Palm,Bramble Hedge,Elephantia
 Geb,Sa++,So++|Anaxi,Ash Palm,Feather Tree,Ranyahn,Royal Palm
-Geb,Sa++,So--|Anaxi,Arconis,Ash Palm,Coconut Palm,Feather Tree
-Geb,Sa++,Sp++|Anaxi,Arconis,Coconut Palm,Delta Palm,Feather Tree
+Geb,Sa++,So--|Folded Birch,Locust Palm,Ash Palm,Coconut Palm,Feather Tree
+Geb,Sa++,Sp++|Locust Palm,Stout Palm,Coconut Palm,Delta Palm,Feather Tree
 Geb,Sa++,Sp--|Anaxi,Ash Palm,Coconut Palm,Orrorin,Royal Palm
 Geb,Sa++,Sw++|Anaxi,Cerulean Blue,Coconut Palm,Feather Tree,Spiked Fishtree
-Geb,Sa++,Sw--|Anaxi,Arconis,Chicory,Coconut Palm,Windriver Palm
-Geb,Sa++,To++|Anaxi,Arconis,Bloodbark,Feather Tree,Windriver Palm
-Geb,Sa++,To--|Anaxi,Arconis,Ash Palm,Coconut Palm,Feather Tree
-Geb,Sa--,So++|Anaxi,Arconis,Ash Palm,Elephantia,Fern Palm
-Geb,Sa--,So--|Anaxi,Arconis,Beetlenut,Bloodbark,Broadleaf Palm
-Geb,Sa--,Sp++|Anaxi,Arconis,Beetlenut,Bloodbark,Broadleaf Palm
-Geb,Sa--,Sp--|Anaxi,Arconis,Bramble Hedge,Broadleaf Palm,Cinnar
-Geb,Sa--,Sw++|Anaxi,Arconis,Beetlenut,Elephantia,Spiked Fishtree
-Geb,Sa--,Sw--|Anaxi,Arconis,Ash Palm,Fern Palm,Hawthorn
-Geb,Sa--,To++|Anaxi,Arconis,Bloodbark,Pratyeka Tree,Umbrella Palm
-Geb,Sa--,To--|Anaxi,Arconis,Ash Palm,Beetlenut,Fern Palm
-Geb,So++,Sp++|Anaxi,Arconis,Ash Palm,Giant Cricklewood,Ranyahn
-Geb,So++,Sp--|Anaxi,Arconis,Bramble Hedge,Chicory,Cinnar
-Geb,So++,Sw++|Anaxi,Arconis,Bramble Hedge,Elephantia,Spiked Fishtree
-Geb,So++,Sw--|Anaxi,Arconis,Ash Palm,Chicory,Fern Palm
+Geb,Sa++,Sw--|Windriver Palm,Spindle Tree,Chicory,Coconut Palm,Oleaceae
+Geb,Sa++,To++|Folded Birch,Stout Palm,Bloodbark,Feather Tree,Windriver Palm
+Geb,Sa++,To--|Folded Birch,Locust Palm,Ash Palm,Coconut Palm,Feather Tree
+Geb,Sa--,So++|Locust Palm,Hawthorn,Ash Palm,Elephantia,Fern Palm
+Geb,Sa--,So--|Folded Birch,Fern Palm,Towering Palm,Bloodbark,Broadleaf Palm
+Geb,Sa--,Sp++|Fern Palm,Folded Birch,Stout Palm,Bloodbark,Broadleaf Palm
+Geb,Sa--,Sp--|Fern Palm,Folded Birch,Bramble Hedge,Broadleaf Palm,Cinnar
+Geb,Sa--,Sw++|Fern Palm,Folded Birch,Towering Palm,Elephantia,Spiked Fishtree
+Geb,Sa--,Sw--|Spindle Tree,Stout Palm,Ash Palm,Fern Palm,Hawthorn
+Geb,Sa--,To++|Hawthorn,Folded Birch,Bloodbark,Trilobellia,Umbrella Palm
+Geb,Sa--,To--|Folded Birch,Chakkanut Tree,Ash Palm,Umbrella Palm,Fern Palm
+Geb,So++,Sp++|Anaxi,Locust Palm,Ash Palm,Giant Cricklewood,Folded Birch
+Geb,So++,Sp--|Anaxi,Fern Palm,Bramble Hedge,Chicory,Cinnar
+Geb,So++,Sw++|Anaxi,Folded Birch,Bramble Hedge,Elephantia,Spiked Fishtree
+Geb,So++,Sw--|Spindle Tree,Stout Palm,Ash Palm,Chicory,Fern Palm
 Geb,So++,To++|Anaxi,Ash Palm,Bloodbark,Giant Cricklewood,Razor Palm
-Geb,So++,To--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Elephantia
-Geb,So--,Sp++|Anaxi,Arconis,Ash Palm,Beetlenut,Bloodbark
-Geb,So--,Sp--|Anaxi,Arconis,Cinnar,Coconut Palm,Orrorin
-Geb,So--,Sw++|Anaxi,Arconis,Ash Palm,Folded Birch,Tapacae Miralis
-Geb,So--,Sw--|Anaxi,Arconis,Ash Palm,Bloodbark,Trilobellia
-Geb,So--,To++|Anaxi,Arconis,Beetlenut,Bloodbark,Windriver Palm
-Geb,So--,To--|Anaxi,Arconis,Ash Palm,Beetlenut,Coconut Palm
-Geb,Sp++,Sw++|Anaxi,Arconis,Beetlenut,Locust Palm,Spiked Fishtree
-Geb,Sp++,Sw--|Anaxi,Arconis,Ash Palm,Delta Palm,Ranyahn
-Geb,Sp++,To++|Anaxi,Arconis,Beetlenut,Bloodbark,Windriver Palm
-Geb,Sp++,To--|Anaxi,Arconis,Ash Palm,Beetlenut,Locust Palm
-Geb,Sp--,Sw++|Anaxi,Arconis,Bramble Hedge,Elephantia,Towering Palm
-Geb,Sp--,Sw--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Razor Palm
-Geb,Sp--,Sw--|Anaxi,Arconis,Bottle Tree,Razor Palm,Royal Palm
+Geb,So++,To--|Anaxi,Bramble Hedge,Umbrella Palm,Towering Palm,Passam
+Geb,So--,Sp++|Folded Birch,Chakkanut Tree,Ash Palm,Cerulean Blue,Bloodbark
+Geb,So--,Sp--|Folded Birch,Bramble Hedge,Cinnar,Coconut Palm,Orrorin
+Geb,So--,Sw++|Locust Palm,Stout Palm,Ash Palm,Folded Birch,Tapacae Miralis
+Geb,So--,Sw--|Spindle Tree,Hawthorn,Ash Palm,Bloodbark,Trilobellia
+Geb,So--,To++|Folded Birch,Fern Palm,Towering Palm,Bloodbark,Windriver Palm
+Geb,So--,To--|Folded Birch,Fern Palm,Ash Palm,Hawthorn,Coconut Palm
+Geb,Sp++,Sw++|Folded Birch,Fern Palm,Umbrella Palm,Locust Palm,Spiked Fishtree
+Geb,Sp++,Sw--|Fern Palm,Monkey Palm,Ash Palm,Delta Palm,Chicory
+Geb,Sp++,To++|Folded Birch,Locust Palm,Towering Palm,Bloodbark,Windriver Palm
+Geb,Sp++,To--|Anaxi,Folded Birch,Ash Palm,Fern Palm,Locust Palm
+Geb,Sp--,Sw++|Folded Birch,Fern Palm,Bramble Hedge,Elephantia,Towering Palm
+Geb,Sp--,Sw--|Cinnar,Hawthorn,Ash Palm,Bramble Hedge,Trilobellia
 Geb,Sp--,To++|Anaxi,Ash Palm,Bramble Hedge,Razor Palm,Windriver Palm
-Geb,Sp--,To--|Anaxi,Arconis,Ash Palm,Bramble Hedge,Cinnar
+Geb,Sp--,To--|Fern Palm,Folded Birch,Ash Palm,Bramble Hedge,Cinnar
 Geb,Sw++,To++|Anaxi,Ash Palm,Bloodbark,Towering Palm,Umbrella Palm
-Geb,Sw++,To--|Anaxi,Arconis,Ash Palm,Elephantia,Spiked Fishtree
-Geb,Sw--,To++|Anaxi,Arconis,Bloodbark,Chicory,Windriver Palm
-Geb,Sw--,To--|Anaxi,Arconis,Ash Palm,Chicory,Fern Palm
+Geb,Sw++,To--|Folded Birch,Locust Palm,Ash Palm,Elephantia,Spiked Fishtree
+Geb,Sw--,To++|Fern Palm,Stout Palm,Bloodbark,Chicory,Windriver Palm
+Geb,Sw--,To--|Coconut Palm,Spindle Tree,Ash Palm,Chicory,Fern Palm
