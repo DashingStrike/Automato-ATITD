@@ -1,43 +1,499 @@
-Ra,Ar+++++,Sp-----|Powdered Lapis,Powdered Sunstone,Salts Of Strontium,Chives,Royal Palm
-Ra,Sp-----,Ar+++++|Powdered Lapis,Powdered Sunstone,Salts Of Strontium,Chives,Royal Palm
-Ra,Ar-----,So+++++|Chicory,Ranyahn,Buckler-leaf,Cardamom,Anaxi
-Ra,So+++++,Ar-----|Chicory,Ranyahn,Buckler-leaf,Cardamom,Anaxi
-Thoth,Ar++++,Bi----,Sp----|Orrorin,Royal Palm,Spindle Tree,Powdered Lapis,Powdered Sunstone
-Thoth,Ar++++,Sp----,To----|Bottle Tree,Cinnar,Royal Palm,Powdered Lapis,Chives
-Thoth,Ar----,So++++,Sp++++|Chicory,Giant Cricklewood,Locust Palm,Ranyahn,Cardamom
-Thoth,Ar----,So++++,To----|Locust Palm,Ranyahn,Salts Of Aluminum,Buckler-leaf,Cardamom
-Thoth,Ar----,Sp++++,To----|Locust Palm,Ranyahn,Spiked Fishtree,Powdered Emerald,Cardamom
+Ra,Ar+++++,Sp-----|Royal Palm,Powdered Lapis,Powdered Sunstone,Salts Of Strontium,Chives
+Ra,Ar-----,So+++++|Anaxi,Chicory,Ranyahn,Buckler-leaf,Cardamom
+Ra,Ar+++++,Sw-----|Razor Palm,Spindle Tree,Trilobellia,Harebell,Orange Sweetgras
+Ra,Ar-----,Sw+++++|Folded Birch,Spiked Fishtree,Towering Palm,Locust Palm,Crumpled Leaf Basil
+Ra,As-----,Bi+++++|Tiny Oil Palm,Gynura,Lemondrop,Motherwort,Rhubarb
+Ra,Bi+++++,So-----|Powdered Citrine,Common Sage,Golden Thyme,Verdant Squill,Beetlenut
+Ra,Bi+++++,Sw-----|Blue Damia,Harebell,Rhubarb,Spinach,Sorrel
+Ra,Bi-----,So+++++|Elephantia,Giant Cricklewood,Bramble Hedge,Common Basil,Crampbark
+Ra,So+++++,Sp-----|Covage,Fleabane,Glechoma,Bramble Hedge,Silvertongue Damia
+Ra,So+++++,To-----|Fern Palm,Ranyahn,Common Rosemary,Discorea,Skirret
+Ra,So-----,To+++++|Bloodbark,Powdered Turquoise,Golden Thyme,Windriver Palm,Indigo Damia
+Ra,Ar+++++,To-----|Bottle Tree,Deadwood Tree ,Powdered Lapis,Chives,Camel Pheromones (Female)
+Ra,As+++++,So-----|Beetlenut,Powdered Citrine,Common Sage,Golden Thyme,Verdant Squill
+Ra,As+++++,To-----|Ash Palm,Cinnar,Powdered Jade,Satsatchi,Shrubby Basil
+Ra,Sp-----,Ar+++++|Royal Palm,Powdered Lapis,Powdered Sunstone,Salts Of Strontium,Chives
+Ra,So+++++,Ar-----|Anaxi,Chicory,Ranyahn,Buckler-leaf,Cardamom
+Ra,Ar+++++,Sw-----|Razor Palm,Spindle Tree,Trilobellia,Harebell,Orange Sweetgras
+Ra,Ar-----,Sw+++++|Folded Birch,Spiked Fishtree,Towering Palm,Locust Palm,Crumpled Leaf Basil
+Ra,As-----,Bi+++++|Tiny Oil Palm,Gynura,Lemondrop,Motherwort,Rhubarb
+Ra,Bi+++++,So-----|Powdered Citrine,Common Sage,Golden Thyme,Verdant Squill,Beetlenut
+Ra,Bi+++++,Sw-----|Blue Damia,Harebell,Rhubarb,Spinach,Sorrel
+Ra,Bi-----,So+++++|Elephantia,Giant Cricklewood,Bramble Hedge,Common Basil,Crampbark
+Ra,So+++++,Sp-----|Covage,Fleabane,Glechoma,Bramble Hedge,Silvertongue Damia
+Ra,So+++++,To-----|Fern Palm,Ranyahn,Common Rosemary,Discorea,Skirret
+Ra,So-----,To+++++|Bloodbark,Powdered Turquoise,Golden Thyme,Windriver Palm,Indigo Damia
+Ra,Ar+++++,To-----|Bottle Tree,Deadwood Tree ,Powdered Lapis,Chives,Camel Pheromones (Female)
+Ra,As+++++,So-----|Beetlenut,Powdered Citrine,Common Sage,Golden Thyme,Verdant Squill
+Ra,As+++++,To-----|Ash Palm,Cinnar,Powdered Jade,Satsatchi,Shrubby Basil
+Thoth,Ar++++,As++++,Bi----|Spindle Tree,Powdered Sunstone,Common Sage,Prisniparni,Camel Pheromones (Female)
+Thoth,Ar++++,As++++,Sa----|Beetlenut,Common Basil,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Ar++++,As++++,To----|Deadwood Tree,Spindle Tree,Powdered Emerald,Common Sage,Camel Pheromones (Female)
+Thoth,Ar++++,As----,To++++|Hokkaido,Razor Palm,Salts Of Strontium,Motherwort,Orange Sweetgrass
+Thoth,Ar++++,As----,Sp----|Razor Palm,Salts Of Strontium,Daggerleaf,Gynura,Motherwort
+Thoth,Ar++++,As----,Sw----|Razor Palm,Trilobellia,Powdered Kunzite,Daggerleaf,Motherwort
+Thoth,Ar++++,Bi++++,So----|Oil Palm,Powdered Ruby,Harebell,Houseleek,Pippali
+Thoth,Ar++++,Bi++++,Sw----|Razor Palm,Blue Damia,Daggerleaf,Harebell,Pippali
+Thoth,Ar++++,Bi----,So++++|Giant Cricklewood,Royal Palm,Spindle Tree,Common Basil,Camel Pheromones (Male)
+Thoth,Ar++++,Bi----,Sp----|Bramble Hedge,Royal Palm,Spindle Tree,Powdered Sunstone,Morpha
+Thoth,Ar++++,Bi----,Sw----|Razor Palm,Spindle Tree,Powdered Sunstone,Bluebottle Clover,Dusty Blue Sage
+Thoth,Ar++++,Bi----,To----|Spindle Tree,Powdered Emerald,Powdered Sunstone,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Ar++++,Sa----,So++++|Elephantia,Razor Palm,Common Basil,Khokali,Camel Pheromones (Male)
+Thoth,Ar++++,Sa----,To----|Deadwood Tree,Fern Palm,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Ar++++,So++++,To----|Elephantia,Spindle Tree,Chives,Skirret,Camel Pheromones (Male)
+Thoth,Ar++++,Sp----,Sw----|Razor Palm,Royal Palm,Trilobellia,Daggerleaf,Meadowsweet
+Thoth,Ar++++,Sp----,To----|Cinnar,Royal Palm,Powdered Lapis,Chives,Lemondrop
+Thoth,Ar----,As----,Sw++++|Folded Birch,Mini Palmetto,Passam,Spiked Fishtree,Crumpled Leaf Basil
+Thoth,Ar----,As----,To++++|Hokkaido,Oleaceae,Passam,Pratyeka Tree,True Tarragon
+Thoth,Ar----,Bi++++,Sw----|Chicory,Kaeshra,Oleaceae,Blue Damia,Rhubarb
+Thoth,Ar----,So++++,Sp++++|Anaxi,Ranyahn,Powdered Aquamarine,Cardamom,Crumpled Leaf Basil
+Thoth,Ar----,So++++,Sw----|Chicory,Ranyahn,Buckler-leaf,Sorrel,Strawberry Tea
+Thoth,Ar----,So++++,To----|Anaxi,Locust Palm,Ranyahn,Cardamom,Discorea
+Thoth,Ar----,Sp++++,Sw++++|Locust Palm,Spiked Fishtree,Powdered Citrine,Powdered Aquamarine,Crumpled Leaf Basil
+Thoth,Ar----,Sp++++,To----|Chakkanut Tree,Locust Palm,Ranyahn,Cardamom,Crumpled Leaf Basil
+Thoth,Ar----,Sw++++,To++++|Passam,Towering Palm,Salts Of Iron,Indigo Damia,Yigory
+Thoth,As++++,Bi----,Sa++++|Blue Tarafern,Mindanao,Pale Russet,Primula,Stickler Hedge
+Thoth,As++++,Bi----,So++++|Anaxi,Elephantia,Spindle Tree,Powdered Morganite,Camel Pheromones (Male)
+Thoth,As++++,Bi----,Sp----|Bramble Hedge,Powdered Morganite,Mindanao,Shrubby Basil,Stickler Hedge
+Thoth,As++++,Bi----,To----|Anaxi,Spindle Tree,Powdered Emerald,Pale Russet,Shrubby Basil
+Thoth,As++++,Sa++++,Sp----|Powdered Morganite,Blue Tarafern,Myristica,Stickler Hedge,Tsangto
+Thoth,As++++,Sa++++,To----|Powdered Jade,Common Sage,Pale Russet,Panoe,Shrubby Basil
+Thoth,As++++,Sa----,So++++|Fern Palm,Salts Of Magnesium,Common Basil,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,As++++,Sa----,To----|Beetlenut,Cinnar,Fern Palm,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,As++++,So++++,Sp----|Powdered Morganite,Fleabane,Glechoma,Satsatchi,Camel Pheromones (Male)
+Thoth,As++++,So++++,To----|Anaxi,Ranyahn,Powdered Amethyst,Satsatchi,Shrubby Basil
+Thoth,As++++,So----,Sw++++|Tapacae Miralis,Towering Palm,Powdered Citrine,Verdant Squill,Camel Pheromones (Female)
+Thoth,As++++,So----,Sp----|Arconis,Powdered Morganite,Golden Thyme,Stickler Hedge,Verdant Squill
+Thoth,As++++,So----,To----|Arconis,Common Sage,Pale Russet,Shrubby Basil,Verdant Squill
+Thoth,As++++,Sp----,Sw++++|Towering Palm,Powdered Morganite,Glechoma,Satsatchi,Camel Pheromones (Female)
+Thoth,As++++,Sp----,To----|Ash Palm,Cinnar,Powdered Diamond,Powdered Morganite,Satsatchi
+Thoth,As++++,Sw++++,To----|Satsatchi,Shrubby Basil,Tiny Clover,Verdant Squill,Camel Pheromones (Female)
+Thoth,As----,Bi++++,To++++|Hokkaido,Gynura,Hazlewort,Motherwort,Rhubarb
+Thoth,As----,Bi++++,Sp----|Anansi,Covage,Daggerleaf,Gynura,Rhubarb
+Thoth,As----,Bi++++,Sw----|Razor Palm,Blue Damia,Cinnamon,Motherwort,Rhubarb
+Thoth,As----,Bi----,Sp++++|Cerulean Blue,Giant Cricklewood,Powdered Almandine,Bee Balm,Pale Ochoa
+Thoth,As----,Sa++++,So----|Coconut Palm,Feather Tree,Hokkaido,Salts Of Silver,Hyssop
+Thoth,As----,So++++,Sp++++|Giant Cricklewood,Powdered Kunzite,Cardamom,Crumpled Leaf Basil,Xanosi
+Thoth,As----,So++++,Sw----|Chicory,Razor Palm,Covage,Rhubarb,Strawberry Tea
+Thoth,As----,Sp----,To++++|Pratyeka Tree,Razor Palm,Salts Of Strontium,Gynura,Sweetflower
+Thoth,Bi++++,Sa++++,Sw----|Blue Damia,Dwarf Hogweed,Harebell,Myristica,Orange Niali
+Thoth,Bi++++,So----,To++++|Windriver Palm,Anansi,Hazlewort,Indigo Damia,Pippali
+Thoth,Bi++++,So----,Sw----|Arconis,Oil Palm,Blue Damia,Harebell,Sorrel
+Thoth,Bi++++,Sp----,To++++|Windriver Palm,Anansi,Cinquefoil,Gynura,Orange Niali
+Thoth,Bi++++,Sp----,Sw----|Powdered Topaz,Daggerleaf,Gynura,Harebell,Orange Niali
 Thoth,Bi----,Sa----,So++++|Bramble Hedge,Broadleaf Palm,Elephantia,Fern Palm,Giant Cricklewood
-Thoth,Bi----,Sp----,Ar++++|Orrorin,Royal Palm,Spindle Tree,Powdered Lapis,Powdered Sunstone
-Thoth,Sp----,To----,Ar++++|Bottle Tree,Cinnar,Royal Palm,Powdered Lapis,Chives
-Thoth,So++++,Sp++++,Ar----|Chicory,Giant Cricklewood,Locust Palm,Ranyahn,Cardamom
-Thoth,So++++,To----,Ar----|Locust Palm,Ranyahn,Salts Of Aluminum,Buckler-leaf,Cardamom
-Thoth,Sp++++,To----,Ar----|Locust Palm,Ranyahn,Spiked Fishtree,Powdered Emerald,Cardamom
+Thoth,Bi----,Sa----,Sp++++|Broadleaf Palm,Giant Cricklewood,Powdered Aquamarine,Salts Of Tin,Dusty Blue Sage
+Thoth,Bi----,Sa----,Sw++++|Broadleaf Palm,Elephantia,Scaley Hardwood,Tapacae Miralis,Umbrella Palm
+Thoth,Bi----,So++++,Sp----|Bramble Hedge,Elephantia,Powdered Morganite,Covage,Crampbark
+Thoth,Bi----,So++++,Sw----|Giant Cricklewood,Spindle Tree,Dusty Blue Sage,Fleabane,Strawberry Tea
+Thoth,Bi----,So++++,To----|Elephantia,Ranyahn,Salts Of Aluminum,Crampbark,Shrubby Basil
+Thoth,Bi----,Sp++++,Sw----|Delta Palm,Giant Cricklewood,Dusty Blue Sage,Pale Ochoa,Strawberry Tea
+Thoth,Sa++++,So----,To----|Arconis,Coconut Palm,Powdered Diamond,Hyssop,Pale Russet
+Thoth,Sa++++,Sp----,Sw----|Razor Palm,Covage,Myristica,Orange Niali,Tsangto
+Thoth,Sa++++,Sp----,To----|Powdered Diamond,Powdered Jade,Powdered Lapis,Covage,Pale Russet
+Thoth,Sa----,So++++,Sp++++|Giant Cricklewood,Ranyahn,Powdered Aquamarine,Salts Of Titanium,Common Basil
+Thoth,Sa----,So++++,Sw----|Fern Palm,Hawthorn,Common Basil,Fleabane,Strawberry Tea
+Thoth,Sa----,So++++,To----|Powdered Aquamarine,Common Basil,Myrrh,Skirret,Camel Pheromones (Male)
+Thoth,Sa----,Sp++++,Sw----|Beetlenut,Salts Of Platinum,Salts Of Titanium,Dusty Blue Sage,Ginger Root
+Thoth,Sa----,Sp++++,To----|Fern Palm,Locust Palm,Ranyahn,Powdered Aquamarine,Salts Of Tin
+Thoth,Sa----,Sw++++,To----|Locust Palm,Scaley Hardwood,Powdered Aquamarine,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,So++++,Sp++++,To----|Giant Cricklewood,Locust Palm,Ranyahn,Powdered Aquamarine,Common Rosemary
+Thoth,So++++,Sp----,Sw----|Bramble Hedge,Daggerleaf,Fleabane,Morpha,Strawberry Tea
+Thoth,So++++,Sp----,To----|Bramble Hedge,Salts Of Aluminum,Chives,Discorea,Glechoma
+Thoth,So----,Sp----,To++++|Orrorin,Powdered Opal,Powdered Turquoise,Salts Of Strontium,Golden Thyme
+Thoth,So----,Sw++++,To++++|Bloodbark,Tapacae Miralis,Towering Palm,Salts Of Iron,Indigo Damia
+Thoth,Sp++++,Sw++++,To----|Locust Palm,Powdered Emerald,Powdered Aquamarine,Salts Of Copper,Crumpled Leaf Basil
+Thoth,Sp----,Sw----,To++++|Razor Palm,Cinquefoil,Gynura,Orange Niali,Sweetflower
+Thoth,As++++,Bi----,Ar++++|Spindle Tree,Powdered Sunstone,Common Sage,Prisniparni,Camel Pheromones (Female)
+Thoth,As++++,Sa----,Ar++++|Beetlenut,Common Basil,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,As++++,To----,Ar++++|Deadwood Tree,Spindle Tree,Powdered Emerald,Common Sage,Camel Pheromones (Female)
+Thoth,As----,To++++,Ar++++|Hokkaido,Razor Palm,Salts Of Strontium,Motherwort,Orange Sweetgrass
+Thoth,As----,Sp----,Ar++++|Razor Palm,Salts Of Strontium,Daggerleaf,Gynura,Motherwort
+Thoth,As----,Sw----,Ar++++|Razor Palm,Trilobellia,Powdered Kunzite,Daggerleaf,Motherwort
+Thoth,Bi++++,So----,Ar++++|Oil Palm,Powdered Ruby,Harebell,Houseleek,Pippali
+Thoth,Bi++++,Sw----,Ar++++|Razor Palm,Blue Damia,Daggerleaf,Harebell,Pippali
+Thoth,Bi----,So++++,Ar++++|Giant Cricklewood,Royal Palm,Spindle Tree,Common Basil,Camel Pheromones (Male)
+Thoth,Bi----,Sp----,Ar++++|Bramble Hedge,Royal Palm,Spindle Tree,Powdered Sunstone,Morpha
+Thoth,Bi----,Sw----,Ar++++|Razor Palm,Spindle Tree,Powdered Sunstone,Bluebottle Clover,Dusty Blue Sage
+Thoth,Bi----,To----,Ar++++|Spindle Tree,Powdered Emerald,Powdered Sunstone,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Sa----,So++++,Ar++++|Elephantia,Razor Palm,Common Basil,Khokali,Camel Pheromones (Male)
+Thoth,Sa----,To----,Ar++++|Deadwood Tree,Fern Palm,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,So++++,To----,Ar++++|Elephantia,Spindle Tree,Chives,Skirret,Camel Pheromones (Male)
+Thoth,Sp----,Sw----,Ar++++|Razor Palm,Royal Palm,Trilobellia,Daggerleaf,Meadowsweet
+Thoth,Sp----,To----,Ar++++|Cinnar,Royal Palm,Powdered Lapis,Chives,Lemondrop
+Thoth,As----,Sw++++,Ar----|Folded Birch,Mini Palmetto,Passam,Spiked Fishtree,Crumpled Leaf Basil
+Thoth,As----,To++++,Ar----|Hokkaido,Oleaceae,Passam,Pratyeka Tree,True Tarragon
+Thoth,Bi++++,Sw----,Ar----|Chicory,Kaeshra,Oleaceae,Blue Damia,Rhubarb
+Thoth,So++++,Sp++++,Ar----|Anaxi,Ranyahn,Powdered Aquamarine,Cardamom,Crumpled Leaf Basil
+Thoth,So++++,Sw----,Ar----|Chicory,Ranyahn,Buckler-leaf,Sorrel,Strawberry Tea
+Thoth,So++++,To----,Ar----|Anaxi,Locust Palm,Ranyahn,Cardamom,Discorea
+Thoth,Sp++++,Sw++++,Ar----|Locust Palm,Spiked Fishtree,Powdered Citrine,Powdered Aquamarine,Crumpled Leaf Basil
+Thoth,Sp++++,To----,Ar----|Chakkanut Tree,Locust Palm,Ranyahn,Cardamom,Crumpled Leaf Basil
+Thoth,Sw++++,To++++,Ar----|Passam,Towering Palm,Salts Of Iron,Indigo Damia,Yigory
+Thoth,Bi----,Sa++++,As++++|Blue Tarafern,Mindanao,Pale Russet,Primula,Stickler Hedge
+Thoth,Bi----,So++++,As++++|Anaxi,Elephantia,Spindle Tree,Powdered Morganite,Camel Pheromones (Male)
+Thoth,Bi----,Sp----,As++++|Bramble Hedge,Powdered Morganite,Mindanao,Shrubby Basil,Stickler Hedge
+Thoth,Bi----,To----,As++++|Anaxi,Spindle Tree,Powdered Emerald,Pale Russet,Shrubby Basil
+Thoth,Sa++++,Sp----,As++++|Powdered Morganite,Blue Tarafern,Myristica,Stickler Hedge,Tsangto
+Thoth,Sa++++,To----,As++++|Powdered Jade,Common Sage,Pale Russet,Panoe,Shrubby Basil
+Thoth,Sa----,So++++,As++++|Fern Palm,Salts Of Magnesium,Common Basil,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Sa----,To----,As++++|Beetlenut,Cinnar,Fern Palm,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,So++++,Sp----,As++++|Powdered Morganite,Fleabane,Glechoma,Satsatchi,Camel Pheromones (Male)
+Thoth,So++++,To----,As++++|Anaxi,Ranyahn,Powdered Amethyst,Satsatchi,Shrubby Basil
+Thoth,So----,Sw++++,As++++|Tapacae Miralis,Towering Palm,Powdered Citrine,Verdant Squill,Camel Pheromones (Female)
+Thoth,So----,Sp----,As++++|Arconis,Powdered Morganite,Golden Thyme,Stickler Hedge,Verdant Squill
+Thoth,So----,To----,As++++|Arconis,Common Sage,Pale Russet,Shrubby Basil,Verdant Squill
+Thoth,Sp----,Sw++++,As++++|Towering Palm,Powdered Morganite,Glechoma,Satsatchi,Camel Pheromones (Female)
+Thoth,Sp----,To----,As++++|Ash Palm,Cinnar,Powdered Diamond,Powdered Morganite,Satsatchi
+Thoth,Sw++++,To----,As++++|Satsatchi,Shrubby Basil,Tiny Clover,Verdant Squill,Camel Pheromones (Female)
+Thoth,Bi++++,To++++,As----|Hokkaido,Gynura,Hazlewort,Motherwort,Rhubarb
+Thoth,Bi++++,Sp----,As----|Anansi,Covage,Daggerleaf,Gynura,Rhubarb
+Thoth,Bi++++,Sw----,As----|Razor Palm,Blue Damia,Cinnamon,Motherwort,Rhubarb
+Thoth,Bi----,Sp++++,As----|Cerulean Blue,Giant Cricklewood,Powdered Almandine,Bee Balm,Pale Ochoa
+Thoth,Sa++++,So----,As----|Coconut Palm,Feather Tree,Hokkaido,Salts Of Silver,Hyssop
+Thoth,So++++,Sp++++,As----|Giant Cricklewood,Powdered Kunzite,Cardamom,Crumpled Leaf Basil,Xanosi
+Thoth,So++++,Sw----,As----|Chicory,Razor Palm,Covage,Rhubarb,Strawberry Tea
+Thoth,Sp----,To++++,As----|Pratyeka Tree,Razor Palm,Salts Of Strontium,Gynura,Sweetflower
+Thoth,Sa++++,Sw----,Bi++++|Blue Damia,Dwarf Hogweed,Harebell,Myristica,Orange Niali
+Thoth,So----,To++++,Bi++++|Windriver Palm,Anansi,Hazlewort,Indigo Damia,Pippali
+Thoth,So----,Sw----,Bi++++|Arconis,Oil Palm,Blue Damia,Harebell,Sorrel
+Thoth,Sp----,To++++,Bi++++|Windriver Palm,Anansi,Cinquefoil,Gynura,Orange Niali
+Thoth,Sp----,Sw----,Bi++++|Powdered Topaz,Daggerleaf,Gynura,Harebell,Orange Niali
 Thoth,Sa----,So++++,Bi----|Bramble Hedge,Broadleaf Palm,Elephantia,Fern Palm,Giant Cricklewood
-Thoth,Sp----,Ar++++,Bi----|Orrorin,Royal Palm,Spindle Tree,Powdered Lapis,Powdered Sunstone
-Thoth,To----,Ar++++,Sp----|Bottle Tree,Cinnar,Royal Palm,Powdered Lapis,Chives
-Thoth,Sp++++,Ar----,So++++|Chicory,Giant Cricklewood,Locust Palm,Ranyahn,Cardamom
-Thoth,To----,Ar----,So++++|Locust Palm,Ranyahn,Salts Of Aluminum,Buckler-leaf,Cardamom
-Thoth,To----,Ar----,Sp++++|Locust Palm,Ranyahn,Spiked Fishtree,Powdered Emerald,Cardamom
+Thoth,Sa----,Sp++++,Bi----|Broadleaf Palm,Giant Cricklewood,Powdered Aquamarine,Salts Of Tin,Dusty Blue Sage
+Thoth,Sa----,Sw++++,Bi----|Broadleaf Palm,Elephantia,Scaley Hardwood,Tapacae Miralis,Umbrella Palm
+Thoth,So++++,Sp----,Bi----|Bramble Hedge,Elephantia,Powdered Morganite,Covage,Crampbark
+Thoth,So++++,Sw----,Bi----|Giant Cricklewood,Spindle Tree,Dusty Blue Sage,Fleabane,Strawberry Tea
+Thoth,So++++,To----,Bi----|Elephantia,Ranyahn,Salts Of Aluminum,Crampbark,Shrubby Basil
+Thoth,Sp++++,Sw----,Bi----|Delta Palm,Giant Cricklewood,Dusty Blue Sage,Pale Ochoa,Strawberry Tea
+Thoth,So----,To----,Sa++++|Arconis,Coconut Palm,Powdered Diamond,Hyssop,Pale Russet
+Thoth,Sp----,Sw----,Sa++++|Razor Palm,Covage,Myristica,Orange Niali,Tsangto
+Thoth,Sp----,To----,Sa++++|Powdered Diamond,Powdered Jade,Powdered Lapis,Covage,Pale Russet
+Thoth,So++++,Sp++++,Sa----|Giant Cricklewood,Ranyahn,Powdered Aquamarine,Salts Of Titanium,Common Basil
+Thoth,So++++,Sw----,Sa----|Fern Palm,Hawthorn,Common Basil,Fleabane,Strawberry Tea
+Thoth,So++++,To----,Sa----|Powdered Aquamarine,Common Basil,Myrrh,Skirret,Camel Pheromones (Male)
+Thoth,Sp++++,Sw----,Sa----|Beetlenut,Salts Of Platinum,Salts Of Titanium,Dusty Blue Sage,Ginger Root
+Thoth,Sp++++,To----,Sa----|Fern Palm,Locust Palm,Ranyahn,Powdered Aquamarine,Salts Of Tin
+Thoth,Sw++++,To----,Sa----|Locust Palm,Scaley Hardwood,Powdered Aquamarine,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Sp++++,To----,So++++|Giant Cricklewood,Locust Palm,Ranyahn,Powdered Aquamarine,Common Rosemary
+Thoth,Sp----,Sw----,So++++|Bramble Hedge,Daggerleaf,Fleabane,Morpha,Strawberry Tea
+Thoth,Sp----,To----,So++++|Bramble Hedge,Salts Of Aluminum,Chives,Discorea,Glechoma
+Thoth,Sp----,To++++,So----|Orrorin,Powdered Opal,Powdered Turquoise,Salts Of Strontium,Golden Thyme
+Thoth,Sw++++,To++++,So----|Bloodbark,Tapacae Miralis,Towering Palm,Salts Of Iron,Indigo Damia
+Thoth,Sw++++,To----,Sp++++|Locust Palm,Powdered Emerald,Powdered Aquamarine,Salts Of Copper,Crumpled Leaf Basil
+Thoth,Sw----,To++++,Sp----|Razor Palm,Cinquefoil,Gynura,Orange Niali,Sweetflower
+Thoth,Bi----,Ar++++,As++++|Spindle Tree,Powdered Sunstone,Common Sage,Prisniparni,Camel Pheromones (Female)
+Thoth,Sa----,Ar++++,As++++|Beetlenut,Common Basil,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,To----,Ar++++,As++++|Deadwood Tree,Spindle Tree,Powdered Emerald,Common Sage,Camel Pheromones (Female)
+Thoth,To++++,Ar++++,As----|Hokkaido,Razor Palm,Salts Of Strontium,Motherwort,Orange Sweetgrass
+Thoth,Sp----,Ar++++,As----|Razor Palm,Salts Of Strontium,Daggerleaf,Gynura,Motherwort
+Thoth,Sw----,Ar++++,As----|Razor Palm,Trilobellia,Powdered Kunzite,Daggerleaf,Motherwort
+Thoth,So----,Ar++++,Bi++++|Oil Palm,Powdered Ruby,Harebell,Houseleek,Pippali
+Thoth,Sw----,Ar++++,Bi++++|Razor Palm,Blue Damia,Daggerleaf,Harebell,Pippali
+Thoth,So++++,Ar++++,Bi----|Giant Cricklewood,Royal Palm,Spindle Tree,Common Basil,Camel Pheromones (Male)
+Thoth,Sp----,Ar++++,Bi----|Bramble Hedge,Royal Palm,Spindle Tree,Powdered Sunstone,Morpha
+Thoth,Sw----,Ar++++,Bi----|Razor Palm,Spindle Tree,Powdered Sunstone,Bluebottle Clover,Dusty Blue Sage
+Thoth,To----,Ar++++,Bi----|Spindle Tree,Powdered Emerald,Powdered Sunstone,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,So++++,Ar++++,Sa----|Elephantia,Razor Palm,Common Basil,Khokali,Camel Pheromones (Male)
+Thoth,To----,Ar++++,Sa----|Deadwood Tree,Fern Palm,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,To----,Ar++++,So++++|Elephantia,Spindle Tree,Chives,Skirret,Camel Pheromones (Male)
+Thoth,Sw----,Ar++++,Sp----|Razor Palm,Royal Palm,Trilobellia,Daggerleaf,Meadowsweet
+Thoth,To----,Ar++++,Sp----|Cinnar,Royal Palm,Powdered Lapis,Chives,Lemondrop
+Thoth,Sw++++,Ar----,As----|Folded Birch,Mini Palmetto,Passam,Spiked Fishtree,Crumpled Leaf Basil
+Thoth,To++++,Ar----,As----|Hokkaido,Oleaceae,Passam,Pratyeka Tree,True Tarragon
+Thoth,Sw----,Ar----,Bi++++|Chicory,Kaeshra,Oleaceae,Blue Damia,Rhubarb
+Thoth,Sp++++,Ar----,So++++|Anaxi,Ranyahn,Powdered Aquamarine,Cardamom,Crumpled Leaf Basil
+Thoth,Sw----,Ar----,So++++|Chicory,Ranyahn,Buckler-leaf,Sorrel,Strawberry Tea
+Thoth,To----,Ar----,So++++|Anaxi,Locust Palm,Ranyahn,Cardamom,Discorea
+Thoth,Sw++++,Ar----,Sp++++|Locust Palm,Spiked Fishtree,Powdered Citrine,Powdered Aquamarine,Crumpled Leaf Basil
+Thoth,To----,Ar----,Sp++++|Chakkanut Tree,Locust Palm,Ranyahn,Cardamom,Crumpled Leaf Basil
+Thoth,To++++,Ar----,Sw++++|Passam,Towering Palm,Salts Of Iron,Indigo Damia,Yigory
+Thoth,Sa++++,As++++,Bi----|Blue Tarafern,Mindanao,Pale Russet,Primula,Stickler Hedge
+Thoth,So++++,As++++,Bi----|Anaxi,Elephantia,Spindle Tree,Powdered Morganite,Camel Pheromones (Male)
+Thoth,Sp----,As++++,Bi----|Bramble Hedge,Powdered Morganite,Mindanao,Shrubby Basil,Stickler Hedge
+Thoth,To----,As++++,Bi----|Anaxi,Spindle Tree,Powdered Emerald,Pale Russet,Shrubby Basil
+Thoth,Sp----,As++++,Sa++++|Powdered Morganite,Blue Tarafern,Myristica,Stickler Hedge,Tsangto
+Thoth,To----,As++++,Sa++++|Powdered Jade,Common Sage,Pale Russet,Panoe,Shrubby Basil
+Thoth,So++++,As++++,Sa----|Fern Palm,Salts Of Magnesium,Common Basil,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,To----,As++++,Sa----|Beetlenut,Cinnar,Fern Palm,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Sp----,As++++,So++++|Powdered Morganite,Fleabane,Glechoma,Satsatchi,Camel Pheromones (Male)
+Thoth,To----,As++++,So++++|Anaxi,Ranyahn,Powdered Amethyst,Satsatchi,Shrubby Basil
+Thoth,Sw++++,As++++,So----|Tapacae Miralis,Towering Palm,Powdered Citrine,Verdant Squill,Camel Pheromones (Female)
+Thoth,Sp----,As++++,So----|Arconis,Powdered Morganite,Golden Thyme,Stickler Hedge,Verdant Squill
+Thoth,To----,As++++,So----|Arconis,Common Sage,Pale Russet,Shrubby Basil,Verdant Squill
+Thoth,Sw++++,As++++,Sp----|Towering Palm,Powdered Morganite,Glechoma,Satsatchi,Camel Pheromones (Female)
+Thoth,To----,As++++,Sp----|Ash Palm,Cinnar,Powdered Diamond,Powdered Morganite,Satsatchi
+Thoth,To----,As++++,Sw++++|Satsatchi,Shrubby Basil,Tiny Clover,Verdant Squill,Camel Pheromones (Female)
+Thoth,To++++,As----,Bi++++|Hokkaido,Gynura,Hazlewort,Motherwort,Rhubarb
+Thoth,Sp----,As----,Bi++++|Anansi,Covage,Daggerleaf,Gynura,Rhubarb
+Thoth,Sw----,As----,Bi++++|Razor Palm,Blue Damia,Cinnamon,Motherwort,Rhubarb
+Thoth,Sp++++,As----,Bi----|Cerulean Blue,Giant Cricklewood,Powdered Almandine,Bee Balm,Pale Ochoa
+Thoth,So----,As----,Sa++++|Coconut Palm,Feather Tree,Hokkaido,Salts Of Silver,Hyssop
+Thoth,Sp++++,As----,So++++|Giant Cricklewood,Powdered Kunzite,Cardamom,Crumpled Leaf Basil,Xanosi
+Thoth,Sw----,As----,So++++|Chicory,Razor Palm,Covage,Rhubarb,Strawberry Tea
+Thoth,To++++,As----,Sp----|Pratyeka Tree,Razor Palm,Salts Of Strontium,Gynura,Sweetflower
+Thoth,Sw----,Bi++++,Sa++++|Blue Damia,Dwarf Hogweed,Harebell,Myristica,Orange Niali
+Thoth,To++++,Bi++++,So----|Windriver Palm,Anansi,Hazlewort,Indigo Damia,Pippali
+Thoth,Sw----,Bi++++,So----|Arconis,Oil Palm,Blue Damia,Harebell,Sorrel
+Thoth,To++++,Bi++++,Sp----|Windriver Palm,Anansi,Cinquefoil,Gynura,Orange Niali
+Thoth,Sw----,Bi++++,Sp----|Powdered Topaz,Daggerleaf,Gynura,Harebell,Orange Niali
 Thoth,So++++,Bi----,Sa----|Bramble Hedge,Broadleaf Palm,Elephantia,Fern Palm,Giant Cricklewood
-Thoth,Sp----,Bi----,Ar++++|Orrorin,Royal Palm,Spindle Tree,Powdered Lapis,Powdered Sunstone
-Thoth,To----,Sp----,Ar++++|Bottle Tree,Cinnar,Royal Palm,Powdered Lapis,Chives
-Thoth,Sp++++,So++++,Ar----|Chicory,Giant Cricklewood,Locust Palm,Ranyahn,Cardamom
-Thoth,To----,So++++,Ar----|Locust Palm,Ranyahn,Salts Of Aluminum,Buckler-leaf,Cardamom
-Thoth,To----,Sp++++,Ar----|Locust Palm,Ranyahn,Spiked Fishtree,Powdered Emerald,Cardamom
+Thoth,Sp++++,Bi----,Sa----|Broadleaf Palm,Giant Cricklewood,Powdered Aquamarine,Salts Of Tin,Dusty Blue Sage
+Thoth,Sw++++,Bi----,Sa----|Broadleaf Palm,Elephantia,Scaley Hardwood,Tapacae Miralis,Umbrella Palm
+Thoth,Sp----,Bi----,So++++|Bramble Hedge,Elephantia,Powdered Morganite,Covage,Crampbark
+Thoth,Sw----,Bi----,So++++|Giant Cricklewood,Spindle Tree,Dusty Blue Sage,Fleabane,Strawberry Tea
+Thoth,To----,Bi----,So++++|Elephantia,Ranyahn,Salts Of Aluminum,Crampbark,Shrubby Basil
+Thoth,Sw----,Bi----,Sp++++|Delta Palm,Giant Cricklewood,Dusty Blue Sage,Pale Ochoa,Strawberry Tea
+Thoth,To----,Sa++++,So----|Arconis,Coconut Palm,Powdered Diamond,Hyssop,Pale Russet
+Thoth,Sw----,Sa++++,Sp----|Razor Palm,Covage,Myristica,Orange Niali,Tsangto
+Thoth,To----,Sa++++,Sp----|Powdered Diamond,Powdered Jade,Powdered Lapis,Covage,Pale Russet
+Thoth,Sp++++,Sa----,So++++|Giant Cricklewood,Ranyahn,Powdered Aquamarine,Salts Of Titanium,Common Basil
+Thoth,Sw----,Sa----,So++++|Fern Palm,Hawthorn,Common Basil,Fleabane,Strawberry Tea
+Thoth,To----,Sa----,So++++|Powdered Aquamarine,Common Basil,Myrrh,Skirret,Camel Pheromones (Male)
+Thoth,Sw----,Sa----,Sp++++|Beetlenut,Salts Of Platinum,Salts Of Titanium,Dusty Blue Sage,Ginger Root
+Thoth,To----,Sa----,Sp++++|Fern Palm,Locust Palm,Ranyahn,Powdered Aquamarine,Salts Of Tin
+Thoth,To----,Sa----,Sw++++|Locust Palm,Scaley Hardwood,Powdered Aquamarine,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,To----,So++++,Sp++++|Giant Cricklewood,Locust Palm,Ranyahn,Powdered Aquamarine,Common Rosemary
+Thoth,Sw----,So++++,Sp----|Bramble Hedge,Daggerleaf,Fleabane,Morpha,Strawberry Tea
+Thoth,To----,So++++,Sp----|Bramble Hedge,Salts Of Aluminum,Chives,Discorea,Glechoma
+Thoth,To++++,So----,Sp----|Orrorin,Powdered Opal,Powdered Turquoise,Salts Of Strontium,Golden Thyme
+Thoth,To++++,So----,Sw++++|Bloodbark,Tapacae Miralis,Towering Palm,Salts Of Iron,Indigo Damia
+Thoth,To----,Sp++++,Sw++++|Locust Palm,Powdered Emerald,Powdered Aquamarine,Salts Of Copper,Crumpled Leaf Basil
+Thoth,To++++,Sp----,Sw----|Razor Palm,Cinquefoil,Gynura,Orange Niali,Sweetflower
+Thoth,Bi----,As++++,Ar++++|Spindle Tree,Powdered Sunstone,Common Sage,Prisniparni,Camel Pheromones (Female)
+Thoth,Sa----,As++++,Ar++++|Beetlenut,Common Basil,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,To----,As++++,Ar++++|Deadwood Tree,Spindle Tree,Powdered Emerald,Common Sage,Camel Pheromones (Female)
+Thoth,To++++,As----,Ar++++|Hokkaido,Razor Palm,Salts Of Strontium,Motherwort,Orange Sweetgrass
+Thoth,Sp----,As----,Ar++++|Razor Palm,Salts Of Strontium,Daggerleaf,Gynura,Motherwort
+Thoth,Sw----,As----,Ar++++|Razor Palm,Trilobellia,Powdered Kunzite,Daggerleaf,Motherwort
+Thoth,So----,Bi++++,Ar++++|Oil Palm,Powdered Ruby,Harebell,Houseleek,Pippali
+Thoth,Sw----,Bi++++,Ar++++|Razor Palm,Blue Damia,Daggerleaf,Harebell,Pippali
+Thoth,So++++,Bi----,Ar++++|Giant Cricklewood,Royal Palm,Spindle Tree,Common Basil,Camel Pheromones (Male)
+Thoth,Sp----,Bi----,Ar++++|Bramble Hedge,Royal Palm,Spindle Tree,Powdered Sunstone,Morpha
+Thoth,Sw----,Bi----,Ar++++|Razor Palm,Spindle Tree,Powdered Sunstone,Bluebottle Clover,Dusty Blue Sage
+Thoth,To----,Bi----,Ar++++|Spindle Tree,Powdered Emerald,Powdered Sunstone,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,So++++,Sa----,Ar++++|Elephantia,Razor Palm,Common Basil,Khokali,Camel Pheromones (Male)
+Thoth,To----,Sa----,Ar++++|Deadwood Tree,Fern Palm,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,To----,So++++,Ar++++|Elephantia,Spindle Tree,Chives,Skirret,Camel Pheromones (Male)
+Thoth,Sw----,Sp----,Ar++++|Razor Palm,Royal Palm,Trilobellia,Daggerleaf,Meadowsweet
+Thoth,To----,Sp----,Ar++++|Cinnar,Royal Palm,Powdered Lapis,Chives,Lemondrop
+Thoth,Sw++++,As----,Ar----|Folded Birch,Mini Palmetto,Passam,Spiked Fishtree,Crumpled Leaf Basil
+Thoth,To++++,As----,Ar----|Hokkaido,Oleaceae,Passam,Pratyeka Tree,True Tarragon
+Thoth,Sw----,Bi++++,Ar----|Chicory,Kaeshra,Oleaceae,Blue Damia,Rhubarb
+Thoth,Sp++++,So++++,Ar----|Anaxi,Ranyahn,Powdered Aquamarine,Cardamom,Crumpled Leaf Basil
+Thoth,Sw----,So++++,Ar----|Chicory,Ranyahn,Buckler-leaf,Sorrel,Strawberry Tea
+Thoth,To----,So++++,Ar----|Anaxi,Locust Palm,Ranyahn,Cardamom,Discorea
+Thoth,Sw++++,Sp++++,Ar----|Locust Palm,Spiked Fishtree,Powdered Citrine,Powdered Aquamarine,Crumpled Leaf Basil
+Thoth,To----,Sp++++,Ar----|Chakkanut Tree,Locust Palm,Ranyahn,Cardamom,Crumpled Leaf Basil
+Thoth,To++++,Sw++++,Ar----|Passam,Towering Palm,Salts Of Iron,Indigo Damia,Yigory
+Thoth,Sa++++,Bi----,As++++|Blue Tarafern,Mindanao,Pale Russet,Primula,Stickler Hedge
+Thoth,So++++,Bi----,As++++|Anaxi,Elephantia,Spindle Tree,Powdered Morganite,Camel Pheromones (Male)
+Thoth,Sp----,Bi----,As++++|Bramble Hedge,Powdered Morganite,Mindanao,Shrubby Basil,Stickler Hedge
+Thoth,To----,Bi----,As++++|Anaxi,Spindle Tree,Powdered Emerald,Pale Russet,Shrubby Basil
+Thoth,Sp----,Sa++++,As++++|Powdered Morganite,Blue Tarafern,Myristica,Stickler Hedge,Tsangto
+Thoth,To----,Sa++++,As++++|Powdered Jade,Common Sage,Pale Russet,Panoe,Shrubby Basil
+Thoth,So++++,Sa----,As++++|Fern Palm,Salts Of Magnesium,Common Basil,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,To----,Sa----,As++++|Beetlenut,Cinnar,Fern Palm,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Sp----,So++++,As++++|Powdered Morganite,Fleabane,Glechoma,Satsatchi,Camel Pheromones (Male)
+Thoth,To----,So++++,As++++|Anaxi,Ranyahn,Powdered Amethyst,Satsatchi,Shrubby Basil
+Thoth,Sw++++,So----,As++++|Tapacae Miralis,Towering Palm,Powdered Citrine,Verdant Squill,Camel Pheromones (Female)
+Thoth,Sp----,So----,As++++|Arconis,Powdered Morganite,Golden Thyme,Stickler Hedge,Verdant Squill
+Thoth,To----,So----,As++++|Arconis,Common Sage,Pale Russet,Shrubby Basil,Verdant Squill
+Thoth,Sw++++,Sp----,As++++|Towering Palm,Powdered Morganite,Glechoma,Satsatchi,Camel Pheromones (Female)
+Thoth,To----,Sp----,As++++|Ash Palm,Cinnar,Powdered Diamond,Powdered Morganite,Satsatchi
+Thoth,To----,Sw++++,As++++|Satsatchi,Shrubby Basil,Tiny Clover,Verdant Squill,Camel Pheromones (Female)
+Thoth,To++++,Bi++++,As----|Hokkaido,Gynura,Hazlewort,Motherwort,Rhubarb
+Thoth,Sp----,Bi++++,As----|Anansi,Covage,Daggerleaf,Gynura,Rhubarb
+Thoth,Sw----,Bi++++,As----|Razor Palm,Blue Damia,Cinnamon,Motherwort,Rhubarb
+Thoth,Sp++++,Bi----,As----|Cerulean Blue,Giant Cricklewood,Powdered Almandine,Bee Balm,Pale Ochoa
+Thoth,So----,Sa++++,As----|Coconut Palm,Feather Tree,Hokkaido,Salts Of Silver,Hyssop
+Thoth,Sp++++,So++++,As----|Giant Cricklewood,Powdered Kunzite,Cardamom,Crumpled Leaf Basil,Xanosi
+Thoth,Sw----,So++++,As----|Chicory,Razor Palm,Covage,Rhubarb,Strawberry Tea
+Thoth,To++++,Sp----,As----|Pratyeka Tree,Razor Palm,Salts Of Strontium,Gynura,Sweetflower
+Thoth,Sw----,Sa++++,Bi++++|Blue Damia,Dwarf Hogweed,Harebell,Myristica,Orange Niali
+Thoth,To++++,So----,Bi++++|Windriver Palm,Anansi,Hazlewort,Indigo Damia,Pippali
+Thoth,Sw----,So----,Bi++++|Arconis,Oil Palm,Blue Damia,Harebell,Sorrel
+Thoth,To++++,Sp----,Bi++++|Windriver Palm,Anansi,Cinquefoil,Gynura,Orange Niali
+Thoth,Sw----,Sp----,Bi++++|Powdered Topaz,Daggerleaf,Gynura,Harebell,Orange Niali
 Thoth,So++++,Sa----,Bi----|Bramble Hedge,Broadleaf Palm,Elephantia,Fern Palm,Giant Cricklewood
-Thoth,Bi----,Ar++++,Sp----|Orrorin,Royal Palm,Spindle Tree,Powdered Lapis,Powdered Sunstone
-Thoth,Sp----,Ar++++,To----|Bottle Tree,Cinnar,Royal Palm,Powdered Lapis,Chives
-Thoth,So++++,Ar----,Sp++++|Chicory,Giant Cricklewood,Locust Palm,Ranyahn,Cardamom
-Thoth,So++++,Ar----,To----|Locust Palm,Ranyahn,Salts Of Aluminum,Buckler-leaf,Cardamom
-Thoth,Sp++++,Ar----,To----|Locust Palm,Ranyahn,Spiked Fishtree,Powdered Emerald,Cardamom
+Thoth,Sp++++,Sa----,Bi----|Broadleaf Palm,Giant Cricklewood,Powdered Aquamarine,Salts Of Tin,Dusty Blue Sage
+Thoth,Sw++++,Sa----,Bi----|Broadleaf Palm,Elephantia,Scaley Hardwood,Tapacae Miralis,Umbrella Palm
+Thoth,Sp----,So++++,Bi----|Bramble Hedge,Elephantia,Powdered Morganite,Covage,Crampbark
+Thoth,Sw----,So++++,Bi----|Giant Cricklewood,Spindle Tree,Dusty Blue Sage,Fleabane,Strawberry Tea
+Thoth,To----,So++++,Bi----|Elephantia,Ranyahn,Salts Of Aluminum,Crampbark,Shrubby Basil
+Thoth,Sw----,Sp++++,Bi----|Delta Palm,Giant Cricklewood,Dusty Blue Sage,Pale Ochoa,Strawberry Tea
+Thoth,To----,So----,Sa++++|Arconis,Coconut Palm,Powdered Diamond,Hyssop,Pale Russet
+Thoth,Sw----,Sp----,Sa++++|Razor Palm,Covage,Myristica,Orange Niali,Tsangto
+Thoth,To----,Sp----,Sa++++|Powdered Diamond,Powdered Jade,Powdered Lapis,Covage,Pale Russet
+Thoth,Sp++++,So++++,Sa----|Giant Cricklewood,Ranyahn,Powdered Aquamarine,Salts Of Titanium,Common Basil
+Thoth,Sw----,So++++,Sa----|Fern Palm,Hawthorn,Common Basil,Fleabane,Strawberry Tea
+Thoth,To----,So++++,Sa----|Powdered Aquamarine,Common Basil,Myrrh,Skirret,Camel Pheromones (Male)
+Thoth,Sw----,Sp++++,Sa----|Beetlenut,Salts Of Platinum,Salts Of Titanium,Dusty Blue Sage,Ginger Root
+Thoth,To----,Sp++++,Sa----|Fern Palm,Locust Palm,Ranyahn,Powdered Aquamarine,Salts Of Tin
+Thoth,To----,Sw++++,Sa----|Locust Palm,Scaley Hardwood,Powdered Aquamarine,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,To----,Sp++++,So++++|Giant Cricklewood,Locust Palm,Ranyahn,Powdered Aquamarine,Common Rosemary
+Thoth,Sw----,Sp----,So++++|Bramble Hedge,Daggerleaf,Fleabane,Morpha,Strawberry Tea
+Thoth,To----,Sp----,So++++|Bramble Hedge,Salts Of Aluminum,Chives,Discorea,Glechoma
+Thoth,To++++,Sp----,So----|Orrorin,Powdered Opal,Powdered Turquoise,Salts Of Strontium,Golden Thyme
+Thoth,To++++,Sw++++,So----|Bloodbark,Tapacae Miralis,Towering Palm,Salts Of Iron,Indigo Damia
+Thoth,To----,Sw++++,Sp++++|Locust Palm,Powdered Emerald,Powdered Aquamarine,Salts Of Copper,Crumpled Leaf Basil
+Thoth,To++++,Sw----,Sp----|Razor Palm,Cinquefoil,Gynura,Orange Niali,Sweetflower
+Thoth,As++++,Ar++++,Bi----|Spindle Tree,Powdered Sunstone,Common Sage,Prisniparni,Camel Pheromones (Female)
+Thoth,As++++,Ar++++,Sa----|Beetlenut,Common Basil,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,As++++,Ar++++,To----|Deadwood Tree,Spindle Tree,Powdered Emerald,Common Sage,Camel Pheromones (Female)
+Thoth,As----,Ar++++,To++++|Hokkaido,Razor Palm,Salts Of Strontium,Motherwort,Orange Sweetgrass
+Thoth,As----,Ar++++,Sp----|Razor Palm,Salts Of Strontium,Daggerleaf,Gynura,Motherwort
+Thoth,As----,Ar++++,Sw----|Razor Palm,Trilobellia,Powdered Kunzite,Daggerleaf,Motherwort
+Thoth,Bi++++,Ar++++,So----|Oil Palm,Powdered Ruby,Harebell,Houseleek,Pippali
+Thoth,Bi++++,Ar++++,Sw----|Razor Palm,Blue Damia,Daggerleaf,Harebell,Pippali
+Thoth,Bi----,Ar++++,So++++|Giant Cricklewood,Royal Palm,Spindle Tree,Common Basil,Camel Pheromones (Male)
+Thoth,Bi----,Ar++++,Sp----|Bramble Hedge,Royal Palm,Spindle Tree,Powdered Sunstone,Morpha
+Thoth,Bi----,Ar++++,Sw----|Razor Palm,Spindle Tree,Powdered Sunstone,Bluebottle Clover,Dusty Blue Sage
+Thoth,Bi----,Ar++++,To----|Spindle Tree,Powdered Emerald,Powdered Sunstone,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Sa----,Ar++++,So++++|Elephantia,Razor Palm,Common Basil,Khokali,Camel Pheromones (Male)
+Thoth,Sa----,Ar++++,To----|Deadwood Tree,Fern Palm,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,So++++,Ar++++,To----|Elephantia,Spindle Tree,Chives,Skirret,Camel Pheromones (Male)
+Thoth,Sp----,Ar++++,Sw----|Razor Palm,Royal Palm,Trilobellia,Daggerleaf,Meadowsweet
+Thoth,Sp----,Ar++++,To----|Cinnar,Royal Palm,Powdered Lapis,Chives,Lemondrop
+Thoth,As----,Ar----,Sw++++|Folded Birch,Mini Palmetto,Passam,Spiked Fishtree,Crumpled Leaf Basil
+Thoth,As----,Ar----,To++++|Hokkaido,Oleaceae,Passam,Pratyeka Tree,True Tarragon
+Thoth,Bi++++,Ar----,Sw----|Chicory,Kaeshra,Oleaceae,Blue Damia,Rhubarb
+Thoth,So++++,Ar----,Sp++++|Anaxi,Ranyahn,Powdered Aquamarine,Cardamom,Crumpled Leaf Basil
+Thoth,So++++,Ar----,Sw----|Chicory,Ranyahn,Buckler-leaf,Sorrel,Strawberry Tea
+Thoth,So++++,Ar----,To----|Anaxi,Locust Palm,Ranyahn,Cardamom,Discorea
+Thoth,Sp++++,Ar----,Sw++++|Locust Palm,Spiked Fishtree,Powdered Citrine,Powdered Aquamarine,Crumpled Leaf Basil
+Thoth,Sp++++,Ar----,To----|Chakkanut Tree,Locust Palm,Ranyahn,Cardamom,Crumpled Leaf Basil
+Thoth,Sw++++,Ar----,To++++|Passam,Towering Palm,Salts Of Iron,Indigo Damia,Yigory
+Thoth,Bi----,As++++,Sa++++|Blue Tarafern,Mindanao,Pale Russet,Primula,Stickler Hedge
+Thoth,Bi----,As++++,So++++|Anaxi,Elephantia,Spindle Tree,Powdered Morganite,Camel Pheromones (Male)
+Thoth,Bi----,As++++,Sp----|Bramble Hedge,Powdered Morganite,Mindanao,Shrubby Basil,Stickler Hedge
+Thoth,Bi----,As++++,To----|Anaxi,Spindle Tree,Powdered Emerald,Pale Russet,Shrubby Basil
+Thoth,Sa++++,As++++,Sp----|Powdered Morganite,Blue Tarafern,Myristica,Stickler Hedge,Tsangto
+Thoth,Sa++++,As++++,To----|Powdered Jade,Common Sage,Pale Russet,Panoe,Shrubby Basil
+Thoth,Sa----,As++++,So++++|Fern Palm,Salts Of Magnesium,Common Basil,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Sa----,As++++,To----|Beetlenut,Cinnar,Fern Palm,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,So++++,As++++,Sp----|Powdered Morganite,Fleabane,Glechoma,Satsatchi,Camel Pheromones (Male)
+Thoth,So++++,As++++,To----|Anaxi,Ranyahn,Powdered Amethyst,Satsatchi,Shrubby Basil
+Thoth,So----,As++++,Sw++++|Tapacae Miralis,Towering Palm,Powdered Citrine,Verdant Squill,Camel Pheromones (Female)
+Thoth,So----,As++++,Sp----|Arconis,Powdered Morganite,Golden Thyme,Stickler Hedge,Verdant Squill
+Thoth,So----,As++++,To----|Arconis,Common Sage,Pale Russet,Shrubby Basil,Verdant Squill
+Thoth,Sp----,As++++,Sw++++|Towering Palm,Powdered Morganite,Glechoma,Satsatchi,Camel Pheromones (Female)
+Thoth,Sp----,As++++,To----|Ash Palm,Cinnar,Powdered Diamond,Powdered Morganite,Satsatchi
+Thoth,Sw++++,As++++,To----|Satsatchi,Shrubby Basil,Tiny Clover,Verdant Squill,Camel Pheromones (Female)
+Thoth,Bi++++,As----,To++++|Hokkaido,Gynura,Hazlewort,Motherwort,Rhubarb
+Thoth,Bi++++,As----,Sp----|Anansi,Covage,Daggerleaf,Gynura,Rhubarb
+Thoth,Bi++++,As----,Sw----|Razor Palm,Blue Damia,Cinnamon,Motherwort,Rhubarb
+Thoth,Bi----,As----,Sp++++|Cerulean Blue,Giant Cricklewood,Powdered Almandine,Bee Balm,Pale Ochoa
+Thoth,Sa++++,As----,So----|Coconut Palm,Feather Tree,Hokkaido,Salts Of Silver,Hyssop
+Thoth,So++++,As----,Sp++++|Giant Cricklewood,Powdered Kunzite,Cardamom,Crumpled Leaf Basil,Xanosi
+Thoth,So++++,As----,Sw----|Chicory,Razor Palm,Covage,Rhubarb,Strawberry Tea
+Thoth,Sp----,As----,To++++|Pratyeka Tree,Razor Palm,Salts Of Strontium,Gynura,Sweetflower
+Thoth,Sa++++,Bi++++,Sw----|Blue Damia,Dwarf Hogweed,Harebell,Myristica,Orange Niali
+Thoth,So----,Bi++++,To++++|Windriver Palm,Anansi,Hazlewort,Indigo Damia,Pippali
+Thoth,So----,Bi++++,Sw----|Arconis,Oil Palm,Blue Damia,Harebell,Sorrel
+Thoth,Sp----,Bi++++,To++++|Windriver Palm,Anansi,Cinquefoil,Gynura,Orange Niali
+Thoth,Sp----,Bi++++,Sw----|Powdered Topaz,Daggerleaf,Gynura,Harebell,Orange Niali
 Thoth,Sa----,Bi----,So++++|Bramble Hedge,Broadleaf Palm,Elephantia,Fern Palm,Giant Cricklewood
-Thoth,Ar++++,Sp----,Bi----|Orrorin,Royal Palm,Spindle Tree,Powdered Lapis,Powdered Sunstone
-Thoth,Ar++++,To----,Sp----|Bottle Tree,Cinnar,Royal Palm,Powdered Lapis,Chives
-Thoth,Ar----,Sp++++,So++++|Chicory,Giant Cricklewood,Locust Palm,Ranyahn,Cardamom
-Thoth,Ar----,To----,So++++|Locust Palm,Ranyahn,Salts Of Aluminum,Buckler-leaf,Cardamom
-Thoth,Ar----,To----,Sp++++|Locust Palm,Ranyahn,Spiked Fishtree,Powdered Emerald,Cardamom
+Thoth,Sa----,Bi----,Sp++++|Broadleaf Palm,Giant Cricklewood,Powdered Aquamarine,Salts Of Tin,Dusty Blue Sage
+Thoth,Sa----,Bi----,Sw++++|Broadleaf Palm,Elephantia,Scaley Hardwood,Tapacae Miralis,Umbrella Palm
+Thoth,So++++,Bi----,Sp----|Bramble Hedge,Elephantia,Powdered Morganite,Covage,Crampbark
+Thoth,So++++,Bi----,Sw----|Giant Cricklewood,Spindle Tree,Dusty Blue Sage,Fleabane,Strawberry Tea
+Thoth,So++++,Bi----,To----|Elephantia,Ranyahn,Salts Of Aluminum,Crampbark,Shrubby Basil
+Thoth,Sp++++,Bi----,Sw----|Delta Palm,Giant Cricklewood,Dusty Blue Sage,Pale Ochoa,Strawberry Tea
+Thoth,So----,Sa++++,To----|Arconis,Coconut Palm,Powdered Diamond,Hyssop,Pale Russet
+Thoth,Sp----,Sa++++,Sw----|Razor Palm,Covage,Myristica,Orange Niali,Tsangto
+Thoth,Sp----,Sa++++,To----|Powdered Diamond,Powdered Jade,Powdered Lapis,Covage,Pale Russet
+Thoth,So++++,Sa----,Sp++++|Giant Cricklewood,Ranyahn,Powdered Aquamarine,Salts Of Titanium,Common Basil
+Thoth,So++++,Sa----,Sw----|Fern Palm,Hawthorn,Common Basil,Fleabane,Strawberry Tea
+Thoth,So++++,Sa----,To----|Powdered Aquamarine,Common Basil,Myrrh,Skirret,Camel Pheromones (Male)
+Thoth,Sp++++,Sa----,Sw----|Beetlenut,Salts Of Platinum,Salts Of Titanium,Dusty Blue Sage,Ginger Root
+Thoth,Sp++++,Sa----,To----|Fern Palm,Locust Palm,Ranyahn,Powdered Aquamarine,Salts Of Tin
+Thoth,Sw++++,Sa----,To----|Locust Palm,Scaley Hardwood,Powdered Aquamarine,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Sp++++,So++++,To----|Giant Cricklewood,Locust Palm,Ranyahn,Powdered Aquamarine,Common Rosemary
+Thoth,Sp----,So++++,Sw----|Bramble Hedge,Daggerleaf,Fleabane,Morpha,Strawberry Tea
+Thoth,Sp----,So++++,To----|Bramble Hedge,Salts Of Aluminum,Chives,Discorea,Glechoma
+Thoth,Sp----,So----,To++++|Orrorin,Powdered Opal,Powdered Turquoise,Salts Of Strontium,Golden Thyme
+Thoth,Sw++++,So----,To++++|Bloodbark,Tapacae Miralis,Towering Palm,Salts Of Iron,Indigo Damia
+Thoth,Sw++++,Sp++++,To----|Locust Palm,Powdered Emerald,Powdered Aquamarine,Salts Of Copper,Crumpled Leaf Basil
+Thoth,Sw----,Sp----,To++++|Razor Palm,Cinquefoil,Gynura,Orange Niali,Sweetflower
+Thoth,Ar++++,Bi----,As++++|Spindle Tree,Powdered Sunstone,Common Sage,Prisniparni,Camel Pheromones (Female)
+Thoth,Ar++++,Sa----,As++++|Beetlenut,Common Basil,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Ar++++,To----,As++++|Deadwood Tree,Spindle Tree,Powdered Emerald,Common Sage,Camel Pheromones (Female)
+Thoth,Ar++++,To++++,As----|Hokkaido,Razor Palm,Salts Of Strontium,Motherwort,Orange Sweetgrass
+Thoth,Ar++++,Sp----,As----|Razor Palm,Salts Of Strontium,Daggerleaf,Gynura,Motherwort
+Thoth,Ar++++,Sw----,As----|Razor Palm,Trilobellia,Powdered Kunzite,Daggerleaf,Motherwort
+Thoth,Ar++++,So----,Bi++++|Oil Palm,Powdered Ruby,Harebell,Houseleek,Pippali
+Thoth,Ar++++,Sw----,Bi++++|Razor Palm,Blue Damia,Daggerleaf,Harebell,Pippali
+Thoth,Ar++++,So++++,Bi----|Giant Cricklewood,Royal Palm,Spindle Tree,Common Basil,Camel Pheromones (Male)
+Thoth,Ar++++,Sp----,Bi----|Bramble Hedge,Royal Palm,Spindle Tree,Powdered Sunstone,Morpha
+Thoth,Ar++++,Sw----,Bi----|Razor Palm,Spindle Tree,Powdered Sunstone,Bluebottle Clover,Dusty Blue Sage
+Thoth,Ar++++,To----,Bi----|Spindle Tree,Powdered Emerald,Powdered Sunstone,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Ar++++,So++++,Sa----|Elephantia,Razor Palm,Common Basil,Khokali,Camel Pheromones (Male)
+Thoth,Ar++++,To----,Sa----|Deadwood Tree,Fern Palm,Khokali,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,Ar++++,To----,So++++|Elephantia,Spindle Tree,Chives,Skirret,Camel Pheromones (Male)
+Thoth,Ar++++,Sw----,Sp----|Razor Palm,Royal Palm,Trilobellia,Daggerleaf,Meadowsweet
+Thoth,Ar++++,To----,Sp----|Cinnar,Royal Palm,Powdered Lapis,Chives,Lemondrop
+Thoth,Ar----,Sw++++,As----|Folded Birch,Mini Palmetto,Passam,Spiked Fishtree,Crumpled Leaf Basil
+Thoth,Ar----,To++++,As----|Hokkaido,Oleaceae,Passam,Pratyeka Tree,True Tarragon
+Thoth,Ar----,Sw----,Bi++++|Chicory,Kaeshra,Oleaceae,Blue Damia,Rhubarb
+Thoth,Ar----,Sp++++,So++++|Anaxi,Ranyahn,Powdered Aquamarine,Cardamom,Crumpled Leaf Basil
+Thoth,Ar----,Sw----,So++++|Chicory,Ranyahn,Buckler-leaf,Sorrel,Strawberry Tea
+Thoth,Ar----,To----,So++++|Anaxi,Locust Palm,Ranyahn,Cardamom,Discorea
+Thoth,Ar----,Sw++++,Sp++++|Locust Palm,Spiked Fishtree,Powdered Citrine,Powdered Aquamarine,Crumpled Leaf Basil
+Thoth,Ar----,To----,Sp++++|Chakkanut Tree,Locust Palm,Ranyahn,Cardamom,Crumpled Leaf Basil
+Thoth,Ar----,To++++,Sw++++|Passam,Towering Palm,Salts Of Iron,Indigo Damia,Yigory
+Thoth,As++++,Sa++++,Bi----|Blue Tarafern,Mindanao,Pale Russet,Primula,Stickler Hedge
+Thoth,As++++,So++++,Bi----|Anaxi,Elephantia,Spindle Tree,Powdered Morganite,Camel Pheromones (Male)
+Thoth,As++++,Sp----,Bi----|Bramble Hedge,Powdered Morganite,Mindanao,Shrubby Basil,Stickler Hedge
+Thoth,As++++,To----,Bi----|Anaxi,Spindle Tree,Powdered Emerald,Pale Russet,Shrubby Basil
+Thoth,As++++,Sp----,Sa++++|Powdered Morganite,Blue Tarafern,Myristica,Stickler Hedge,Tsangto
+Thoth,As++++,To----,Sa++++|Powdered Jade,Common Sage,Pale Russet,Panoe,Shrubby Basil
+Thoth,As++++,So++++,Sa----|Fern Palm,Salts Of Magnesium,Common Basil,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,As++++,To----,Sa----|Beetlenut,Cinnar,Fern Palm,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,As++++,Sp----,So++++|Powdered Morganite,Fleabane,Glechoma,Satsatchi,Camel Pheromones (Male)
+Thoth,As++++,To----,So++++|Anaxi,Ranyahn,Powdered Amethyst,Satsatchi,Shrubby Basil
+Thoth,As++++,Sw++++,So----|Tapacae Miralis,Towering Palm,Powdered Citrine,Verdant Squill,Camel Pheromones (Female)
+Thoth,As++++,Sp----,So----|Arconis,Powdered Morganite,Golden Thyme,Stickler Hedge,Verdant Squill
+Thoth,As++++,To----,So----|Arconis,Common Sage,Pale Russet,Shrubby Basil,Verdant Squill
+Thoth,As++++,Sw++++,Sp----|Towering Palm,Powdered Morganite,Glechoma,Satsatchi,Camel Pheromones (Female)
+Thoth,As++++,To----,Sp----|Ash Palm,Cinnar,Powdered Diamond,Powdered Morganite,Satsatchi
+Thoth,As++++,To----,Sw++++|Satsatchi,Shrubby Basil,Tiny Clover,Verdant Squill,Camel Pheromones (Female)
+Thoth,As----,To++++,Bi++++|Hokkaido,Gynura,Hazlewort,Motherwort,Rhubarb
+Thoth,As----,Sp----,Bi++++|Anansi,Covage,Daggerleaf,Gynura,Rhubarb
+Thoth,As----,Sw----,Bi++++|Razor Palm,Blue Damia,Cinnamon,Motherwort,Rhubarb
+Thoth,As----,Sp++++,Bi----|Cerulean Blue,Giant Cricklewood,Powdered Almandine,Bee Balm,Pale Ochoa
+Thoth,As----,So----,Sa++++|Coconut Palm,Feather Tree,Hokkaido,Salts Of Silver,Hyssop
+Thoth,As----,Sp++++,So++++|Giant Cricklewood,Powdered Kunzite,Cardamom,Crumpled Leaf Basil,Xanosi
+Thoth,As----,Sw----,So++++|Chicory,Razor Palm,Covage,Rhubarb,Strawberry Tea
+Thoth,As----,To++++,Sp----|Pratyeka Tree,Razor Palm,Salts Of Strontium,Gynura,Sweetflower
+Thoth,Bi++++,Sw----,Sa++++|Blue Damia,Dwarf Hogweed,Harebell,Myristica,Orange Niali
+Thoth,Bi++++,To++++,So----|Windriver Palm,Anansi,Hazlewort,Indigo Damia,Pippali
+Thoth,Bi++++,Sw----,So----|Arconis,Oil Palm,Blue Damia,Harebell,Sorrel
+Thoth,Bi++++,To++++,Sp----|Windriver Palm,Anansi,Cinquefoil,Gynura,Orange Niali
+Thoth,Bi++++,Sw----,Sp----|Powdered Topaz,Daggerleaf,Gynura,Harebell,Orange Niali
 Thoth,Bi----,So++++,Sa----|Bramble Hedge,Broadleaf Palm,Elephantia,Fern Palm,Giant Cricklewood
+Thoth,Bi----,Sp++++,Sa----|Broadleaf Palm,Giant Cricklewood,Powdered Aquamarine,Salts Of Tin,Dusty Blue Sage
+Thoth,Bi----,Sw++++,Sa----|Broadleaf Palm,Elephantia,Scaley Hardwood,Tapacae Miralis,Umbrella Palm
+Thoth,Bi----,Sp----,So++++|Bramble Hedge,Elephantia,Powdered Morganite,Covage,Crampbark
+Thoth,Bi----,Sw----,So++++|Giant Cricklewood,Spindle Tree,Dusty Blue Sage,Fleabane,Strawberry Tea
+Thoth,Bi----,To----,So++++|Elephantia,Ranyahn,Salts Of Aluminum,Crampbark,Shrubby Basil
+Thoth,Bi----,Sw----,Sp++++|Delta Palm,Giant Cricklewood,Dusty Blue Sage,Pale Ochoa,Strawberry Tea
+Thoth,Sa++++,To----,So----|Arconis,Coconut Palm,Powdered Diamond,Hyssop,Pale Russet
+Thoth,Sa++++,Sw----,Sp----|Razor Palm,Covage,Myristica,Orange Niali,Tsangto
+Thoth,Sa++++,To----,Sp----|Powdered Diamond,Powdered Jade,Powdered Lapis,Covage,Pale Russet
+Thoth,Sa----,Sp++++,So++++|Giant Cricklewood,Ranyahn,Powdered Aquamarine,Salts Of Titanium,Common Basil
+Thoth,Sa----,Sw----,So++++|Fern Palm,Hawthorn,Common Basil,Fleabane,Strawberry Tea
+Thoth,Sa----,To----,So++++|Powdered Aquamarine,Common Basil,Myrrh,Skirret,Camel Pheromones (Male)
+Thoth,Sa----,Sw----,Sp++++|Beetlenut,Salts Of Platinum,Salts Of Titanium,Dusty Blue Sage,Ginger Root
+Thoth,Sa----,To----,Sp++++|Fern Palm,Locust Palm,Ranyahn,Powdered Aquamarine,Salts Of Tin
+Thoth,Sa----,To----,Sw++++|Locust Palm,Scaley Hardwood,Powdered Aquamarine,Camel Pheromones (Female),Camel Pheromones (Male)
+Thoth,So++++,To----,Sp++++|Giant Cricklewood,Locust Palm,Ranyahn,Powdered Aquamarine,Common Rosemary
+Thoth,So++++,Sw----,Sp----|Bramble Hedge,Daggerleaf,Fleabane,Morpha,Strawberry Tea
+Thoth,So++++,To----,Sp----|Bramble Hedge,Salts Of Aluminum,Chives,Discorea,Glechoma
+Thoth,So----,To++++,Sp----|Orrorin,Powdered Opal,Powdered Turquoise,Salts Of Strontium,Golden Thyme
+Thoth,So----,To++++,Sw++++|Bloodbark,Tapacae Miralis,Towering Palm,Salts Of Iron,Indigo Damia
+Thoth,Sp++++,To----,Sw++++|Locust Palm,Powdered Emerald,Powdered Aquamarine,Salts Of Copper,Crumpled Leaf Basil
+Thoth,Sp----,To++++,Sw----|Razor Palm,Cinquefoil,Gynura,Orange Niali,Sweetflower
 Osiris,Ar++++,As----|Butterleaf Tree,Monkey Palm,Razor Palm,Trilobellia,Salts Of Strontium
 Osiris,Ar++++,Bi----|Bramble Hedge,Razor Palm,Spindle Tree,Tapacae Miralis,Powdered Sunstone
 Osiris,Ar++++,So----|Arconis,Tapacae Miralis,Powdered Ruby,Powdered Lapis,Salts Of Strontium
