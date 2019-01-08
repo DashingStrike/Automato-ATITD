@@ -10,21 +10,64 @@ dofile("common.inc");
 stirMaster = false; -- TODO: Make this an optional selection when choosing the Stir Cement option
 
 items = {
+
 --strength
-{"", "Coconuts"},
+{"",
+"Coconuts",
+},
+
+
 --dex
-{""},
+{"",
+
+},
+
 --end
-{"", "Flax Comb", "Hackling Rake", "Dig Dirt", "Dig Hole", "Dig Limestone", "Stir Cement", "Excavate Blocks", "Push Pyramid", "Weave Canvas", "Weave Silk",
- "Weave Linen", "Weave Wool Cloth", "Churn Butter"},
---spd
-{""},
+{"",          
+"Churn Butter",
+"Flax Comb",
+"Dig Dirt",
+"Dig Hole",
+"Dig Limestone",
+"Excavate Blocks",
+"Hackling Rake",
+"Pump Aqueduct",
+"Push Pyramid",
+"Stir Cement",
+"Weave Canvas",
+"Weave Linen",
+"Weave Silk",
+"Weave Wool Cloth,"
+},
+
 --con
-{""},
+{"",
+"Gun Powder",
+},
+
+--spd
+{"",
+
+},
+
 --foc
-{"", "Tap Rods", "Sharpened Stick", "Tinder", "Crudely Carved Handle", "Wooden Peg", "Barrel Tap"},
+{"",
+"Barrel Tap",
+"Bottle Stopper",
+"Crudely Carved Handle",
+"Sharpened Stick",
+"Tap Rods",
+"Tinder",
+"Wooden Peg",
+},
+
 --per
-{""} };
+{"",
+
+},
+
+
+ };
 
 local lagBound = {};
 lagBound["Dig Hole"] = true;
@@ -45,6 +88,10 @@ textLookup["Wooden Peg"] = "Whittle a small Wooden Peg";
 textLookup["Barrel Tap"] = "Whittle a Barrel Tap";
 -- textLookup["Survey Area"] = "Survey Area";
 -- textLookup["Survey (Uncover)"] = "Survey Area";
+textLookup["Gun Powder"] = "Gunpowder";
+textLookup["Pump Aqueduct"] = "Pump the Aqueduct";
+textLookup["Churn Butter"] = "Churn Butter";
+
 
 statNames = {"strength", "dexterity", "endurance", "constitution", "speed", "focus", "perception"};
 statTimer = {};
@@ -69,7 +116,7 @@ function getClickActions()
    while not done do
       checkBreak();
       y = 10;
-      lsSetCamera(0,0,lsScreenX*scale,lsScreenY*scale);
+        lsSetCamera(0,0,lsScreenX*1.7,lsScreenY*1.7);
       lsPrint(5, y, z, 1.2, 1.2, 0xFFFFFFff, "Ensure that all menus are pinned!");
       y = y + 50;
       for i = 1, #statNames do
@@ -247,13 +294,6 @@ function pyramidPush()
    end
 end
 
-function splitCoconuts()
-  t=findText("Separate Coconut Meat");
-  if t~= nil then
-    clickText(t);
-  end
-end
-
 function stirCement()
    t = waitForText("Stir the cement", 1000);
    if t then
@@ -388,10 +428,6 @@ function doTasks()
                tapRods();
             elseif curTask == "Stir Cement" then
                stirCement();
-            elseif curTask =="Coconuts" then
-               splitCoconuts();
-            elseif curTask =="Churn Butter" then
-               clickText(findText("Churn", nil, EXACT));
             else
                clickText(findText(textLookup[curTask]));
             end
