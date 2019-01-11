@@ -3,7 +3,6 @@ Ra,Ar-----,So+++++|Anaxi,Chicory,Ranyahn,Buckler-leaf,Cardamom
 Ra,Ar+++++,Sw-----|Razor Palm,Spindle Tree,Trilobellia,Harebell,Orange Sweetgras
 Ra,Ar-----,Sw+++++|Folded Birch,Spiked Fishtree,Towering Palm,Locust Palm,Crumpled Leaf Basil
 Ra,As-----,Bi+++++|Tiny Oil Palm,Gynura,Lemondrop,Motherwort,Rhubarb
-Ra,Bi+++++,So-----|Powdered Citrine,Common Sage,Golden Thyme,Verdant Squill,Beetlenut
 Ra,Bi+++++,Sw-----|Blue Damia,Harebell,Rhubarb,Spinach,Sorrel
 Ra,Bi-----,So+++++|Elephantia,Giant Cricklewood,Bramble Hedge,Common Basil,Crampbark
 Ra,So+++++,Sp-----|Covage,Fleabane,Glechoma,Bramble Hedge,Silvertongue Damia
@@ -17,7 +16,6 @@ Ra,So+++++,Ar-----|Anaxi,Chicory,Ranyahn,Buckler-leaf,Cardamom
 Ra,Ar+++++,Sw-----|Razor Palm,Spindle Tree,Trilobellia,Harebell,Orange Sweetgras
 Ra,Ar-----,Sw+++++|Folded Birch,Spiked Fishtree,Towering Palm,Locust Palm,Crumpled Leaf Basil
 Ra,As-----,Bi+++++|Tiny Oil Palm,Gynura,Lemondrop,Motherwort,Rhubarb
-Ra,Bi+++++,So-----|Powdered Citrine,Common Sage,Golden Thyme,Verdant Squill,Beetlenut
 Ra,Bi+++++,Sw-----|Blue Damia,Harebell,Rhubarb,Spinach,Sorrel
 Ra,Bi-----,So+++++|Elephantia,Giant Cricklewood,Bramble Hedge,Common Basil,Crampbark
 Ra,So+++++,Sp-----|Covage,Fleabane,Glechoma,Bramble Hedge,Silvertongue Damia
