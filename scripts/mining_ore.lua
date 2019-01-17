@@ -1,4 +1,4 @@
--- mining_ore.lua v2.2.9.2 -- by Cegaiel
+-- mining_ore.lua v2.2.9.3 -- by Cegaiel
 -- Credits to Tallow for his Simon macro, which was used as a template to build on.
 -- 
 -- Brute force method, you manually click/set every stones' location and it will work every possible 3 node/stone combinations.
@@ -24,7 +24,7 @@
 dofile("common.inc");
 dofile("settings.inc");
 
-info = "Ore Mining v2.2.9.2 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\'). Press Shift over ATITD window.\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
+info = "Ore Mining v2.2.9.3 by Cegaiel --\nMacro brute force tries every possible 3 stone combination (and optionally 4 stone, too). Time consuming but it works!\n\nMAIN chat tab MUST be showing and wide enough so that each line doesn't wrap.\n\nChat MUST be minimized but Visible (Options, Chat-Related, \'Minimized chat channels are still visible\' - ON). Options/Interface Options: 'Use Flyaway message for some things' - OFF\n\nOptional: Pin the mine's Take... Ore... menu (\"All Ore\" will appear in pinned window) and it will refresh every round.\n\nWARNING: If you use the Dual Monitor option, uncheck in Interface Options: Right-Click opens a menu as pinned.";
 
 
 -- Start don't alter these ...
@@ -64,7 +64,7 @@ hueTol = 75; --10
 -- If we gathered the EXACT same amount of Ore from previous round, then this confuses macro and needs timeOut to move on.
 -- Silver is a good example of repetive quantities, 1, 2 silver is common, back to back. Later in script, Silver will use 4000ms timeout instead of usual 6000ms timeout.
 
-chatReadTimeOut = 3000; -- Maximum Time (ms) before moving on.
+chatReadTimeOut = 6000; -- Maximum Time (ms) before moving on.
 chatReadTimeOutSilver = 4000; -- Since silver frequently gets 1, 2 silver back to back, then lower time out to 4000 instead of 6000 so prevent longer hang times (when last chat line is same as previous line).
 
 --End Customizable
@@ -352,18 +352,18 @@ function getPoints()
             local yOff = (index - index%4)/2 * 7;
             local xOff2 = (#clickList % 4) * 75;
             local yOff2 = (#clickList - #clickList%4)/2 * 7;
-            lsPrint(11 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff, i .. ":");
-            lsPrint(11 + xOff, y + yOff, z, 0.5, 0.5, clickListColor[i][1], "     (" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
+            lsPrint(8 + xOff, y + yOff, z, 0.5, 0.5, 0xffffffff, i);
+            lsPrint(8 + xOff, y + yOff, z, 0.5, 0.5, clickListColor[i][1], "     (" .. clickList[i][1] .. ", " .. clickList[i][2] .. ")");
             index = index + 1;
             if #clickList < stonecount then
-              lsPrint(11 + xOff2, y+yOff2, z, 0.5, 0.5, 0xffffffff, #clickList+1 .. ":");
-              lsPrint(11 + xOff2, y+yOff2, z, 0.5, 0.5, pixels, "      " .. nx .. ", " .. ny);
+              lsPrint(8 + xOff2, y+yOff2, z, 0.5, 0.5, 0xffffffff, #clickList+1 .. ":");
+              lsPrint(8 + xOff2, y+yOff2, z, 0.5, 0.5, pixels, "      " .. nx .. ", " .. ny);
             end
         end
 
         if #clickList == 0 then
-          lsPrint(11, y, z, 0.5, 0.5, 0xffffffff, "1:");
-          lsPrint(11, y, z, 0.5, 0.5, pixels, "      " .. nx .. ", " .. ny);
+          lsPrint(8, y, z, 0.5, 0.5, 0xffffffff, "1:");
+          lsPrint(8, y, z, 0.5, 0.5, pixels, "      " .. nx .. ", " .. ny);
         end
 
         if #clickList >= stonecount then
@@ -641,7 +641,7 @@ function promptDelays()
         dropdown_ore_cur_value = readSetting("dropdown_ore_cur_value",dropdown_ore_cur_value);
         dropdown_ore_cur_value = lsDropdown("thisOre", 15, y, 0, 320, dropdown_ore_cur_value, dropdown_ore_values);
         writeSetting("dropdown_ore_cur_value",dropdown_ore_cur_value);
-      y = y + 35;
+        y = y + 35;
         lsPrint(15, y, 0, 0.8, 0.8, 0xffffffff, "Node Click Delay (ms):");
         y = y + 22;
         clickDelay = readSetting("clickDelay",clickDelay);
