@@ -6,6 +6,7 @@ dofile("common.inc");
 
 button_names = {"Grass","Grass Small Icon","Slate","Slate Small Icon","Clay","Clay Small Icon"};
 counter = 0;
+postClickDelay = 500;
 
 function checkOK()
 	while 1 do
@@ -14,42 +15,14 @@ function checkOK()
 		OK = srFindImage("OK.png");
 			if OK then
 			sleepWithStatus(100, "A popup box has been detected!\n\nAre you out of water?\n\nRun to nearby water (leave this popup open).\n\nAs soon as water icon appears, jugs will be refilled and popup window closed.");
-			checkWater();
+			  if drawWater(1) then
+			    closePopUp();
+			  end
 			else
 			break;
 			end
 	end
 end
-
-
-function checkWater()
-	checkBreak();
-	srReadScreen();
-	local water = srFindImage("iconWaterJugSmall.png", 1);
-	local watersmall = srFindImage("iconWaterJugSmallIcon.png", 1);
-
-    if (water or watersmall) then
-	--Right click the ground to stop running, before gathering water. Or it interupts the gather water
-	srClickMouseNoMove(OK[0], OK[1]+35, 1);
-	lsSleep(100);
-
-		if water then
-	      safeClick(water[0]+3, water[1]-5);
-		else
-	      safeClick(watersmall[0]+3, watersmall[1]-5);
-		end
-
-
-      local max = waitForImage("crem-max.png", 500, "Waiting for Max button", nil, 3000);
-      if max then
-        safeClick(max[0]+5, max[1]+5);
-        sleepWithStatus(3500, "Waiting for water pickup animation...");
-	  closePopUp();
-      end
-
-   end 
-end
-
 
 
 function closePopUp()
@@ -70,7 +43,7 @@ function gatherGrass()
 		local grass = srFindImage("grass.png",1000);
 			if grass then
 			srClickMouseNoMove(grass[0]+5,grass[1],1);
-			sleepWithStatus(100, "Clicking Grass Icon\n\nGrass Collected: " .. tostring(counter));
+			sleepWithStatus(postClickDelay, "Clicking Grass Icon\n\nGrass Collected: " .. tostring(counter));
 			counter = counter + 1;
 			else
 			sleepWithStatus(100, "Searching for Grass Icon\n\nGrass Collected: " .. tostring(counter));
@@ -85,7 +58,7 @@ function gatherGrassSmall()
 		local grasssmall = srFindImage("grass_small.png", 1000);
 			if grasssmall then
 			srClickMouseNoMove(grasssmall[0]+5,grasssmall[1],1);
-			sleepWithStatus(100, "Clicking Small Grass Icon\n\nGrass Collected: " .. tostring(counter));
+			sleepWithStatus(postClickDelay, "Clicking Small Grass Icon\n\nGrass Collected: " .. tostring(counter));
 			counter = counter + 1;
 			else
 			sleepWithStatus(100, "Searching for Small Grass Icon\n\nGrass Collected: " .. tostring(counter));
@@ -100,7 +73,7 @@ function gatherSlate()
 		local slate = srFindImage("slate.png",1000);
 			if slate then
 			srClickMouseNoMove(slate[0]+5,slate[1],1);
-			sleepWithStatus(100, "Clicking Slate Icon\n\nSlate Collected: " .. tostring(counter));
+			sleepWithStatus(postClickDelay, "Clicking Slate Icon\n\nSlate Collected: " .. tostring(counter));
 			counter = counter + 1;
 			else
 			sleepWithStatus(100, "Searching for Slate Icon\n\nSlate Collected: " .. tostring(counter));
@@ -115,7 +88,7 @@ function gatherSlateSmall()
 		local slatesmall = srFindImage("slate_small.png", 10000);
 			if slatesmall then
 			srClickMouseNoMove(slatesmall[0]+5,slatesmall[1],1);
-			sleepWithStatus(100, "Clicking Small Slate Icon\n\nSlate Collected: " .. tostring(counter));
+			sleepWithStatus(postClickDelay, "Clicking Small Slate Icon\n\nSlate Collected: " .. tostring(counter));
 			counter = counter + 1;
 			else
 			sleepWithStatus(100, "Searching for Small Slate Icon\n\nSlate Collected: " .. tostring(counter));
@@ -131,7 +104,7 @@ function gatherClay()
 		local clay = srFindImage("clay.png");
 			if clay then
 			srClickMouseNoMove(clay[0]+5,clay[1],1);
-			sleepWithStatus(100, "Clicking Clay Icon\n\nClay Collected: " .. tostring(counter));
+			sleepWithStatus(postClickDelay, "Clicking Clay Icon\n\nClay Collected: " .. tostring(counter));
 			counter = counter + 1;
 			else
 			sleepWithStatus(100, "Searching for Clay Icon\n\nClay Collected: " .. tostring(counter));
@@ -147,7 +120,7 @@ function gatherClaySmall()
 		local claysmall = srFindImage("clay_small.png", 10000);
 			if claysmall then
 			srClickMouseNoMove(claysmall[0]+5,claysmall[1],1);
-			sleepWithStatus(100, "Clicking Small Clay Icon\n\nClay Collected: " .. tostring(counter));
+			sleepWithStatus(postClickDelay, "Clicking Small Clay Icon\n\nClay Collected: " .. tostring(counter));
 			counter = counter + 1;
 			else
 			sleepWithStatus(100, "Searching for Small Clay Icon\n\nClay Collected: " .. tostring(counter));
