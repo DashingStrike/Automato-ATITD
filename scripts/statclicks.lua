@@ -90,7 +90,6 @@ textLookup["Barrel Tap"] = "Whittle a Barrel Tap";
 -- textLookup["Survey (Uncover)"] = "Survey Area";
 textLookup["Gun Powder"] = "Gunpowder";
 textLookup["Pump Aqueduct"] = "Pump the Aqueduct";
-textLookup["Churn Butter"] = "Churn Butter";
 
 
 statNames = {"strength", "dexterity", "endurance", "constitution", "speed", "focus", "perception"};
@@ -376,6 +375,19 @@ local function excavateBlocks()
    return;
 end
 
+function churnButter()
+-- Since we want to click on Churn and window has same word multiple times, we will do a dirty hack and look for Pour in Cows Milk and click with a -10 Y offset to hit Churn on menu
+-- clickText(parse, safe, offsetX, offsetY)
+   local window = findText("This is [a-z]+ Butter Churn", nil, REGION+REGEX);
+   if window == nil then
+      return;
+   end
+   local t = findText("Pour in Cows Milk", window);
+   if t then
+      clickText(t, true, nil, -10);
+   end
+end
+
 function doTasks()
    didTask = false;
    for i=1, 7 do
@@ -428,6 +440,8 @@ function doTasks()
                tapRods();
             elseif curTask == "Stir Cement" then
                stirCement();
+            elseif curTask == "Churn Butter" then
+               churnButter();
             else
                clickText(findText(textLookup[curTask]));
             end
