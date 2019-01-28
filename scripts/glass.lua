@@ -311,7 +311,7 @@ function glassTick(window_pos, state)
 					  state.status = state.status .. " NothingToMake - Refreshing Window";
 					--srSetMousePos(thisIs[0], thisIs[1]);
 					  srClickMouseNoMove(thisIs[0], thisIs[1]);
-					  lsSleep(100);
+					  lsSleep(1000);
 					end
 				end
 			end
