@@ -19,6 +19,8 @@ recipes = {};
 filename = "paint_recipes.txt"
 exampleRecipes = "Barn Red : Clay 3 RedSand 9 Silver 4 - #example\nBeet : Cabbage 8 Clay 2 - #example\nBoysenberry : Cabbage 4 Clay 6 - #example\nBrown : Carrot 2 RedSand 8 - #example\nBurgundy Red : RedSand 8 Silver 2 - #example\nBurnt Umber : Clay 3 RedSand 7 - #example"
 
+take_paint = true; -- Useful to turn this option off when making Ribbons in Pigment Lab
+
 function doit()
     recipes = loadRecipes(filename);
     askForWindow("Open the paint window. Take any paint away so to start with 'Black'.");
@@ -47,10 +49,12 @@ function mixPaint(config)
                 sleepWithStatus(click_delay, "Making paint " .. i .. " of " .. config.paint_amount);
             end
         end
-        srReadScreen();
-        lsSleep(100);
-        clickAllText("Take the Paint");
-        lsSleep(100);
+        if take_paint then
+          srReadScreen();
+          lsSleep(100);
+          clickAllText("Take the Paint");
+          lsSleep(100);
+        end
     end
 end
 
@@ -74,19 +78,22 @@ function getUserParams()
             config.color_index = readSetting("color_name",config.color_index);
             config.color_index         = lsDropdown("color_name", X_PADDING, current_y, X_PADDING, lsScreenX - 50, config.color_index, COLOR_NAMES);
             writeSetting("color_name",config.color_index);
-            lsScrollAreaEnd(#COLOR_NAMES * 180);
+            lsScrollAreaEnd(#COLOR_NAMES * 25);
           lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
             config.color_name = COLOR_NAMES[config.color_index];
             current_y = 160;
-            config.paint_amount = drawNumberEditBox("paint_amount", "              Mix how much paint?", 100);
-            current_y = current_y - 15;
+            config.paint_amount = drawNumberEditBox("paint_amount", "                 Mix how much paint?", 10);
+            take_paint = readSetting("take_paint",take_paint);
+            take_paint = CheckBox(65, current_y-35, 0, 0xffffffff, " Take Paint after batch?", take_paint, 0.67, 0.67);
+            writeSetting("take_paint",take_paint);
+            current_y = current_y - 5;
             got_user_params = true;
             for k,v in pairs(config) do
                 got_user_params = got_user_params and v;
             end
             if config.paint_amount then
-                drawWrappedText("This will mix " .. config.paint_amount .. " debens of " ..
-                         config.color_name .. " paint, with a total cost of:", 0xD0D0D0ff, X_PADDING, current_y-10);
+                drawWrappedText("Mix " .. config.paint_amount .. " debens of " ..
+                         config.color_name .. " paint.\nTotal Cost:", 0xD0D0D0ff, X_PADDING, current_y-10);
                 current_y = current_y + 25;
                 for i=1, #recipes[config.color_index].ingredient do
                     drawWrappedText(math.ceil(recipes[config.color_index].amount[i] * config.paint_amount / 10) .. " " ..
@@ -113,19 +120,14 @@ function getUserParams()
 end
 
 function drawNumberEditBox(key, text, default)
-    return drawEditBox(key, text, default, true, 0.7, 0.7);
+    return drawEditBox(key, text, default, true);
 end
 
 function drawEditBox(key, text, default, validateNumber)
     drawTextUsingCurrent(text, WHITE);
     local width = validateNumber and 50 or 200;
-    local height = 30;
-          lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
-
-    local done, result = lsEditBox(key, X_PADDING, current_y, 0, width, height, 1.0, 1.0, BLACK, default);
-
-          lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-
+    local height = 22;
+    local done, result = lsEditBox(key, X_PADDING, current_y-22, 0, width, height, 1.0, 1.0, BLACK, default);
     if validateNumber then
         result = tonumber(result);
     elseif result == "" then
