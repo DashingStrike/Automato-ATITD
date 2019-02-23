@@ -69,22 +69,25 @@ function getUserParams()
         current_y = 10;
         
         if not got_user_params then
-            lsScrollAreaBegin("scroll_area", X_PADDING, current_y, X_PADDING, lsScreenX - X_PADDING, 70);
+          lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
+            lsScrollAreaBegin("scroll_area", X_PADDING, current_y, X_PADDING, lsScreenX - X_PADDING+115, 180);
             config.color_index = readSetting("color_name",config.color_index);
             config.color_index         = lsDropdown("color_name", X_PADDING, current_y, X_PADDING, lsScreenX - 50, config.color_index, COLOR_NAMES);
             writeSetting("color_name",config.color_index);
-            lsScrollAreaEnd(#COLOR_NAMES * 25);
+            lsScrollAreaEnd(#COLOR_NAMES * 180);
+          lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
             config.color_name = COLOR_NAMES[config.color_index];
-            current_y = 80;
-            config.paint_amount      = drawNumberEditBox("paint_amount", "Mix how much paint?", 10);
+            current_y = 160;
+            config.paint_amount = drawNumberEditBox("paint_amount", "              Mix how much paint?", 100);
+            current_y = current_y - 15;
             got_user_params = true;
             for k,v in pairs(config) do
                 got_user_params = got_user_params and v;
             end
             if config.paint_amount then
                 drawWrappedText("This will mix " .. config.paint_amount .. " debens of " ..
-                         config.color_name .. " paint, with a total cost of:", 0xD0D0D0ff, X_PADDING, current_y+10);
-                current_y = current_y + 40;
+                         config.color_name .. " paint, with a total cost of:", 0xD0D0D0ff, X_PADDING, current_y-10);
+                current_y = current_y + 25;
                 for i=1, #recipes[config.color_index].ingredient do
                     drawWrappedText(math.ceil(recipes[config.color_index].amount[i] * config.paint_amount / 10) .. " " ..
                              recipes[config.color_index].ingredient[i], 0xD0D0D0ff, X_PADDING, current_y);
@@ -110,14 +113,19 @@ function getUserParams()
 end
 
 function drawNumberEditBox(key, text, default)
-    return drawEditBox(key, text, default, true);
+    return drawEditBox(key, text, default, true, 0.7, 0.7);
 end
 
 function drawEditBox(key, text, default, validateNumber)
     drawTextUsingCurrent(text, WHITE);
     local width = validateNumber and 50 or 200;
     local height = 30;
+          lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
+
     local done, result = lsEditBox(key, X_PADDING, current_y, 0, width, height, 1.0, 1.0, BLACK, default);
+
+          lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+
     if validateNumber then
         result = tonumber(result);
     elseif result == "" then
@@ -145,6 +153,7 @@ function drawWrappedText(text, colour, x, y)
 end
 
 function drawBottomButton(xOffset, text)
+    checkBreak();
     return lsButtonText(lsScreenX - xOffset, lsScreenY - 30, z, 100, WHITE, text);
 end
 
