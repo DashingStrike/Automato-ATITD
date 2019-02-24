@@ -30,6 +30,7 @@ checkBreak();
       statusScreen("Trying type " .. types[i]);
       srReadScreen();
       clickAllText(types[i] .. "'s Compound");
+      sleepWithStatus(2750, "Waiting out requirement mutation...");  -- This line added per SomeBob's recommendation on February 23, 2019
       local anchor = waitForText("Required:");
       if anchor then
 	local tags = {types[i]};
