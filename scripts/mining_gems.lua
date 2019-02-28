@@ -420,7 +420,7 @@ end
 function TakeGemWindowRefresh()
  ---- New Feature, Refresh Gem Take menu
  -- First check to see if All Gems (From mine's Take menu) is pinned up, if so refresh it.
- findAllGems = findText("All Gems");
+  findAllGems = findText("All Gems");
 	if findAllGems then 
 		if not autoWorkMine then
 	         sleepWithStatus(1000, "Refreshing pinned Gem menu ..."); -- Let pinned window catchup. If autowork mine, there is already a 1000 delay on workMine()
@@ -428,7 +428,7 @@ function TakeGemWindowRefresh()
 	 safeClick(findAllGems[0],findAllGems[1]);
 	end
 --Now check to see if there is a Huge Gem and give a special alert.
-	 lsSleep(150);
+	 lsSleep(500);
  findHugeGems = findText("Huge");
  if findHugeGems then
   lsPlaySound("applause.wav");
@@ -618,7 +618,7 @@ function clickSequence()
 	if autoWorkMine then
 	  workMine();
 	elseif workMineButtonLocSet then
-        srSetMousePos(workMineButtonLoc[0], workMineButtonLoc[1]); 
+          srSetMousePos(workMineButtonLoc[0], workMineButtonLoc[1]); 
 	end
 
   TakeGemWindowRefresh();
