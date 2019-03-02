@@ -1005,7 +1005,7 @@ function clickWaypointPixel(x, y, typeOfWaypoint)
             safeClick(x,y);
             lsSleep(150);
             srReadScreen();
-            local pos = findText("This is");
+            local pos = findText("Bonfire");
             if(not pos) then
                 lsPrintln("Looking for " .. WaypointTypes[typeOfWaypoint] .. " but clicking didn't bring up a menu.");
                 return false;
@@ -1020,7 +1020,7 @@ function clickWaypointPixel(x, y, typeOfWaypoint)
     local rgbTol = 450;
     local hueTol = 450;
     local roughness = 20;
-    if (typeOfWaypoint == Ranyahn) or (typeOfWaypoint == Hawthorn) then
+    if (typeOfWaypoint == Ranyahn) or (typeOfWaypoint == Hawthorn) or (typeOfWaypoint == MiniatureFernPalm) then
         roughness = 100;
     end
     local foundSomething = false;
