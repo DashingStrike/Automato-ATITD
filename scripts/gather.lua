@@ -952,7 +952,7 @@ function clickWaypoint(typeOfWaypoint)
     local mid = {};
     mid[0] = xyWindowSize[0] / 2;
     mid[1] = xyWindowSize[1] / 2;
-    srSetMousePos(mid[0],mid[1]);
+    --srSetMousePos(mid[0],mid[1]);
     local dx;
     local dy;
     local delta;
@@ -1001,7 +1001,7 @@ function clickWaypointPixel(x, y, typeOfWaypoint)
             local mid = {};
             mid[0] = xyWindowSize[0] / 2;
             mid[1] = xyWindowSize[1] / 2;
-            srSetMousePos(mid[0],mid[1]);
+            --srSetMousePos(mid[0],mid[1]);
             safeClick(x,y);
             lsSleep(150);
             srReadScreen();
@@ -1031,7 +1031,7 @@ function clickWaypointPixel(x, y, typeOfWaypoint)
             local mid = {};
             mid[0] = xyWindowSize[0] / 2;
             mid[1] = xyWindowSize[1] / 2;
-            srSetMousePos(mid[0],mid[1]);
+            --srSetMousePos(mid[0],mid[1]);
             safeClick(x,y);
             lsSleep(150);
             srReadScreen();
@@ -1365,7 +1365,7 @@ function clickColor(color)
     local mid = {};
     mid[0] = xyWindowSize[0] / 2;
     mid[1] = xyWindowSize[1] / 2;
-    srSetMousePos(mid[0],mid[1]);
+    --srSetMousePos(mid[0],mid[1]);
     local dx;
     local dy;
     local delta;
@@ -1540,7 +1540,7 @@ function prepareForWalking()
     local mid = {};
     mid[0] = xyWindowSize[0] / 2;
     mid[1] = xyWindowSize[1] / 2;
-    srSetMousePos(mid[0],mid[1]);
+    --srSetMousePos(mid[0],mid[1]);
     lsSleep(150);
     setCameraView(CARTOGRAPHER2CAM);
 end
