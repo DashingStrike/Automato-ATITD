@@ -191,11 +191,11 @@ function config()
         y = y + 35;
 
         lsPrintWrapped(10, y, 0, lsScreenX - 20, 0.65, 0.65, 0xFFFFFFff,
-            "If macro detects quality = or > " .. min_quality .. " then it will abort early and stop at this quality.\n\nIf Auto Unload is checked, then it will also Unload the item.\n\nIf unchecked, then you will manually need to Hold Shift to unload. This will allow you to try to manually attempt to adjust the project furthur.");
+            "If macro detects quality = or > " .. min_quality .. " then it will abort early and stop at this quality.\n\nIf Auto Unload is checked, then it will also Unload the item.\n\nIf unchecked, then you will need to Hold Shift (or [U]nload hotkey) to Unload -- If you\'re trying to manually increase quality.");
 
         y = y + 140;
-        lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Min Quality:");
-        is_done, min_quality = lsEditBox("min_quality", 125, y-3, 0, 70, 30, 1.0, 1.0,
+        lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Min Quality:");
+        is_done, min_quality = lsEditBox("min_quality", 100, y-3, 0, 70, 30, 1.0, 1.0,
                                      0x000000ff, min_quality);
         min_quality = tonumber(min_quality);
         if not min_quality then
