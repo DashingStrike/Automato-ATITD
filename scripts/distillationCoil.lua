@@ -193,16 +193,20 @@ function config()
         lsPrintWrapped(10, y, 0, lsScreenX - 20, 0.65, 0.65, 0xFFFFFFff,
             "If macro detects quality = or > " .. min_quality .. " then it will abort early and stop at this quality.\n\nIf Auto Unload is checked, then it will also Unload the item.\n\nIf unchecked, then you will manually need to Hold Shift to unload. This will allow you to try to manually attempt to adjust the project furthur.");
 
-        y = y + 175;
+        y = y + 140;
         lsPrint(10, y, 0, 0.8, 0.8, 0xffffffff, "Min Quality:");
         is_done, min_quality = lsEditBox("min_quality", 125, y-3, 0, 70, 30, 1.0, 1.0,
                                      0x000000ff, min_quality);
         min_quality = tonumber(min_quality);
         if not min_quality then
           is_done = false;
-          lsPrint(10, y+32, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+          lsPrint(10, y+25, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
           min_quality = 3500;
         end
+        y = y + 40;
+        lsPrint(10, y, 0, 0.67, 0.67, 0xffff80ff, "Glory Hole position Locked: " .. mouse_x ..", " .. mouse_y);
+        y = y + 30;
+        lsPrintWrapped(10, y, 0, lsScreenX - 20, 0.65, 0.65, 0xffff80ff, "This is where mouse was pointing when you pressed Shift, on PREVIOUS screen. If you did not hover Glory Hole, when you pressed Shift, then End Script, try again!");
 
         if lsButtonText(10, lsScreenY - 30, 0, 100, 0xFFFFFFff,
             "Start") then
