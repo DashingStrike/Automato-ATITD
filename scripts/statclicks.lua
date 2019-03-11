@@ -37,7 +37,7 @@ items = {
 "Weave Canvas",
 "Weave Linen",
 "Weave Silk",
-"Weave Wool Cloth,"
+"Weave Wool Cloth",
 },
 
 --con
@@ -135,12 +135,16 @@ end
 function weave(clothType)
    if clothType == "Canvas" then
       srcType = "Twine";
+      srcQty = "60";
    elseif clothType == "Linen" then
       srcType = "Thread";
+      srcQty = "400";
    elseif clothType == "Wool" then
       srcType = "Yarn";
+      srcQty = "60";
    elseif clothType == "Silk" then
       srcType = "Raw Silk";
+      srcQty = "50";
    end
 
 --   lsPrintln("Weaving " .. srcType);
@@ -165,7 +169,8 @@ function weave(clothType)
       if studReg then
          lsSleep(500);
          srReadScreen();
-         closeEmptyAndErrorWindows();
+         --closeEmptyAndErrorWindows();
+         closePopUp();
       end
       -- reload the loom
       loadText = findText("Load the Loom with " .. srcType, loomReg);
@@ -173,9 +178,10 @@ function weave(clothType)
          clickText(loadText);
          local t = waitForText("Load how much", 2000);
          if t ~= nil then
-            srCharEvent("MAX\n");
+            srCharEvent(srcQty .. "\n");
          end
-         closeEmptyAndErrorWindows(); --This should just be a func to close the error region, but lazy.
+         --closeEmptyAndErrorWindows(); --This should just be a func to close the error region, but lazy.
+         closePopUp();
       end
    end
 
@@ -189,7 +195,8 @@ function weave(clothType)
          clickText(t);
          lsSleep(per_tick);
          srReadScreen();
-         closeEmptyAndErrorWindows(); --This should just be a func to close the error region, but lazy.
+         --closeEmptyAndErrorWindows(); --This should just be a func to close the error region, but lazy.
+         closePopUp();
          lsSleep(per_tick);
       end
    end
@@ -455,7 +462,8 @@ function doTasks()
       lsDoFrame();
    else
       srReadScreen();
-      closeEmptyAndErrorWindows();
+      --closeEmptyAndErrorWindows();
+      closePopUp();
       lsSleep(per_tick);
    end
 end
@@ -550,6 +558,21 @@ function checkAndEat()
          foodTimer = lsGetTimer();
       end
    end
+end
+
+function closePopUp()
+lsSleep(100);
+while 1 do
+  checkBreak();
+  srReadScreen()
+  local ok = srFindImage("OK.png")
+  if ok then
+    srClickMouseNoMove(ok[0]+5,ok[1],1);
+    lsSleep(100);
+  else
+    break;
+  end
+end
 end
 
 function doit()
