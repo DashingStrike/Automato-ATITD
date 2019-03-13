@@ -9,10 +9,11 @@
 --
 
 dofile("common.inc");
+dofile("settings.inc");
 
 per_click_delay = 0;
 
-local expected_gardens = 33;
+local expected_gardens = 1;
 local last_sun = 99;
 
 instructions = {
@@ -192,60 +193,73 @@ function test()
 	error 'done';
 end
 
-function refillWater()
-	lsSleep(100);
-	srReadScreen();
-	FindWater = srFindImage("iconWaterJugSmall.png");
+function config()
+  local is_done = false;
+  local count = 1;
+  while not is_done do
+    checkBreak();
+    local y = 10;
+    lsPrint(12, y, 0, 0.7, 0.7, 0xffffffff,
+            "Garden Options:");
+    y = y + 35;
+    lsPrint(15, y+5, 0, 0.8, 0.8, 0xffffffff, "How many passes?");
 
-	if FindWater then
-	statusScreen("Refilling water...");
-	srClickMouseNoMove(FindWater[0]+3,FindWater[1]-5, right_click);
-	lsSleep(500);
+    is_done, num_loops = lsEditBox("num_loops", 175, y+5, 0, 50, 0, 0.9, 0.9,
+                                     0x000000ff, 1);
+    num_loops = tonumber(num_loops);
+      if not num_loops then
+        is_done = false;
+        lsPrint(15, y+22, 10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+        num_loops = 1;
+      end
 
+    y = y + 45;
+    if waterAllTicks then
+      textColor = 0xffff80ff;
+    else
+      textColor = 0xffffffff;
+    end
 
-		srReadScreen();
-		FindMaxButton = srFindImage("Maxbutton.png");
+    waterAllTicks = readSetting("waterAllTicks",waterAllTicks);
+    waterAllTicks = CheckBox(15, y, z, textColor, " Refill Jugs after EVERY tick?", waterAllTicks, 0.75, 0.75);
+    writeSetting("waterAllTicks",waterAllTicks);
 
-		if FindMaxButton then
-		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
-		lsSleep(500);
-		end
+    y = y + 32;
+    lsPrintWrapped(10, y, 1, lsScreenX, 0.7, 0.7, 0xFFFFFFff, "Note: Macro will always refill jugs before and after each pass.\n\nThe above checkbox isn\'t recommened but is available in case you're low on jugs or doing large batch quantities that consume lots of water.");
 
-	end
+    if lsButtonText(lsScreenX - 110, lsScreenY - 80, 0, 100, 0xFFFFFFff, "Start") then
+        is_done = 1;
+        start = 1;
+    end
+
+    if lsButtonText(lsScreenX - 110, lsScreenY - 30, 0, 100, 0xFFFFFFff,
+                    "End script") then
+      error "Clicked End script button";
+    end
+
+   if lsButtonText(10, lsScreenY - 30, 0, 140, 0x80D080ff, "Window Manager") then
+    windowManager("Thistle Garden Setup", nil, true, true, nil, nil, nil, nil, nil, nil, true);
+   end
+
+   lsDoFrame();
+   lsSleep(10);
+  end
 end
-
-function refillWaterBarrel()
-	lsSleep(100);
-	srReadScreen();
-	FindWater = findText("Draw Water");
-
-	if FindWater then
-	statusScreen("Refilling water...");
-	srClickMouseNoMove(FindWater[0]+30,FindWater[1]+5, right_click);
-	lsSleep(500);
-
-
-		srReadScreen();
-		FindMaxButton = srFindImage("Maxbutton.png", 5000);
-
-		if FindMaxButton then
-		srClickMouseNoMove(FindMaxButton[0]+3,FindMaxButton[1]+3, right_click);
-		lsSleep(500);
-		end
-	end
-end
-
 
 function doit()
-	num_loops = promptNumber("How many passes ?", 1);
-	askForWindow("Pin any number of thistle gardens, edit thistle_custom with recipe. Macro will always look for water icon to refill jugs. You can optionally pin the Water Barrel menu to refill jugs.");
-	
+	askForWindow("Pin any number of thistle gardens, edit thistle_custom with recipe.\n\nWindows must be pinned in grid (use Windows Manager).\n\nMacro will attempt to refill jugs by water icon, pinned Aqueduct or Rain Barrel.");
+	config();
+	main();
+end
+
+
+function main()
+
 	if not ( #instructions == 41*5) then
 		error 'Invalid instruction length';
 	end
 
-	refillWater();
-	refillWaterBarrel();
+	drawWater(1); -- in /common/common_click.inc. 1 = skipTimer (no 3s delay). Also checks aqueduct and barrel
 
 	
 	-- test();
@@ -291,6 +305,9 @@ function doit()
 			if finish_up then
 				num_loops = loops;
 			end			
+                        if waterAllTicks then
+                          drawWater(1);
+                        end
 			lsSleep(1000); -- Wait a moment after image changes before doing the next tick
 		end
 
@@ -300,8 +317,7 @@ function doit()
 		clickAll("Harvest.png", nil);
 		lsSleep(500);
 		
-		refillWater();
-		refillWaterBarrel();
+		drawWater(1);
 
 		
 		if finish_up then
