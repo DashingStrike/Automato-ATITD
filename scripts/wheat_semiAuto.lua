@@ -163,11 +163,11 @@ function promptFlaxNumbers()
     -- lsEditBox returns two different things (a state and a value)
     local y = 40;
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Wheat Name:");
-    is_done, seedType = lsEditBox("flaxname", 120, y, z, 100, 30, scale, scale,
+    is_done, seedType = lsEditBox("flaxname", 120, y, z, 100, 0, scale, scale,
                                    0x000000ff, seedType);
     y = y + 32
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Jugs:");
-    is_done, jugs = lsEditBox("passes", 120, y, z, 50, 30, scale, scale,
+    is_done, jugs = lsEditBox("passes", 120, y, z, 50, 0, scale, scale,
                                    0x000000ff, jugs);
     if not tonumber(jugs) then
       is_done = nil;
@@ -176,7 +176,7 @@ function promptFlaxNumbers()
     end
     y = y + 32
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Grid size:");
-    is_done, grid_w = lsEditBox("grid", 120, y, z, 50, 30, scale, scale,
+    is_done, grid_w = lsEditBox("grid", 120, y, z, 50, 0, scale, scale,
                                 0x000000ff, grid_w);
     if not tonumber(grid_w) then
       is_done = nil;

@@ -66,10 +66,9 @@ function setOptions()
         checkBreak();
         local y = 10;
 
-        lsSetCamera(0,0,lsScreenX*1.3,lsScreenY*1.3);  -- Shrink the text boxes and text down
-        lsPrint(5, y, 0, 0.8, 0.8, 0xffffffff, "Casts per Lure?");
+        lsPrint(5, y, 0, 0.7, 0.7, 0xffffffff, "Casts per Lure?");
         TotalCasts = readSetting("TotalCasts",TotalCasts);
-        is_done, TotalCasts = lsEditBox("totalcasts", 140, y, 0, 40, 25, 1.0, 1.0, 0x000000ff, TotalCasts);
+        is_done, TotalCasts = lsEditBox("totalcasts", 120, y, 0, 40, 0, 0.8, 0.8, 0x000000ff, TotalCasts);
         TotalCasts = tonumber(TotalCasts);
         if not TotalCasts then
             is_done = false;
@@ -77,7 +76,6 @@ function setOptions()
             TotalCasts = 5;
         end
         writeSetting("TotalCasts",TotalCasts);
-        lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
         y = y + 25;
         lsPrint(5, y, 0, 0.6, 0.6, 0xffffffff, "Casts per Lure?  # Casts before switching lures.");
         y = y + 25;
@@ -91,51 +89,44 @@ function setOptions()
         y = y + 16;
         lsPrint(5, y, 0, 0.6, 0.6, 0xc0c0ffff, "Main chat MUST be wide enough so no lines wrap!");
 
-        lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);  -- Shrink the check boxes and text down
-        y = y + 80;
-
-        AutoFillet = readSetting("AutoFillet",AutoFillet);
-        AutoFillet = lsCheckBox(10, y, 10, 0xFFFFFFff, " Automatically Fillet Fish", AutoFillet);
-        writeSetting("AutoFillet",AutoFillet);
         y = y + 25;
+        AutoFillet = readSetting("AutoFillet",AutoFillet);
+        AutoFillet = CheckBox(10, y, 10, 0xFFFFFFff, " Automatically Fillet Fish", AutoFillet, 0.7, 0.7);
+        writeSetting("AutoFillet",AutoFillet);
+        y = y + 20;
 
         muteSoundEffects = readSetting("muteSoundEffects",muteSoundEffects);
-        muteSoundEffects = lsCheckBox(10, y, 10, 0xFFFFFFff, " Mute Sound Effects", muteSoundEffects);
+        muteSoundEffects = CheckBox(10, y, 10, 0xFFFFFFff, " Mute Sound Effects", muteSoundEffects, 0.7, 0.7);
         writeSetting("muteSoundEffects",muteSoundEffects);
 
-        y = y + 25;
+        y = y + 20;
         SkipCommon = readSetting("SkipCommon",SkipCommon);
-        SkipCommon = lsCheckBox(10, y, 10, 0xFFFFFFff, " Skip Common Fish", SkipCommon);
+        SkipCommon = CheckBox(10, y, 10, 0xFFFFFFff, " Skip Common Fish", SkipCommon, 0.7, 0.7);
         writeSetting("SkipCommon",SkipCommon);
-        y = y + 30;
-        lsPrintWrapped(10, y, 0, lsScreenX + 82, 0.7, 0.7, 0xffff80ff, "If Common Fish Caught, immediately switch to next lure:");
+        y = y + 20;
+        lsPrintWrapped(10, y, 0, lsScreenX, 0.6, 0.6, 0xffff80ff, "If Common Fish caught, then switch to next lure:");
         y = y + 18
-        lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.7, 0.7, 0xffffffff, "(Abdju, Chromis, Catfish, Carp, Perch, Phagrus, Tilapia)");
-        y = y + 40;
-        lsPrintWrapped(10, y, 0, lsScreenX + 80, 0.8, 0.8, 0x80ff80ff, "Log entries recorded to FishLog.txt in Automato/games/ATITD folder.");
-        y = y + 45;
+        lsPrintWrapped(10, y, 0, lsScreenX, 0.6, 0.6, 0xffffffff, "(Abdju, Chromis, Catfish, Carp, Perch, Phagrus, Tilapia)");
+        y = y + 20;
+        lsPrintWrapped(10, y, 0, lsScreenX, 0.6, 0.6, 0x80ff80ff, "Log entries are recorded to FishLog.txt in Automato/games/ATITD folder.");
+        y = y + 35;
         LogFails = readSetting("LogFails",LogFails);
-        LogFails = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Failed Catches (Log Everything)", LogFails);
+        LogFails = CheckBox(10, y, 10, 0xFFFFFFff, " Log Failed Catches (Log Everything)", LogFails, 0.7, 0.7);
         writeSetting("LogFails",LogFails);
 
         if LogFails then
             LogStrangeUnusual = false;
             LogOdd = false;
         else
-            y = y + 25;
+            y = y + 20;
             LogStrangeUnusual = readSetting("LogStrangeUnusual",LogStrangeUnusual);
-            LogStrangeUnusual = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Strange & Unusual Fish Seen ...", LogStrangeUnusual);
+            LogStrangeUnusual = CheckBox(10, y, 10, 0xFFFFFFff, " Log Strange & Unusual Fish Seen ...", LogStrangeUnusual, 0.7, 0.7);
             writeSetting("LogStrangeUnusual",LogStrangeUnusual);
-            y = y + 25;
+            y = y + 20;
             LogOdd = readSetting("LogOdd",LogOdd);
-            LogOdd = lsCheckBox(10, y, 10, 0xFFFFFFff, " Log Odd Fish Seen ...", LogOdd);
+            LogOdd = CheckBox(10, y, 10, 0xFFFFFFff, " Log Odd Fish Seen ...", LogOdd, 0.7, 0.7);
             writeSetting("LogOdd",LogOdd);
-            lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
-
-            y = y + 25;
-            lsPrintWrapped(10, y, 0, lsScreenX + 82, 0.7, 0.7, 0xffff80ff, "If Common Fish Caught, immediately switch to next lure:");
         end
-        lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);  -- Restore text boxes and text back to normal
 
         if setResume then
             buttonName = "Set/Resume";

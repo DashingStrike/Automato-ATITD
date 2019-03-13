@@ -135,7 +135,7 @@ function tendWheat()
 	if water_count >= 40 then
 	refillWater();
 	end
-    sleepWithStatus(3000, "----------------------------------------------\nIf you want to plant more wheat Press Alt+Shift to Pause\n\nOR Use Win Manager button to Pause + Arrange Grids\n----------------------------------------------\nWaterings SINCE Jugs Refill: " .. water_count .. "\nWaterings UNTIL Jugs Refill: " .. refill_jugs .. "\n----------------------------------------------\nTotal Waterings: " .. total_waterings .. "\nTotal Harvests: " .. total_harvests);
+    sleepWithStatus(3000, "----------------------------------------------\nIf you want to plant more wheat Press Alt+Shift to Pause\n\nOR Use Win Manager button to Pause + Arrange Grids\n----------------------------------------------\nWaterings SINCE Jugs Refill: " .. water_count .. "\nWaterings UNTIL Jugs Refill: " .. refill_jugs .. "\n----------------------------------------------\nTotal Waterings: " .. total_waterings .. "\nTotal Harvests: " .. total_harvests, nil, 0.7, 0.7);
 
   end
   return quit_message;

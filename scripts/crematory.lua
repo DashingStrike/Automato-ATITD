@@ -499,7 +499,7 @@ end
 -------------------------------------------------------------------------------
 
 function promptLoad()
-  scale = 0.8;
+  scale = 0.85;
   local z = 0;
   local is_done = nil;
   while not is_done do
@@ -509,7 +509,7 @@ function promptLoad()
 
     passCount = readSetting("passCount",passCount);
     lsPrint(15, y, z, scale, scale, 0xffffffff, "Passes:");
-    is_done, passCount = lsEditBox("passes", 90, y, z, 50, 25, scale, scale,
+    is_done, passCount = lsEditBox("passes", 80, y, z, 50, 0, scale, scale,
                                    0x000000ff, passCount);
     if not tonumber(passCount) then
       is_done = false;
@@ -566,7 +566,7 @@ function promptLoad()
 
     loadDelay = readSetting("loadDelay",loadDelay);
     lsPrint(15, y, z, scale, scale, 0xffffffff, "Load Delay (ms):");
-    is_done, loadDelay = lsEditBox("loadDelay", 150, y, z, 60, 25, scale, scale,
+    is_done, loadDelay = lsEditBox("loadDelay", 150, y, z, 60, 0, scale, scale,
                                    0x000000ff, loadDelay);
     if not tonumber(loadDelay) then
       is_done = false;

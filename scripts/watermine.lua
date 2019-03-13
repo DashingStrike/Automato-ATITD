@@ -87,7 +87,7 @@ end
 
 
 function promptOptions()
-	scale = 1.0;
+	scale = 0.8;
 	
 	local z = 0;
 	local is_done = nil;
@@ -102,16 +102,16 @@ function promptOptions()
 		-- lsEditBox needs a key to uniquely name this edit box
 		--   let's just use the prompt!
 		-- lsEditBox returns two different things (a state and a value)
-		local y = 40;
+		local y = 60;
 
 
-		do_initial_wind = lsCheckBox(10, y, z+10, 0xFFFFFFff, " Do Initial Wind", do_initial_wind);
+		do_initial_wind = CheckBox(10, y, z+10, 0xFFFFFFff, " Do Initial Wind", do_initial_wind, scale);
 		y = y + 32;
-		do_wind = lsCheckBox(10, y, z+10, 0xFFFFFFff, " Do Any Windings", do_wind);
+		do_wind = CheckBox(10, y, z+10, 0xFFFFFFff, " Do Any Windings", do_wind, scale);
 		y = y + 32;
 
 
-		if lsButtonText(170, y, z, 100, 0xFFFFFFff, "OK") then
+		if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Start") then
 			is_done = 1;
 		end
 

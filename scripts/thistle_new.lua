@@ -375,7 +375,7 @@ function config()
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
     y = y + 30;
     lsPrint(15, y+5, 0, 0.8, 0.8, 0xffffffff, "How many passes?");
-    is_done, num_loops = lsEditBox("num_loops", 190, y, 0, 50, 30, 1.0, 1.0,
+    is_done, num_loops = lsEditBox("num_loops", 175, y+5, 0, 50, 0, 0.9, 0.9,
                                      0x000000ff, 1);
      num_loops = tonumber(num_loops);
        if not num_loops then
@@ -386,7 +386,7 @@ function config()
     y = y + 35;
     lsPrint(15, y+5, 0, 0.8, 0.8, 0xffffffff, "How many gardens?");
     expected_gardens = readSetting("expected_gardens",expected_gardens);
-    is_done, expected_gardens = lsEditBox("expected_gardens", 190, y, 0, 50, 30, 1.0, 1.0,
+    is_done, expected_gardens = lsEditBox("expected_gardens", 175, y+5, 0, 50, 0, 0.9, 0.9,
                                      0x000000ff, expected_gardens);
      expected_gardens = tonumber(expected_gardens);
        if not expected_gardens then
@@ -452,7 +452,7 @@ function thistleConfig()
 	end
 
 	if string.len(farmName) > 0 then
-	  if lsButtonText(140, y+65, 0, 100, 0xffffffff, "Create/Save") then
+	  if lsButtonText(140, y+65, 0, 120, 0xffffffff, "Create/Save") then
 	    addSilkFarm(farmName);
 	    add = nil;
 	  end
@@ -462,7 +462,7 @@ function thistleConfig()
 
   if add then
 	lsPrint(10, y+10, 0, 0.8, 0.8, 0xffffffff, "Silk Farm Name:");
-	is_done, farmName = lsEditBox("farmName", 10, y+30, 0, 230, 25, 0.8, 0.8, 0x000000ff);
+	is_done, farmName = lsEditBox("farmName", 10, y+30, 0, 230, 0, 0.9, 0.9, 0x000000ff);
   end
 
   lsPrintWrapped(10, y+200, z, lsScreenX - 20, 0.65, 0.65, 0xffff40ff, message); 

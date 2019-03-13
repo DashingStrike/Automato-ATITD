@@ -111,17 +111,18 @@ function doit()
 end
 
 function promptVineyard(status, action)
+  local scale = 0.7;
   while not lsControlHeld() do
     local edit = lsButtonText(10, lsScreenY - 30, 0, 120, 0xffffffff,
 			      "Edit Tends");
 
-    lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
+    --lsSetCamera(0,0,lsScreenX*1.2,lsScreenY*1.2);
 
-local checkStart = 100
-    alsoTend = lsCheckBox(10, lsScreenY - checkStart, 10, 0xffffffff, " Always Tend", alsoTend);
-    alsoCutting = lsCheckBox(10, lsScreenY - checkStart + 20, 10, 0xffffffff, " Take Cuttings", alsoCutting);
-    alsoHarvest = lsCheckBox(10, lsScreenY - checkStart + 40, 10, 0xffffffff, " Auto Harvest", alsoHarvest);
-    replant = lsCheckBox(10, lsScreenY - checkStart + 60, 10, 0xffffffff, " Auto Replant", replant);
+local checkStart = 150
+    alsoTend = CheckBox(10, lsScreenY - checkStart, 10, 0xffffffff, " Always Tend", alsoTend, scale, scale);
+    alsoCutting = CheckBox(10, lsScreenY - checkStart + 20, 10, 0xffffffff, " Take Cuttings", alsoCutting, scale, scale);
+    alsoHarvest = CheckBox(10, lsScreenY - checkStart + 40, 10, 0xffffffff, " Auto Harvest", alsoHarvest, scale, scale);
+    replant = CheckBox(10, lsScreenY - checkStart + 60, 10, 0xffffffff, " Auto Replant", replant, scale, scale);
 
 if replant then
   local tends = {};
@@ -138,10 +139,10 @@ if replant then
   end
 end    
     
-    lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
+   -- lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 --    action = lsDropdown("VineyardAction", 125, lsScreenY - 120, 0, 100, action, vineyardActions);
     lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
-    lsPrint(10, lsScreenY - 75, 0, 0.7, 0.7, 0xd0d0d0ff,
+    lsPrint(10, lsScreenY - 65, 0, 0.7, 0.7, 0xd0d0d0ff,
 	    "Tap Ctrl key over a vineyard");
     statusScreen(status);
     if edit then

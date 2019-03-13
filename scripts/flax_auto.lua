@@ -209,7 +209,7 @@ end
 -------------------------------------------------------------------------------
 
 function promptFlaxNumbers()
-  scale = 1.1;
+  scale = 0.75;
     
   local z = 0;
   local is_done = nil;
@@ -221,11 +221,9 @@ function promptFlaxNumbers()
 
     local y = 5;
 
-    lsSetCamera(0,0,lsScreenX*scale,lsScreenY*scale);
-
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
     num_loops = readSetting("num_loops",num_loops);
-    is_done, num_loops = lsEditBox("passes", 110, y, z, 50, 30, scale, scale,
+    is_done, num_loops = lsEditBox("passes", 110, y, z, 50, 0, scale, scale,
                                    0x000000ff, num_loops);
     if not tonumber(num_loops) then
       is_done = nil;
@@ -233,11 +231,11 @@ function promptFlaxNumbers()
       num_loops = 1;
     end
     writeSetting("num_loops",num_loops);
-    y = y + 32;
+    y = y + 28;
 
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Grid size:");
     grid_w = readSetting("grid_w",grid_w);
-    is_done, grid_w = lsEditBox("grid", 110, y, z, 50, 30, scale, scale,
+    is_done, grid_w = lsEditBox("grid", 110, y, z, 50, 0, scale, scale,
                                 0x000000ff, grid_w);
     if not tonumber(grid_w) then
       is_done = nil;
@@ -248,17 +246,22 @@ function promptFlaxNumbers()
     grid_w = tonumber(grid_w);
     grid_h = grid_w;
     writeSetting("grid_w",grid_w);
-    y = y + 32;
+    y = y + 28;
+
 	
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Plant to the:");
+    lsSetCamera(0,0,lsScreenX*1.4,lsScreenY*1.4);
+
 	grid_direction = readSetting("grid_direction",grid_direction);
-	grid_direction = lsDropdown("grid_direction", 145, y, 0, 145, grid_direction, grid_directions);
+	grid_direction = lsDropdown("grid_direction", 140, y+28, 0, 145, grid_direction, grid_directions);
 	writeSetting("grid_direction",grid_direction);
-    y = y + 32;
+    lsSetCamera(0,0,lsScreenX,lsScreenY);
+
+    y = y + 40;
 
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Seed harvests per bed:");
     seeds_per_pass = readSetting("seeds_per_pass",seeds_per_pass);
-    is_done, seeds_per_pass = lsEditBox("seedsper", 250, y, z, 50, 30,
+    is_done, seeds_per_pass = lsEditBox("seedsper", 185, y, z, 50, 0,
                                           scale, scale, 0x000000ff, seeds_per_pass);
     seeds_per_pass = tonumber(seeds_per_pass);
     if not seeds_per_pass then
@@ -267,11 +270,11 @@ function promptFlaxNumbers()
       seeds_per_pass = 1;
     end
     writeSetting("seeds_per_pass",seeds_per_pass);
-    y = y + 32;
+    y = y + 28;
 
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Seeds per harvest:");
     seeds_per_harvest = readSetting("seeds_per_harvest",seeds_per_harvest);
-    is_done, seeds_per_harvest = lsEditBox("seedsperharvest", 250, y, z, 50, 30,
+    is_done, seeds_per_harvest = lsEditBox("seedsperharvest", 185, y, z, 50, 0,
                                           scale, scale, 0x000000ff, seeds_per_harvest);
     seeds_per_harvest = tonumber(seeds_per_harvest);
     if not seeds_per_harvest then
@@ -280,22 +283,22 @@ function promptFlaxNumbers()
       seeds_per_harvest = 1;
     end
     writeSetting("seeds_per_harvest",seeds_per_harvest);
-    y = y + 32;
+    y = y + 28;
 
     rot_flax = readSetting("rot_flax",rot_flax);
-    rot_flax = lsCheckBox(10, y, z+10, 0xFFFFFFff, "Rot Flax", rot_flax);
+    rot_flax = CheckBox(10, y, z+10, 0xFFFFFFff, " Rot Flax", rot_flax);
     writeSetting("rot_flax",rot_flax);
-    y = y + 32;
+    y = y + 28;
 
     water_needed = readSetting("water_needed",water_needed);
-    water_needed = lsCheckBox(10, y, z+10, 0xFFFFFFff, "Flax requires water", water_needed);
+    water_needed = CheckBox(10, y, z+10, 0xFFFFFFff, " Flax requires water", water_needed);
     writeSetting("water_needed",water_needed);
-    y = y + 32;
+    y = y + 28;
     
     if rot_flax or water_needed then
-      lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Water coords:");
+      lsPrint(25, y, z, scale, scale, 0xFFFFFFff, "Water coords:");
       water_location[0] = readSetting("water_locationX",water_location[0]);
-      is_done, water_location[0] = lsEditBox("water_locationX", 165, y, z, 55, 30,
+      is_done, water_location[0] = lsEditBox("water_locationX", 165, y, z, 55, 0,
                                             scale, scale, 0x000000ff, water_location[0]);
       water_location[0] = tonumber(water_location[0]);
       if not water_location[0] then
@@ -306,7 +309,7 @@ function promptFlaxNumbers()
       writeSetting("water_locationX",water_location[0]);
       
       water_location[1] = readSetting("water_locationY",water_location[1]);
-      is_done, water_location[1] = lsEditBox("water_locationY", 222, y, z, 55, 30,
+      is_done, water_location[1] = lsEditBox("water_locationY", 222, y, z, 55, 0,
                                             scale, scale, 0x000000ff, water_location[1]);
       water_location[1] = tonumber(water_location[1]);
       if not water_location[1] then
@@ -315,18 +318,18 @@ function promptFlaxNumbers()
         water_location[1] = 1;
       end
       writeSetting("water_locationY",water_location[1]);
-      y = y + 32;
+      y = y + 28;
     end
 
     store_flax = readSetting("store_flax",store_flax);
-    store_flax = lsCheckBox(10, y, z+10, 0xFFFFFFff, "Store Flax", store_flax);
+    store_flax = CheckBox(10, y, z+10, 0xFFFFFFff, " Store Flax", store_flax);
     writeSetting("store_flax",store_flax);
-    y = y + 32;
+    y = y + 28;
     
     if store_flax then
-      lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Storage coords:");
+      lsPrint(25, y, z, scale, scale, 0xFFFFFFff, "Storage coords:");
       storage_location[0] = readSetting("storage_locationX",storage_location[0]);
-      is_done, storage_location[0] = lsEditBox("storage_locationX", 185, y, z, 55, 30,
+      is_done, storage_location[0] = lsEditBox("storage_locationX", 165, y, z, 55, 0,
                                             scale, scale, 0x000000ff, storage_location[0]);
       storage_location[0] = tonumber(storage_location[0]);
       if not storage_location[0] then
@@ -337,7 +340,7 @@ function promptFlaxNumbers()
       writeSetting("storage_locationX",storage_location[0]);
     
       storage_location[1] = readSetting("storage_locationY",storage_location[1]);
-      is_done, storage_location[1] = lsEditBox("storage_locationY", 242, y, z, 55, 30,
+      is_done, storage_location[1] = lsEditBox("storage_locationY", 222, y, z, 55, 0,
                                             scale, scale, 0x000000ff, storage_location[1]);
       storage_location[1] = tonumber(storage_location[1]);
       if not storage_location[1] then
@@ -346,14 +349,14 @@ function promptFlaxNumbers()
         storage_location[1] = 1;
       end
       writeSetting("storage_locationY",storage_location[1]);
-      y = y + 32 + 5;
+      y = y + 28 + 5;
     end
 
-    if lsButtonText(10, (lsScreenY - 30) * scale, z, 100, 0xFFFFFFff, "OK") then
+    if lsButtonText(10, (lsScreenY - 30), z, 100, 0xFFFFFFff, "OK") then
       is_done = 1;
     end
 
-    if lsButtonText((lsScreenX - 100) * scale, (lsScreenY - 30) * scale, z, 100, 0xFFFFFFff,
+    if lsButtonText((lsScreenX - 100), (lsScreenY - 30), z, 100, 0xFFFFFFff,
                     "End script") then
       error "Clicked End Script button";
     end
@@ -374,7 +377,7 @@ end
 -------------------------------------------------------------------------------
 
 function promptSeeds()
-  scale = 1.1;
+  scale = 0.75;
     
   local z = 0;
   local is_done = nil;
@@ -386,7 +389,6 @@ function promptSeeds()
 
     local y = 5;
 
-    lsSetCamera(0,0,lsScreenX*scale,lsScreenY*scale);
 
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "How many seeds are you");
     y = y + 32;
@@ -414,11 +416,11 @@ function promptSeeds()
 	  min_seeds .. " minimum will be used before growing more seeds.");
 	y = y + 128;
 
-    if lsButtonText(10, (lsScreenY - 30) * scale, z, 100, 0xFFFFFFff, "OK") then
+    if lsButtonText(10, (lsScreenY - 30), z, 100, 0xFFFFFFff, "OK") then
       is_done = 1;
     end
 
-    if lsButtonText((lsScreenX - 100) * scale, (lsScreenY - 30) * scale, z, 100, 0xFFFFFFff,
+    if lsButtonText((lsScreenX - 100), (lsScreenY - 30), z, 100, 0xFFFFFFff,
                     "End script") then
       error "Clicked End Script button";
     end

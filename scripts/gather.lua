@@ -306,28 +306,28 @@ function queryRoute()
         end
         y = y + 64;
         wood = readSetting("wood",wood);
-        wood = lsCheckBox(10, y, z, 0xFFFFFFff, "Gather wood", wood);
+        wood = lsCheckBox(10, y, z, 0xFFFFFFff, " Gather wood", wood);
         writeSetting("wood",wood);
         y = y + 32;
         slate = readSetting("slate",slate);
-        slate = lsCheckBox(10, y, z, 0xFFFFFFff, "Gather slate", slate);
+        slate = lsCheckBox(10, y, z, 0xFFFFFFff, " Gather slate", slate);
         writeSetting("slate",slate);
         y = y + 32;
         grass = readSetting("grass",grass);
-        grass = lsCheckBox(10, y, z, 0xFFFFFFff, "Gather grass", grass);
+        grass = lsCheckBox(10, y, z, 0xFFFFFFff, " Gather grass", grass);
         writeSetting("grass",grass);
         y = y + 32;
         clay = readSetting("clay",clay);
-        clay = lsCheckBox(10, y, z, 0xFFFFFFff, "Gather clay and flint", clay);
+        clay = lsCheckBox(10, y, z, 0xFFFFFFff, " Gather clay and flint", clay);
         writeSetting("clay",clay);
         y = y + 32;
         lsPrint(35, y+5, z, 1, 1, 0xFFFFFFff, "Number of jugs:");
         numJugs = readSetting("numJugs",numJugs);
         nada, numJugs = lsEditBox("jugCount", 
-            200, y, z, 50, 30, scale, scale, 0x000000ff, numJugs);
+            200, y+7, z, 70, 0, 1.0, 1.0, 0x000000ff, numJugs);
         writeSetting("numJugs",numJugs);
         if (clay and (not tonumber(numJugs))) then
-            lsPrint(35, y+32, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+            lsPrint(35, y+32, z+10, 0.9, 0.9, 0xFF2020ff, "MUST BE A NUMBER");
         end
         y = y + 32;
         y = y + 32;

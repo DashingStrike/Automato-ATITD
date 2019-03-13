@@ -195,7 +195,7 @@ function config()
 
         y = y + 140;
         lsPrint(10, y, 0, 0.7, 0.7, 0xffffffff, "Min Quality:");
-        is_done, min_quality = lsEditBox("min_quality", 100, y-3, 0, 70, 30, 1.0, 1.0,
+        is_done, min_quality = lsEditBox("min_quality", 95, y-3, 0, 80, 0, 0.9, 0.9,
                                      0x000000ff, min_quality);
         min_quality = tonumber(min_quality);
         if not min_quality then

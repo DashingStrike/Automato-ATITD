@@ -1,4 +1,4 @@
--- barley.lua v2.1.3 -- by Cegaiel (but based off flax_stable.lua; credits of flax_stable.lua to Jimbly KasumiGhia, Tallow, SkyFeather)
+-- barley.lua v2.1.3 -- by Cegaiel (but based off flax_stable.lua; credits of flax_stable.lua to Jimbly, KasumiGhia, Tallow, SkyFeather)
 --
 -- Use Fertilizer will use 4 fertilizer per plant.  The yield will vary from 2-10. The numbers just depends on how many weeds occur before harvesting. 
 -- If you are 'lucky' enough to not get any weeds on a plant, you will get the full 10. But with weeds, you will get 2-5 on average, usually 3-5.
@@ -108,8 +108,7 @@ end
 -------------------------------------------------------------------------------
 
 function promptFlaxNumbers()
-  scale = 0.8;
-	
+  scale = 0.75;
   local z = 0;
   local is_done = nil;
   local value = nil;
@@ -125,7 +124,7 @@ function promptFlaxNumbers()
     local y = 40;
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Passes:");
     num_loops = readSetting("num_loops",num_loops);
-    is_done, num_loops = lsEditBox("passes", 120, y, z, 50, 30, scale, scale,
+    is_done, num_loops = lsEditBox("passes", 85, y, z, 40, 0, scale, scale,
                                    0x000000ff, num_loops);
     if not tonumber(num_loops) then
       is_done = nil;
@@ -136,7 +135,7 @@ function promptFlaxNumbers()
     y = y + 32;
     lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Grid size:");
     grid_w = readSetting("grid_w",grid_w);
-    is_done, grid_w = lsEditBox("grid", 120, y, z, 50, 30, scale, scale,
+    is_done, grid_w = lsEditBox("grid", 85, y, z, 40, 0, scale, scale,
                                 0x000000ff, grid_w);
     if not tonumber(grid_w) then
       is_done = nil;
@@ -147,7 +146,6 @@ function promptFlaxNumbers()
     writeSetting("grid_w",grid_w);
     grid_w = tonumber(grid_w);
     grid_h = grid_w;
-    y = y + 32;
 
     if not is_plant then
       lsPrint(5, y, z, scale, scale, 0xFFFFFFff, "Seeds per:");
@@ -162,7 +160,6 @@ function promptFlaxNumbers()
         lsPrint(10, y+18, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
         seeds_per_pass = 1;
       end
-      y = y + 32;
     end
 
     if is_plant then
@@ -173,19 +170,23 @@ function promptFlaxNumbers()
         is_done = 1;
     end
 
-    y = y + 55;
-      lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
+    y = y + 35;
+
       use_fert = readSetting("use_fert",use_fert);
 	if use_fert then
-    	  use_fert = lsCheckBox(10, y+10, z, 0xff8080ff, " Use Fertilizer (Uncheck for Water Only)", use_fert);
+    	  use_fert = CheckBox(10, y, z, 0xff8080ff, " Use Fertilizer (Uncheck for Water Only)", use_fert, 0.7, 0.7);
 	else
-    	  use_fert = lsCheckBox(10, y+10, z, 0x8080ffff, " Use Water Only (Check for Fertilizer)", use_fert);
+    	  use_fert = CheckBox(10, y, z, 0x8080ffff, " Use Water Only (Check for Fertilizer)", use_fert, 0.7, 0.7);
 	end
+
+    y = y + 25;
+
       writeSetting("use_fert",use_fert);
       waterGap = readSetting("waterGap",waterGap);
-    	  waterGap = lsCheckBox(10, y+40, z, 0xffffffff, " Leave Water Gap (Pin windows lower)", waterGap);
+    	  waterGap = CheckBox(10, y, z, 0xffffffff, " Leave Water Gap (Pin windows lower)", waterGap, 0.7, 0.7);
+    y = y + 25;
+
       writeSetting("waterGap",waterGap);
-    	  lsSetCamera(0,0,lsScreenX*1.0,lsScreenY*1.0);
 
 	if use_fert then
         lsPrintWrapped(10, y+10, z+10, lsScreenX - 20, 0.7, 0.7, 0xD0D0D0ff,
