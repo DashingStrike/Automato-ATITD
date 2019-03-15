@@ -99,7 +99,9 @@ actions = {
 };
 
 function runKettles(num_loops, action)
+  startTime = lsGetTimer();
   for i=1, num_loops do
+    startTimePass = lsGetTimer();
     drawWater();
     refreshAll();
 
@@ -109,13 +111,17 @@ function runKettles(num_loops, action)
     clickAllImages("Kettle_Begin.png");
     lsSleep(200);
 
-    local message = "(" .. i .. "/" .. num_loops .. ") Making "
-      .. action.label;
+    local message = "(" .. i .. "/" .. num_loops .. ") Making " .. action.label;
 
-    waitForKettles(message, action.stoked);
-
+    waitForKettles(message, action.stoked, i, num_loops);
     clickAllImages("kettle_take.png");
-    lsSleep(200);
+    if i < num_loops then
+      sleepWithStatus(5000,"Take all Kettles Completed!\n\nPausing before next Pass, in case you want to End Script", nil, 0.7, 0.7);
+    end
+    if finish_up then
+      sleepWithStatus(5000,"Finish up initiated ...\n\nYou have completed " .. i .. "/" .. num_loops .. " passes.", nil, 0.7, 0.7);
+      break;
+    end
   end
 end
 
@@ -124,7 +130,7 @@ function refreshAll()
   lsSleep(200);
 end
 
-function waitForKettles(message, stoked)
+function waitForKettles(message, stoked, passes, num_loops)
   local done = false;
   while not done do
     if stoked then
@@ -135,10 +141,18 @@ function waitForKettles(message, stoked)
     done = true;
     for i=1,#anchors do
       if not stokeWindow(anchors[i], stoked) then
-	done = false;
+	  done = false;
       end
     end
-    sleepWithStatus(5000, message);
+    if finish_up and not finish_up_message then
+      message = message .. "\n\nFinishing up, this will be last pass!";
+      finish_up_message = 1;
+    end
+    if passes > 1 then
+      sleepWithStatus(5000, message .. "\n\nPass Elapsed Time: " .. getElapsedTime(startTime) .. "\n\nTotal Elapsed Time: " .. getElapsedTime(startTimePass), nil, 0.7, 0.7);
+    else
+      sleepWithStatus(5000, message .. "\n\nPass Elapsed Time: " .. getElapsedTime(startTimePass), nil, 0.7, 0.7);
+    end
   end
 end
 
@@ -237,8 +251,47 @@ function menuKettles()
       message = message .. "  " .. selected.matCounts[i]*num_loops*kettles
 	.. " " .. selected.matLabels[i] .. "\n";
     end
-      message = message .. "\n\nNote: Jugs are refilled before each pass begins, if an available water source is available (water icon or pinned Water Barrel)";
+      message = message .. "\n\nNote: Jugs are refilled before each pass begins, if an available water source is available (water icon or pinned Water Barrel)\n\nTip: Did you know? If the macro breaks or you quit (before kettles are done), restarting macro will pick up where you left off at (even if kettles are idle)!";
     askForWindow(message);
     runKettles(num_loops, selected);
   end
+end
+
+-- This is copy/paste of statusScreen from /common/common_ui.inc. The reason this is duplicated here, is so the Finish Up (hard coded below) button doesn't flicker during countdown
+function statusScreen(message, color, allow_break, scale)
+  if not message then
+    message = "";
+  end
+  if not color then
+    color = 0xFFFFFFff;
+  end
+  if allow_break == nil then
+    allow_break = true;
+  end
+  if not scale then
+    scale = 0.8;
+  end
+  lsPrintWrapped(10, 80, 0, lsScreenX - 20, scale, scale, color, message);
+  lsPrintWrapped(10, lsScreenY-100, 0, lsScreenX - 20, scale, scale, 0xffd0d0ff,
+		 error_status);
+  if lsButtonText(lsScreenX - 110, lsScreenY - 30, z, 100,
+		  0xFFFFFFff, "End script") then
+    error(quit_message);
+  end
+  if allow_break then
+    lsPrint(10, 10, 0, 0.7, 0.7, 0xB0B0B0ff,
+	    "Hold Ctrl+Shift to end this script.");
+    if allow_pause then
+      lsPrint(10, 24, 0, 0.7, 0.7, 0xB0B0B0ff,
+	      "Hold Alt+Shift to pause this script.");
+    end
+    if not finish_up then
+	if lsButtonText(lsScreenX - 110, lsScreenY - 60, z, 100, 0xFFFFFFff, "Finish up") then
+	  finish_up = 1;
+      end
+    end
+    checkBreak();
+  end
+  lsSleep(tick_delay);
+  lsDoFrame();
 end
