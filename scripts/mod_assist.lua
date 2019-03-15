@@ -4,13 +4,9 @@
 -- Uses pbslog.txt to save modding history.
 
 dofile("common.inc");
+dofile("settings.inc");
 
-askText = singleLine([[
-  mod_assist by Safa. Do various modding tasks using Automato UI or Keyboard Shortcuts. 
-  Get notified when new posts are present. This macro WON'T autopost any messages. 
-  Every post must be approved by the operator! Click the gear icon for more settings. 
-  Hit SHIFT to begin.
-  ]]);
+askText = "mod_assist by Safa. Do various modding tasks using Automato UI or Keyboard Shortcuts.\n\nGet notified when new posts are present. This macro WON'T autopost any messages.\n\nEvery post must be approved by the operator! Click the gear icon for more settings.\n\nHit SHIFT to begin.\n\nNew: Settings (Gear Icon) are now saved to Settings.mod_assist.lua.txt . You can erase this file to reset to all defaults.";
 
 --Done Modding
 is_done = false;
@@ -463,10 +459,12 @@ function settingsMenu()
   if ui_size == "Default" then 
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/off.png") then
       ui_size = "Toolbar";
+	writeSetting("ui_size",ui_size);
     end
   else
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/on.png") then
       ui_size = "Default";
+	writeSetting("ui_size",ui_size);
     end
   end
 
@@ -475,10 +473,12 @@ function settingsMenu()
   if logsession == "Off" then 
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/off.png") then
       logsession = "On";
+	writeSetting("logsession",logsession);
     end
   else
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/on.png") then
       logsession = "Off";
+	writeSetting("logsession",logsession);
     end
   end
 
@@ -488,16 +488,19 @@ function settingsMenu()
     lsPrint(60, settings_y + 10, 1, 0.7, 0.7, 0x000000FF, "Notify until all posts are sent");
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/mid.png") then
       sounds = "On";
+	writeSetting("sounds",sounds);
     end
   elseif sounds == "On" then
     lsPrint(60, settings_y + 10, 1, 0.7, 0.7, 0x000000FF, "Notify once for every post");
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/on.png") then
       sounds = "Off";
+	writeSetting("sounds",sounds);
     end
   else
     lsPrint(60, settings_y + 10, 1, 0.7, 0.7, 0x000000FF, "No Notification");
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/off.png") then
       sounds = "Loop";
+	writeSetting("sounds",sounds);
     end
   end
 
@@ -506,10 +509,12 @@ function settingsMenu()
   if success_sound == "Off" then 
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/off.png") then
       success_sound = "On";
+	writeSetting("success_sound",success_sound);
     end
   else
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/on.png") then
       success_sound = "Off";
+	writeSetting("success_sound",success_sound);
     end
   end
 
@@ -518,10 +523,12 @@ function settingsMenu()
   if scribble_sound == "Off" then 
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/off.png") then
       scribble_sound = "On";
+	writeSetting("scribble_sound",scribble_sound);
     end
   else
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/on.png") then
       scribble_sound = "Off";
+	writeSetting("scribble_sound",scribble_sound);
     end
   end
 
@@ -530,10 +537,12 @@ function settingsMenu()
   if keyboard_shortcuts == "Off" then 
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/off.png") then
       keyboard_shortcuts = "On";
+	writeSetting("keyboard_shortcuts",keyboard_shortcuts);
     end
   else
     if lsButtonImg(20, settings_y, 1, 0.30, 0xFFFFFFff, "pbs/on.png") then
       keyboard_shortcuts = "Off";
+	writeSetting("keyboard_shortcuts",keyboard_shortcuts);
     end
   end
 
@@ -586,6 +595,7 @@ function postKeyList()
   for i =1,#buttons do
     if lsKeyDown(buttons[i]) then
       post_button = buttons[i];
+	writeSetting("post_button",post_button);
     end
   end
 end
@@ -594,6 +604,7 @@ function saveKeyList()
   for i =1,#buttons do
     if lsKeyDown(buttons[i]) then
       save_button = buttons[i];
+	writeSetting("save_button",save_button);
     end
   end
 end
@@ -605,6 +616,46 @@ function startModding()
   else
     --Time Macro Started. (for pbslog.txt)
     timeStarted = "[" .. Date .. ", " .. Time .. "]";
+  end
+
+  ui_size_check = readSetting("ui_size",uisize);
+  if ui_size_check ~= nil and ui_size_check ~= false then
+    ui_size = ui_size_check;
+  end
+
+  logsession_check = readSetting("logsession",logsession);
+  if logsession_check ~= nil and logsession_check ~= false then
+    logsession = logsession_check;
+  end
+
+  sounds_check = readSetting("sounds",sounds);
+  if sounds_check ~= nil and sounds_check ~= false then
+    sounds = sounds_check;
+  end
+
+  success_sound_check = readSetting("success_sound",success_sound);
+  if success_sound_check ~= nil and success_sound_check ~= false then
+    success_sound = success_sound_check;
+  end
+
+  scribble_sound_check = readSetting("scribble_sound",scribble_sound);
+  if scribble_sound_check ~= nil and scribble_sound_check ~= false then
+    scribble_sound = scribble_sound_check;
+  end
+
+  keyboard_shortcuts_check = readSetting("keyboard_shortcuts",keyboard_shortcuts);
+  if keyboard_shortcuts_check ~= nil and keyboard_shortcuts_check ~= false then
+    keyboard_shortcuts = keyboard_shortcuts_check;
+  end
+
+  post_button_check = readSetting("post_button",post_button);
+  if post_button_check ~= nil and post_button_check ~= false then
+    post_button = post_button_check;
+  end
+
+  save_button_check = readSetting("save_button",save_button);
+  if save_button_check ~= nil and save_button_check ~= false then
+    save_button = save_button_check;
   end
 
   srReadScreen();
