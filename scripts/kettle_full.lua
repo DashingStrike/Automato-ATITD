@@ -237,6 +237,7 @@ function menuKettles()
       message = message .. "  " .. selected.matCounts[i]*num_loops*kettles
 	.. " " .. selected.matLabels[i] .. "\n";
     end
+      message = message .. "\n\nNote: Jugs are refilled before each pass begins, if an available water source is available (water icon or pinned Water Barrel)";
     askForWindow(message);
     runKettles(num_loops, selected);
   end
