@@ -15,7 +15,7 @@ temperature_width = 85; -- Width of the Temperature label
 tol = 6500;
 menuButtonSelected = 0;
 madeSomeGlass = false; -- Becomes true when you've started to make anything
-tick_time = 3000;
+tick_time = 2000;
 
 writeLogs = false; -- Write out in GlassLogs.txt every time bench status updates 
 thisLog = "\n***************  New Session Started  ***************\n\n";
@@ -400,9 +400,9 @@ function doit()
 	  lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
 
 	if maintainHeatNoCook then
-	  maintainHeatNoCook = lsCheckBox(200, lsScreenY - 100, 10, 0xFFFF00ff, " Suspend Cooking", maintainHeatNoCook);
+	  maintainHeatNoCook = lsCheckBox(200, lsScreenY - 100, 10, 0xFFFF00ff, " Suspend Cooking (Maintain Heat, no New Projects)", maintainHeatNoCook);
 	else
-	  maintainHeatNoCook = lsCheckBox(200, lsScreenY - 100, 10, 0xFFFFFFff, " Suspend Cooking", maintainHeatNoCook);
+	  maintainHeatNoCook = lsCheckBox(200, lsScreenY - 100, 10, 0xFFFFFFff, " Suspend Cooking (Maintain Heat, no New Projects)", maintainHeatNoCook);
 	end
 
 	  showTicks = lsCheckBox(200, lsScreenY - 70, 10, 0xFFFFFFff, " Display Ticks/HV/DV", showTicks);
@@ -478,7 +478,7 @@ function doit()
 						  this_tick = this_tick .. last_ret[window_index];
 						end
 				else
-					lsPrint(10, 65 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. " - COOL DOWN");
+					lsPrint(10, 65 + 15*window_index, 0, 0.7, 0.7, 0xFFFFFFff, "#" .. window_index .. "  - COOL DOWN");
 				end
 			end
 
@@ -497,9 +497,9 @@ function doit()
 
 			  lsSetCamera(0,0,lsScreenX*1.5,lsScreenY*1.5);
 			  if maintainHeatNoCook then
-			    maintainHeatNoCook = lsCheckBox(200, lsScreenY - 100, 10, 0xFFFF00ff, " Suspend Cooking", maintainHeatNoCook);
+			    maintainHeatNoCook = lsCheckBox(200, lsScreenY - 100, 10, 0xFFFF00ff, " Suspend Cooking (Maintain Heat, no New Projects)", maintainHeatNoCook);
 			  else
-			    maintainHeatNoCook = lsCheckBox(200, lsScreenY - 100, 10, 0xFFFFFFff, " Suspend Cooking", maintainHeatNoCook);
+			    maintainHeatNoCook = lsCheckBox(200, lsScreenY - 100, 10, 0xFFFFFFff, " Suspend Cooking (Maintain Heat, no New Projects)", maintainHeatNoCook);
 			  end
 			    showTicks = lsCheckBox(200, lsScreenY - 70, 10, 0xFFFFFFff, " Display Ticks/HV/DV", showTicks);
 			    writeLogs = lsCheckBox(200, lsScreenY - 40, 10, 0xFFFFFFff, " Write Log File", writeLogs);
