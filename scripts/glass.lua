@@ -15,7 +15,7 @@ temperature_width = 85; -- Width of the Temperature label
 tol = 6500;
 menuButtonSelected = 0;
 madeSomeGlass = false; -- Becomes true when you've started to make anything
-tick_time = 2000;
+tick_time = 1500;
 
 writeLogs = false; -- Write out in GlassLogs.txt every time bench status updates 
 thisLog = "\n***************  New Session Started  ***************\n\n";

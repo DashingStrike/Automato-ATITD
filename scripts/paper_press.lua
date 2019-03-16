@@ -89,13 +89,13 @@ function doit()
 		lsSleep(200);
 		-- refocus();
 		
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for 1st batch of paper to finish");
+		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for 1st batch of paper to finish", nil, 0.7, 0.7);
 
 		clickAll("PaperMake.png", 1);
 		lsSleep(200);
 		-- refocus();
 
-		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for 2nd batch of paper to finish");
+		sleepWithStatus(69000, "[" .. i .. "/" .. num_loops .. "] Waiting for 2nd batch of paper to finish", nil, 0.7, 0.7);
 
 		clickAll("PaperRemove.png", 1);
 		lsSleep(200);
