@@ -648,7 +648,7 @@ function ripOutAllSeeds()
     lsPrintln("Clicking Utility.. button at: " .. utloc[0] .. ", " .. utloc[1]);
     clickText(utloc);
     lsPrintln("Clicking rip out");
-    clickText(waitForText(txtRipOut));
+    clickText(waitForText(txtRipOut, 5000));
     lsSleep(refresh_time);
     lsPrintln("Unpinning region");
     unpinWindow(flaxRegions[i]);
