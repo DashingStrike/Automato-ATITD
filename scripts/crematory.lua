@@ -96,6 +96,7 @@ function runCrematories()
     end
     refreshWindows()
     takeAll();
+    lsSleep(1000);
     loadAll();
 
   while foundOK do
@@ -220,7 +221,8 @@ function start()
     srReadScreen();
     OK = srFindImage("OK.png");
     if OK then
-	error('Popup detected while firing crematory.\n\nThat suggests No Wood in inventory');
+	--error('Popup detected while firing crematory.\n\nThat suggests No Wood in inventory');
+	srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
     end
   end
   sleepWithStatus(longWait, updateMessage("Finding my Chi"));
@@ -490,6 +492,7 @@ function takeAll()
       clickText(t);
       waitForNoText("Everything");
       safeClick(wins[i].x + 25, wins[i].y + 5);
+  sleepWithStatus(500,"Taking...", nil, 0.7, 0.7);
     end
   end
 end
@@ -513,7 +516,7 @@ function promptLoad()
                                    0x000000ff, passCount);
     if not tonumber(passCount) then
       is_done = false;
-      lsPrint(10, y+30, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+      lsPrint(10, y+20, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
       passCount = 1;
     end
     writeSetting("passCount",passCount);
@@ -570,7 +573,7 @@ function promptLoad()
                                    0x000000ff, loadDelay);
     if not tonumber(loadDelay) then
       is_done = false;
-      lsPrint(10, y+30, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
+      lsPrint(10, y+20, z+10, 0.7, 0.7, 0xFF2020ff, "MUST BE A NUMBER");
       loadDelay = 500;
     end
     writeSetting("loadDelay",loadDelay);
@@ -618,36 +621,37 @@ function loadAll()
       cremWin = cremWins[i]
       for i, v in ipairs(loads) do
          checkBreak();
+         lsSleep(loadDelay);
          clickText(findText("Load the Crematory...", cremWin));
-         lsSleep(500);
+         lsSleep(loadDelay);
+
          local t = waitForText("Wood", nil, nil, nil, REGION);
-         lsSleep(shortWait*2);
+         lsSleep(loadDelay);
          t = waitForText(v, nil, nil, t);
-         lsSleep(shortWait*2);
          clickText(t);
-         lsSleep(shortWait*2);
+         lsSleep(loadDelay);
          t = waitForText("Load how much", nil, nil, nil, REGION);
-         lsSleep(shortWait*2);
+         lsSleep(loadDelay);
          safeClick(t.x + t.width/2, t.bottom - 50);
-         lsSleep(shortWait*2);
          waitForNoText("Load how much");
-         sleepWithStatus(loadDelay,"Loaded: " .. v);
-      end
+       lsSleep(loadDelay);
 
 	foundOK = nil;
-
 	while 1 do
 	  srReadScreen();
 	  OK = srFindImage("OK.png");
 		if OK then
 		  foundOK = true;
 		  srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
+         	  sleepWithStatus(500,"Popup Detected, Oops");
 		else	
+         	  sleepWithStatus(500,"Loaded: " .. v);
 		  break;
 		end
-	  lsSleep(tick_delay);
+	  lsSleep(longWait);
 	end
 
+      end
    end
 end
 
@@ -759,5 +763,6 @@ function refreshWindows()
 	for i=1,#tops do
 	  safeClick(tops[i][0], tops[i][1]);
 	end
-  lsSleep(250);
+--  lsSleep(250);
+  sleepWithStatus(500,"Refresh Windows...", nil, 0.7, 0.7);
 end
