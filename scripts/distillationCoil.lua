@@ -77,7 +77,7 @@ function doit()
 	local num_rounds;
 	local keystrokes;
 	num_rounds = 1; -- promptNumber("How many coils?", 1);
-	askForWindowAndPixel("\n\nPin up the 'Start Making' menu.\n\nMake sure your chat is minimized!\nMinimized chat-channels are still visible (Options, Chat-related, CHECKED)\n\nClick in ATITD, HOVER your mouse OVER the glory hole, THEN press Shift key.\n\nEnsure your heater control is set to Pinpoint.");
+	askForWindowAndPixel("\n\nPin up the 'Start Making' menu.\n\nMake sure your chat is minimized!\nMinimized chat-channels are still visible (Options, Chat-related, CHECKED)\n\nMain Chat must be showing, as the macro reads the Quality in chat.\n\nClick in ATITD, HOVER your mouse OVER the glory hole, THEN press Shift key.\n\nEnsure your heater control is set to Pinpoint.");
 	config();
 	clickAll("WindowEmpty.png"); -- Refresh any empty windows
 	lsSleep(100);
@@ -225,5 +225,12 @@ function unLoad();
   srSetMousePos(mouse_x, mouse_y);
   lsSleep(60);
   srKeyEvent("u");
-  lsSleep(60);
+  lsSleep(100);
+
+  srReadScreen();
+  OK = srFindImage("OK.png"); 
+    if(OK) then
+      srClickMouseNoMove(OK[0]+2,OK[1]+2, true);
+      lsSleep(100);
+    end
 end
