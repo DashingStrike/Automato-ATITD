@@ -99,10 +99,15 @@ function addCC(window_pos, state, message)
 	end
 	-- lsPrintln(window_pos[0] .. " " .. window_pos[1] .. " " .. window_w .. " " .. window_h);
 	local pos = srFindImageInRange("GlassAdd2Charcoal.png", window_pos[0], window_pos[1], window_w, window_h, tol);
-	
 	state.just_added = 1;
-	srClickMouseNoMove(pos[0]+5, pos[1]+2);
-	state.status = state.status .. " (Adding2CC" .. message .. ")";
+--	srClickMouseNoMove(pos[0]+5, pos[1]+2);
+      if not pos then
+        sleepWithStatus(2000, "Uh Oh, Add 2 CC not found on bench #" .. window_index .. "\nIf this error persists than your bench may have problems.");
+	  state.status = state.status .. " (Error, Adding2CC failed, not found" .. message .. ")";
+      else
+        srClickMouseNoMove(pos[0]+5, pos[1]+2);
+	  state.status = state.status .. " (Adding2CC" .. message .. ")";
+      end
 end
 
 function glassTick(window_pos, state)
