@@ -299,6 +299,7 @@ function glassTick(window_pos, state)
 							end
 						--state.status = state.status .. " Making:" .. item_priority[item_index];
 						state.status = state.status .. " Making:" .. making;
+						lsSleep(100);
 						srClickMouseNoMove(pos[0]+5, pos[1]+2);
 						lsSleep(100);
 						made_one = 1;
@@ -426,6 +427,10 @@ function doit()
 	
 	while 1 do
 	
+
+		closePopUp(); -- Check for any popups and close
+
+
 		-- Tick
 
 		srReadScreen();
@@ -604,4 +609,19 @@ function WriteGlassLogs(Text)
 	FileGlass = io.open("GlassLogs.txt","a+");
 	FileGlass:write(Text);
 	FileGlass:close();
+end
+
+function closePopUp()
+--Check for multiple popups, that might be hidden on top of each other
+while 1 do
+  checkBreak();
+  srReadScreen()
+  local ok = srFindImage("OK.png")
+  if ok then
+    srClickMouseNoMove(ok[0]+5,ok[1],1);
+    lsSleep(100);
+  else
+    break;
+  end
+end
 end
