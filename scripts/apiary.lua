@@ -1,4 +1,4 @@
--- apiary.lua v1.0 -- by Cegaiel. Credits to Tallow for bits of code taken from simon.lua
+-- apiary.lua v1.1 -- by Cegaiel. Credits to Tallow for bits of code taken from simon.lua
 --
 -- Checks and Takes everything, from all of your apiaries.
 -- It sends the 'C' (Check) key over each one, waits for the OK box to disappear, then sends the 'T' to take. 
@@ -7,14 +7,8 @@
 
 dofile("common.inc");
 
-askText = singleLine([[
-  Apiary Checker v1.0 by Cegaiel --
-  Checks and Takes everything from all of your apiaries.
-  Make sure chat is minimized!
-  Press Shift over ATITD window to continue.
-]]);
 
-askText = "Apiary Checker v1.0 by Cegaiel\n \nAllows you to quickly set all of your apiary locations by tapping Shift over each one.\n \nThen run and it will Check, wait for OK box, then Take everything from all of your apiaries.\n \nMake sure CHAT IS MINIMIZED!\n \nPress Shift over ATITD window to continue.";
+askText = "Apiary Checker v1.1 by Cegaiel\n \nAllows you to quickly set all of your apiary locations by tapping Shift over each one.\n \nThen run and it will Check, wait for OK box, then Take everything from all of your apiaries.\n \nMake sure CHAT IS MINIMIZED!\n \nPress Shift over ATITD window to continue.";
 
 
 function doit()
@@ -24,7 +18,7 @@ function doit()
 end
 
 function clickSequence()
-  sleepWithStatus(500, "Starting... Don\'t move mouse!");
+  sleepWithStatus(500, "Starting... Don\'t move mouse!", nil, 0.7, 0.7);
     for i=1,#clickList do
 	checkBreak();
 	srSetMousePos(clickList[i][1], clickList[i][2]);
@@ -32,26 +26,27 @@ function clickSequence()
 	checkHives(i);
 	count = i;
     end
-  sleepWithStatus(2500, "[" .. count .. "/" .. #clickList .."] All finished!");
+  sleepWithStatus(1000, "[" .. count .. "/" .. #clickList .."] All finished!", nil, 0.7, 0.7);
   lsPlaySound("Complete.wav");
+  getPoints();
 end
 
 function checkHives(apiary)
   checkBreak();
   local OK = true;
   srKeyEvent('c'); --Check [C]
-  sleepWithStatus(500, "[" .. apiary .. "/" .. #clickList .."] Checking");
+  sleepWithStatus(500, "[" .. apiary .. "/" .. #clickList .."] Checking Apiary ...", nil, 0.7, 0.7);
 
     while OK do
 	--Wait, loop forever if OK box is present. Only when OK box is not present, then continue and Take
 	checkBreak();
 	srReadScreen();
 	OK = srFindImage("OK.png"); -- If OK box present, then OK = true. If OK box not present, then OK = false
-      sleepWithStatus(50, "[" .. apiary .. "/" .. #clickList .."] Waiting for OK");
+      sleepWithStatus(50, "[" .. apiary .. "/" .. #clickList .."] Waiting for OK", nil, 0.7, 0.7);
     end
 
   srKeyEvent('t');  -- Take [T]
-  sleepWithStatus(150, "[" .. apiary .. "/" .. #clickList .."] Taking");
+  sleepWithStatus(150, "[" .. apiary .. "/" .. #clickList .."] Taking Apiary ...", nil, 0.7, 0.7);
 end
 
 function getPoints()
@@ -69,7 +64,7 @@ clickList = {};
     end
     was_shifted = is_shifted;
     checkBreak();
-    lsPrint(10, 10, z, 1.0, 1.0, 0xFFFFFFff,
+    lsPrint(10, 10, z, 0.8, 0.8, 0xFFFFFFff,
 	    "Set Apiary Locations (" .. #clickList .. ")");
     local y = 60;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Select camera and zoom level");
