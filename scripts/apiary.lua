@@ -1,4 +1,4 @@
--- apiary.lua v1.1 -- by Cegaiel. Credits to Tallow for bits of code taken from simon.lua
+-- apiary.lua v1.12 -- by Cegaiel. Credits to Tallow for bits of code taken from simon.lua
 --
 -- Checks and Takes everything, from all of your apiaries.
 -- It sends the 'C' (Check) key over each one, waits for the OK box to disappear, then sends the 'T' to take. 
@@ -8,8 +8,10 @@
 dofile("common.inc");
 
 
-askText = "Apiary Checker v1.1 by Cegaiel\n \nAllows you to quickly set all of your apiary locations by tapping Shift over each one.\n \nThen run and it will Check, wait for OK box, then Take everything from all of your apiaries.\n \nMake sure CHAT IS MINIMIZED!\n \nPress Shift over ATITD window to continue.";
+askText = "Apiary Checker v1.12 by Cegaiel\n \nAllows you to quickly set all of your apiary locations by tapping Shift over each one.\n \nThen run and it will Check, wait for OK box, then Take everything from all of your apiaries.\n \nMake sure CHAT IS MINIMIZED!\n \nPress Shift over ATITD window to continue.";
 
+clickList = {};
+numRan = 0;
 
 function doit()
   askForWindow(askText);
@@ -23,34 +25,35 @@ function clickSequence()
 	checkBreak();
 	srSetMousePos(clickList[i][1], clickList[i][2]);
 	lsSleep(100); -- ~65+ delay needed before the mouse can actually move.
-	checkHives(i);
+	checkHives(i,clickList[i][1],clickList[i][2]);
 	count = i;
     end
-  sleepWithStatus(1000, "[" .. count .. "/" .. #clickList .."] All finished!", nil, 0.7, 0.7);
+
+  numRan = numRan + 1;
   lsPlaySound("Complete.wav");
   getPoints();
 end
 
-function checkHives(apiary)
+function checkHives(apiary,x,y)
   checkBreak();
   local OK = true;
   srKeyEvent('c'); --Check [C]
-  sleepWithStatus(500, "[" .. apiary .. "/" .. #clickList .."] Checking Apiary ...", nil, 0.7, 0.7);
+  sleepWithStatus(500, x .. ", " .. y .. "\n\n[" .. apiary .. "/" .. #clickList .."] Checking Apiary ...", nil, 0.7, 0.7);
 
     while OK do
 	--Wait, loop forever if OK box is present. Only when OK box is not present, then continue and Take
 	checkBreak();
 	srReadScreen();
 	OK = srFindImage("OK.png"); -- If OK box present, then OK = true. If OK box not present, then OK = false
-      sleepWithStatus(50, "[" .. apiary .. "/" .. #clickList .."] Waiting for OK", nil, 0.7, 0.7);
+      sleepWithStatus(50, x .. ", " .. y .. "\n\n[" .. apiary .. "/" .. #clickList .."] Waiting for OK", nil, 0.7, 0.7);
     end
 
   srKeyEvent('t');  -- Take [T]
-  sleepWithStatus(150, "[" .. apiary .. "/" .. #clickList .."] Taking Apiary ...", nil, 0.7, 0.7);
+  sleepWithStatus(150, x .. ", " .. y .. "\n\n[" .. apiary .. "/" .. #clickList .."] Taking Apiary ...", nil, 0.7, 0.7);
 end
 
 function getPoints()
-clickList = {};
+--clickList = {};
   local was_shifted = lsShiftHeld();
   local is_done = false;
   local mx = 0;
@@ -66,7 +69,7 @@ clickList = {};
     checkBreak();
     lsPrint(10, 10, z, 0.8, 0.8, 0xFFFFFFff,
 	    "Set Apiary Locations (" .. #clickList .. ")");
-    local y = 60;
+    local y = 45;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Select camera and zoom level");
     y = y + 20
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "that best fits apiaries in screen.")
@@ -83,11 +86,27 @@ clickList = {};
     y = y + 30;
     lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "2) After setting all apiary locations:")
     y = y + 20;
-    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Click Start to begin checking apiaries.")
+    lsPrint(5, y, z, 0.7, 0.7, 0xf0f0f0ff, "Click Start/Repeat to begin checking apiaries.")
 
-    if #clickList >= 1 then -- Only show start button if one or more apiaries was selected.
+    if #clickList >= 1 and numRan == 0 then -- Only show start button if one or more apiaries was selected.
       if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Start") then
         is_done = 1;
+        clickSequence();
+      end
+end
+
+    if #clickList >= 1 then
+      if lsButtonText(10, lsScreenY - 60, z, 100, 0xFFFFFFff, "Reset Locations") then
+        is_done = false;
+	  clickList = {};
+	  numRan = 0;
+      end
+    end
+
+
+    if #clickList >= 1 and numRan > 0 then -- Only show start button if one or more apiaries was selected.
+      if lsButtonText(10, lsScreenY - 30, z, 100, 0xFFFFFFff, "Repeat Last") then
+        clickSequence();
       end
     end
 
