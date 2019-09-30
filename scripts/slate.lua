@@ -14,11 +14,9 @@ function doit()
 
 	while not done	
 	do
-		sleepWithStatus(100, "Slates collected: " .. tostring(numSlates)) ;
+		sleepWithStatus(5, "Slates collected: " .. tostring(numSlates)) ;
 		srReadScreen();
-		local xyWindowSize = srGetWindowSize();
-		local midX = xyWindowSize[0] / 2;
-		local pos = srFindImageInRange("slate.png",0,0,midX,100,1000);
+		local pos = srFindImage("slate.png");
 		if (pos) then
 			safeClick(pos[0] + 3, pos[1] + 3);
 			numSlates = numSlates + 1;
